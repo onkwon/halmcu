@@ -6,6 +6,7 @@ API Reference
 
    uart
    timer
+   system
 
 .. note:: This is a **note** box.
 

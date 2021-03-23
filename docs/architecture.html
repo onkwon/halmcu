@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Design and Architecture</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#directory-structure">Directory Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-system">Build System</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
@@ -187,6 +188,17 @@
 └── tests/
 </pre></div>
 </div>
+</div>
+<div class="section" id="build-system">
+<h2>Build System<a class="headerlink" href="#build-system" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://www.gnu.org/software/make/manual/make.html">Make</a> build automation tool is used.</p>
+<ol class="simple">
+<li><p>You shoud specify a target you want to build for, something like: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">a33</span></code></p></li>
+<li><p>It will include a project Makefile according to the target. e.g. <code class="docutils literal notranslate"><span class="pre">projects/a33.mk</span></code></p></li>
+<li><p>In the project Makefile, all drivers it supports are included by <code class="docutils literal notranslate"><span class="pre">drivers/a33/driver.mk</span></code></p></li>
+<li><p>Then it decides what cpu architecture is of the MCU</p></li>
+<li><p>And build based on the architecture with its Makefile, <code class="docutils literal notranslate"><span class="pre">arch/arm/armv7-m/m3/arch.mk</span></code></p></li>
+</ol>
 </div>
 </div>
 
