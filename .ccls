@@ -5,7 +5,7 @@ clang
 -Iinclude
 -Iarch/arm/armv7-m/include/CMSIS_5/CMSIS/Core/Include
 
--I/usr/local/Cellar/cpputest/4.0/include
+-Itests/cpputest/include
 
 -isystem /usr/local/include
 -isystem /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1
