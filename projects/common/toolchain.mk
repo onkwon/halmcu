@@ -9,7 +9,7 @@ OC := $(CROSS_COMPILE_PREFIX)objcopy
 OD := $(CROSS_COMPILE_PREFIX)objdump
 NM := $(CROSS_COMPILE_PREFIX)nm
 
-CFLAGS += -std=gnu99 \
+CFLAGS += -std=c99 \
 	  -static \
 	  -nostdlib \
 	  -fno-builtin \

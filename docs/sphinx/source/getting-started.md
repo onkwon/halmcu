@@ -8,3 +8,7 @@
 ### Keil
 ### Other
 ## Running an example
+### Using libabov Build System
+Please refer to [build template](https://github.com/onkwon/libabov/tree/master/examples/build-template).
+### Custom Build
+Please refer to [custom build example](https://github.com/onkwon/libabov/tree/master/examples/custom-build).

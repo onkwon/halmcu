@@ -3,13 +3,13 @@ ENTRY(ISR_reset)
 PROVIDE(_estack = ORIGIN(ram) + LENGTH(ram));
 
 SECTIONS {
-	.isr_vector : {
-		KEEP(*(.isr_vector))
+	.isr_vectors : {
+		KEEP(*(.isr_vectors))
+		KEEP(*(.external_isr_vectors))
 		. = ALIGN(4);
 	} >rom
 
 	.text : {
-		. = ALIGN(4);
 		*(.text*)
 
 		. = ALIGN(4);

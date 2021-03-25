@@ -13,15 +13,16 @@ extern "C" {
 
 #define unused(x)			(void)(x)
 
-#define ABOVE_UNUSED			__attribute__((unused))
-#define ABOVE_USED			__attribute__((used))
-#define ABOVE_ALWAYS_INLINE		__attribute__((always_inline))
-#define ABOVE_WEAK			__attribute__((weak))
-#define ABOVE_NORETURN			__attribute__((noreturn))
-#define ABOVE_PACKED			__attribute__((packed))
-#define ABOVE_SECTION(x)		__attribute__((section(x)))
+#define ABOV_UNUSED			__attribute__((unused))
+#define ABOV_USED			__attribute__((used))
+#define ABOV_ALWAYS_INLINE		__attribute__((always_inline))
+#define ABOV_WEAK			__attribute__((weak))
+#define ABOV_NORETURN			__attribute__((noreturn))
+#define ABOV_PACKED			__attribute__((packed))
+#define ABOV_SECTION(x)			__attribute__((section(x)))
+#define ABOV_ALIAS(x)			__attribute__((alias(x)))
 
-#define ABOVE_STATIC_ASSERT(exp, msg)	_Static_assert(exp, msg)
+#define ABOV_STATIC_ASSERT(exp, msg)	_Static_assert(exp, msg)
 
 #define barrier()			__asm__ __volatile__("" ::: "memory")
 #define ACCESS_ONCE(x)			(*(volatile __typeof__(x) *)&(x))
@@ -48,4 +49,4 @@ extern "C" {
 }
 #endif
 
-#endif /* ABOVE_COMPILER_H */
+#endif /* ABOV_COMPILER_H */

@@ -15,6 +15,8 @@ libabov Developer Documentation
    examples
    copyrights
 
+.. mdinclude:: ../../../README.md
+
 Indices and tables
 ==================
 

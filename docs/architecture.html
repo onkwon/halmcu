@@ -176,13 +176,17 @@
 │       │   ├── m3/
 │       │   └── m4/
 │       └── include/
+│           └── CMSIS/
 ├── docs/
 ├── drivers/
 │   ├── a31/
 │   ├── a33/
 │   └── common/
-├── include/
-│   └── abov/
+├── examples/
+├── include
+│   └── abov
+│       ├── drivers
+│       └── sys
 ├── projects/
 │   └── common/
 └── tests/
@@ -192,12 +196,12 @@
 <div class="section" id="build-system">
 <h2>Build System<a class="headerlink" href="#build-system" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://www.gnu.org/software/make/manual/make.html">Make</a> build automation tool is used.</p>
-<ol class="simple">
-<li><p>You shoud specify a target you want to build for, something like: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">a33</span></code></p></li>
-<li><p>It will include a project Makefile according to the target. e.g. <code class="docutils literal notranslate"><span class="pre">projects/a33.mk</span></code></p></li>
-<li><p>In the project Makefile, all drivers it supports are included by <code class="docutils literal notranslate"><span class="pre">drivers/a33/driver.mk</span></code></p></li>
+<ol class="arabic simple">
+<li><p>You shoud specify MCU you want to build for, something like: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">MCU=a33g</span></code></p></li>
+<li><p>It will automatically include a project Makefile according to the MCU. e.g. <code class="docutils literal notranslate"><span class="pre">projects/a33g.mk</span></code></p></li>
+<li><p>In the project Makefile, all drivers it supports are included by <code class="docutils literal notranslate"><span class="pre">drivers/a33g/driver.mk</span></code></p></li>
 <li><p>Then it decides what cpu architecture is of the MCU</p></li>
-<li><p>And build based on the architecture with its Makefile, <code class="docutils literal notranslate"><span class="pre">arch/arm/armv7-m/m3/arch.mk</span></code></p></li>
+<li><p>And build based on the architecture with its Makefile, <code class="docutils literal notranslate"><span class="pre">arch/arm/armv7-m/m3/m3.mk</span></code></p></li>
 </ol>
 </div>
 </div>

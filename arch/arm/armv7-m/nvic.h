@@ -5,7 +5,11 @@
 extern "C" {
 #endif
 
+typedef void (*nvic_vector_t)(void);
+
 void ISR_reset(void);
+void default_fallback_handler(void);
+void default_irq_handler(void);
 
 #if defined(__cplusplus)
 }

@@ -1,52 +1,91 @@
-target := $(firstword $(MAKECMDGOALS))
-OUTDIR := $(BUILDIR)/$(target)
+OUTDIR := $(BUILDIR)/$(MCU)
 
-$(info building    $(MAKECMDGOALS))
+$(info building    $(MCU))
 
-include projects/common/version.mk
-include projects/common/toolchain.mk
-include projects/$(target).mk
-
-ifeq ($(ARCH),)
-$(error no cpu architecture specified)
-endif
-
-DEFS += \
-	$(ARCH) \
-	LIBABOV_BUILD_DATE=\""$(shell date)"\" \
-	LIBABOV_VERSION=$(VERSION) \
+include $(LIBABOV_ROOT)/projects/common/sources.mk
 
 OBJS += $(addprefix $(OUTDIR)/, $(SRCS:.c=.o))
-DEPS += $(OBJS:.o=.d)
+DEPS += $(LIBABOV_OBJS:.o=.d) $(OBJS:.o=.d)
+DEFS += $(LIBABOV_DEFS)
+INCS += $(LIBABOV_INCS)
 
 OUTCOM := $(OUTDIR)/$(PROJECT)
 OUTLIB := $(OUTCOM).a
+OUTELF := $(OUTCOM).elf
+OUTBIN := $(OUTCOM).bin
+OUTHEX := $(OUTCOM).hex
 OUTSHA := $(OUTCOM).sha256
-OUTPUT := $(OUTSHA) $(OUTDIR)/sources.txt $(OUTDIR)/includes.txt
+OUTSRC := $(OUTDIR)/sources.txt
+OUTINC := $(OUTDIR)/includes.txt
+OUTDEF := $(OUTDIR)/defines.txt
 
-$(MAKECMDGOALS): all
+OUTPUT := $(OUTBIN) $(OUTHEX) $(OUTSHA) $(OUTSRC) $(OUTINC) $(OUTDEF) \
+	$(OUTCOM).size $(OUTCOM).sym $(OUTCOM).lst $(OUTCOM).dump
+
 all: $(OUTPUT)
-	$(Q)$(SZ) -t --common $(sort $(OBJS))
+	$(Q)$(SZ) -t --common $(sort $(LIBABOV_OBJS) $(OBJS))
+	$(Q)$(SZ) $(OUTELF)
 
-$(OUTDIR)/sources.txt: $(OUTLIB)
+$(OUTCOM).size: $(OUTELF)
 	$(info generating  $@)
-	$(Q)echo $(sort $(SRCS)) | tr ' ' '\n' > $@
-$(OUTDIR)/includes.txt: $(OUTLIB)
+	$(Q)$(NM) -S --size-sort $< > $@
+$(OUTCOM).sym: $(OUTELF)
+	$(info generating  $@)
+	$(Q)$(OD) -t $< | sort > $@
+$(OUTCOM).lst: $(OUTELF)
+	$(info generating  $@)
+	$(Q)$(OD) -d $< > $@
+$(OUTCOM).dump: $(OUTELF)
+	$(info generating  $@)
+	$(Q)$(OD) -x $< > $@
+
+$(OUTSRC): $(OUTELF)
+	$(info generating  $@)
+	$(Q)echo $(sort $(LIBABOV_SRCS) $(SRCS)) | tr ' ' '\n' > $@
+$(OUTINC): $(OUTELF)
 	$(info generating  $@)
 	$(Q)echo $(subst -I,,$(sort $(INCS))) | tr ' ' '\n' > $@
-
-$(OUTSHA): $(OUTLIB)
+$(OUTDEF): $(OUTELF)
+	$(info generating  $@)
+	$(Q)echo $(sort $(DEFS)) | tr ' ' '\n' > $@
+$(OUTSHA): $(OUTELF)
 	$(info generating  $@)
 	$(Q)openssl dgst -sha256 $< > $@
-$(OUTLIB): $(OBJS)
+$(OUTHEX): $(OUTELF)
+	$(info generating  $@)
+	$(Q)$(OC) -O ihex $< $@
+$(OUTBIN): $(OUTELF)
+	$(info generating  $@)
+	$(Q)$(OC) -O binary $< $@
+$(OUTELF): $(LIBABOV_OBJS) $(OBJS) $(LD_SCRIPT)
+	$(info linking     $@)
+	$(Q)$(CC) -o $@ $(LIBABOV_OBJS) $(OBJS) \
+		-Wl,-Map,$(OUTCOM).map \
+		$(addprefix -T, $(LD_SCRIPT)) \
+		$(CFLAGS) \
+		$(LDFLAGS) \
+		$(LIBDIRS) \
+		$(LIBS)
+
+.PHONY: lib
+lib: $(OUTLIB)
+$(OUTLIB): $(LIBABOV_OBJS)
 	$(info archiving   $@)
 	$(Q)rm -f $@
 	$(Q)$(AR) $(ARFLAGS) $@ $^ 1> /dev/null 2>&1
+	$(Q)$(SZ) -t --common $(sort $^)
+$(LIBABOV_OBJS): $(OUTDIR)/%.o: $(LIBABOV_ROOT)/%.c $(MAKEFILE_LIST)
+	$(info compiling   $(<:$(LIBABOV_ROOT)/%=%))
+	@mkdir -p $(@D)
+	$(Q)$(CC) -o $@ -c $< -MMD \
+		$(addprefix -D, $(DEFS)) \
+		$(addprefix -I, $(INCS)) \
+		$(CFLAGS)
 
 $(OBJS): $(OUTDIR)/%.o: %.c $(MAKEFILE_LIST)
 	$(info compiling   $<)
 	@mkdir -p $(@D)
-	$(Q)$(CC) -o $@ -c $*.c -MMD \
+	$(Q)$(CC) -o $@ -c $< -MMD \
 		$(addprefix -D, $(DEFS)) \
 		$(addprefix -I, $(INCS)) \
 		$(CFLAGS)
