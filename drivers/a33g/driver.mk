@@ -1,6 +1,6 @@
 DRV_SUBDIRS := \
 	$(LIBABOV_ROOT)/drivers/common \
-	$(LIBABOV_ROOT)/drivers/$(MCU) \
+	$(LIBABOV_ROOT)/drivers/$(DEVICE) \
 
 DRV_SRCS := \
 	$(foreach d, $(DRV_SUBDIRS), \

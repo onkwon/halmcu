@@ -1,6 +1,6 @@
 PROJECT := a33g
 BUILDIR := build
-export MCU ?= a33g
+export DEVICE ?= a33g
 
 NDEBUG := true
 

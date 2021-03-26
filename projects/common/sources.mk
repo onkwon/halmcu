@@ -1,8 +1,8 @@
-ifeq ($(MCU),)
+ifeq ($(DEVICE),)
 $(error no mcu specified)
 endif
 
-include $(LIBABOV_ROOT)/projects/$(MCU).mk
+include $(LIBABOV_ROOT)/projects/$(DEVICE).mk
 include $(LIBABOV_ROOT)/projects/common/version.mk
 include $(LIBABOV_ROOT)/projects/common/toolchain.mk
 

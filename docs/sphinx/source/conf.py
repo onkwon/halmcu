@@ -33,6 +33,7 @@ release = '0.0.1'
 extensions = [
     'hawkmoth',
     'm2r2',
+    'sphinx_markdown_tables',
 ]
 
 # Add any paths that contain templates here, relative to this directory.

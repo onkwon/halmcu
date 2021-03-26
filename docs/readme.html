@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Getting Started &mdash; libabov 0.0.1 documentation</title>
+  <title>ABOV microcontroller library &mdash; libabov 0.0.1 documentation</title>
   
 
   
@@ -88,9 +88,12 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installing-prerequisites">Installing prerequisites</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ABOV microcontroller library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#getting-started">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installing-prerequisites">Installing prerequisites</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gnu-arm-embedded-toolchain">GNU Arm Embedded Toolchain</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#setting-up-the-development-environment">Setting up the development environment</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#visual-studio-code">Visual Studio Code</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#iar">IAR</a></li>
@@ -98,17 +101,18 @@
 <li class="toctree-l3"><a class="reference internal" href="#other">Other</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#running-an-example">Running an example</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#building-a-project">Building a project</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#using-libabov-build-system">Using libabov Build System</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#custom-build">Custom Build</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#running-an-example">Running an example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Design and Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="copyrights.html">Copyrights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devices.html">Supported Devices</a></li>
 </ul>
 
             
@@ -157,13 +161,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Getting Started</li>
+      <li>ABOV microcontroller library</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/getting-started.md.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/readme.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -176,14 +180,49 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="getting-started">
-<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="abov-microcontroller-library">
+<h1>ABOV microcontroller library<a class="headerlink" href="#abov-microcontroller-library" title="Permalink to this headline">¶</a></h1>
+<p>It provides a developing environment for ABOV devices by including low level
+hardware drivers, libraries, and examples for peripherals.</p>
 </div>
+<div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="installing-prerequisites">
 <h2>Installing prerequisites<a class="headerlink" href="#installing-prerequisites" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads">GNU Arm Embedded Toolchain</a></p>
+<div class="section" id="gnu-arm-embedded-toolchain">
+<h3>GNU Arm Embedded Toolchain<a class="headerlink" href="#gnu-arm-embedded-toolchain" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Download the <a class="reference external" href="https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads">GNU Arm Embedded Toolchain</a>.</p></li>
+<li><p>Locate it where desired</p></li>
+<li><p>Add path to environment variable</p></li>
+<li><p>Then you can check that ARM GCC is in your path:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ arm-none-eabi-gcc --version
+arm-none-eabi-gcc <span class="o">(</span>GNU Arm Embedded Toolchain <span class="m">10</span>-2020-q4-major<span class="o">)</span> <span class="m">10</span>.2.1 <span class="m">20201103</span> <span class="o">(</span>release<span class="o">)</span>
+Copyright <span class="o">(</span>C<span class="o">)</span> <span class="m">2020</span> Free Software Foundation, Inc.
+This is free software<span class="p">;</span> see the <span class="nb">source</span> <span class="k">for</span> copying conditions.  There is NO
+warranty<span class="p">;</span> not even <span class="k">for</span> MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+</pre></div>
+</div>
+<p>Alternatively you can do it with package manager:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://formulae.brew.sh/cask/gcc-arm-embedded">MacOSX</a></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">brew</span> <span class="pre">install</span> <span class="pre">--cask</span> <span class="pre">gcc-arm-embedded</span></code></p></li>
+</ul>
+</li>
+<li><p>Linux</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">-y</span> <span class="pre">gcc-arm-none-eabi</span></code></p></li>
+</ul>
+</li>
+<li><p>Windows</p>
+<ul>
+<li><p>Download and run <a class="reference external" href="https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads">the installer</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 <div class="section" id="setting-up-the-development-environment">
 <h2>Setting up the development environment<a class="headerlink" href="#setting-up-the-development-environment" title="Permalink to this headline">¶</a></h2>
@@ -200,8 +239,8 @@
 <h3>Other<a class="headerlink" href="#other" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="running-an-example">
-<h2>Running an example<a class="headerlink" href="#running-an-example" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="building-a-project">
+<h2>Building a project<a class="headerlink" href="#building-a-project" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="using-libabov-build-system">
 <h3>Using libabov Build System<a class="headerlink" href="#using-libabov-build-system" title="Permalink to this headline">¶</a></h3>
 <p>Please refer to <a class="reference external" href="https://github.com/onkwon/libabov/tree/master/examples/build-template">build template</a>.</p>
@@ -210,6 +249,9 @@
 <h3>Custom Build<a class="headerlink" href="#custom-build" title="Permalink to this headline">¶</a></h3>
 <p>Please refer to <a class="reference external" href="https://github.com/onkwon/libabov/tree/master/examples/custom-build">custom build example</a>.</p>
 </div>
+</div>
+<div class="section" id="running-an-example">
+<h2>Running an example<a class="headerlink" href="#running-an-example" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 

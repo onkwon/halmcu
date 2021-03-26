@@ -1,6 +1,6 @@
-OUTDIR := $(BUILDIR)/$(MCU)
+OUTDIR := $(BUILDIR)/$(DEVICE)
 
-$(info building    $(MCU))
+$(info building    $(DEVICE))
 
 include $(LIBABOV_ROOT)/projects/common/sources.mk
 

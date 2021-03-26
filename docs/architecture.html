@@ -42,7 +42,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="API Reference" href="api/index.html" />
-    <link rel="prev" title="Getting Started" href="getting-started.html" /> 
+    <link rel="prev" title="ABOV microcontroller library" href="readme.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -88,7 +88,8 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">ABOV microcontroller library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#getting-started">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Design and Architecture</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#directory-structure">Directory Structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#build-system">Build System</a></li>
@@ -96,7 +97,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="copyrights.html">Copyrights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devices.html">Supported Devices</a></li>
 </ul>
 
             
@@ -196,11 +197,13 @@
 <div class="section" id="build-system">
 <h2>Build System<a class="headerlink" href="#build-system" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://www.gnu.org/software/make/manual/make.html">Make</a> build automation tool is used.</p>
+<p>Additional tools like Kbuild or scripts are intentionally avoided not to
+increase complexity.</p>
 <ol class="arabic simple">
-<li><p>You shoud specify MCU you want to build for, something like: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">MCU=a33g</span></code></p></li>
-<li><p>It will automatically include a project Makefile according to the MCU. e.g. <code class="docutils literal notranslate"><span class="pre">projects/a33g.mk</span></code></p></li>
+<li><p>You shoud specify device you want to build for, something like: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">DEVICE=a33g</span></code></p></li>
+<li><p>It will automatically include a project Makefile according to the device. e.g. <code class="docutils literal notranslate"><span class="pre">projects/a33g.mk</span></code></p></li>
 <li><p>In the project Makefile, all drivers it supports are included by <code class="docutils literal notranslate"><span class="pre">drivers/a33g/driver.mk</span></code></p></li>
-<li><p>Then it decides what cpu architecture is of the MCU</p></li>
+<li><p>Then it decides what cpu architecture is of the device</p></li>
 <li><p>And build based on the architecture with its Makefile, <code class="docutils literal notranslate"><span class="pre">arch/arm/armv7-m/m3/m3.mk</span></code></p></li>
 </ol>
 </div>
@@ -213,7 +216,7 @@
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="api/index.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="getting-started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="readme.html" class="btn btn-neutral float-left" title="ABOV microcontroller library" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

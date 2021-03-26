@@ -9,13 +9,11 @@ libabov Developer Documentation
 .. toctree::
    :maxdepth: 2
 
-   getting-started
+   readme
    architecture
    api/index
    examples
-   copyrights
-
-.. mdinclude:: ../../../README.md
+   devices
 
 Indices and tables
 ==================

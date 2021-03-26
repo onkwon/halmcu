@@ -1,5 +1,5 @@
 PROJECT := a33g
-export MCU ?= a33g
+export DEVICE ?= a33g
 
 LD_SCRIPT := ports/abov/a33g526.ld
 LDFLAGS += -specs=nano.specs #-specs=nosys.specs
