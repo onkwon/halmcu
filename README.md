@@ -1,7 +1,7 @@
-# ABOV microcontroller library
+*libabov* provides a developing environment for ABOV devices by including low
+level hardware drivers, libraries, and examples for peripherals.
 
-It provides a developing environment for ABOV devices by including low level
-hardware drivers, libraries, and examples for peripherals.
+All documentation including API reference for *libabov* is at [libabov.readthedocs.io](https://libabov.readthedocs.io/)
 
 # Getting Started
 ## Installing prerequisites

@@ -1,5 +1,5 @@
 ifeq ($(DEVICE),)
-$(error no mcu specified)
+$(error no device specified)
 endif
 
 include $(LIBABOV_ROOT)/projects/$(DEVICE).mk

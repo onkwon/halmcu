@@ -4,7 +4,7 @@ UART
 Source
 ~~~~~~
 
-.. literalinclude:: ../../../../f.c
+.. literalinclude:: ../../../f.c
    :language: C
 
 Directive
@@ -12,10 +12,10 @@ Directive
 
 .. code-block:: rest
 
-   .. c:autodoc:: ../../../../f.c
+   .. c:autodoc:: ../../../f.c
 
 Output
 ~~~~~~
 
-.. c:autodoc:: ../../../*.[ch]
+.. c:autodoc:: ../../*.[ch]
    :compat: javadoc-basic
