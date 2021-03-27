@@ -1,4 +1,4 @@
 System
 ======
 
-.. c:autodoc:: ../../include/abov/sys/init.h
+.. c:autodoc:: ../../include/abov/system.h
