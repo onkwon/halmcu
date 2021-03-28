@@ -7,6 +7,7 @@ API Reference
    system
    uart
    timer
+   watchdog
    errata
 
 .. note:: This is a **note** box.

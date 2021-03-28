@@ -38,3 +38,8 @@ increase complexity.
 3. In the project Makefile, all drivers it supports are included by `drivers/a33g/driver.mk`
 4. Then it decides what cpu architecture is of the device
 5. And build based on the architecture with its Makefile, `arch/arm/armv7-m/m3/m3.mk`
+
+## Software Layers
+### Low Level Layer
+### Hardwar Abstraction Layer
+### Driver Layer
