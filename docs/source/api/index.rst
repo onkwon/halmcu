@@ -4,9 +4,10 @@ API Reference
 .. toctree::
    :maxdepth: 1
 
+   system
    uart
    timer
-   system
+   errata
 
 .. note:: This is a **note** box.
 
