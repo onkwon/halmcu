@@ -9,12 +9,12 @@
 #define WOF_POS					(8)
 #define WDH_POS					(15)
 
-#define WPRS_MASK				(7UL << WPRS_POS)
+#define WPRS_MASK				(7U << WPRS_POS)
 
-#define WEN					(1UL << WEN_POS)
-#define WRE					(1UL << WRE_POS)
-#define WIE					(1UL << WIE_POS)
-#define WDH					(1UL << WDH_POS)
+#define WEN					(1U << WEN_POS)
+#define WRE					(1U << WRE_POS)
+#define WIE					(1U << WIE_POS)
+#define WDH					(1U << WDH_POS)
 
 void wdt_ll_set_prescaler(uint32_t div_factor)
 {
@@ -61,18 +61,3 @@ uint32_t wdt_ll_get_count(void)
 {
 	return WDT->CVR;
 }
-
-uint32_t wdt_ll_get_timeout(void)
-{
-	return WDT->LR;
-}
-
-#if 0
-void wdt_hal_enable(void)
-{
-}
-
-void wdt_hal_disable(void)
-{
-}
-#endif

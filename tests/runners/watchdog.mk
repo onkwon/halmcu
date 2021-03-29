@@ -10,6 +10,7 @@ TEST_SRC_FILES = \
 INCLUDE_DIRS = \
 	../include \
 	stubs/overrides \
+	$(CPPUTEST_HOME)/include \
 
 CPPUTEST_CPPFLAGS = \
 	-DDEVICE=a33g \

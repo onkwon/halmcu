@@ -42,11 +42,13 @@ export CPPUTEST_WARNINGFLAGS = \
 	\
 	-Wswitch-default \
 	-Wswitch-enum \
-	-Wredundant-decls \
 
 ifeq ($(shell uname), Darwin)
-CPPUTEST_WARNINGFLAGS += -Wno-error=poison-system-directories
+CPPUTEST_WARNINGFLAGS += \
+	-Wno-error=poison-system-directories
 else
+CPPUTEST_WARNINGFLAGS += \
+	-Wno-error=redundant-decls
 #TARGET_PLATFORM ?= $(shell gcc -dumpmachine)
 endif
 
