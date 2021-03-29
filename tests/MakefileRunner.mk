@@ -31,32 +31,21 @@ export CPPUTEST_WARNINGFLAGS = \
 	-Wfloat-equal \
 	-Winline \
 	-Wundef \
+	-Wunused-macros \
 	-Wshadow \
 	-Wwrite-strings \
 	-Waggregate-return \
+	-Wredundant-decls \
 	-Wconversion \
 	-Wstrict-overflow=5 \
 	-Werror \
 	\
 	-Wswitch-default \
 	-Wswitch-enum \
-	-Wno-long-long \
-	-Wno-missing-braces \
-	-Wno-missing-field-initializers \
-	-Wno-packed \
-	-Wno-unused-parameter \
-	\
-	-Wno-error=switch-enum \
-	-Wno-error=aggregate-return
-#-Wredundant-decls -Wswitch-enum
+	-Wredundant-decls \
 
 ifeq ($(shell uname), Darwin)
-CPPUTEST_WARNINGFLAGS += \
-	-Wno-error=zero-as-null-pointer-constant \
-	-Wno-error=poison-system-directories \
-	-Wno-error=covered-switch-default \
-	-Wno-error=format-nonliteral \
-	-Wno-error=pedantic
+CPPUTEST_WARNINGFLAGS += -Wno-error=poison-system-directories
 else
 #TARGET_PLATFORM ?= $(shell gcc -dumpmachine)
 endif

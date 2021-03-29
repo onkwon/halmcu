@@ -13,10 +13,14 @@
 │       └── include/
 │           └── CMSIS/
 ├── docs/
+├── devices/
+│   └── abov
+│       ├── a31/
+│       ├── a33/
+│       └── common/
 ├── drivers/
-│   ├── a31/
-│   ├── a33/
-│   └── common/
+│   ├── adc/
+│   └── uart/
 ├── examples/
 ├── include
 │   └── abov
@@ -26,6 +30,12 @@
 │   └── common/
 └── tests/
 ```
+
+| Directory | Description                                                     |
+| --------- | -----------                                                     |
+| devices   | low level and hardware dependent code for the specific device   |
+| drivers   | device abstraction code for drivers. no hardware dependency     |
+
 
 ## Build System
 [Make](https://www.gnu.org/software/make/manual/make.html) build automation tool is used.

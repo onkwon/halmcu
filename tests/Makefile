@@ -1,18 +1,6 @@
 export CPPUTEST_HOME ?= cpputest
 export BUILDIR ?= build
 
-TEST_SRC_FILES    += src/test_all.cpp
-MOCKS_SRC_DIRS    += mocks
-
-CPPUTEST_CPPFLAGS += -DUNITTEST
-CPPUTEST_CXXFLAGS += -std=c++11
-
-INCLUDE_DIRS += \
-	../include \
-	fakes \
-	spies \
-	$(CPPUTEST_HOME)/include
-
 TESTS := $(shell find runners -type f -regex ".*\.mk")
 
 .PHONY: all
