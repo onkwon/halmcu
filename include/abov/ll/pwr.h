@@ -11,8 +11,7 @@ enum pwr_ll_mode {
 	LL_POWER_MODE_RUN,
 	LL_POWER_MODE_SLEEP,
 	LL_POWER_MODE_DEEP_SLEEP,
-	LL_POWER_MODE_STOP,
-	LL_POWER_MODE_STANDBY,
+	LL_POWER_MODE_BLACKOUT,
 };
 
 enum pwr_ll_peripheral {
@@ -38,15 +37,18 @@ enum pwr_ll_peripheral {
 	LL_PERIPHERAL_PMC		= LL_PERIPHERAL_BASE + 0x1200,
 	LL_PERIPHERAL_FRT		= LL_PERIPHERAL_BASE + 0x1300,
 	LL_PERIPHERAL_USART		= LL_PERIPHERAL_BASE + 0x1400,
+	LL_PERIPHERAL_MXFAIL		= LL_PERIPHERAL_BASE + 0x1500,
+	LL_PERIPHERAL_LVD		= LL_PERIPHERAL_BASE + 0x1600,
 };
 
 void pwr_ll_reboot(void);
 uint32_t pwr_ll_get_reboot_source(void);
+void pwr_ll_clear_reboot_source(uint32_t bitpos);
 
 void pwr_ll_set_mode(uint32_t val);
-int pwr_ll_get_mode(void);
 
 void pwr_ll_set_wakeup_source(uint32_t val);
+void pwr_ll_clear_wakeup_source(uint32_t val);
 uint32_t pwr_ll_get_wakeup_source(void);
 
 void pwr_ll_enable_peripheral(uint32_t val);
