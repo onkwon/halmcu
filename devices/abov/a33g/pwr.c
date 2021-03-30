@@ -35,9 +35,9 @@ static uint32_t get_wakeup_bitmask_from_peripheral(uint32_t x)
 		return 1U << 1;
 	case LL_PERIPHERAL_LVD:
 		return 1U << 0;
+	default:
+		return 0;
 	}
-
-	return 0;
 }
 
 void pwr_ll_reboot(void)
