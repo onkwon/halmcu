@@ -82,3 +82,30 @@ TEST(Power, clear_wakeup_source_ShouldClearSource) {
 	pwr_ll_clear_wakeup_source(LL_PERIPHERAL_WDT); // WDT
 	LONGS_EQUAL(0x7b6, PMU->WSER);
 }
+
+TEST(Power, enable_peripheral_ShouldEnablePeripheral) {
+	PMU->PER = 0;
+	pwr_ll_enable_peripheral(LL_PERIPHERAL_JTAG);
+	LONGS_EQUAL(0x80000000, PMU->PER);
+	pwr_ll_enable_peripheral(LL_PERIPHERAL_PWM);
+	LONGS_EQUAL(0x81000000, PMU->PER);
+	pwr_ll_enable_peripheral(LL_PERIPHERAL_UART + 1);
+	LONGS_EQUAL(0x81200000, PMU->PER);
+	pwr_ll_enable_peripheral(LL_PERIPHERAL_I2C);
+	LONGS_EQUAL(0x81240000, PMU->PER);
+	pwr_ll_enable_peripheral(LL_PERIPHERAL_GPIO + 2);
+	LONGS_EQUAL(0x81240400, PMU->PER);
+}
+
+TEST(Power, disable_peripheral_ShouldDisablePeripheral) {
+	pwr_ll_disable_peripheral(LL_PERIPHERAL_GPIO);
+	LONGS_EQUAL(0xfffffeff, PMU->PER);
+	pwr_ll_disable_peripheral(LL_PERIPHERAL_GPIO + 5); // GPIOF
+	LONGS_EQUAL(0xffffdeff, PMU->PER);
+	pwr_ll_disable_peripheral(LL_PERIPHERAL_UART + 2); // UART2
+	LONGS_EQUAL(0xffbfdeff, PMU->PER);
+	pwr_ll_disable_peripheral(LL_PERIPHERAL_ADC);
+	LONGS_EQUAL(0xefbfdeff, PMU->PER);
+	pwr_ll_disable_peripheral(LL_PERIPHERAL_WDT);
+	LONGS_EQUAL(0xefbfdef7, PMU->PER);
+}

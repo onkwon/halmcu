@@ -43,16 +43,16 @@ enum pwr_ll_peripheral {
 
 void pwr_ll_reboot(void);
 uint32_t pwr_ll_get_reboot_source(void);
-void pwr_ll_clear_reboot_source(uint32_t bitpos);
+void pwr_ll_clear_reboot_source(uint32_t bitmask);
 
 void pwr_ll_set_mode(uint32_t val);
 
-void pwr_ll_set_wakeup_source(uint32_t val);
-void pwr_ll_clear_wakeup_source(uint32_t val);
+void pwr_ll_set_wakeup_source(uint32_t peri);
+void pwr_ll_clear_wakeup_source(uint32_t peri);
 uint32_t pwr_ll_get_wakeup_source(void);
 
-void pwr_ll_enable_peripheral(uint32_t val);
-void pwr_ll_disable_peripheral(uint32_t val);
+void pwr_ll_enable_peripheral(uint32_t peri);
+void pwr_ll_disable_peripheral(uint32_t peri);
 
 #if defined(__cplusplus)
 }
