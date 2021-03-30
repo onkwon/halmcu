@@ -17,11 +17,11 @@ jobs:
         with:
           submodules: 'recursive'
       - name: Build Project
-        run: CROSS_COMPILE=arm-none-eabi VERSION=${GITHUB_REF#refs/tags/} make
+        run: VERSION=${GITHUB_REF#refs/tags/} make lib all DEVICE=a33g
       - name: Get Version
         id: get_version
         run: |
-          echo ::set-output name=HASH::$(cat build/libmcu_*.sha256)
+          echo ::set-output name=HASH::$(cat build/a33g/libabov.sha256)
           echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
       - name: Create Release
         id: create_release
@@ -45,6 +45,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/libmcu_${{ steps.get_version.outputs.VERSION }}.tgz
-          asset_name: libmcu_${{ steps.get_version.outputs.VERSION }}.tgz
+          asset_path: ./build/a33g/libabov.a
+          asset_name: libabov_${{ steps.get_version.outputs.VERSION }}.a
           asset_content_type: application/zip

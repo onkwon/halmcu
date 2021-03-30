@@ -1,3 +1,7 @@
+![Build Status](https://github.com/onkwon/libabov/workflows/build/badge.svg)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=onkwon_libabov&metric=security_rating)](https://sonarcloud.io/dashboard?id=onkwon_libabov)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=onkwon_libabov&metric=coverage)](https://sonarcloud.io/dashboard?id=onkwon_libabov)
+
 *libabov* provides a developing environment for ABOV devices by including low
 level hardware drivers, libraries, and examples for peripherals.
 
