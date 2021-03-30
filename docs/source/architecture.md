@@ -13,10 +13,14 @@
 │       └── include/
 │           └── CMSIS/
 ├── docs/
+├── devices/
+│   └── abov
+│       ├── a31/
+│       ├── a33/
+│       └── common/
 ├── drivers/
-│   ├── a31/
-│   ├── a33/
-│   └── common/
+│   ├── adc/
+│   └── uart/
 ├── examples/
 ├── include
 │   └── abov
@@ -26,6 +30,12 @@
 │   └── common/
 └── tests/
 ```
+
+| Directory | Description                                                     |
+| --------- | -----------                                                     |
+| devices   | low level and hardware dependent code for the specific device   |
+| drivers   | device abstraction code for drivers. no hardware dependency     |
+
 
 ## Build System
 [Make](https://www.gnu.org/software/make/manual/make.html) build automation tool is used.
@@ -38,3 +48,8 @@ increase complexity.
 3. In the project Makefile, all drivers it supports are included by `drivers/a33g/driver.mk`
 4. Then it decides what cpu architecture is of the device
 5. And build based on the architecture with its Makefile, `arch/arm/armv7-m/m3/m3.mk`
+
+## Software Layers
+### Low Level Layer
+### Hardwar Abstraction Layer
+### Driver Layer

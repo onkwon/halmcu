@@ -1,6 +1,6 @@
 #include "abov/errata.h"
-#include "arch/arm/cmsis.h"
-#include "registers.h"
+#include "abov/asm/arm/cmsis.h"
+#include "a33g.h"
 #include "abov/system.h"
 
 #define PMU_LEGACY_MODE					(0x0001UL << 31)

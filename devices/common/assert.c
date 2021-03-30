@@ -11,5 +11,5 @@ void __assert_func(const char * const file,
 	unused(func);
 	unused(exp);
 
-	while (1) {}
+	while (1) { /* hang */ }
 }
