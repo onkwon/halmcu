@@ -31,6 +31,7 @@ jobs:
           cd coverage_report
           for f in $(find ../tests -name '*.gcda' -or -name '*.gcno'); do cp $f ./; done
           gcov -abcfup ../**/*.c -o ./
+          ls -al
       - name: Archive code coverage results
         uses: actions/upload-artifact@v1
         with:
