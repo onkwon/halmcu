@@ -12,7 +12,7 @@
 
 #define SWRST					1
 
-static inline uint32_t get_bitmask_from_peripheral(uint32_t x)
+static uint32_t get_wakeup_bitmask_from_peripheral(uint32_t x)
 {
 	switch (x) {
 	case LL_PERIPHERAL_GPIO + 0: // GPIOA
@@ -82,12 +82,12 @@ void pwr_ll_set_mode(uint32_t val)
 
 void pwr_ll_set_wakeup_source(uint32_t val)
 {
-	PMU->WSER |= get_bitmask_from_peripheral(val);
+	PMU->WSER |= get_wakeup_bitmask_from_peripheral(val);
 }
 
 void pwr_ll_clear_wakeup_source(uint32_t val)
 {
-	PMU->WSER &= ~get_bitmask_from_peripheral(val);
+	PMU->WSER &= ~get_wakeup_bitmask_from_peripheral(val);
 }
 
 uint32_t pwr_ll_get_wakeup_source(void)
