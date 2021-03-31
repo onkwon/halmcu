@@ -41,7 +41,6 @@ export CPPUTEST_WARNINGFLAGS = \
 	-Werror \
 	\
 	-Wswitch-default \
-	-Wswitch-enum \
 
 ifeq ($(shell uname), Darwin)
 CPPUTEST_WARNINGFLAGS += \
