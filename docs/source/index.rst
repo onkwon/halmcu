@@ -7,7 +7,7 @@ libabov Developer Documentation
 ===============================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    readme
    architecture

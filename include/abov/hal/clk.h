@@ -8,17 +8,42 @@ extern "C" {
 #include <stdint.h>
 #include "abov/hal/peripheral.h"
 
+/** Clock source type */
 typedef enum {
+	/** Internal oscillator */
 	CLK_INTERNAL_OSC,
+	/** Internal 16MHz oscillator */
 	CLK_INTERNAL_OSC_16MHZ,
+	/** External oscillator */
 	CLK_EXTERNAL_OSC,
+	/** External sub oscillator */
 	CLK_EXTERNAL_OSC_SUB,
 } clk_source_t;
 
+/**
+ * Enable peripheral clock.
+ *
+ * :param peri: Peripheral declared as :c:type:`peripheral_t` in `peripheral.h`
+ */
 void clk_enable_peripheral(peripheral_t peri);
+/**
+ * Disable peripheral clock
+ *
+ * :param peri: Peripheral declared as :c:type:`peripheral_t` in `peripheral.h`
+ */
 void clk_disable_peripheral(peripheral_t peri);
 
+/**
+ * Enable clock source
+ *
+ * :param clk: Clock source.
+ */
 void clk_enable_source(clk_source_t clk);
+/**
+ * Disable clock source
+ *
+ * :param clk: Clock source.
+ */
 void clk_disable_source(clk_source_t clk);
 
 #if defined(__cplusplus)
