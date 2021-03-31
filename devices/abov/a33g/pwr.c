@@ -126,12 +126,12 @@ void pwr_ll_clear_reboot_source(uint32_t bitmask)
 	PMU->RSSR &= ~bitmask;
 }
 
-void pwr_ll_set_mode(uint32_t val)
+void pwr_ll_set_mode(pwr_mode_t sleep_mode)
 {
 	uint32_t bit = 0;
 	PMU->MR &= ~(PMUMODE_MASK | VDCLP_MASK);
 
-	switch (val) {
+	switch (sleep_mode) {
 	case LL_POWER_MODE_RUN:
 		bit = 0;
 		break;

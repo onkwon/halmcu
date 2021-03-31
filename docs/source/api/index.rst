@@ -4,11 +4,14 @@ API Reference
 .. toctree::
    :maxdepth: 1
 
-   system
-   uart
-   timer
-   watchdog
+   clock
    errata
+   peripheral
+   power
+   system
+   timer
+   uart
+   watchdog
 
 .. note:: This is a **note** box.
 
