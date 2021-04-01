@@ -1,8 +1,8 @@
 #include "abov/hal/clk.h"
+#include <assert.h>
+#include "abov/bitop.h"
 #include "abov/asm/arm/cmsis.h"
 #include "a33g.h"
-
-#include <assert.h>
 
 #define PLLCON_UNLOCK_KEY			0x80750000U
 
@@ -38,15 +38,6 @@
 #define PLLEN					(1U << 14)
 #define PLLRST					(1U << 15)
 #define PLLLOCKSTS				(1U << 12)
-
-static inline void set_register_with_mask(volatile uint32_t *reg,
-		uint32_t pos, uint32_t mask, uint32_t val)
-{
-	uint32_t t = *reg;
-	t &= ~mask;
-	t |= (val << pos) & mask;
-	*reg = t;
-}
 
 static void unlock_pllcon(void)
 {
@@ -194,42 +185,42 @@ static uint32_t clk_get_pll_prescaler(void)
 
 static void clk_set_pll_prescaler(uint32_t div_factor)
 {
-	set_register_with_mask(&PMU->BCCR, PLLCLKDIV_POS, PLLCLKDIV_MASK, div_factor);
+	bitop_clean_set_with_mask(&PMU->BCCR, PLLCLKDIV_POS, PLLCLKDIV_MASK, div_factor);
 }
 
 static void clk_set_hclk_prescaler(uint32_t div_factor)
 {
-	set_register_with_mask(&PMU->BCCR, HCLKDIV_POS, HCLKDIV_MASK, div_factor);
+	bitop_clean_set_with_mask(&PMU->BCCR, HCLKDIV_POS, HCLKDIV_MASK, div_factor);
 }
 
 static void clk_set_pclk_prescaler(uint32_t div_factor)
 {
-	set_register_with_mask(&PMU->BCCR, PCLKDIV_POS, PCLKDIV_MASK, div_factor);
+	bitop_clean_set_with_mask(&PMU->BCCR, PCLKDIV_POS, PCLKDIV_MASK, div_factor);
 }
 
 static void clk_set_pll_post_multifactor(uint32_t mul_factor) // N1
 {
-	set_register_with_mask(&PMU->PLLCON, VCO_N1_POS, VCO_N1_MASK, mul_factor);
+	bitop_clean_set_with_mask(&PMU->PLLCON, VCO_N1_POS, VCO_N1_MASK, mul_factor);
 }
 
 static void clk_set_pll_post_divfactor(uint32_t div_factor) // N2
 {
-	set_register_with_mask(&PMU->PLLCON, VCO_N2_POS, VCO_N2_MASK, div_factor);
+	bitop_clean_set_with_mask(&PMU->PLLCON, VCO_N2_POS, VCO_N2_MASK, div_factor);
 }
 
 static void clk_set_pll_pre_divfactor(uint32_t div_factor) // R
 {
-	set_register_with_mask(&PMU->PLLCON, PREDIV_POS, PREDIV_MASK, div_factor);
+	bitop_clean_set_with_mask(&PMU->PLLCON, PREDIV_POS, PREDIV_MASK, div_factor);
 }
 
 static void clk_set_pll_divfactor(uint32_t div_factor) // P
 {
-	set_register_with_mask(&PMU->PLLCON, POSTDIV_POS, POSTDIV_MASK, div_factor);
+	bitop_clean_set_with_mask(&PMU->PLLCON, POSTDIV_POS, POSTDIV_MASK, div_factor);
 }
 
 static void clk_set_pll_vco_mode(uint32_t mode) // D
 {
-	set_register_with_mask(&PMU->PLLCON, VCO_MODE_POS, VCO_MODE_MASK, mode);
+	bitop_clean_set_with_mask(&PMU->PLLCON, VCO_MODE_POS, VCO_MODE_MASK, mode);
 }
 
 static bool configure_pll(clk_source_t clkin)
