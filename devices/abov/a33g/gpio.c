@@ -268,7 +268,7 @@ void gpio_write(uint32_t ngpio, int value)
 
 int gpio_read(uint32_t ngpio)
 {
-	GPIO_Type *reg = get_reg_from_gpio_number(ngpio);
+	const GPIO_Type *reg = get_reg_from_gpio_number(ngpio);
 	uint32_t pin = get_pin_from_gpio_number(ngpio);
 
 	if (reg == NULL || pin > MAX_PIN_NUMBER) {
@@ -289,7 +289,7 @@ void gpio_write_port(gpio_port_t port, int value)
 
 int gpio_read_port(gpio_port_t port)
 {
-	GPIO_Type *reg = get_reg_from_port(port);
+	const GPIO_Type *reg = get_reg_from_port(port);
 
 	if (reg == NULL) {
 		return -1;
