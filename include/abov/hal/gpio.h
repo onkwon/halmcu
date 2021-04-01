@@ -109,17 +109,37 @@ void gpio_write_port(gpio_port_t port, int value);
  * :return: the value read from the specified GPIO port
  */
 int gpio_read_port(gpio_port_t port);
-/** Enable interrupt on the given GPIO pin
+/**
+ * Enable interrupt on the given GPIO pin
  *
  * :param ngpio: GPIO number
  * :param intr_type: sets interrupt trigger type
  */
 bool gpio_enable_intr(uint32_t ngpio, gpio_intr_t intr_type);
-/** Disable interrupt on the given GPIO pin
+/**
+ * Disable interrupt on the given GPIO pin
  *
  * :param ngpio: GPIO number
  */
 bool gpio_disable_intr(uint32_t ngpio);
+/**
+ * Clear interru flag on the given GPIO pin
+ *
+ * :param ngpio: GPIO number
+ */
+void gpio_clear_intr_flag(uint32_t ngpio);
+/**
+ * Enable the given port
+ *
+ * :param port: GPIO port
+ */
+void gpio_enable_port(gpio_port_t port);
+/**
+ * Disable the given port
+ *
+ * :param port: GPIO port
+ */
+void gpio_disable_port(gpio_port_t port);
 
 #if defined(__cplusplus)
 }
