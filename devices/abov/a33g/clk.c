@@ -1,6 +1,7 @@
 #include "abov/hal/clk.h"
 #include <assert.h>
 #include "abov/bitop.h"
+#include "abov/compiler.h"
 #include "abov/asm/arm/cmsis.h"
 #include "a33g.h"
 
@@ -265,8 +266,10 @@ static void set_pll_factors(uint32_t src_hz, uint32_t target_hz)
 	assert(r < 8); // 3-bit PREDIV
 	assert(src_hz / (r+1) == 2*MHZ);
 
-	uint32_t n1, n2;
+	uint32_t n1 = 0;
+	uint32_t n2 = 0;
 	bool ok = calculate_n1_n2(target_hz, &n1, &n2);
+	unused(ok);
 	assert(ok);
 	assert(2*(n1+1) <= 200); // NOTE: 50 <= VCO <= 200MHz, 100 <= VCOx2 <= 250MHz
 	assert(2*(n1+1)/(n2+1) <= 90); // NOTE: 8 <= out frequency <= 90MHz
