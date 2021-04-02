@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#define PERIPHERAL_SPACE_SIZE		0x100U
+
 /** Each peripheral space is defined at 256 intervals.
  * Say there are 3 UARTs, each UART can be accessed with PERIPHERAL_GPIO + n. */
 typedef enum {

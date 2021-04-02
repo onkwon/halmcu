@@ -24,13 +24,13 @@
 static UART_Type *get_uart_from_port(uart_port_t port)
 {
 	switch (port) {
-	case UARTp0:
+	case UART_PORT_0:
 		return UART0;
-	case UARTp1:
+	case UART_PORT_1:
 		return UART1;
-	case UARTp2:
+	case UART_PORT_2:
 		return UART2;
-	case UARTp3:
+	case UART_PORT_3:
 		return UART3;
 	default:
 		return NULL;

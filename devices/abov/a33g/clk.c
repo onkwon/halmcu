@@ -449,3 +449,17 @@ bool clk_is_pll_locked(void)
 {
 	return !!(PMU->PLLCON & PLLLOCKSTS);
 }
+
+void clk_reset(void)
+{
+	PMU->PCCR = 0x118;
+	PMU->CCR = 0x80;
+	PMU->CMR = 0;
+	PMU->MCMR = 0;
+	PMU->BCCR = 0;
+	PMU->PCSR = 0;
+	PMU->COR = 0;
+	PMU->PLLCON = 0;
+	PMU->IOSC16TRIM = 0x228B;
+	PMU->EOSCCON = 1;
+}

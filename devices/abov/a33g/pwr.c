@@ -14,19 +14,11 @@
 
 static uint32_t get_wakeup_bitmask_from_enum(uint32_t x)
 {
-	switch (x) {
-	case PERIPHERAL_GPIOA:
-		return 1U << 5;
-	case PERIPHERAL_GPIOB:
-		return 1U << 6;
-	case PERIPHERAL_GPIOC:
-		return 1U << 7;
-	case PERIPHERAL_GPIOD:
-		return 1U << 8;
-	case PERIPHERAL_GPIOE:
-		return 1U << 9;
-	case PERIPHERAL_GPIOF:
-		return 1U << 10;
+	uint32_t peri = x & ~(PERIPHERAL_SPACE_SIZE - 1);
+
+	switch (peri) {
+	case PERIPHERAL_GPIO:
+		return 1U << (x - PERIPHERAL_GPIO + 5);
 	case PERIPHERAL_FRT:
 		return 1U << 4;
 	case PERIPHERAL_WDT:
@@ -42,66 +34,34 @@ static uint32_t get_wakeup_bitmask_from_enum(uint32_t x)
 
 static uint32_t get_activation_bitmask_from_enum(uint32_t x)
 {
-	switch (x) {
+	uint32_t peri = x & ~(PERIPHERAL_SPACE_SIZE - 1);
+
+	switch (peri) {
 	case PERIPHERAL_JTAG:
 		return 1U << 31;
 	case PERIPHERAL_PMC:
 		return 1U << 29;
 	case PERIPHERAL_ADC:
 		return 1U << 28;
-	case PERIPHERAL_PWM4:
-	case PERIPHERAL_PWM5:
-	case PERIPHERAL_PWM6:
-	case PERIPHERAL_PWM7:
-		return 1U << 25;
-	case PERIPHERAL_PWM0:
-	case PERIPHERAL_PWM1:
-	case PERIPHERAL_PWM2:
-	case PERIPHERAL_PWM3:
-		return 1U << 24;
-	case PERIPHERAL_UART3:
-		return 1U << 23;
-	case PERIPHERAL_UART2:
-		return 1U << 22;
-	case PERIPHERAL_UART1:
-		return 1U << 21;
-	case PERIPHERAL_UART0:
-		return 1U << 20;
-	case PERIPHERAL_I2C1:
-		return 1U << 19;
-	case PERIPHERAL_I2C0:
-		return 1U << 18;
-	case PERIPHERAL_SPI1:
-		return 1U << 17;
-	case PERIPHERAL_SPI0:
-		return 1U << 16;
+	case PERIPHERAL_PWM:
+		return 1U << (((x - PERIPHERAL_PWM) >> 2) + 24);
+	case PERIPHERAL_UART:
+		return 1U << (x - PERIPHERAL_UART + 20);
+	case PERIPHERAL_I2C:
+		return 1U << (x - PERIPHERAL_I2C + 18);
+	case PERIPHERAL_SPI:
+		return 1U << (x - PERIPHERAL_SPI + 16);
 	case PERIPHERAL_CRC:
 		return 1U << 14;
-	case PERIPHERAL_GPIOF:
-		return 1U << 13;
-	case PERIPHERAL_GPIOE:
-		return 1U << 12;
-	case PERIPHERAL_GPIOD:
-		return 1U << 11;
-	case PERIPHERAL_GPIOC:
-		return 1U << 10;
-	case PERIPHERAL_GPIOB:
-		return 1U << 9;
-	case PERIPHERAL_GPIOA:
-		return 1U << 8;
-	case PERIPHERAL_TIMER9:
-	case PERIPHERAL_TIMER8:
-	case PERIPHERAL_TIMER7:
-	case PERIPHERAL_TIMER6:
-		return 1U << 7;
-	case PERIPHERAL_TIMER5:
-	case PERIPHERAL_TIMER4:
-	case PERIPHERAL_TIMER3:
-	case PERIPHERAL_TIMER2:
-		return 1U << 6;
-	case PERIPHERAL_TIMER1:
-	case PERIPHERAL_TIMER0:
-		return 1U << 5;
+	case PERIPHERAL_GPIO:
+		return 1U << (x - PERIPHERAL_GPIO + 8);
+	case PERIPHERAL_TIMER:
+		if (x > PERIPHERAL_TIMER5) { /* TIMER6 ~ TIMER9 */
+			return 1U << 7;
+		} else if (x >= PERIPHERAL_TIMER2) { /* TIMER2 ~ TIMER5 */
+			return 1U << 6;
+		}
+		return 1U << 5; /* TIMER0 and TIMER1 */
 	case PERIPHERAL_FRT:
 		return 1U << 4;
 	case PERIPHERAL_WDT:
@@ -174,4 +134,28 @@ void pwr_enable_peripheral(peripheral_t peri)
 void pwr_disable_peripheral(peripheral_t peri)
 {
 	PMU->PER &= ~get_activation_bitmask_from_enum(peri);
+}
+
+void pwr_reset(void)
+{
+	PMU->MR = 0;
+	PMU->CFG = 0;
+	PMU->WSER = 0;
+	PMU->RSER = 0x69;
+	PMU->RSSR = 0;
+	PMU->PRER = 0xB3FF7FF8;
+	PMU->PER = 0xB3FF7FF8;
+	PMU->PCCR = 0x118;
+	PMU->CCR = 0x80;
+	PMU->CMR = 0;
+	PMU->MCMR = 0;
+	PMU->BCCR = 0;
+	PMU->PCSR = 0;
+	PMU->COR = 0;
+	PMU->PLLCON = 0;
+	PMU->LVDCON = 0x8800;
+	PMU->VDCCON = 0xFF;
+	PMU->IOSC16TRIM = 0x228B;
+	PMU->EOSCCON = 1;
+	PMU->EXTMODER = 0;
 }

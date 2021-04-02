@@ -8,6 +8,13 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
+/**
+ * Reset WDT unit
+ *
+ * This function makes WDT unit the reset state.
+ */
+void wdt_reset(void);
+
 void wdt_ll_set_prescaler(uint32_t div_factor);
 void wdt_ll_reload(uint32_t timeout);
 void wdt_ll_start(void);
