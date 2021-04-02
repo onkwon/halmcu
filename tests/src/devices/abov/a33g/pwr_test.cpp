@@ -12,17 +12,13 @@ struct pmu * const PMU = &reg;
 
 TEST_GROUP(Power) {
 	void setup(void) {
-		set_initial_state();
-	}
-	void teardown(void) {
-	}
-
-	void set_initial_state(void) {
 		pwr_reset();
 
 		PMU->IDR = 0xCEDA0000;
 		PMU->PRER = 0xFFFFFFFF;
 		PMU->PER = 0xFFFFFFFF;
+	}
+	void teardown(void) {
 	}
 };
 

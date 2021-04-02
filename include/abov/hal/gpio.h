@@ -59,6 +59,12 @@ typedef enum {
 } gpio_intr_t;
 
 /**
+ * Reset GPIO port
+ *
+ * This function makes GPIO port the reset state.
+ */
+void gpio_reset(gpio_port_t port);
+/**
  * Initialize the given GPIO pin to the specified mode
  *
  * :param ngpio: GPIO number

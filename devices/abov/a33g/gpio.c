@@ -307,3 +307,8 @@ void gpio_disable_port(gpio_port_t port)
 {
 	disable_port(port);
 }
+
+void gpio_reset(gpio_port_t port)
+{
+	unused(port);
+}
