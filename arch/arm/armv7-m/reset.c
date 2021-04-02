@@ -1,4 +1,4 @@
-#include "abov/asm/arm/nvic.h"
+#include "abov/irq.h"
 #include <stdint.h>
 #include "abov/asm/arm/cmsis.h"
 #include "abov/compiler.h"

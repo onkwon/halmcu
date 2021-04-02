@@ -5,7 +5,6 @@ PROVIDE(_estack = ORIGIN(ram) + LENGTH(ram));
 SECTIONS {
 	.isr_vectors : {
 		KEEP(*(.isr_vectors))
-		KEEP(*(.external_isr_vectors))
 		. = ALIGN(4);
 	} >rom
 

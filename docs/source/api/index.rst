@@ -7,6 +7,7 @@ API Reference
    clock
    errata
    gpio
+   irq
    peripheral
    power
    system
