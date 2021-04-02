@@ -44,7 +44,7 @@ static bool is_tx_busy(const UART_Type *uart)
 
 uint32_t uart_get_status(uart_port_t port)
 {
-	UART_Type *uart = get_uart_from_port(port);
+	const UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
 	return (uart->LSR << 8) | uart->IIR;
 }
@@ -61,74 +61,6 @@ void uart_disable_rx_intr(uart_port_t port)
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
 	uart->IER &= ~DRIE;
-}
-
-void uart_set_baudrate(uart_port_t port, uint32_t baudrate)
-{
-	UART_Type *uart = get_uart_from_port(port);
-	assert(uart != NULL);
-
-	uint32_t n = clk_get_pclk_frequency() / 2;
-	uint32_t d = 16 * baudrate;
-	uint32_t y = n / d;
-	uint32_t r = n - y * d;
-
-	uint8_t bfr = (uint8_t)(r * 256 / d);
-	uint8_t dlm = (uint8_t)(y >> 8);
-	uint8_t dll = (uint8_t)y;
-
-	uint32_t lcr = uart->LCR;
-	uart->LCR = 0x80;
-	uart->DLM = (uint32_t)dlm;
-	uart->DLL = (uint32_t)dll;
-	uart->BFR = (uint32_t)bfr;
-	uart->LCR = lcr;
-}
-
-int uart_read_byte(uart_port_t port)
-{
-	UART_Type *uart = get_uart_from_port(port);
-	assert(uart != NULL);
-
-	if (uart->LSR & RDR) {
-		return (int)uart->RBR;
-	}
-
-	return -1;
-}
-
-void uart_write_byte(uart_port_t port, uint8_t val)
-{
-	UART_Type *uart = get_uart_from_port(port);
-	assert(uart != NULL);
-
-	while (is_tx_busy(uart)) {
-		/* wait for transmit buffer gets available */
-	}
-
-	uart->THR = (uint32_t)val;
-}
-
-void uart_reset(uart_port_t port)
-{
-	UART_Type *uart = get_uart_from_port(port);
-	assert(uart != NULL);
-
-	while (is_tx_busy(uart)) {
-		/* wait until finising ongoing tx */
-	}
-
-	uart->IER = 0;
-	unused(uart->IIR);
-	unused(uart->LSR);
-	uart->FCR = 0;
-	uart->SCR = 0;
-	uart->DTR = 0;
-	uart->LCR = 0x80;
-	uart->DLL = 0;
-	uart->DLM = 0;
-	uart->BFR = 0;
-	uart->LCR = 0;
 }
 
 void uart_set_parity(uart_port_t port, uart_parity_t parity)
@@ -164,6 +96,52 @@ void uart_set_wordsize(uart_port_t port, uart_wordsize_t wordsize)
 			WORDSIZE_POS, 3U << WORDSIZE_POS, (uint32_t)wordsize-5);
 }
 
+void uart_set_baudrate(uart_port_t port, uint32_t baudrate)
+{
+	UART_Type *uart = get_uart_from_port(port);
+	assert(uart != NULL);
+
+	uint32_t n = clk_get_pclk_frequency() / 2;
+	uint32_t d = 16 * baudrate;
+	uint32_t y = n / d;
+	uint32_t r = n - y * d;
+
+	uint8_t bfr = (uint8_t)(r * 256 / d);
+	uint8_t dlm = (uint8_t)(y >> 8);
+	uint8_t dll = (uint8_t)y;
+
+	uint32_t lcr = uart->LCR;
+	uart->LCR = 0x80;
+	uart->DLM = (uint32_t)dlm;
+	uart->DLL = (uint32_t)dll;
+	uart->BFR = (uint32_t)bfr;
+	uart->LCR = lcr;
+}
+
+int uart_read_byte(uart_port_t port)
+{
+	const UART_Type *uart = get_uart_from_port(port);
+	assert(uart != NULL);
+
+	if (uart->LSR & RDR) {
+		return (int)uart->RBR;
+	}
+
+	return -1;
+}
+
+void uart_write_byte(uart_port_t port, uint8_t val)
+{
+	UART_Type *uart = get_uart_from_port(port);
+	assert(uart != NULL);
+
+	while (is_tx_busy(uart)) {
+		/* wait for transmit buffer gets available */
+	}
+
+	uart->THR = (uint32_t)val;
+}
+
 void uart_enable(uart_port_t port)
 {
 	uint32_t peri = (uint32_t)port + PERIPHERAL_UART0;
@@ -180,4 +158,26 @@ void uart_disable(uart_port_t port)
 
 	clk_disable_peripheral((peripheral_t)peri);
 	pwr_disable_peripheral((peripheral_t)peri);
+}
+
+void uart_reset(uart_port_t port)
+{
+	UART_Type *uart = get_uart_from_port(port);
+	assert(uart != NULL);
+
+	while (is_tx_busy(uart)) {
+		/* wait until finising ongoing tx */
+	}
+
+	uart->IER = 0;
+	unused(uart->IIR);
+	unused(uart->LSR);
+	uart->FCR = 0;
+	uart->SCR = 0;
+	uart->DTR = 0;
+	uart->LCR = 0x80;
+	uart->DLL = 0;
+	uart->DLM = 0;
+	uart->BFR = 0;
+	uart->LCR = 0;
 }
