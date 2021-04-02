@@ -169,8 +169,8 @@ void uart_enable(uart_port_t port)
 	uint32_t peri = (uint32_t)port + PERIPHERAL_UART0;
 	assert(peri >= PERIPHERAL_UART0 && peri <= PERIPHERAL_UART3);
 
-	pwr_enable_peripheral(peri);
-	clk_enable_peripheral(peri);
+	pwr_enable_peripheral((peripheral_t)peri);
+	clk_enable_peripheral((peripheral_t)peri);
 }
 
 void uart_disable(uart_port_t port)
@@ -178,6 +178,6 @@ void uart_disable(uart_port_t port)
 	uint32_t peri = (uint32_t)port + PERIPHERAL_UART0;
 	assert(peri >= PERIPHERAL_UART0 && peri <= PERIPHERAL_UART3);
 
-	clk_disable_peripheral(peri);
-	pwr_disable_peripheral(peri);
+	clk_disable_peripheral((peripheral_t)peri);
+	pwr_disable_peripheral((peripheral_t)peri);
 }

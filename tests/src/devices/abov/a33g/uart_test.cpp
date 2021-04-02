@@ -22,7 +22,7 @@ uint32_t clk_get_pclk_frequency(void)
 		.returnUnsignedIntValueOrDefault(8000000);
 }
 
-void pwr_enable_peripheral(uint32_t peri)
+void pwr_enable_peripheral(peripheral_t peri)
 {
 	mock().actualCall(__func__).withParameter("peri", peri);
 }
@@ -30,7 +30,7 @@ void clk_enable_peripheral(peripheral_t peri)
 {
 	mock().actualCall(__func__).withParameter("peri", peri);
 }
-void pwr_disable_peripheral(uint32_t peri)
+void pwr_disable_peripheral(peripheral_t peri)
 {
 	mock().actualCall(__func__).withParameter("peri", peri);
 }

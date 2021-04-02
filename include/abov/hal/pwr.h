@@ -33,16 +33,16 @@ void pwr_clear_reboot_source(uint32_t bitmask);
 void pwr_set_mode(pwr_mode_t sleep_mode);
 
 /** Set wakeup source */
-void pwr_set_wakeup_source(uint32_t peri);
+void pwr_set_wakeup_source(peripheral_t peri);
 /** Clear wakeup source */
-void pwr_clear_wakeup_source(uint32_t peri);
+void pwr_clear_wakeup_source(peripheral_t peri);
 /** Get wakeup source */
 uint32_t pwr_get_wakeup_source(void);
 
 /** Enable peripheral */
-void pwr_enable_peripheral(uint32_t peri);
+void pwr_enable_peripheral(peripheral_t peri);
 /** Disable peripheral */
-void pwr_disable_peripheral(uint32_t peri);
+void pwr_disable_peripheral(peripheral_t peri);
 
 #if defined(__cplusplus)
 }

@@ -151,12 +151,12 @@ void pwr_set_mode(pwr_mode_t sleep_mode)
 	PMU->MR |= bit;
 }
 
-void pwr_set_wakeup_source(uint32_t peri)
+void pwr_set_wakeup_source(peripheral_t peri)
 {
 	PMU->WSER |= get_wakeup_bitmask_from_enum(peri);
 }
 
-void pwr_clear_wakeup_source(uint32_t peri)
+void pwr_clear_wakeup_source(peripheral_t peri)
 {
 	PMU->WSER &= ~get_wakeup_bitmask_from_enum(peri);
 }
@@ -166,12 +166,12 @@ uint32_t pwr_get_wakeup_source(void)
 	return PMU->WSSR;
 }
 
-void pwr_enable_peripheral(uint32_t peri)
+void pwr_enable_peripheral(peripheral_t peri)
 {
 	PMU->PER |= get_activation_bitmask_from_enum(peri);
 }
 
-void pwr_disable_peripheral(uint32_t peri)
+void pwr_disable_peripheral(peripheral_t peri)
 {
 	PMU->PER &= ~get_activation_bitmask_from_enum(peri);
 }
