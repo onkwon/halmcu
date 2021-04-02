@@ -21,8 +21,7 @@ TEST_GROUP(Clock) {
 	void teardown(void) {
 	}
 
-	void set_initial_state(void)
-	{
+	void set_initial_state(void) {
 		memset(PMU, 0, sizeof(*PMU));
 		PMU->PCCR = 0x118;
 		PMU->CCR = 0x80;

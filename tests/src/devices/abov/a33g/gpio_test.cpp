@@ -37,8 +37,7 @@ TEST_GROUP(gpio) {
 	void teardown(void) {
 	}
 
-	void set_initial_state(void)
-	{
+	void set_initial_state(void) {
 		memset(PCA, 0, sizeof(*PCA));
 		memset(PCB, 0, sizeof(*PCB));
 		memset(PCC, 0, sizeof(*PCC));

@@ -4,7 +4,7 @@
 
 #include <string.h>
 
-#include "abov/ll/pwr.h"
+#include "abov/hal/pwr.h"
 #include "a33g.h"
 
 extern "C" {
@@ -19,8 +19,7 @@ TEST_GROUP(Power) {
 	void teardown(void) {
 	}
 
-	void set_initial_state(void)
-	{
+	void set_initial_state(void) {
 		memset(PMU, 0, sizeof(*PMU));
 		PMU->IDR = 0xCEDA0000;
 		PMU->RSER = 0x69;
@@ -32,80 +31,80 @@ TEST_GROUP(Power) {
 };
 
 TEST(Power, reboot_ShouldSetSWRST) {
-	pwr_ll_reboot();
+	pwr_reboot();
 	LONGS_EQUAL(1, PMU->CFG);
 }
 
 TEST(Power, get_reboot_source_ShouldReturnResetSource) {
 	PMU->RSSR = 0x40;
-	LONGS_EQUAL(0x40, pwr_ll_get_reboot_source());
+	LONGS_EQUAL(0x40, pwr_get_reboot_source());
 	PMU->RSSR = 0x8;
-	LONGS_EQUAL(0x8, pwr_ll_get_reboot_source());
+	LONGS_EQUAL(0x8, pwr_get_reboot_source());
 }
 
 TEST(Power, clear_reboot_source_ShouldClearResetSource) {
 	PMU->RSSR = 0xFB;
-	pwr_ll_clear_reboot_source(0x40);
+	pwr_clear_reboot_source(0x40);
 	LONGS_EQUAL(0xBB, PMU->RSSR);
-	pwr_ll_clear_reboot_source(0x8);
+	pwr_clear_reboot_source(0x8);
 	LONGS_EQUAL(0xB3, PMU->RSSR);
-	pwr_ll_clear_reboot_source(0x20);
+	pwr_clear_reboot_source(0x20);
 	LONGS_EQUAL(0x93, PMU->RSSR);
 }
 
 TEST(Power, set_mode_ShouldChangeMode) {
-	pwr_ll_set_mode(LL_POWER_MODE_SLEEP);
+	pwr_set_mode(PWR_MODE_SLEEP);
 	LONGS_EQUAL(1, PMU->MR);
-	pwr_ll_set_mode(LL_POWER_MODE_DEEP_SLEEP);
+	pwr_set_mode(PWR_MODE_DEEP_SLEEP);
 	LONGS_EQUAL(2, PMU->MR);
-	pwr_ll_set_mode(LL_POWER_MODE_BLACKOUT);
+	pwr_set_mode(PWR_MODE_BLACKOUT);
 	LONGS_EQUAL(6, PMU->MR);
 }
 
 TEST(Power, set_wakeup_source_ShouldSetSource) {
-	pwr_ll_set_wakeup_source(LL_PERIPHERAL_GPIO); // GPIOA
+	pwr_set_wakeup_source(PERIPHERAL_GPIOA);
 	LONGS_EQUAL(0x20, PMU->WSER);
-	pwr_ll_set_wakeup_source(LL_PERIPHERAL_GPIO + 1); // GPIOB
+	pwr_set_wakeup_source(PERIPHERAL_GPIOB);
 	LONGS_EQUAL(0x60, PMU->WSER);
-	pwr_ll_set_wakeup_source(LL_PERIPHERAL_GPIO + 5); // GPIOF
+	pwr_set_wakeup_source(PERIPHERAL_GPIOF);
 	LONGS_EQUAL(0x460, PMU->WSER);
-	pwr_ll_set_wakeup_source(LL_PERIPHERAL_MXFAIL); // MXFAIL
+	pwr_set_wakeup_source(PERIPHERAL_MXFAIL);
 	LONGS_EQUAL(0x462, PMU->WSER);
 }
 
 TEST(Power, clear_wakeup_source_ShouldClearSource) {
 	PMU->WSER = 0x7ff;
-	pwr_ll_clear_wakeup_source(LL_PERIPHERAL_GPIO + 1); // GPIOB
+	pwr_clear_wakeup_source(PERIPHERAL_GPIOB);
 	LONGS_EQUAL(0x7bf, PMU->WSER);
-	pwr_ll_clear_wakeup_source(LL_PERIPHERAL_LVD); // LVD
+	pwr_clear_wakeup_source(PERIPHERAL_LVD);
 	LONGS_EQUAL(0x7be, PMU->WSER);
-	pwr_ll_clear_wakeup_source(LL_PERIPHERAL_WDT); // WDT
+	pwr_clear_wakeup_source(PERIPHERAL_WDT);
 	LONGS_EQUAL(0x7b6, PMU->WSER);
 }
 
 TEST(Power, enable_peripheral_ShouldEnablePeripheral) {
 	PMU->PER = 0;
-	pwr_ll_enable_peripheral(LL_PERIPHERAL_JTAG);
+	pwr_enable_peripheral(PERIPHERAL_JTAG);
 	LONGS_EQUAL(0x80000000, PMU->PER);
-	pwr_ll_enable_peripheral(LL_PERIPHERAL_PWM);
+	pwr_enable_peripheral(PERIPHERAL_PWM);
 	LONGS_EQUAL(0x81000000, PMU->PER);
-	pwr_ll_enable_peripheral(LL_PERIPHERAL_UART + 1);
+	pwr_enable_peripheral(PERIPHERAL_UART1);
 	LONGS_EQUAL(0x81200000, PMU->PER);
-	pwr_ll_enable_peripheral(LL_PERIPHERAL_I2C);
+	pwr_enable_peripheral(PERIPHERAL_I2C);
 	LONGS_EQUAL(0x81240000, PMU->PER);
-	pwr_ll_enable_peripheral(LL_PERIPHERAL_GPIO + 2);
+	pwr_enable_peripheral(PERIPHERAL_GPIOC);
 	LONGS_EQUAL(0x81240400, PMU->PER);
 }
 
 TEST(Power, disable_peripheral_ShouldDisablePeripheral) {
-	pwr_ll_disable_peripheral(LL_PERIPHERAL_GPIO);
+	pwr_disable_peripheral(PERIPHERAL_GPIO);
 	LONGS_EQUAL(0xfffffeff, PMU->PER);
-	pwr_ll_disable_peripheral(LL_PERIPHERAL_GPIO + 5); // GPIOF
+	pwr_disable_peripheral(PERIPHERAL_GPIOF);
 	LONGS_EQUAL(0xffffdeff, PMU->PER);
-	pwr_ll_disable_peripheral(LL_PERIPHERAL_UART + 2); // UART2
+	pwr_disable_peripheral(PERIPHERAL_UART2);
 	LONGS_EQUAL(0xffbfdeff, PMU->PER);
-	pwr_ll_disable_peripheral(LL_PERIPHERAL_ADC);
+	pwr_disable_peripheral(PERIPHERAL_ADC);
 	LONGS_EQUAL(0xefbfdeff, PMU->PER);
-	pwr_ll_disable_peripheral(LL_PERIPHERAL_WDT);
+	pwr_disable_peripheral(PERIPHERAL_WDT);
 	LONGS_EQUAL(0xefbfdef7, PMU->PER);
 }

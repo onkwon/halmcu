@@ -19,7 +19,7 @@ static uint32_t get_pin_from_gpio_number(uint32_t ngpio)
 
 static gpio_port_t get_port_from_gpio_number(uint32_t ngpio)
 {
-	return ngpio & ~PIN_NUMBER_MASK;
+	return (gpio_port_t)(ngpio & ~PIN_NUMBER_MASK);
 }
 
 static PCU_Type *get_pcu_from_gpio_number(uint32_t ngpio)

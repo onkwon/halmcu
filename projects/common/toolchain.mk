@@ -24,6 +24,7 @@ CFLAGS += -std=c99 \
 STACK_LIMIT ?= 128
 CFLAGS += -Wall \
 	  -Wextra \
+	  -Wc++-compat \
 	  -Wformat=2 \
 	  -Wmissing-prototypes \
 	  -Wstrict-prototypes \
@@ -51,6 +52,7 @@ CFLAGS += -Wall \
 #-Wformat-truncation=2
 #-Wformat-overflow
 #-Wabi=11 -Wlogical-op
+#-Wpedantic
 
 ## Compiler errors
 CFLAGS += -Werror \
