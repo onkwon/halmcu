@@ -55,8 +55,24 @@ struct gpio {
 	uint32_t SRR;
 };
 
+struct uart {
+	uint32_t RBR;
+	uint32_t THR;
+	uint32_t DLL;
+	uint32_t IER;
+	uint32_t DLM;
+	uint32_t FCR;
+	uint32_t IIR;
+	uint32_t LCR;
+	uint32_t LSR;
+	uint32_t SCR;
+	uint32_t BFR;
+	uint32_t DTR;
+};
+
 typedef struct pcu PCU_Type;
 typedef struct gpio GPIO_Type;
+typedef struct uart UART_Type;
 
 extern struct wdt * const WDT;
 extern struct pmu * const PMU;
@@ -74,6 +90,11 @@ extern struct gpio * const PC;
 extern struct gpio * const PD;
 extern struct gpio * const PE;
 extern struct gpio * const PF;
+
+extern struct uart * const UART0;
+extern struct uart * const UART1;
+extern struct uart * const UART2;
+extern struct uart * const UART3;
 
 #if defined(__cplusplus)
 }

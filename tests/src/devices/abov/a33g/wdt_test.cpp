@@ -17,8 +17,7 @@ TEST_GROUP(Watchdog) {
 	void teardown(void) {
 	}
 
-	void set_initial_state(void)
-	{
+	void set_initial_state(void) {
 		WDT->LR = 0;
 		WDT->CVR = 0xffff;
 		WDT->CON = 0x47;

@@ -19,8 +19,7 @@ TEST_GROUP(Power) {
 	void teardown(void) {
 	}
 
-	void set_initial_state(void)
-	{
+	void set_initial_state(void) {
 		memset(PMU, 0, sizeof(*PMU));
 		PMU->IDR = 0xCEDA0000;
 		PMU->RSER = 0x69;
