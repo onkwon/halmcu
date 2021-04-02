@@ -53,6 +53,14 @@ typedef enum {
 } uart_wordsize_t;
 
 /**
+ * Reset UART interface
+ *
+ * This function makes the given UART the reset default state.
+ *
+ * :param port: a enum of :c:type:`uart_port_t`
+ */
+void uart_reset(uart_port_t port);
+/**
  * Enable UART
  *
  * :param port: a enum of :c:type:`uart_port_t`
@@ -113,14 +121,6 @@ void uart_enable_tx_intr(uart_port_t port);
  * :param port: a enum of :c:type:`uart_port_t`
  */
 void uart_disable_tx_intr(uart_port_t port);
-/**
- * Reset UART interface
- *
- * This function makes the given UART the reset default state.
- *
- * :param port: a enum of :c:type:`uart_port_t`
- */
-void uart_reset(uart_port_t port);
 /**
  * Read UART status flag
  *

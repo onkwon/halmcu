@@ -2,8 +2,6 @@
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTestExt/MockSupport.h"
 
-#include <string.h>
-
 #include "abov/hal/pwr.h"
 #include "a33g.h"
 
@@ -20,13 +18,11 @@ TEST_GROUP(Power) {
 	}
 
 	void set_initial_state(void) {
-		memset(PMU, 0, sizeof(*PMU));
+		pwr_reset();
+
 		PMU->IDR = 0xCEDA0000;
-		PMU->RSER = 0x69;
 		PMU->PRER = 0xFFFFFFFF;
 		PMU->PER = 0xFFFFFFFF;
-		PMU->LVDCON = 0x8800;
-		PMU->VDCCON = 0xFF;
 	}
 };
 
@@ -59,6 +55,8 @@ TEST(Power, set_mode_ShouldChangeMode) {
 	LONGS_EQUAL(2, PMU->MR);
 	pwr_set_mode(PWR_MODE_BLACKOUT);
 	LONGS_EQUAL(6, PMU->MR);
+	pwr_set_mode(PWR_MODE_RUN);
+	LONGS_EQUAL(0, PMU->MR);
 }
 
 TEST(Power, set_wakeup_source_ShouldSetSource) {
@@ -107,4 +105,9 @@ TEST(Power, disable_peripheral_ShouldDisablePeripheral) {
 	LONGS_EQUAL(0xefbfdeff, PMU->PER);
 	pwr_disable_peripheral(PERIPHERAL_WDT);
 	LONGS_EQUAL(0xefbfdef7, PMU->PER);
+}
+
+TEST(Power, get_wakeup_source_ShouldReturnWakeupSource) {
+	PMU->WSSR = 0x80;
+	LONGS_EQUAL(0x80, pwr_get_wakeup_source());
 }

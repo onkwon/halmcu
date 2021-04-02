@@ -22,6 +22,13 @@ typedef enum {
 	PWR_MODE_BLACKOUT,
 } pwr_mode_t;
 
+/**
+ * Reset PWR unit
+ *
+ * This function makes PWR unit the reset state.
+ */
+void pwr_reset(void);
+
 /** Software system reset */
 void pwr_reboot(void);
 /** Get reboot source */
