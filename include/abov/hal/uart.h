@@ -11,13 +11,13 @@ extern "C" {
 /** UART port enumeration */
 typedef enum {
 	/***/
-	UARTp0,
+	UART_PORT_0,
 	/***/
-	UARTp1,
+	UART_PORT_1,
 	/***/
-	UARTp2,
+	UART_PORT_2,
 	/***/
-	UARTp3,
+	UART_PORT_3,
 } uart_port_t;
 
 /** UART parity enumeration */
