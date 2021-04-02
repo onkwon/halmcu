@@ -1,4 +1,4 @@
-#include "../arch/arm/armv7-m/nvic.h"
+#include "abov/asm/arm/nvic.h"
 #include <assert.h>
 #include "abov/compiler.h"
 
