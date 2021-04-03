@@ -35,9 +35,7 @@ static irq_t get_irq_from_port(uart_port_t port)
 
 static int get_index_of_empty_handle(void)
 {
-	int i;
-
-	for (i = 0; i < UART_MAX_DRIVER_HANDLE; i++) {
+	for (int i = 0; i < UART_MAX_DRIVER_HANDLE; i++) {
 		if (handles[i] == NULL) {
 			return i;
 		}
@@ -48,9 +46,7 @@ static int get_index_of_empty_handle(void)
 
 static int get_index_of_handle_by_obj(const struct uart *obj)
 {
-	int i;
-
-	for (i = 0; i < UART_MAX_DRIVER_HANDLE; i++) {
+	for (int i = 0; i < UART_MAX_DRIVER_HANDLE; i++) {
 		if (handles[i] != NULL && handles[i] == obj) {
 			return i;
 		}
@@ -61,9 +57,7 @@ static int get_index_of_handle_by_obj(const struct uart *obj)
 
 static int get_index_of_handle_by_port(const uart_port_t port)
 {
-	int i;
-
-	for (i = 0; i < UART_MAX_DRIVER_HANDLE; i++) {
+	for (int i = 0; i < UART_MAX_DRIVER_HANDLE; i++) {
 		if (handles[i] != NULL && handles[i]->port == port) {
 			return i;
 		}
@@ -116,7 +110,7 @@ bool uart_init(uart_handle_t *handle, uart_port_t port, const struct uart_cfg *c
 
 void uart_deinit(uart_handle_t *handle)
 {
-	struct uart *self = (struct uart *)handle;
+	const struct uart *self = (const struct uart *)handle;
 	int index = get_index_of_handle_by_obj(self);
 	if (index < 0) { /* not found */
 		return;
@@ -148,7 +142,7 @@ void uart_register_error_handler(uart_handle_t *handle, uart_intr_callback_t han
 
 size_t uart_read(uart_handle_t *handle, void *buf, size_t bufsize)
 {
-	struct uart *self = (struct uart *)handle;
+	const struct uart *self = (const struct uart *)handle;
 	uint8_t *p = (uint8_t *)buf;
 	size_t received = 0;
 
@@ -166,7 +160,7 @@ size_t uart_read(uart_handle_t *handle, void *buf, size_t bufsize)
 
 size_t uart_write(uart_handle_t *handle, const void *data, size_t datasize)
 {
-	struct uart *self = (struct uart *)handle;
+	const struct uart *self = (const struct uart *)handle;
 	const uint8_t *p = (const uint8_t *)data;
 
 	for (size_t i = 0; i < datasize; i++) {
