@@ -14,18 +14,22 @@
 │           └── CMSIS/
 ├── docs/
 ├── devices/
+│   ├── common/
 │   └── abov
-│       ├── a31/
-│       ├── a33/
-│       └── common/
+│       ├── a31g/
+│       ├── a31l/
+│       ├── a33g/
+│       └── a34m/
 ├── drivers/
 │   ├── adc/
+        ... 
 │   └── uart/
 ├── examples/
 ├── include
 │   └── abov
-│       ├── drivers
-│       └── sys
+│       ├── asm/
+│       ├── drivers/
+│       └── hal/
 ├── projects/
 │   └── common/
 └── tests/
@@ -33,8 +37,14 @@
 
 | Directory | Description                                                     |
 | --------- | -----------                                                     |
+| arch      |                                                                 |
+| docs      |                                                                 |
 | devices   | low level and hardware dependent code for the specific device   |
 | drivers   | device abstraction code for drivers. no hardware dependency     |
+| examples  |                                                                 |
+| include   |                                                                 |
+| projects  |                                                                 |
+| tests     |                                                                 |
 
 
 ## Build System
@@ -53,3 +63,5 @@ increase complexity.
 ### Low Level Layer
 ### Hardwar Abstraction Layer
 ### Driver Layer
+
+## Porting
