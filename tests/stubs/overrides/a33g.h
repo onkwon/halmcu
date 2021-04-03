@@ -7,13 +7,13 @@ extern "C" {
 
 #include <stdint.h>
 
-struct wdt {
+struct wdt_stub {
 	uint32_t LR;
 	uint32_t CVR;
 	uint32_t CON;
 };
 
-struct pmu {
+struct pmu_stub {
 	uint32_t IDR;
 	uint32_t MR;
 	uint32_t CFG;
@@ -38,7 +38,7 @@ struct pmu {
 	uint32_t EXTMODER;
 };
 
-struct pcu {
+struct pcu_stub {
 	uint32_t MR;
 	uint32_t CR;
 	uint32_t PCR;
@@ -49,13 +49,13 @@ struct pcu {
 	uint32_t DPR;
 };
 
-struct gpio {
+struct gpio_stub {
 	uint32_t ODR;
 	uint32_t IDR;
 	uint32_t SRR;
 };
 
-struct uart {
+struct uart_stub {
 	uint32_t RBR;
 	uint32_t THR;
 	uint32_t DLL;
@@ -70,31 +70,31 @@ struct uart {
 	uint32_t DTR;
 };
 
-typedef struct pcu PCU_Type;
-typedef struct gpio GPIO_Type;
-typedef struct uart UART_Type;
+typedef struct pcu_stub PCU_Type;
+typedef struct gpio_stub GPIO_Type;
+typedef struct uart_stub UART_Type;
 
-extern struct wdt * const WDT;
-extern struct pmu * const PMU;
+extern struct wdt_stub * const WDT;
+extern struct pmu_stub * const PMU;
 
-extern struct pcu * const PCA;
-extern struct pcu * const PCB;
-extern struct pcu * const PCC;
-extern struct pcu * const PCD;
-extern struct pcu * const PCE;
-extern struct pcu * const PCF;
+extern struct pcu_stub * const PCA;
+extern struct pcu_stub * const PCB;
+extern struct pcu_stub * const PCC;
+extern struct pcu_stub * const PCD;
+extern struct pcu_stub * const PCE;
+extern struct pcu_stub * const PCF;
 
-extern struct gpio * const PA;
-extern struct gpio * const PB;
-extern struct gpio * const PC;
-extern struct gpio * const PD;
-extern struct gpio * const PE;
-extern struct gpio * const PF;
+extern struct gpio_stub * const PA;
+extern struct gpio_stub * const PB;
+extern struct gpio_stub * const PC;
+extern struct gpio_stub * const PD;
+extern struct gpio_stub * const PE;
+extern struct gpio_stub * const PF;
 
-extern struct uart * const UART0;
-extern struct uart * const UART1;
-extern struct uart * const UART2;
-extern struct uart * const UART3;
+extern struct uart_stub * const UART0;
+extern struct uart_stub * const UART1;
+extern struct uart_stub * const UART2;
+extern struct uart_stub * const UART3;
 
 #if defined(__cplusplus)
 }

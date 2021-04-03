@@ -8,12 +8,12 @@
 #include "a33g.h"
 
 extern "C" {
-static struct uart reg0, reg1, reg2, reg3;
+static struct uart_stub reg0, reg1, reg2, reg3;
 
-struct uart * const UART0 = &reg0;
-struct uart * const UART1 = &reg1;
-struct uart * const UART2 = &reg2;
-struct uart * const UART3 = &reg3;
+struct uart_stub * const UART0 = &reg0;
+struct uart_stub * const UART1 = &reg1;
+struct uart_stub * const UART2 = &reg2;
+struct uart_stub * const UART3 = &reg3;
 }
 
 uint32_t clk_get_pclk_frequency(void)
@@ -64,7 +64,7 @@ TEST(uart, get_status_ShouldReturnLRS) {
 	uint32_t expected = 0xA55A;
 	UART0->LSR = expected >> 8;
 	UART0->IIR = expected & 0xff;
-	LONGS_EQUAL(expected, uart_get_status(UART_PORT_0));
+	LONGS_EQUAL(expected | UART_EVENT_TX_READY, uart_get_status(UART_PORT_0));
 }
 
 TEST(uart, enable_rx_intr_ShouldSetDrieInIER) {
@@ -114,6 +114,10 @@ TEST(uart, read_byte_ShouldReturnReceivedByte) {
 	UART0->RBR = 0xA5;
 	UART0->LSR |= 1;
 	LONGS_EQUAL(0xA5, uart_read_byte(UART_PORT_0));
+}
+
+TEST(uart, read_byte_nonblock_ShouldReturnNegativeOne_WhenNonReceived) {
+	LONGS_EQUAL(-1, uart_read_byte_nonblock(UART_PORT_0));
 }
 
 TEST(uart, write_byte_ShouldWriteByteToTHR) {

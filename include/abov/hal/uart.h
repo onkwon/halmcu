@@ -52,6 +52,21 @@ typedef enum {
 	UART_WORDSIZE_5		= 5,
 } uart_wordsize_t;
 
+/** UART event enumeration */
+enum uart_event_flag {
+	/***/
+	UART_EVENT_BIT			= 28,
+	/***/
+	UART_EVENT_RX			= (1U << (UART_EVENT_BIT+0)),
+	/***/
+	UART_EVENT_TX_READY		= (1U << (UART_EVENT_BIT+1)),
+	/***/
+	UART_EVENT_ERROR		= (1U << (UART_EVENT_BIT+2)),
+	/***/
+	UART_EVENT_MASK			=
+		(UART_EVENT_RX | UART_EVENT_TX_READY | UART_EVENT_ERROR),
+};
+
 /**
  * Reset UART interface
  *
@@ -76,11 +91,18 @@ void uart_disable(uart_port_t port);
  * Read a byte from UART
  *
  * :param port: a enum of :c:type:`uart_port_t`
+ * :return: received byte
+ */
+int uart_read_byte(uart_port_t port);
+/**
+ * Read a byte from UART
+ *
+ * :param port: a enum of :c:type:`uart_port_t`
  * :return: * received byte on success
  *          * -1 when no received data
  * :note: This function is non-blocking.
  */
-int uart_read_byte(uart_port_t port);
+int uart_read_byte_nonblock(uart_port_t port);
 /**
  * Write a byte to UART
  *

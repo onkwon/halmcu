@@ -8,26 +8,26 @@
 #include "a33g.h"
 
 extern "C" {
-static struct pcu regPA, regPB, regPC, regPD, regPE, regPF;
-static struct gpio regGA, regGB, regGC, regGD, regGE, regGF;
+static struct pcu_stub regPA, regPB, regPC, regPD, regPE, regPF;
+static struct gpio_stub regGA, regGB, regGC, regGD, regGE, regGF;
 
-static struct pmu regPmu;
+static struct pmu_stub regPmu;
 
-struct pcu * const PCA = &regPA;
-struct pcu * const PCB = &regPB;
-struct pcu * const PCC = &regPC;
-struct pcu * const PCD = &regPD;
-struct pcu * const PCE = &regPE;
-struct pcu * const PCF = &regPF;
+struct pcu_stub * const PCA = &regPA;
+struct pcu_stub * const PCB = &regPB;
+struct pcu_stub * const PCC = &regPC;
+struct pcu_stub * const PCD = &regPD;
+struct pcu_stub * const PCE = &regPE;
+struct pcu_stub * const PCF = &regPF;
 
-struct gpio * const PA = &regGA;
-struct gpio * const PB = &regGB;
-struct gpio * const PC = &regGC;
-struct gpio * const PD = &regGD;
-struct gpio * const PE = &regGE;
-struct gpio * const PF = &regGF;
+struct gpio_stub * const PA = &regGA;
+struct gpio_stub * const PB = &regGB;
+struct gpio_stub * const PC = &regGC;
+struct gpio_stub * const PD = &regGD;
+struct gpio_stub * const PE = &regGE;
+struct gpio_stub * const PF = &regGF;
 
-struct pmu * const PMU = &regPmu;
+struct pmu_stub * const PMU = &regPmu;
 }
 
 TEST_GROUP(gpio) {

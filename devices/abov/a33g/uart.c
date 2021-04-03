@@ -20,6 +20,7 @@
 #define THRE				(1U << 5)
 #define TEMT				(1U << 6)
 #define DRIE				1U
+#define THREIE				(1U << 1)
 
 static UART_Type *get_uart_from_port(uart_port_t port)
 {
@@ -42,11 +43,38 @@ static bool is_tx_busy(const UART_Type *uart)
 	return (uart->LSR & (THRE | TEMT)) != (THRE | TEMT);
 }
 
+static int read_receive_buffer_register(const UART_Type *uart)
+{
+	if (uart->LSR & RDR) {
+		return (int)uart->RBR;
+	}
+	return -1;
+}
+
 uint32_t uart_get_status(uart_port_t port)
 {
 	const UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
-	return (uart->LSR << 8) | uart->IIR;
+
+	uint32_t iir = uart->IIR;
+	uint32_t lsr = uart->LSR;
+	uint32_t flags = 0;
+
+	switch (iir & 7) {
+	case 2: /* transmit ready */
+		flags |= UART_EVENT_TX_READY;
+		break;
+	case 3: /* error */
+		flags |= UART_EVENT_ERROR;
+		break;
+	case 4: /* rx */
+		flags |= UART_EVENT_RX;
+		break;
+	default:
+		break;
+	}
+
+	return flags | (lsr << 8) | iir;
 }
 
 void uart_enable_rx_intr(uart_port_t port)
@@ -61,6 +89,20 @@ void uart_disable_rx_intr(uart_port_t port)
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
 	uart->IER &= ~DRIE;
+}
+
+void uart_enable_tx_intr(uart_port_t port)
+{
+	UART_Type *uart = get_uart_from_port(port);
+	assert(uart != NULL);
+	uart->IER |= THREIE;
+}
+
+void uart_disable_tx_intr(uart_port_t port)
+{
+	UART_Type *uart = get_uart_from_port(port);
+	assert(uart != NULL);
+	uart->IER &= ~THREIE;
 }
 
 void uart_set_parity(uart_port_t port, uart_parity_t parity)
@@ -118,16 +160,25 @@ void uart_set_baudrate(uart_port_t port, uint32_t baudrate)
 	uart->LCR = lcr;
 }
 
-int uart_read_byte(uart_port_t port)
+int uart_read_byte_nonblock(uart_port_t port)
 {
 	const UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
 
-	if (uart->LSR & RDR) {
-		return (int)uart->RBR;
-	}
+	return read_receive_buffer_register(uart);
+}
 
-	return -1;
+int uart_read_byte(uart_port_t port)
+{
+	const UART_Type *uart = get_uart_from_port(port);
+	assert(uart != NULL);
+	int res;
+
+	do {
+		res = read_receive_buffer_register(uart);
+	} while (res == -1);
+
+	return res;
 }
 
 void uart_write_byte(uart_port_t port, uint8_t val)
