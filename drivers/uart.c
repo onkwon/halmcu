@@ -147,28 +147,21 @@ void uart_default_isr(uart_port_t uartp)
 {
 	uint32_t flags = uart_get_status(uartp);
 	int index = get_index_of_handle_by_port(uartp);
-	uart_intr_callback_t callback = NULL;
 
 	if (index < 0) { /* not found */
 		return;
 	}
 
-	switch (flags & UART_EVENT_MASK) {
-	case UART_EVENT_RX:
-		callback = handles[index]->rx_handler;
-		break;
-	case UART_EVENT_TX_READY:
-		callback = handles[index]->tx_handler;
-		break;
-	case UART_EVENT_ERROR:
-		callback = handles[index]->error_handler;
-		break;
-	default:
-		break;
-	}
+	const struct uart *obj = handles[index];
 
-	if (callback != NULL) {
-		callback(flags);
+	if ((flags & UART_EVENT_RX) && obj->rx_handler) {
+		obj->rx_handler(flags);
+	}
+	if ((flags & UART_EVENT_TX_READY) && obj->tx_handler) {
+		obj->tx_handler(flags);
+	}
+	if ((flags & UART_EVENT_ERROR) && obj->error_handler) {
+		obj->error_handler(flags);
 	}
 }
 

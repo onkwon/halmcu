@@ -64,7 +64,7 @@ TEST(uart, get_status_ShouldReturnLRS) {
 	uint32_t expected = 0xA55A;
 	UART0->LSR = expected >> 8;
 	UART0->IIR = expected & 0xff;
-	LONGS_EQUAL(expected, uart_get_status(UART_PORT_0));
+	LONGS_EQUAL(expected | UART_EVENT_TX_READY, uart_get_status(UART_PORT_0));
 }
 
 TEST(uart, enable_rx_intr_ShouldSetDrieInIER) {

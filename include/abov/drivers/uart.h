@@ -55,8 +55,7 @@ void uart_register_rx_handler(uart_handle_t *handle, uart_intr_callback_t handle
 void uart_register_tx_handler(uart_handle_t *handle, uart_intr_callback_t handler);
 void uart_register_error_handler(uart_handle_t *handle, uart_intr_callback_t handler);
 
-int uart_read(uart_handle_t *handle, void *buf, size_t readsize);
-int uart_read_nonblock(uart_handle_t *handle, void *buf, size_t readsize);
+int uart_read(uart_handle_t *handle, void *buf, size_t bufsize);
 int uart_write(uart_handle_t *handle, void *data, size_t datasize);
 
 void uart_default_isr(uart_port_t uartp);

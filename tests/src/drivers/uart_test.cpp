@@ -156,3 +156,16 @@ TEST(uart_driver, error_interrupt_ShouldCallNothing_WhenNohandlerRegistered) {
 	mock().expectNoCall("intr_handler");
 	uart_default_isr(UART_PORT_3);
 }
+TEST(uart_driver, multiple_interrupt_ShouldCallEachHandlers) {
+	default_cfg.rx_interrupt = true;
+	default_cfg.tx_interrupt = true;
+	uart_init(&default_handle, UART_PORT_0, &default_cfg);
+	uart_register_rx_handler(&default_handle, intr_handler);
+	uart_register_tx_handler(&default_handle, intr_handler);
+	uart_register_error_handler(&default_handle, intr_handler);
+	mock().expectOneCall("uart_get_status").withParameter("port", UART_PORT_0)
+		.andReturnValue(UART_EVENT_RX | UART_EVENT_TX_READY | UART_EVENT_ERROR);
+	mock().expectNCalls(3, "intr_handler")
+		.withParameter("flags", UART_EVENT_RX | UART_EVENT_TX_READY | UART_EVENT_ERROR);
+	uart_default_isr(UART_PORT_0);
+}
