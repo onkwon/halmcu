@@ -46,7 +46,26 @@ uint32_t uart_get_status(uart_port_t port)
 {
 	const UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
-	return (uart->LSR << 8) | uart->IIR;
+
+	uint32_t iir = uart->IIR;
+	uint32_t lsr = uart->LSR;
+	uint32_t flags = 0;
+
+	switch (iir & 7) {
+	case 2: /* transmit ready */
+		flags |= UART_EVENT_TX_READY;
+		break;
+	case 3: /* error */
+		flags |= UART_EVENT_ERROR;
+		break;
+	case 4: /* rx */
+		flags |= UART_EVENT_RX;
+		break;
+	default:
+		break;
+	}
+
+	return flags | (lsr << 8) | iir;
 }
 
 void uart_enable_rx_intr(uart_port_t port)

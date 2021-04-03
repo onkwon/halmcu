@@ -263,7 +263,7 @@ void gpio_write(uint32_t ngpio, int value)
 		return;
 	}
 
-	reg->SRR = 1U << (pin + ((uint32_t)!value * 16));
+	reg->SRR = 1U << (pin + ((uint32_t)!(value & 1) * 16));
 }
 
 int gpio_read(uint32_t ngpio)

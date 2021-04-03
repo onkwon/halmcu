@@ -9,6 +9,7 @@ extern "C" {
 #define RESERVE_IRQ(n)
 typedef enum {
 #include IRQ_DEFINES
+	IRQ_UNDEFINED = -1,
 } irq_t;
 #undef RESERVE_IRQ
 #undef DEFINE_IRQ

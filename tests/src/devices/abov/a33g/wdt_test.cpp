@@ -6,8 +6,8 @@
 #include "a33g.h"
 
 extern "C" {
-static struct wdt wdtreg;
-struct wdt * const WDT = &wdtreg;
+static struct wdt_stub wdtreg;
+struct wdt_stub * const WDT = &wdtreg;
 }
 
 TEST_GROUP(Watchdog) {

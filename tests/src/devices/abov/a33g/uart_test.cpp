@@ -8,12 +8,12 @@
 #include "a33g.h"
 
 extern "C" {
-static struct uart reg0, reg1, reg2, reg3;
+static struct uart_stub reg0, reg1, reg2, reg3;
 
-struct uart * const UART0 = &reg0;
-struct uart * const UART1 = &reg1;
-struct uart * const UART2 = &reg2;
-struct uart * const UART3 = &reg3;
+struct uart_stub * const UART0 = &reg0;
+struct uart_stub * const UART1 = &reg1;
+struct uart_stub * const UART2 = &reg2;
+struct uart_stub * const UART3 = &reg3;
 }
 
 uint32_t clk_get_pclk_frequency(void)

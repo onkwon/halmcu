@@ -52,6 +52,21 @@ typedef enum {
 	UART_WORDSIZE_5		= 5,
 } uart_wordsize_t;
 
+/** UART event enumeration */
+enum uart_event_flag {
+	/***/
+	UART_EVENT_BIT			= 28,
+	/***/
+	UART_EVENT_RX			= (1U << (UART_EVENT_BIT+0)),
+	/***/
+	UART_EVENT_TX_READY		= (1U << (UART_EVENT_BIT+1)),
+	/***/
+	UART_EVENT_ERROR		= (1U << (UART_EVENT_BIT+2)),
+	/***/
+	UART_EVENT_MASK			=
+		(UART_EVENT_RX | UART_EVENT_TX_READY | UART_EVENT_ERROR),
+};
+
 /**
  * Reset UART interface
  *

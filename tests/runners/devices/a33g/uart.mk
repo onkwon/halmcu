@@ -1,4 +1,4 @@
-COMPONENT_NAME = uart
+COMPONENT_NAME = uart_a33g
 
 SRC_FILES = \
 	../devices/abov/a33g/uart.c \

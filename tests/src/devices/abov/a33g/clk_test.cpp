@@ -8,8 +8,8 @@
 #define MHZ				1000000U
 
 extern "C" {
-static struct pmu reg;
-struct pmu * const PMU = &reg;
+static struct pmu_stub reg;
+struct pmu_stub * const PMU = &reg;
 }
 
 TEST_GROUP(Clock) {
