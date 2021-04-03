@@ -53,6 +53,7 @@ int uart_read_byte_nonblock(uart_port_t port) {
 }
 void uart_write_byte(uart_port_t port, uint8_t val) {
 	mock().actualCall(__func__).withParameter("port", port);
+	(void)val;
 }
 
 TEST_GROUP(uart_driver) {
