@@ -143,6 +143,36 @@ void uart_register_error_handler(uart_handle_t *handle, uart_intr_callback_t han
 	self->error_handler = handler;
 }
 
+size_t uart_read(uart_handle_t *handle, void *buf, size_t bufsize)
+{
+	struct uart *self = (struct uart *)handle;
+	uint8_t *p = (uint8_t *)buf;
+	size_t received = 0;
+
+	while (received < bufsize) {
+		int val = uart_read_byte_nonblock(self->port);
+		if (val < 0) {
+			break;
+		}
+
+		p[received++] = (uint8_t)val;
+	}
+
+	return received;
+}
+
+size_t uart_write(uart_handle_t *handle, const void *data, size_t datasize)
+{
+	struct uart *self = (struct uart *)handle;
+	const uint8_t *p = (const uint8_t *)data;
+
+	for (size_t i = 0; i < datasize; i++) {
+		uart_write_byte(self->port, p[i]);
+	}
+
+	return datasize;
+}
+
 void uart_default_isr(uart_port_t uartp)
 {
 	uint32_t flags = uart_get_status(uartp);

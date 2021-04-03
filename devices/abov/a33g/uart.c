@@ -42,6 +42,14 @@ static bool is_tx_busy(const UART_Type *uart)
 	return (uart->LSR & (THRE | TEMT)) != (THRE | TEMT);
 }
 
+static int read_receive_buffer_register(const UART_Type *uart)
+{
+	if (uart->LSR & RDR) {
+		return (int)uart->RBR;
+	}
+	return -1;
+}
+
 uint32_t uart_get_status(uart_port_t port)
 {
 	const UART_Type *uart = get_uart_from_port(port);
@@ -137,16 +145,25 @@ void uart_set_baudrate(uart_port_t port, uint32_t baudrate)
 	uart->LCR = lcr;
 }
 
-int uart_read_byte(uart_port_t port)
+int uart_read_byte_nonblock(uart_port_t port)
 {
 	const UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
 
-	if (uart->LSR & RDR) {
-		return (int)uart->RBR;
-	}
+	return read_receive_buffer_register(uart);
+}
 
-	return -1;
+int uart_read_byte(uart_port_t port)
+{
+	const UART_Type *uart = get_uart_from_port(port);
+	assert(uart != NULL);
+	int res;
+
+	do {
+		res = read_receive_buffer_register(uart);
+	} while (res == -1);
+
+	return res;
 }
 
 void uart_write_byte(uart_port_t port, uint8_t val)

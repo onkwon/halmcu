@@ -5,6 +5,8 @@
 #include "abov/drivers/uart.h"
 #include "abov/irq.h"
 
+#include <string.h>
+
 static void intr_handler(uint32_t flags) {
 	mock().actualCall(__func__).withParameter("flags", flags);
 }
@@ -44,6 +46,13 @@ void irq_enable(irq_t irq) {
 uint32_t uart_get_status(uart_port_t port) {
 	return mock().actualCall(__func__).withParameter("port", port)
 		.returnUnsignedIntValueOrDefault(0);
+}
+int uart_read_byte_nonblock(uart_port_t port) {
+	return mock().actualCall(__func__).withParameter("port", port)
+		.returnIntValueOrDefault(-1);
+}
+void uart_write_byte(uart_port_t port, uint8_t val) {
+	mock().actualCall(__func__).withParameter("port", port);
 }
 
 TEST_GROUP(uart_driver) {
@@ -168,4 +177,34 @@ TEST(uart_driver, multiple_interrupt_ShouldCallEachHandlers) {
 	mock().expectNCalls(3, "intr_handler")
 		.withParameter("flags", UART_EVENT_RX | UART_EVENT_TX_READY | UART_EVENT_ERROR);
 	uart_default_isr(UART_PORT_0);
+}
+
+TEST(uart_driver, read_ShouldReturnReceivedData) {
+	uint8_t buf[3];
+	uart_init(&default_handle, UART_PORT_0, &default_cfg);
+	mock().expectNCalls(3, "uart_read_byte_nonblock")
+		.withParameter("port", UART_PORT_0)
+		.andReturnValue(1);
+	LONGS_EQUAL(3, uart_read(&default_handle, buf, sizeof(buf)));
+	LONGS_EQUAL(1, buf[0]);
+	LONGS_EQUAL(1, buf[1]);
+	LONGS_EQUAL(1, buf[2]);
+}
+TEST(uart_driver, read_ShouldStopReading_WhenBufsizeShort) {
+	uint8_t buf[1];
+	uart_init(&default_handle, UART_PORT_0, &default_cfg);
+	mock().expectNCalls(1, "uart_read_byte_nonblock")
+		.withParameter("port", UART_PORT_0)
+		.andReturnValue(1);
+	LONGS_EQUAL(1, uart_read(&default_handle, buf, sizeof(buf)));
+	LONGS_EQUAL(1, buf[0]);
+}
+
+TEST(uart_driver, wrte_ShouldWrite) {
+	const char *data = "Hello, World!";
+	size_t datalen = strlen(data);
+	uart_init(&default_handle, UART_PORT_0, &default_cfg);
+	mock().expectNCalls((unsigned int)datalen, "uart_write_byte")
+		.withParameter("port", UART_PORT_0);
+	LONGS_EQUAL(datalen, uart_write(&default_handle, data, datalen));
 }

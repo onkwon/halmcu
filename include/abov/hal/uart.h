@@ -91,11 +91,18 @@ void uart_disable(uart_port_t port);
  * Read a byte from UART
  *
  * :param port: a enum of :c:type:`uart_port_t`
+ * :return: received byte
+ */
+int uart_read_byte(uart_port_t port);
+/**
+ * Read a byte from UART
+ *
+ * :param port: a enum of :c:type:`uart_port_t`
  * :return: * received byte on success
  *          * -1 when no received data
  * :note: This function is non-blocking.
  */
-int uart_read_byte(uart_port_t port);
+int uart_read_byte_nonblock(uart_port_t port);
 /**
  * Write a byte to UART
  *

@@ -116,6 +116,10 @@ TEST(uart, read_byte_ShouldReturnReceivedByte) {
 	LONGS_EQUAL(0xA5, uart_read_byte(UART_PORT_0));
 }
 
+TEST(uart, read_byte_nonblock_ShouldReturnNegativeOne_WhenNonReceived) {
+	LONGS_EQUAL(-1, uart_read_byte_nonblock(UART_PORT_0));
+}
+
 TEST(uart, write_byte_ShouldWriteByteToTHR) {
 	uart_write_byte(UART_PORT_0, 0xA5);
 	LONGS_EQUAL(0xA5, UART0->THR);
