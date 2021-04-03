@@ -32,7 +32,6 @@ CFLAGS += -Wall \
 	  -Wcast-align \
 	  -Wpointer-arith \
 	  -Wbad-function-cast \
-	  -Wnested-externs \
 	  -Wcast-qual \
 	  -Wmissing-format-attribute \
 	  -Wmissing-include-dirs \
@@ -53,11 +52,11 @@ CFLAGS += -Wall \
 #-Wformat-overflow
 #-Wabi=11 -Wlogical-op
 #-Wpedantic
+#-Wnested-externs
 
 ## Compiler errors
 CFLAGS += -Werror \
 	  -Wno-error=format-nonliteral \
-	  -Wno-error=nested-externs \
 
 ifndef NDEBUG
 	CFLAGS += -g3
