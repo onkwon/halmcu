@@ -20,6 +20,7 @@
 #define THRE				(1U << 5)
 #define TEMT				(1U << 6)
 #define DRIE				1U
+#define THREIE				(1U << 1)
 
 static UART_Type *get_uart_from_port(uart_port_t port)
 {
@@ -88,6 +89,20 @@ void uart_disable_rx_intr(uart_port_t port)
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
 	uart->IER &= ~DRIE;
+}
+
+void uart_enable_tx_intr(uart_port_t port)
+{
+	UART_Type *uart = get_uart_from_port(port);
+	assert(uart != NULL);
+	uart->IER |= THREIE;
+}
+
+void uart_disable_tx_intr(uart_port_t port)
+{
+	UART_Type *uart = get_uart_from_port(port);
+	assert(uart != NULL);
+	uart->IER &= ~THREIE;
 }
 
 void uart_set_parity(uart_port_t port, uart_parity_t parity)

@@ -10,6 +10,10 @@ ifeq ($(ARCH),)
 $(error no cpu architecture specified)
 endif
 
+DRV_SUBDIRS := $(LIBABOV_ROOT)/drivers
+DRV_SRCS := $(foreach d, $(DRV_SUBDIRS), $(shell find $(d) -type f -regex ".*\.c"))
+LIBABOV_SRCS += $(DRV_SRCS)
+
 LIBABOV_SRCS_STRIPPED := $(LIBABOV_SRCS:$(LIBABOV_ROOT)/%=%)
 LIBABOV_OBJS := $(addprefix $(OUTDIR)/, $(LIBABOV_SRCS_STRIPPED:.c=.o))
 LIBABOV_DEFS += \
