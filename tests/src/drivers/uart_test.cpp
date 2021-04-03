@@ -180,6 +180,12 @@ TEST(uart_driver, multiple_interrupt_ShouldCallEachHandlers) {
 	uart_default_isr(UART_PORT_0);
 }
 
+TEST(uart_driver, read_ShouldReturnZero_WhenNoDataReceived) {
+	uint8_t c;
+	uart_init(&default_handle, UART_PORT_0, &default_cfg);
+	mock().expectOneCall("uart_read_byte_nonblock").withParameter("port", UART_PORT_0);
+	LONGS_EQUAL(0, uart_read(&default_handle, &c, 1));
+}
 TEST(uart_driver, read_ShouldReturnReceivedData) {
 	uint8_t buf[3];
 	uart_init(&default_handle, UART_PORT_0, &default_cfg);
