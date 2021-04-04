@@ -9,6 +9,8 @@ extern "C" {
 #include "cmsis_gcc.h"
 #include "abov/compiler.h"
 
+#include "abov/errata.h"
+
 /**
  * Initialize system in early booting time.
  *
@@ -26,9 +28,9 @@ void early_init(void);
 #define wmb()					barrier()
 
 /** Enable IRQ Interrupts */
-#define enable_irq()				__enable_irq()
+#define interrupt_unlock()			__enable_irq()
 /** Disable IRQ Interrupts */
-#define disable_irq()				__disable_irq()
+#define interrupt_lock()			__disable_irq()
 
 #if defined(__cplusplus)
 }
