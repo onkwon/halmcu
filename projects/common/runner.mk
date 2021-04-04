@@ -17,15 +17,18 @@ else
 endif
 export Q
 
-static_goals := clean test coverage docs flash erase monitor gdbserver
+tooling := flash erase monitor gdbserver
+static_goals := clean test coverage docs $(tooling)
 goals := $(filter-out $(static_goals), $(MAKECMDGOALS))
 ifeq ($(goals),)
 goals := all
 endif
-$(MAKECMDGOALS): $(goals)
 $(goals):
 	$(foreach goal, $@, \
 		$(Q)$(MAKE) -f $(LIBABOV_ROOT)/projects/common/rules.mk $(goal))
+
+.PHONY: $(tooling)
+$(tooling): all
 
 .PHONY: clean
 clean:
