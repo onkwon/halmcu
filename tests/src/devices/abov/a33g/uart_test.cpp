@@ -78,6 +78,17 @@ TEST(uart, disable_rx_intr_ShouldClearDrieInIER) {
 	LONGS_EQUAL(0, UART0->IER);
 }
 
+TEST(uart, enable_tx_intr_ShouldSetDrieInIER) {
+	uart_enable_tx_intr(UART_PORT_0);
+	LONGS_EQUAL(2, UART0->IER);
+}
+
+TEST(uart, disable_tx_intr_ShouldClearDrieInIER) {
+	UART0->IER = 2;
+	uart_disable_tx_intr(UART_PORT_0);
+	LONGS_EQUAL(0, UART0->IER);
+}
+
 TEST(uart, set_baudrate_ShouldSetBaudrate_When38400With8MhzPclkGiven) {
 	mock().expectOneCall("clk_get_pclk_frequency").andReturnValue(8000000);
 	uart_set_baudrate(UART_PORT_0, 38400);

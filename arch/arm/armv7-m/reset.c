@@ -32,14 +32,17 @@ static inline void initialize_ram(void)
 
 static inline void run_constructors(void)
 {
+	/* constructors */
 }
 
 static inline void run_destructors(void)
 {
+	/* destructors */
 }
 
 ABOV_WEAK void early_init(void)
 {
+	/* place holder */
 }
 
 ABOV_WEAK void ISR_reset(void)

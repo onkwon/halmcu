@@ -3,20 +3,19 @@ export BUILDIR ?= build
 
 TESTS := $(shell find runners -type f -regex ".*\.mk")
 
-.PHONY: all
+.PHONY: all test compile gcov debug flags
 all: test
-.PHONY: test
 test: BUILD_RULE=all
 test: $(TESTS)
-.PHONY: compile
 compile: BUILD_RULE=start
 compile: $(TESTS)
-.PHONY: debug
+gcov: BUILD_RULE=gcov
+gcov: $(TESTS)
 debug: BUILD_RULE=debug
 debug: $(TESTS)
-.PHONY: flags
 flags: BUILD_RULE=flags
 flags: $(TESTS)
+
 .PHONY: $(TESTS)
 $(TESTS):
 	$(MAKE) -f $@ $(BUILD_RULE)
