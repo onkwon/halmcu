@@ -59,7 +59,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           build-wrapper-linux-x86-64 --out-dir bw-output \
-              make clean all DEVICE=a33g
+              make clean lib DEVICE=a33g
           sonar-scanner \
               -Dsonar.organization=onkwon-github \
               -Dsonar.projectKey=onkwon_libabov \
