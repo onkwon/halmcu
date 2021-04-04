@@ -11,7 +11,7 @@ NM := $(CROSS_COMPILE_PREFIX)nm
 
 CFLAGS += -std=c99 \
 	  -static \
-	  -nostdlib \
+	  -ffreestanding \
 	  -fno-builtin \
 	  -fno-common \
 	  -ffunction-sections \
@@ -19,6 +19,7 @@ CFLAGS += -std=c99 \
 	  -fstack-usage \
 	  -Os
 #CFLAGS += -fno-short-enums
+#CFLAGS += -nostdlib
 
 ## Compiler warnings
 STACK_LIMIT ?= 128
