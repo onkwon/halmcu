@@ -6,10 +6,10 @@ export TEST_TARGET = $(BUILDIR)/$(COMPONENT_NAME)_tests
 export CPPUTEST_OBJS_DIR = $(BUILDIR)/objs
 export CPPUTEST_LIB_DIR = $(BUILDIR)/lib
 
-export CPPUTEST_USE_EXTENSIONS=Y
-export CPPUTEST_USE_MEM_LEAK_DETECTION=Y
-export CPPUTEST_USE_GCOV=Y
-export GCOV_ARGS=-b -c # branch coverage report
+export CPPUTEST_USE_EXTENSIONS = Y
+export CPPUTEST_USE_MEM_LEAK_DETECTION = Y
+export CPPUTEST_USE_GCOV = Y
+export GCOV_ARGS = -abcfpu
 export CPPUTEST_EXE_FLAGS = "-c" # colorize output
 
 export CPPUTEST_WARNINGFLAGS = \

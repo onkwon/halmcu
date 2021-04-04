@@ -4,7 +4,7 @@ SRC_FILES = \
 	../devices/abov/a33g/uart.c \
 
 TEST_SRC_FILES = \
-	src/devices/abov/a33g/uart_a33g_test.cpp \
+	src/devices/abov/a33g/uart_test.cpp \
 	src/test_all.cpp \
 
 INCLUDE_DIRS = \
