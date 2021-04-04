@@ -16,11 +16,11 @@ void errata_1(void)
 	PMULEGACY->LEGACY = PMU_LEGACY_NORMAL_STEP1;
 	PMULEGACY->LEGACY = PMU_LEGACY_NORMAL_STEP2;
 
-	enable_irq();
+	interrupt_unlock();
 
 	do {
 		val = PMULEGACY->LEGACY;
 	} while ((val & PMU_LEGACY_MODE) != PMU_LEGACY_MODE_NORMAL);
 
-	disable_irq();
+	interrupt_lock();
 }

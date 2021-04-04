@@ -4,7 +4,8 @@
 #include "abov/compiler.h"
 #include "abov/system.h"
 
-extern uintptr_t _data, _edata, _ebss, _data_loadaddr;
+extern uintptr_t _edata, _ebss;
+extern uintptr_t _data[], _data_loadaddr[];
 extern int main(void);
 
 static inline void initialize_core(void)
@@ -16,8 +17,8 @@ static inline void initialize_core(void)
 
 static inline void initialize_ram(void)
 {
-	volatile const uintptr_t *src = &_data_loadaddr;
-	uintptr_t *dst = &_data;
+	volatile const uintptr_t *src = _data_loadaddr;
+	uintptr_t *dst = _data;
 
 	while (dst < &_edata) {
 		*dst++ = *src++;

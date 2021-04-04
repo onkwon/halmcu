@@ -1,11 +1,12 @@
 ![Build Status](https://github.com/onkwon/libabov/workflows/build/badge.svg)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=onkwon_libabov&metric=security_rating)](https://sonarcloud.io/dashboard?id=onkwon_libabov)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=onkwon_libabov&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=onkwon_libabov)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=onkwon_libabov&metric=coverage)](https://sonarcloud.io/dashboard?id=onkwon_libabov)
 
 *libabov* provides a developing environment for ABOV devices by including low
 level hardware drivers, libraries, and examples for peripherals.
 
-All documentation including API reference for *libabov* is at [libabov.readthedocs.io](https://libabov.readthedocs.io/)
+Documentation including API reference for *libabov* is at [libabov.readthedocs.io](https://libabov.readthedocs.io/)
 
 # Getting Started
 ## Installing prerequisites
@@ -34,6 +35,7 @@ Alternatively you can do it with package manager:
 
 ## Setting up the development environment
 ### Visual Studio Code
+### Embedded Studio
 ### IAR
 ### Keil
 ### Other

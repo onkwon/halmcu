@@ -1,4 +1,5 @@
 #include "abov/drivers/uart.h"
+#include <string.h>
 #include "abov/irq.h"
 #include "abov/compiler.h"
 
@@ -81,7 +82,7 @@ bool uart_init(uart_handle_t *handle, uart_port_t port, const struct uart_cfg *c
 		return false;
 	}
 
-	self->rx_handler = self->tx_handler = self->error_handler = NULL;
+	memset(self, 0, sizeof(*self));
 	self->port = port;
 	self->cfg = *cfg;
 	handles[index] = self;

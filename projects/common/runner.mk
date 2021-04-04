@@ -18,14 +18,23 @@ endif
 export Q
 
 tooling := flash erase monitor gdbserver
-static_goals := clean test coverage docs $(tooling)
-goals := $(filter-out $(static_goals), $(MAKECMDGOALS))
-ifeq ($(goals),)
+static-goals := clean test coverage docs $(tooling)
+goals := $(filter-out $(static-goals), $(MAKECMDGOALS))
+ifeq ($(goals), all_devices)
+device-list := $(shell find $(LIBABOV_ROOT)/projects -maxdepth 1 -name "*.mk")
+device-list := $(basename $(notdir $(device-list)))
+goals :=
+else ifeq ($(goals),)
 goals := all
 endif
 $(goals):
 	$(foreach goal, $@, \
 		$(Q)$(MAKE) -f $(LIBABOV_ROOT)/projects/common/rules.mk $(goal))
+.PHONY: all_devices $(device-list)
+all_devices: $(device-list)
+$(device-list):
+	$(info dev=$@)
+	$(Q)$(MAKE) -f $(LIBABOV_ROOT)/projects/common/rules.mk lib DEVICE=$@
 
 .PHONY: $(tooling)
 $(tooling): all

@@ -16,10 +16,8 @@ jobs:
         uses: actions/checkout@v1
         with:
           submodules: 'recursive'
-      - name: Host Compile
-        run: make clean all DEVICE=a33g
-      - name: Cross Compile
-        run: CROSS_COMPILE=arm-none-eabi make clean all DEVICE=a33g
+      - name: Compile
+        run: make all_devices
       - name: Install test framework
         run: make -C tests install
       - name: Test
@@ -59,7 +57,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           build-wrapper-linux-x86-64 --out-dir bw-output \
-              make clean all DEVICE=a33g
+              make all_devices
           sonar-scanner \
               -Dsonar.organization=onkwon-github \
               -Dsonar.projectKey=onkwon_libabov \
