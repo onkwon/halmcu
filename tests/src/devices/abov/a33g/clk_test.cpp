@@ -143,6 +143,14 @@ TEST(Clock, get_pclk_freq_ShouldReturnHclk) {
 	LONGS_EQUAL(32*MHZ, clk_get_pclk_frequency());
 }
 
+TEST(Clock, get_freq_ShouldReturnClk) {
+	LONGS_EQUAL(1000000, clk_get_frequency(CLK_PLL));
+	LONGS_EQUAL(8000000, clk_get_frequency(CLK_EXTERNAL_OSC));
+	LONGS_EQUAL(0, clk_get_frequency(CLK_EXTERNAL_OSC_SUB));
+	LONGS_EQUAL(1000000, clk_get_frequency(CLK_INTERNAL_OSC));
+	LONGS_EQUAL(16000000, clk_get_frequency(CLK_INTERNAL_OSC_16MHZ));
+}
+
 TEST(Clock, is_pll_locked_ShouldReturnPllStatus) {
 	LONGS_EQUAL(0, clk_is_pll_locked());
 	PMU->PLLCON |= 1U << 12;

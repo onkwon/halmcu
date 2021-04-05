@@ -7,14 +7,20 @@
 
 extern "C" {
 static struct wdt_stub wdtreg;
+static struct pmu_stub pmureg;
 struct wdt_stub * const WDT = &wdtreg;
+struct pmu_stub * const PMU = &pmureg;
 }
 
 TEST_GROUP(Watchdog) {
 	void setup(void) {
+		mock().ignoreOtherCalls();
+
 		set_initial_state();
 	}
 	void teardown(void) {
+		mock().checkExpectations();
+		mock().clear();
 	}
 
 	void set_initial_state(void) {
@@ -29,6 +35,19 @@ TEST(Watchdog, set_prescaler_ShouldSetPrescaler) {
 		wdt_set_prescaler(i);
 		LONGS_EQUAL(0x40 | i, WDT->CON);
 	}
+}
+
+TEST(Watchdog, get_prescaler_ShouldReturnDivFactor) {
+	WDT->CON = 0;
+	LONGS_EQUAL(1, wdt_get_prescaler());
+	WDT->CON = 1;
+	LONGS_EQUAL(4, wdt_get_prescaler());
+	WDT->CON = 2;
+	LONGS_EQUAL(8, wdt_get_prescaler());
+	WDT->CON = 3;
+	LONGS_EQUAL(16, wdt_get_prescaler());
+	WDT->CON = 7;
+	LONGS_EQUAL(256, wdt_get_prescaler());
 }
 
 TEST(Watchdog, set_prescaler_ShouldIgnoreOutBoundValue_WhenUnsupportedDivFactorGiven) {
@@ -89,4 +108,37 @@ TEST(Watchdog, set_interrupt_ShouldSetWRE_WhenTrueGiven) {
 
 TEST(Watchdog, get_count_ShouldReturnCVR) {
 	LONGS_EQUAL(0xffff, wdt_get_count());
+}
+
+#include "abov/drivers/wdt.h"
+#include "abov/hal/clk.h"
+
+TEST(Watchdog, set_clock_source_ShouldSetPmuPcsr) {
+	PMU->PCSR = 1;
+	WDT->CON = 0;
+	wdt_set_clock_source(CLK_PLL);
+	LONGS_EQUAL(0, PMU->PCSR);
+	LONGS_EQUAL(8, WDT->CON);
+	wdt_set_clock_source(CLK_INTERNAL_OSC_16MHZ);
+	LONGS_EQUAL(1, PMU->PCSR);
+	wdt_set_clock_source(CLK_EXTERNAL_OSC_SUB);
+	LONGS_EQUAL(2, PMU->PCSR);
+	wdt_set_clock_source(CLK_INTERNAL_OSC);
+	LONGS_EQUAL(3, PMU->PCSR);
+}
+TEST(Watchdog, set_clock_source_ShouldIgnoreParam_WhenInvalidGiven) {
+	PMU->PCSR = 0x1000;
+	wdt_set_clock_source(CLK_PLL_BYPASS);
+	LONGS_EQUAL(0x1000, PMU->PCSR);
+}
+
+TEST(Watchdog, get_clock_source_ShouldReturnClockSource) {
+	PMU->PCSR = 1;
+	LONGS_EQUAL(CLK_INTERNAL_OSC_16MHZ, wdt_get_clock_source());
+	PMU->PCSR = 2;
+	LONGS_EQUAL(CLK_EXTERNAL_OSC_SUB, wdt_get_clock_source());
+	PMU->PCSR = 3;
+	LONGS_EQUAL(CLK_INTERNAL_OSC, wdt_get_clock_source());
+	PMU->PCSR = 0;
+	LONGS_EQUAL(CLK_PLL, wdt_get_clock_source());
 }

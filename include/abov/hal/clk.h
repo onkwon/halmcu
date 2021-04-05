@@ -76,6 +76,8 @@ bool clk_is_pll_locked(void);
 uint32_t clk_get_hclk_frequency(void);
 /** Get PCLK frequency in Hz */
 uint32_t clk_get_pclk_frequency(void);
+/** Get clock frequency in Hz */
+uint32_t clk_get_frequency(clk_source_t clk);
 
 /** Select watchdog clock source */
 void clk_set_wdt_source(clk_source_t clk);

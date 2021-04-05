@@ -1,4 +1,6 @@
 #include "abov/hal/wdt.h"
+#include "abov/bitop.h"
+
 #include "abov/asm/arm/cmsis.h"
 #include "a33g.h"
 
@@ -23,9 +25,23 @@ void wdt_set_prescaler(uint32_t div_factor)
 	WDT->CON = val;
 }
 
+uint32_t wdt_get_prescaler(void)
+{
+	uint32_t val = (WDT->CON & WPRS_MASK) >> WPRS_POS;
+	if (val == 0) {
+		return 1;
+	}
+	return 1U << (val + 1);
+}
+
 void wdt_reload(uint32_t timeout)
 {
 	WDT->LR = timeout;
+}
+
+uint32_t wdt_get_reload(void)
+{
+	return WDT->LR;
 }
 
 void wdt_start(void)
@@ -60,4 +76,47 @@ void wdt_set_interrupt(bool enable)
 uint32_t wdt_get_count(void)
 {
 	return WDT->CVR;
+}
+
+#include "abov/drivers/wdt.h"
+#include "abov/hal/clk.h"
+
+void wdt_set_clock_source(clk_source_t clk)
+{
+	uint32_t val = 0;
+
+	switch (clk) {
+	case CLK_INTERNAL_OSC:
+		val = 3;
+		break;
+	case CLK_INTERNAL_OSC_16MHZ:
+		val = 1;
+		break;
+	case CLK_PLL:
+		val = 0;
+		break;
+	case CLK_EXTERNAL_OSC_SUB:
+		val = 2;
+		break;
+	default:
+		return;
+	}
+
+	bitop_clean_set_with_mask(&PMU->PCSR, 0, 3U, val);
+	WDT->CON |= 1U << 3;
+}
+
+clk_source_t wdt_get_clock_source(void)
+{
+	switch (PMU->PCSR & 3) {
+	case 1:
+		return CLK_INTERNAL_OSC_16MHZ;
+	case 2:
+		return CLK_EXTERNAL_OSC_SUB;
+	case 3:
+		return CLK_INTERNAL_OSC;
+	case 0:
+	default:
+		return CLK_PLL;
+	}
 }
