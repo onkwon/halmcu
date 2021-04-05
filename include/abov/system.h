@@ -9,16 +9,13 @@ extern "C" {
 #include "cmsis_gcc.h"
 #include "abov/compiler.h"
 
-#include "abov/errata.h"
-
-/**
- * Initialize system in early booting time.
- *
- * Early low-level initialization can be done depending on vendor specifics such
- * as co-processor configuration, initializing external memory, enabling caches
- * and so on.
- */
+/** Early low-level initialization can be done depending on the core
+ * implementation such as co-processor configuration, initializing external
+ * memory, enabling caches and so on. */
 void early_init(void);
+/** Device specific initialization can be done before jumping into the main
+ * application code. */
+void pre_main(void);
 
 /** Insert a hardware full memory bariier. */
 #define mb()					__DMB()
