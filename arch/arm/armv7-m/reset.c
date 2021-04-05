@@ -46,6 +46,11 @@ ABOV_WEAK void early_init(void)
 	/* place holder */
 }
 
+ABOV_WEAK void pre_main(void)
+{
+	/* place holder */
+}
+
 ABOV_WEAK void ISR_reset(void)
 {
 	initialize_core();
@@ -54,6 +59,7 @@ ABOV_WEAK void ISR_reset(void)
 	early_init();
 
 	run_constructors();
+	pre_main();
 	main();
 	run_destructors();
 }
