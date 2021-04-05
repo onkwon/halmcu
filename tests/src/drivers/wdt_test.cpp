@@ -31,6 +31,9 @@ clk_source_t wdt_get_clock_source(void) {
 void wdt_reload(uint32_t timeout) {
 	mock().actualCall(__func__).withParameter("timeout", timeout);
 }
+uint32_t wdt_get_reload(void) {
+	return mock().actualCall(__func__).returnUnsignedIntValueOrDefault(0);
+}
 
 TEST_GROUP(Watchdog) {
 	void setup(void) {
@@ -104,4 +107,10 @@ TEST(Watchdog, set_ShouldSetTimeout_When1MilliSecTimeoutGiven) {
 
 	mock().expectOneCall("wdt_reload").withParameter("timeout", 1000);
 	wdt_set(1);
+}
+
+TEST(Watchdog, wdt_feed_ShouldReloadWatchdogTimeout) {
+	mock().expectOneCall("wdt_get_reload").andReturnValue(1000000);
+	mock().expectOneCall("wdt_reload").withParameter("timeout", 1000000);
+	wdt_feed();
 }
