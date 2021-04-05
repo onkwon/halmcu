@@ -35,13 +35,47 @@ Alternatively you can do it with package manager:
 
 ## Setting up the development environment
 ### Visual Studio Code
+1. Install [Visual Studio Code](https://code.visualstudio.com/)
+2. Install Visual Studio Code Plugins
+  * [C/C++](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
+3. Press `F1` to display the command palette
+4. At the command palette prompt, enter `gitcl`, select the **Git: Clone (Recursive)**
+5. When prompted for the **Repository URL**, enter `https://github.com/onkwon/libabov-example.git`
+6. And press `F1` again. At the command palette prompt enter `task`, select the
+   **Tasks: Run Build Task**
+
 ### Embedded Studio
 ### IAR
 ### Keil
 ### Other
-## Building a project
-### Using libabov Build System
-Please refer to [build template](https://github.com/onkwon/libabov/tree/master/examples/build-template).
-### Custom Build
-Please refer to [custom build example](https://github.com/onkwon/libabov/tree/master/examples/custom-build).
+*libabov* is a self-contained C library that you will need to include into your
+project.
+
+#### 1. Get *libabov* into your project
+
+```bash
+$ cd ${YOUR_PROJECT_DIR}
+$ git submodule add https://github.com/onkwon/libabov.git ${YOUR_THIRD_PARTY_DIR}/libabov
+```
+
+#### 2. Add *libabov* to your existing build system
+##### Make
+Please refer to a [build template](examples/build-template/Makefile).
+##### Other
+Please refer to a [custom build example](examples/custom-build).
+
+1. Add the sources under `${YOUR_THIRD_PARTY_DIR}/libabov/drivers/*.c` to your
+   project
+2. Add the sources under `${YOUR_THIRD_PARTY_DIR}/libabov/devices/common/*.c` to
+   your project
+3. Add the sources under
+   `${YOUR_THIRD_PARTY_DIR}/libabov/devices/${VENDOR}/${DEVICE}/*.c` to your
+   project
+4. Add cpu architecture specific sources under
+   `${YOUR_THIRD_PARTY_DIR}/libabov/arch/${YOUR_ARCH}` to your project
+5. Add `${YOUR_THIRD_PARTY_DIR}/libabov/include` to the include paths for your
+   project
+6. Add CMSIS include path to the include paths for your project
+7. Pass `DEVICE`, `ARCH`, and `XTAL` definitions to your compiler
+
 ## Running an example

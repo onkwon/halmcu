@@ -39,6 +39,7 @@
 #define PLLEN					(1U << 14)
 #define PLLRST					(1U << 15)
 #define PLLLOCKSTS				(1U << 12)
+#define MCKMNT					(1U << 8)
 
 static void unlock_pllcon(void)
 {
@@ -392,6 +393,7 @@ clk_source_t clk_get_source(void)
 void clk_enable_pll(void)
 {
 	PMU->PLLCON |= PLLEN | PLLRST | nBYPASS;
+	PMU->MCMR |= MCKMNT;
 }
 
 void clk_disable_pll(void)

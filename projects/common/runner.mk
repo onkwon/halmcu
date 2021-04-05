@@ -33,7 +33,6 @@ $(goals):
 .PHONY: all_devices $(device-list)
 all_devices: $(device-list)
 $(device-list):
-	$(info dev=$@)
 	$(Q)$(MAKE) -f $(LIBABOV_ROOT)/projects/common/rules.mk lib DEVICE=$@
 
 .PHONY: $(tooling)

@@ -59,6 +59,13 @@ increase complexity.
 4. Then it decides what cpu architecture is of the device
 5. And build based on the architecture with its Makefile, `arch/arm/armv7-m/m3/m3.mk`
 
+* `ABOV_CFLAGS`
+* `ABOV_WARNING_CFLAGS`
+* `CROSS_COMPILE`
+* `DEVICE`
+* `XTAL`
+* `NDEBUG`
+
 ## Software Layers
 ### Low Level Layer
 ### Hardwar Abstraction Layer
