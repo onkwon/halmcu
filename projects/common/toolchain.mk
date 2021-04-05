@@ -9,55 +9,59 @@ OC := $(CROSS_COMPILE_PREFIX)objcopy
 OD := $(CROSS_COMPILE_PREFIX)objdump
 NM := $(CROSS_COMPILE_PREFIX)nm
 
-CFLAGS += -std=c99 \
-	  -static \
-	  -ffreestanding \
-	  -fno-builtin \
-	  -fno-common \
-	  -ffunction-sections \
-	  -fdata-sections \
-	  -fstack-usage \
-	  -Os
-#CFLAGS += -fno-short-enums
-#CFLAGS += -nostdlib
+ABOV_CFLAGS ?= \
+	-std=c99 \
+	-static \
+	-ffreestanding \
+	-fno-builtin \
+	-fno-common \
+	-ffunction-sections \
+	-fdata-sections \
+	-fstack-usage \
+	-Os
+	#-fno-short-enums
+	#-nostdlib
 
 ## Compiler warnings
 STACK_LIMIT ?= 128
-CFLAGS += -Wall \
-	  -Wextra \
-	  -Wc++-compat \
-	  -Wformat=2 \
-	  -Wmissing-prototypes \
-	  -Wstrict-prototypes \
-	  -Wmissing-declarations \
-	  -Wcast-align \
-	  -Wpointer-arith \
-	  -Wbad-function-cast \
-	  -Wcast-qual \
-	  -Wmissing-format-attribute \
-	  -Wmissing-include-dirs \
-	  -Wformat-nonliteral \
-	  -Wdouble-promotion \
-	  -Wfloat-equal \
-	  -Winline \
-	  -Wundef \
-	  -Wunused-macros \
-	  -Wshadow \
-	  -Wwrite-strings \
-	  -Waggregate-return \
-	  -Wredundant-decls \
-	  -Wconversion \
-	  -Wstrict-overflow=5 \
-	  -Wstack-usage=$(STACK_LIMIT)
-#-Wformat-truncation=2
-#-Wformat-overflow
-#-Wabi=11 -Wlogical-op
-#-Wpedantic
-#-Wnested-externs
+ABOV_WARNING_FLAGS ?= \
+	-Werror \
+	-Wall \
+	-Wextra \
+	-Wc++-compat \
+	-Wformat=2 \
+	-Wmissing-prototypes \
+	-Wstrict-prototypes \
+	-Wmissing-declarations \
+	-Wcast-align \
+	-Wpointer-arith \
+	-Wbad-function-cast \
+	-Wcast-qual \
+	-Wmissing-format-attribute \
+	-Wmissing-include-dirs \
+	-Wformat-nonliteral \
+	-Wdouble-promotion \
+	-Wfloat-equal \
+	-Winline \
+	-Wundef \
+	-Wunused-macros \
+	-Wshadow \
+	-Wwrite-strings \
+	-Waggregate-return \
+	-Wredundant-decls \
+	-Wconversion \
+	-Wstrict-overflow=5 \
+	-Wno-long-long \
+	-Wswitch-default \
+	-Wstack-usage=$(STACK_LIMIT)
+	#-Wformat-truncation=2
+	#-Wformat-overflow
+	#-Wabi=11 -Wlogical-op
+	#-Wpedantic
+	#-Wnested-externs
+	#-Wswitch-enum
 
-## Compiler errors
-CFLAGS += -Werror \
-	  -Wno-error=format-nonliteral \
+CFLAGS += $(ABOV_CFLAGS) $(ABOV_WARNING_FLAGS)
 
 ifndef NDEBUG
 	CFLAGS += -g3
