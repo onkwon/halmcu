@@ -12,13 +12,13 @@ extern "C" {
 /** Clock source type */
 typedef enum {
 	/** Internal oscillator */
-	CLK_INTERNAL_OSC,
+	CLK_LSI,
 	/** Internal 16MHz oscillator */
-	CLK_INTERNAL_OSC_16MHZ,
+	CLK_HSI,
 	/** External oscillator */
-	CLK_EXTERNAL_OSC,
+	CLK_HSE,
 	/** External sub oscillator */
-	CLK_EXTERNAL_OSC_SUB,
+	CLK_LSE,
 	/** PLL */
 	CLK_PLL,
 	/** PLL bypass */
