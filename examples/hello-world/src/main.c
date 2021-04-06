@@ -1,9 +1,9 @@
 #include "abov/system.h"
-#include "abov/drivers/uart.h"
-#include "abov/drivers/gpio.h"
+#include "abov/hal/uart.h"
+#include "abov/hal/gpio.h"
 
-#include "abov/hal/clk.h"
-#include "abov/hal/wdt.h"
+#include "abov/ll/clk.h"
+#include "abov/ll/wdt.h"
 
 #define UART0_RX_PIN			(GPIOC + 8)
 #define UART0_TX_PIN			(GPIOC + 9)

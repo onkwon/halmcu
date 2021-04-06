@@ -1,4 +1,4 @@
 Clock
 =====
 
-.. c:autodoc:: ../../include/abov/hal/clk.h
+.. c:autodoc:: ../../include/abov/ll/clk.h

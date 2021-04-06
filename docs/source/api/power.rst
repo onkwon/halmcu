@@ -1,4 +1,4 @@
 Power
 =====
 
-.. c:autodoc:: ../../include/abov/hal/pwr.h
+.. c:autodoc:: ../../include/abov/ll/pwr.h

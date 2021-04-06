@@ -1,10 +1,10 @@
 COMPONENT_NAME = watchdog_driver
 
 SRC_FILES = \
-	../drivers/wdt.c \
+	../hal/wdt.c \
 
 TEST_SRC_FILES = \
-	src/drivers/wdt_test.cpp \
+	src/hal/wdt_test.cpp \
 	src/test_all.cpp \
 
 INCLUDE_DIRS = \

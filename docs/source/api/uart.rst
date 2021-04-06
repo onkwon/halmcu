@@ -10,10 +10,10 @@ Examples
 .. literalinclude:: ../../../examples/hello-world/src/main.c
    :language: C
 
-API
+HAL
 ---
-.. c:autodoc:: ../../include/abov/drivers/uart.h
-
-HAL Driver
-----------
 .. c:autodoc:: ../../include/abov/hal/uart.h
+
+LL
+--
+.. c:autodoc:: ../../include/abov/ll/uart.h

@@ -2,7 +2,7 @@
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTestExt/MockSupport.h"
 
-#include "abov/hal/clk.h"
+#include "abov/ll/clk.h"
 #include "a33g.h"
 
 #define MHZ				1000000U

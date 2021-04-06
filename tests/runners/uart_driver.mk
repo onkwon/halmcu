@@ -1,10 +1,10 @@
 COMPONENT_NAME = uart_driver
 
 SRC_FILES = \
-	../drivers/uart.c \
+	../hal/uart.c \
 
 TEST_SRC_FILES = \
-	src/drivers/uart_test.cpp \
+	src/hal/uart_test.cpp \
 	src/test_all.cpp \
 
 INCLUDE_DIRS = \

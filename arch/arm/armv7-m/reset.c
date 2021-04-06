@@ -1,4 +1,4 @@
-#include "abov/irq.h"
+#include "abov/hal/irq.h"
 #include <stdint.h>
 #include "abov/asm/arm/cmsis.h"
 #include "abov/compiler.h"

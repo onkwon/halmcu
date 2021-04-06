@@ -1,6 +1,6 @@
-#include "abov/drivers/wdt.h"
-#include "abov/hal/pwr.h"
-#include "abov/hal/clk.h"
+#include "abov/hal/wdt.h"
+#include "abov/ll/pwr.h"
+#include "abov/ll/clk.h"
 
 #define KHZ			1000
 

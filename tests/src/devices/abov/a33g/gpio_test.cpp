@@ -4,7 +4,7 @@
 
 #include <string.h>
 
-#include "abov/hal/gpio.h"
+#include "abov/ll/gpio.h"
 #include "a33g.h"
 
 extern "C" {

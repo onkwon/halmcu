@@ -1,5 +1,5 @@
-#include "abov/drivers/gpio.h"
-#include "abov/delay.h"
+#include "abov/hal/gpio.h"
+#include "abov/hal/delay.h"
 
 #define LED_PIN			(GPIOD + 1)
 
