@@ -17,7 +17,7 @@ jobs:
         with:
           submodules: 'recursive'
       - name: Build Project
-        run: VERSION=${GITHUB_REF#refs/tags/} make lib all DEVICE=a33g
+        run: VERSION=${GITHUB_REF#refs/tags/} make all_devices
       - name: Get Version
         id: get_version
         run: |
