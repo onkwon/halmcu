@@ -9,3 +9,7 @@ VERSION_PATCH := $(strip $(word 3, $(version-tmp)))
 
 export LIBABOV_VERSION
 export LIBABOV_VERSION_TAG
+
+.PHONY: version
+version:
+	$(info $(LIBABOV_VERSION_TAG))
