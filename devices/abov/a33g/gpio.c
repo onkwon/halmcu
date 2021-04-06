@@ -7,55 +7,55 @@
 
 /* a33g supports 15 pins per port */
 #define MAX_PIN_NUMBER				15U
-#define PIN_NUMBER_MASK				(GPIO_PORT_SIZE - 1)
+#define PIN_NUMBER_MASK				(ABOV_GPIO_PORT_SIZE - 1)
 #define PER_BASE_POS				8U
 
-ABOV_STATIC_ASSERT(GPIO_PORT_SIZE == 0x100, "");
+ABOV_STATIC_ASSERT(ABOV_GPIO_PORT_SIZE == 0x100, "");
 
 static uint32_t get_pin_from_gpio_number(uint32_t ngpio)
 {
 	return ngpio & PIN_NUMBER_MASK;
 }
 
-static gpio_port_t get_port_from_gpio_number(uint32_t ngpio)
+static abov_gpio_port_t get_port_from_gpio_number(uint32_t ngpio)
 {
-	return (gpio_port_t)(ngpio & ~PIN_NUMBER_MASK);
+	return (abov_gpio_port_t)(ngpio & ~PIN_NUMBER_MASK);
 }
 
 static PCU_Type *get_pcu_from_gpio_number(uint32_t ngpio)
 {
 	switch (get_port_from_gpio_number(ngpio)) {
-	case GPIOA:
+	case ABOV_GPIOA:
 		return PCA;
-	case GPIOB:
+	case ABOV_GPIOB:
 		return PCB;
-	case GPIOC:
+	case ABOV_GPIOC:
 		return PCC;
-	case GPIOD:
+	case ABOV_GPIOD:
 		return PCD;
-	case GPIOE:
+	case ABOV_GPIOE:
 		return PCE;
-	case GPIOF:
+	case ABOV_GPIOF:
 		return PCF;
 	default:
 		return NULL;
 	}
 }
 
-static GPIO_Type *get_reg_from_port(gpio_port_t port)
+static GPIO_Type *get_reg_from_port(abov_gpio_port_t port)
 {
 	switch (port) {
-	case GPIOA:
+	case ABOV_GPIOA:
 		return PA;
-	case GPIOB:
+	case ABOV_GPIOB:
 		return PB;
-	case GPIOC:
+	case ABOV_GPIOC:
 		return PC;
-	case GPIOD:
+	case ABOV_GPIOD:
 		return PD;
-	case GPIOE:
+	case ABOV_GPIOE:
 		return PE;
-	case GPIOF:
+	case ABOV_GPIOF:
 		return PF;
 	default:
 		return NULL;
@@ -67,37 +67,37 @@ static GPIO_Type *get_reg_from_gpio_number(uint32_t ngpio)
 	return get_reg_from_port(get_port_from_gpio_number(ngpio));
 }
 
-static void enable_port(gpio_port_t port)
+static void enable_port(abov_gpio_port_t port)
 {
 	uint32_t pos = port >> 8;
 	bitop_set(&PMU->PER, pos + PER_BASE_POS);
 }
 
-static void disable_port(gpio_port_t port)
+static void disable_port(abov_gpio_port_t port)
 {
 	uint32_t pos = port >> 8;
 	bitop_clear(&PMU->PER, pos + PER_BASE_POS);
 }
 
-static void set_gpio_mode(PCU_Type *ctrl, uint32_t pin, gpio_mode_t mode)
+static void set_gpio_mode(PCU_Type *ctrl, uint32_t pin, abov_gpio_mode_t mode)
 {
 	uint32_t pos = pin * 2;
 	uint32_t mask = 3U << pos;
 	uint32_t val = 0;
 
 	switch (mode) {
-	case GPIO_MODE_OPENDRAIN:
+	case ABOV_GPIO_MODE_OPENDRAIN:
 		val = 1;
 		break;
-	case GPIO_MODE_INPUT:
-	case GPIO_MODE_INPUT_PULLUP:
-	case GPIO_MODE_INPUT_PULLDOWN:
+	case ABOV_GPIO_MODE_INPUT:
+	case ABOV_GPIO_MODE_INPUT_PULLUP:
+	case ABOV_GPIO_MODE_INPUT_PULLDOWN:
 		val = 2;
 		break;
-	case GPIO_MODE_ANALOG:
+	case ABOV_GPIO_MODE_ANALOG:
 		val = 3;
 		break;
-	case GPIO_MODE_PUSHPULL:
+	case ABOV_GPIO_MODE_PUSHPULL:
 	default:
 		break;
 	}
@@ -105,17 +105,17 @@ static void set_gpio_mode(PCU_Type *ctrl, uint32_t pin, gpio_mode_t mode)
 	bitop_clean_set_with_mask(&ctrl->CR, pos, mask, val);
 }
 
-static void set_gpio_pullmode(PCU_Type *ctrl, uint32_t pin, gpio_mode_t mode)
+static void set_gpio_pullmode(PCU_Type *ctrl, uint32_t pin, abov_gpio_mode_t mode)
 {
 	uint32_t reg = ctrl->PCR;
 
 	bitop_clear(&reg, pin);
 	bitop_clear(&reg, pin + 16);
 
-	if (mode == GPIO_MODE_INPUT_PULLDOWN) {
+	if (mode == ABOV_GPIO_MODE_INPUT_PULLDOWN) {
 		bitop_set(&reg, pin + 16);
 		bitop_set(&reg, pin);
-	} else if (mode == GPIO_MODE_INPUT_PULLUP) {
+	} else if (mode == ABOV_GPIO_MODE_INPUT_PULLUP) {
 		bitop_set(&reg, pin);
 	}
 
@@ -138,7 +138,27 @@ static void disable_gpio_debounce(PCU_Type *ctrl, uint32_t pin)
 	ctrl->DER &= ~(3U << pin);
 }
 
-bool gpio_set_altfunc(uint32_t ngpio, int altfunc)
+static bool set_gpio(uint32_t ngpio, abov_gpio_mode_t mode)
+{
+	PCU_Type *ctrl = get_pcu_from_gpio_number(ngpio);
+	uint32_t pin = get_pin_from_gpio_number(ngpio);
+
+	if (ctrl == NULL || pin > MAX_PIN_NUMBER) {
+		return false;
+	}
+
+	enable_port(get_port_from_gpio_number(ngpio));
+
+	set_gpio_mode(ctrl, pin, mode);
+	set_gpio_pullmode(ctrl, pin, mode);
+	set_gpio_alt(ctrl, pin, 0);
+	disable_gpio_intr(ctrl, pin);
+	disable_gpio_debounce(ctrl, pin);
+
+	return true;
+}
+
+bool abov_gpio_set_altfunc(uint32_t ngpio, int altfunc)
 {
 	if (altfunc > 3) {
 		return false;
@@ -159,37 +179,17 @@ bool gpio_set_altfunc(uint32_t ngpio, int altfunc)
 	return true;
 }
 
-static bool set_gpio(uint32_t ngpio, gpio_mode_t mode)
-{
-	PCU_Type *ctrl = get_pcu_from_gpio_number(ngpio);
-	uint32_t pin = get_pin_from_gpio_number(ngpio);
-
-	if (ctrl == NULL || pin > MAX_PIN_NUMBER) {
-		return false;
-	}
-
-	enable_port(get_port_from_gpio_number(ngpio));
-
-	set_gpio_mode(ctrl, pin, mode);
-	set_gpio_pullmode(ctrl, pin, mode);
-	set_gpio_alt(ctrl, pin, 0);
-	disable_gpio_intr(ctrl, pin);
-	disable_gpio_debounce(ctrl, pin);
-
-	return true;
-}
-
-bool gpio_open(uint32_t ngpio, gpio_mode_t mode)
+bool abov_gpio_open(uint32_t ngpio, abov_gpio_mode_t mode)
 {
 	return set_gpio(ngpio, mode);
 }
 
-bool gpio_close(uint32_t ngpio)
+bool abov_gpio_close(uint32_t ngpio)
 {
-	return set_gpio(ngpio, GPIO_MODE_ANALOG);
+	return set_gpio(ngpio, ABOV_GPIO_MODE_ANALOG);
 }
 
-bool gpio_enable_intr(uint32_t ngpio, gpio_intr_t intr_type)
+bool abov_gpio_enable_intr(uint32_t ngpio, abov_gpio_intr_t intr_type)
 {
 	PCU_Type *ctrl = get_pcu_from_gpio_number(ngpio);
 	uint32_t pin = get_pin_from_gpio_number(ngpio);
@@ -201,19 +201,19 @@ bool gpio_enable_intr(uint32_t ngpio, gpio_intr_t intr_type)
 	uint32_t val = 0;
 	bool edge = false;
 	switch (intr_type) {
-	case GPIO_INTR_EDGE_RISING:
+	case ABOV_GPIO_INTR_EDGE_RISING:
 		edge = true;
 		/* fall through */
-	case GPIO_INTR_LEVEL_HIGH:
+	case ABOV_GPIO_INTR_LEVEL_HIGH:
 		val = 2;
 		break;
-	case GPIO_INTR_EDGE_FALLING:
+	case ABOV_GPIO_INTR_EDGE_FALLING:
 		edge = true;
 		/* fall through */
-	case GPIO_INTR_LEVEL_LOW:
+	case ABOV_GPIO_INTR_LEVEL_LOW:
 		val = 1;
 		break;
-	case GPIO_INTR_EDGE_ANY:
+	case ABOV_GPIO_INTR_EDGE_ANY:
 		edge = true;
 		val = 3;
 		break;
@@ -228,7 +228,7 @@ bool gpio_enable_intr(uint32_t ngpio, gpio_intr_t intr_type)
 	return true;
 }
 
-bool gpio_disable_intr(uint32_t ngpio)
+bool abov_gpio_disable_intr(uint32_t ngpio)
 {
 	PCU_Type *ctrl = get_pcu_from_gpio_number(ngpio);
 	uint32_t pin = get_pin_from_gpio_number(ngpio);
@@ -242,7 +242,7 @@ bool gpio_disable_intr(uint32_t ngpio)
 	return true;
 }
 
-void gpio_clear_intr_flag(uint32_t ngpio)
+void abov_gpio_clear_intr_flag(uint32_t ngpio)
 {
 	PCU_Type *ctrl = get_pcu_from_gpio_number(ngpio);
 	uint32_t pin = get_pin_from_gpio_number(ngpio);
@@ -254,7 +254,7 @@ void gpio_clear_intr_flag(uint32_t ngpio)
 	ctrl->ISR |= 1U << (pin * 2);
 }
 
-void gpio_write(uint32_t ngpio, int value)
+void abov_gpio_write(uint32_t ngpio, int value)
 {
 	GPIO_Type *reg = get_reg_from_gpio_number(ngpio);
 	uint32_t pin = get_pin_from_gpio_number(ngpio);
@@ -266,7 +266,7 @@ void gpio_write(uint32_t ngpio, int value)
 	reg->SRR = 1U << (pin + ((uint32_t)!(value & 1) * 16));
 }
 
-int gpio_read(uint32_t ngpio)
+int abov_gpio_read(uint32_t ngpio)
 {
 	const GPIO_Type *reg = get_reg_from_gpio_number(ngpio);
 	uint32_t pin = get_pin_from_gpio_number(ngpio);
@@ -278,7 +278,7 @@ int gpio_read(uint32_t ngpio)
 	return (reg->IDR >> pin) & 0x1;
 }
 
-void gpio_write_port(gpio_port_t port, int value)
+void abov_gpio_write_port(abov_gpio_port_t port, int value)
 {
 	GPIO_Type *reg = get_reg_from_port(port);
 
@@ -287,7 +287,7 @@ void gpio_write_port(gpio_port_t port, int value)
 	}
 }
 
-int gpio_read_port(gpio_port_t port)
+int abov_gpio_read_port(abov_gpio_port_t port)
 {
 	const GPIO_Type *reg = get_reg_from_port(port);
 
@@ -298,17 +298,17 @@ int gpio_read_port(gpio_port_t port)
 	return (int)reg->IDR;
 }
 
-void gpio_enable_port(gpio_port_t port)
+void abov_gpio_enable_port(abov_gpio_port_t port)
 {
 	enable_port(port);
 }
 
-void gpio_disable_port(gpio_port_t port)
+void abov_gpio_disable_port(abov_gpio_port_t port)
 {
 	disable_port(port);
 }
 
-void gpio_reset(gpio_port_t port)
+void abov_gpio_reset(abov_gpio_port_t port)
 {
 	unused(port);
 }

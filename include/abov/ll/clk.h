@@ -9,78 +9,102 @@ extern "C" {
 #include <stdbool.h>
 #include "abov/hal/peripheral.h"
 
+#if !defined(ABOV_PREFIX)
+#define clk_reset				abov_clk_reset
+#define clk_enable_peripheral			abov_clk_enable_peripheral
+#define clk_disable_peripheral			abov_clk_disable_peripheral
+#define clk_enable_source			abov_clk_enable_source
+#define clk_disable_source			abov_clk_disable_source
+#define clk_set_source				abov_clk_set_source
+#define clk_get_source				abov_clk_get_source
+#define clk_set_pll_frequency			abov_clk_set_pll_frequency
+#define clk_enable_pll				abov_clk_enable_pll
+#define clk_disable_pll				abov_clk_disable_pll
+#define clk_is_pll_locked			abov_clk_is_pll_locked
+#define clk_get_hclk_frequency			abov_clk_get_hclk_frequency
+#define clk_get_pclk_frequency			abov_clk_get_pclk_frequency
+#define clk_get_frequency			abov_clk_get_frequency
+#define clk_set_wdt_source			abov_clk_set_wdt_source
+#define clk_enable_outpin			abov_clk_enable_outpin
+#define clk_disable_outpin			abov_clk_disable_outpin
+#define clk_set_outpin_prescaler		abov_clk_set_outpin_prescaler
+#define clk_set_outpin_source			abov_clk_set_outpin_source
+#define clk_source_t				abov_clk_source_t
+#endif
+
 /** Clock source type */
 typedef enum {
 	/** Internal oscillator */
-	CLK_INTERNAL_OSC,
+	ABOV_CLK_LSI,
 	/** Internal 16MHz oscillator */
-	CLK_INTERNAL_OSC_16MHZ,
+	ABOV_CLK_HSI,
 	/** External oscillator */
-	CLK_EXTERNAL_OSC,
+	ABOV_CLK_HSE,
 	/** External sub oscillator */
-	CLK_EXTERNAL_OSC_SUB,
+	ABOV_CLK_LSE,
 	/** PLL */
-	CLK_PLL,
+	ABOV_CLK_PLL,
 	/** PLL bypass */
-	CLK_PLL_BYPASS,
-} clk_source_t;
+	ABOV_CLK_PLL_BYPASS,
+} abov_clk_source_t;
 
 /**
  * Reset CLK unit
  *
  * This function makes CLK unit the reset state.
  */
-void clk_reset(void);
+void abov_clk_reset(void);
 
 /**
  * Enable peripheral clock.
  *
  * :param peri: Peripheral declared as :c:type:`peripheral_t` in `peripheral.h`
  */
-void clk_enable_peripheral(peripheral_t peri);
+void abov_clk_enable_peripheral(peripheral_t peri);
 /**
  * Disable peripheral clock
  *
  * :param peri: Peripheral declared as :c:type:`peripheral_t` in `peripheral.h`
  */
-void clk_disable_peripheral(peripheral_t peri);
+void abov_clk_disable_peripheral(peripheral_t peri);
 
 /**
  * Enable clock source
  *
  * :param clk: Clock source.
  */
-void clk_enable_source(clk_source_t clk);
+void abov_clk_enable_source(abov_clk_source_t clk);
 /**
  * Disable clock source
  *
  * :param clk: Clock source.
  */
-void clk_disable_source(clk_source_t clk);
+void abov_clk_disable_source(abov_clk_source_t clk);
 
 /** Select main clock source */
-void clk_set_source(clk_source_t clk);
+void abov_clk_set_source(abov_clk_source_t clk);
 /** Get main clock source */
-clk_source_t clk_get_source(void);
+abov_clk_source_t abov_clk_get_source(void);
 
 /** Set frequency */
-bool clk_set_pll_frequency(clk_source_t clk, clk_source_t clkin, uint32_t hz);
+bool abov_clk_set_pll_frequency(abov_clk_source_t clk, abov_clk_source_t clkin,
+		uint32_t hz);
 /** Enable PLL */
-void clk_enable_pll(void);
+void abov_clk_enable_pll(void);
 /** Disable PLL */
-void clk_disable_pll(void);
+void abov_clk_disable_pll(void);
 /** Check if PLL is locked */
-bool clk_is_pll_locked(void);
+bool abov_clk_is_pll_locked(void);
 
 /** Get HCLK frequency in Hz */
-uint32_t clk_get_hclk_frequency(void);
+uint32_t abov_clk_get_hclk_frequency(void);
 /** Get PCLK frequency in Hz */
-uint32_t clk_get_pclk_frequency(void);
+uint32_t abov_clk_get_pclk_frequency(void);
 /** Get clock frequency in Hz */
-uint32_t clk_get_frequency(clk_source_t clk);
+uint32_t abov_clk_get_frequency(abov_clk_source_t clk);
 
 /** Select watchdog clock source */
-void clk_set_wdt_source(clk_source_t clk);
+void abov_clk_set_wdt_source(abov_clk_source_t clk);
 
 #if defined(__cplusplus)
 }
