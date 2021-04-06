@@ -92,16 +92,16 @@ void wdt_set_clock_source(clk_source_t clk)
 	uint32_t val = 0;
 
 	switch (clk) {
-	case CLK_INTERNAL_OSC:
+	case CLK_LSI:
 		val = 3;
 		break;
-	case CLK_INTERNAL_OSC_16MHZ:
+	case CLK_HSI:
 		val = 1;
 		break;
 	case CLK_PLL:
 		val = 0;
 		break;
-	case CLK_EXTERNAL_OSC_SUB:
+	case CLK_LSE:
 		val = 2;
 		break;
 	default:
@@ -116,11 +116,11 @@ clk_source_t wdt_get_clock_source(void)
 {
 	switch (PMU->PCSR & 3) {
 	case 1:
-		return CLK_INTERNAL_OSC_16MHZ;
+		return CLK_HSI;
 	case 2:
-		return CLK_EXTERNAL_OSC_SUB;
+		return CLK_LSE;
 	case 3:
-		return CLK_INTERNAL_OSC;
+		return CLK_LSI;
 	case 0:
 	default:
 		return CLK_PLL;

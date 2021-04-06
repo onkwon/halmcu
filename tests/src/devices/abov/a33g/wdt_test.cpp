@@ -124,11 +124,11 @@ TEST(Watchdog, set_clock_source_ShouldSetPmuPcsr) {
 	wdt_set_clock_source(CLK_PLL);
 	LONGS_EQUAL(0, PMU->PCSR);
 	LONGS_EQUAL(8, WDT->CON);
-	wdt_set_clock_source(CLK_INTERNAL_OSC_16MHZ);
+	wdt_set_clock_source(CLK_HSI);
 	LONGS_EQUAL(1, PMU->PCSR);
-	wdt_set_clock_source(CLK_EXTERNAL_OSC_SUB);
+	wdt_set_clock_source(CLK_LSE);
 	LONGS_EQUAL(2, PMU->PCSR);
-	wdt_set_clock_source(CLK_INTERNAL_OSC);
+	wdt_set_clock_source(CLK_LSI);
 	LONGS_EQUAL(3, PMU->PCSR);
 }
 TEST(Watchdog, set_clock_source_ShouldIgnoreParam_WhenInvalidGiven) {
@@ -139,11 +139,11 @@ TEST(Watchdog, set_clock_source_ShouldIgnoreParam_WhenInvalidGiven) {
 
 TEST(Watchdog, get_clock_source_ShouldReturnClockSource) {
 	PMU->PCSR = 1;
-	LONGS_EQUAL(CLK_INTERNAL_OSC_16MHZ, wdt_get_clock_source());
+	LONGS_EQUAL(CLK_HSI, wdt_get_clock_source());
 	PMU->PCSR = 2;
-	LONGS_EQUAL(CLK_EXTERNAL_OSC_SUB, wdt_get_clock_source());
+	LONGS_EQUAL(CLK_LSE, wdt_get_clock_source());
 	PMU->PCSR = 3;
-	LONGS_EQUAL(CLK_INTERNAL_OSC, wdt_get_clock_source());
+	LONGS_EQUAL(CLK_LSI, wdt_get_clock_source());
 	PMU->PCSR = 0;
 	LONGS_EQUAL(CLK_PLL, wdt_get_clock_source());
 }

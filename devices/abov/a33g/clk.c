@@ -106,13 +106,13 @@ static uint32_t get_activation_bitmask_from_peripheral(peripheral_t peri)
 static uint32_t get_bitmask_from_clksrc(clk_source_t clk)
 {
 	switch (clk) {
-	case CLK_INTERNAL_OSC:
+	case CLK_LSI:
 		return 1U << 6;
-	case CLK_INTERNAL_OSC_16MHZ:
+	case CLK_HSI:
 		return 1U << 4;
-	case CLK_EXTERNAL_OSC_SUB:
+	case CLK_LSE:
 		return 1U << 2;
-	case CLK_EXTERNAL_OSC:
+	case CLK_HSE:
 		return 1U << 0;
 	default:
 		return 0;
@@ -124,10 +124,10 @@ static bool clk_set_pll_source(clk_source_t clk)
 	uint32_t val = PMU->BCCR & ~PLLCLKSEL_MASK;
 
 	switch (clk) {
-	case CLK_EXTERNAL_OSC:
+	case CLK_HSE:
 		val |= PLLCLKSEL_MASK;
 		break;
-	case CLK_INTERNAL_OSC_16MHZ:
+	case CLK_HSI:
 		break;
 	default:
 		return false;
@@ -140,9 +140,9 @@ static bool clk_set_pll_source(clk_source_t clk)
 static clk_source_t clk_get_pll_source(void)
 {
 	if (PMU->BCCR & PLLCLKSEL_MASK) {
-		return CLK_EXTERNAL_OSC;
+		return CLK_HSE;
 	}
-	return CLK_INTERNAL_OSC_16MHZ;
+	return CLK_HSI;
 }
 
 static uint32_t clk_get_pll_post_multifactor(void)
@@ -288,13 +288,13 @@ static clk_source_t clk_get_source_internal(void)
 
 	switch (val) {
 	case 1:
-		return CLK_EXTERNAL_OSC_SUB;
+		return CLK_LSE;
 	case 2:
 		return CLK_PLL;
 	case 3:
 		return CLK_PLL_BYPASS;
 	default:
-		return CLK_INTERNAL_OSC;
+		return CLK_LSI;
 	}
 }
 
@@ -303,10 +303,10 @@ static uint32_t clk_get_pll_frequency(void)
 	uint32_t clkin, n1, n2, d, r, p;
 
 	switch (clk_get_source_internal()) {
-	case CLK_INTERNAL_OSC:
+	case CLK_LSI:
 		return 1*MHZ;
 	case CLK_PLL:
-		if (clk_get_pll_source() == CLK_EXTERNAL_OSC) {
+		if (clk_get_pll_source() == CLK_HSE) {
 			clkin = XTAL;
 		} else {
 			clkin = 16*MHZ;
@@ -319,7 +319,7 @@ static uint32_t clk_get_pll_frequency(void)
 		p = clk_get_pll_divfactor() + 1;
 		return (clkin * n1) / (r * n2 * p) * d;
 	case CLK_PLL_BYPASS:
-	case CLK_EXTERNAL_OSC_SUB:
+	case CLK_LSE:
 	default:
 		return 0;
 	}
@@ -343,7 +343,7 @@ void clk_enable_source(clk_source_t clk)
 	val |= mask << 1;
 	PMU->CCR = val;
 
-	if (clk == CLK_EXTERNAL_OSC) {
+	if (clk == CLK_HSE) {
 		PMU->CMR |= MXOSCMNT; // activate MXOSC monitoring
 		PMU->CMR |= MXOSCSTS; // clear
 		while ((PMU->CMR & MXOSCSTS) == 0) {
@@ -367,9 +367,9 @@ void clk_set_source(clk_source_t clk)
 	val &= ~mask;
 
 	switch (clk) {
-	case CLK_INTERNAL_OSC:
+	case CLK_LSI:
 		break;
-	case CLK_EXTERNAL_OSC_SUB:
+	case CLK_LSE:
 		val |= 1U;
 		break;
 	case CLK_PLL:
@@ -403,7 +403,7 @@ void clk_disable_pll(void)
 
 bool clk_set_pll_frequency(clk_source_t clk, clk_source_t clkin, uint32_t hz)
 {
-	uint32_t src_hz = 16*MHZ; // CLK_INTERNAL_OSC_16MHZ
+	uint32_t src_hz = 16*MHZ; // CLK_HSI
 
 	assert(hz % MHZ == 0);
 	unlock_pllcon();
@@ -413,14 +413,14 @@ bool clk_set_pll_frequency(clk_source_t clk, clk_source_t clkin, uint32_t hz)
 		if (!configure_pll(clkin)) {
 			return false;
 		}
-		if (clkin == CLK_EXTERNAL_OSC) {
+		if (clkin == CLK_HSE) {
 			// NOTE: according to UM_A33G52x: 4 <= xtal <= 8MHz
 			assert(XTAL >= 4*MHZ && XTAL <= 8*MHZ);
 			src_hz = XTAL;
 		}
 		break;
-	case CLK_INTERNAL_OSC:
-	case CLK_EXTERNAL_OSC_SUB:
+	case CLK_LSI:
+	case CLK_LSE:
 	case CLK_PLL_BYPASS:
 	default:
 		return false;
@@ -452,13 +452,13 @@ uint32_t clk_get_frequency(clk_source_t clk)
 	switch (clk) {
 	case CLK_PLL:
 		return clk_get_hclk_frequency();
-	case CLK_INTERNAL_OSC:
+	case CLK_LSI:
 		return 1*MHZ;
-	case CLK_INTERNAL_OSC_16MHZ:
+	case CLK_HSI:
 		return 16*MHZ;
-	case CLK_EXTERNAL_OSC:
+	case CLK_HSE:
 		return XTAL;
-	case CLK_EXTERNAL_OSC_SUB:
+	case CLK_LSE:
 	default:
 		return 0;
 	}

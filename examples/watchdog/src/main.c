@@ -5,7 +5,7 @@
 int main(void)
 {
 	wdt_enable();
-	wdt_set_clock_source(CLK_INTERNAL_OSC);
+	wdt_set_clock_source(CLK_LSI);
 	wdt_set_prescaler(0);
 #if defined(ENABLE_WATCHDOG_INTERRUPT)
 	wdt_set_interrupt(true);

@@ -11,8 +11,8 @@ static uart_handle_t uart0_handle;
 
 static void system_clock_init(void)
 {
-	clk_enable_source(CLK_INTERNAL_OSC_16MHZ);
-	clk_set_pll_frequency(CLK_PLL, CLK_INTERNAL_OSC_16MHZ, 16000000);
+	clk_enable_source(CLK_HSI);
+	clk_set_pll_frequency(CLK_PLL, CLK_HSI, 16000000);
 	clk_enable_pll();
 	clk_set_source(CLK_PLL);
 	while (!clk_is_pll_locked()) ;
