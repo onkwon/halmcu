@@ -1,7 +1,6 @@
 #include "abov/system.h"
-#include "abov/drivers/uart.h"
-#include "abov/drivers/gpio.h"
-
+#include "abov/hal/uart.h"
+#include "abov/hal/gpio.h"
 #include "abov/hal/clk.h"
 #include "abov/hal/wdt.h"
 

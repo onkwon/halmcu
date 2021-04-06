@@ -1,4 +1,4 @@
 IRQ
 ===
 
-.. c:autodoc:: ../../include/abov/irq.h
+.. c:autodoc:: ../../include/abov/hal/irq.h

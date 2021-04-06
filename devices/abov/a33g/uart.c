@@ -1,4 +1,4 @@
-#include "abov/hal/uart.h"
+#include "abov/ll/uart.h"
 
 #include <assert.h>
 #include <stddef.h>
@@ -6,8 +6,8 @@
 #include "abov/bitop.h"
 #include "abov/compiler.h"
 
-#include "abov/hal/pwr.h"
-#include "abov/hal/clk.h"
+#include "abov/ll/pwr.h"
+#include "abov/ll/clk.h"
 #include "abov/asm/arm/cmsis.h"
 #include "a33g.h"
 

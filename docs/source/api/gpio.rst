@@ -6,6 +6,10 @@ Examples
 .. literalinclude:: ../../../examples/blinky/src/main.c
    :language: C
 
-API
+HAL
 ---
 .. c:autodoc:: ../../include/abov/hal/gpio.h
+
+LL
+--
+.. c:autodoc:: ../../include/abov/ll/gpio.h

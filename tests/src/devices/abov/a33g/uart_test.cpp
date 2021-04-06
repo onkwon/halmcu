@@ -2,9 +2,9 @@
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTestExt/MockSupport.h"
 
-#include "abov/hal/uart.h"
-#include "abov/hal/pwr.h"
-#include "abov/hal/clk.h"
+#include "abov/ll/uart.h"
+#include "abov/ll/pwr.h"
+#include "abov/ll/clk.h"
 #include "a33g.h"
 
 extern "C" {

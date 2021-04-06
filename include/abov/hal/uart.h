@@ -1,179 +1,112 @@
-#ifndef ABOV_UART_HAL_H
-#define ABOV_UART_HAL_H
+#ifndef ABOV_UART_H
+#define ABOV_UART_H
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-#include <stdint.h>
+#include <stddef.h>
 #include <stdbool.h>
+#include <limits.h>
 
-/** UART port enumeration */
-typedef enum {
-	/***/
-	UART_PORT_0,
-	/***/
-	UART_PORT_1,
-	/***/
-	UART_PORT_2,
-	/***/
-	UART_PORT_3,
-} uart_port_t;
+#include "abov/ll/uart.h"
 
-/** UART parity enumeration */
-typedef enum {
-	/***/
-	UART_PARITY_NONE,
-	/***/
-	UART_PARITY_ODD,
-	/***/
-	UART_PARITY_EVEN,
-} uart_parity_t;
+/** UART handler type */
+typedef void (*uart_intr_callback_t)(uint32_t flags);
 
-/** UART stopbit enumeration */
-typedef enum {
+/** UART configuration */
+struct uart_cfg {
 	/***/
-	UART_STOPBIT_1,
+	uart_wordsize_t wordsize;
 	/***/
-	UART_STOPBIT_1_5,
+	uart_stopbit_t stopbit;
 	/***/
-	UART_STOPBIT_2,
-} uart_stopbit_t;
-
-/** UART wordsize enumeration */
-typedef enum {
+	uart_parity_t parity;
 	/***/
-	UART_WORDSIZE_8		= 8,
+	unsigned int baudrate;
 	/***/
-	UART_WORDSIZE_7		= 7,
+	bool rx_interrupt;
 	/***/
-	UART_WORDSIZE_6		= 6,
-	/***/
-	UART_WORDSIZE_5		= 5,
-} uart_wordsize_t;
-
-/** UART event enumeration */
-enum uart_event_flag {
-	/***/
-	UART_EVENT_BIT			= 28,
-	/***/
-	UART_EVENT_RX			= (1U << (UART_EVENT_BIT+0)),
-	/***/
-	UART_EVENT_TX_READY		= (1U << (UART_EVENT_BIT+1)),
-	/***/
-	UART_EVENT_ERROR		= (1U << (UART_EVENT_BIT+2)),
-	/***/
-	UART_EVENT_MASK			=
-		(UART_EVENT_RX | UART_EVENT_TX_READY | UART_EVENT_ERROR),
+	bool tx_interrupt;
 };
 
+/** UART handle type */
+typedef union {
+#if defined(__WORDSIZE) && __WORDSIZE == 64
+	char _size[sizeof(struct uart_cfg) + sizeof(uart_port_t) + 24];
+#else
+	char _size[sizeof(struct uart_cfg) + sizeof(uart_port_t) + 12];
+#endif
+	long _align;
+} uart_handle_t;
+
 /**
- * Reset UART interface
+ * Initialize UART port with given configuration
  *
- * This function makes the given UART the reset default state.
+ * :param handle: handle of uart port
+ * :param port: a enum of :c:type:`uart_port_t`
+ * :param cfg: configuration
+ * :return: `true` on success
+ */
+bool uart_init(uart_handle_t *handle, uart_port_t port, const struct uart_cfg *cfg);
+/**
+ * Deinitialize UART port
+ *
+ * :param handle: handle of uart port
+ */
+void uart_deinit(uart_handle_t *handle);
+/**
+ * Register rx interrupt handler
+ *
+ * :param handle: handle of uart port
+ * :param handler: rx interrupt handler
+ */
+void uart_register_rx_handler(uart_handle_t *handle, uart_intr_callback_t handler);
+/**
+ * Register tx ready interrupt handler
+ *
+ * :param handle: handle of uart port
+ * :param handler: tx ready interrupt handler
+ */
+void uart_register_tx_handler(uart_handle_t *handle, uart_intr_callback_t handler);
+/**
+ * Register error interrupt handler
+ *
+ * :param handle: handle of uart port
+ * :param handler: error interrupt handler
+ */
+void uart_register_error_handler(uart_handle_t *handle, uart_intr_callback_t handler);
+/**
+ * Read bytes from UART port
+ *
+ * :param handle: handle of uart port
+ * :param buf: receive buffer address
+ * :param bufsize: buffer sizie
+ */
+size_t uart_read(uart_handle_t *handle, void *buf, size_t bufsize);
+/**
+ * Write data to UART port
+ *
+ * :param handle: handle of uart port
+ * :param data: data buffer address
+ * :param datasize: data size to send
+ */
+size_t uart_write(uart_handle_t *handle, const void *data, size_t datasize);
+/**
+ * The default UART interrupt handler
  *
  * :param port: a enum of :c:type:`uart_port_t`
+ * :note: Define :c:macro:`UART_MAX_DRIVER_HANDLE` to `0` not to occupy any
+ *        memory if you don't use the default interrupt hander but your own.
  */
-void uart_reset(uart_port_t port);
-/**
- * Enable UART
- *
- * :param port: a enum of :c:type:`uart_port_t`
- */
-void uart_enable(uart_port_t port);
-/**
- * Disable UART
- *
- * :param port: a enum of :c:type:`uart_port_t`
- */
-void uart_disable(uart_port_t port);
-/**
- * Read a byte from UART
- *
- * :param port: a enum of :c:type:`uart_port_t`
- * :return: received byte
- */
-int uart_read_byte(uart_port_t port);
-/**
- * Read a byte from UART
- *
- * :param port: a enum of :c:type:`uart_port_t`
- * :return: * received byte on success
- *          * -1 when no received data
- * :note: This function is non-blocking.
- */
-int uart_read_byte_nonblock(uart_port_t port);
-/**
- * Write a byte to UART
- *
- * This function will block until the byte gets written into the hold register.
- *
- * :param port: a enum of :c:type:`uart_port_t`
- * :param val: value to write
- */
-void uart_write_byte(uart_port_t port, uint8_t val);
-/**
- * Set UART baudrate
- *
- * :param port: a enum of :c:type:`uart_port_t`
- * :param baudrate: baudrate
- */
-void uart_set_baudrate(uart_port_t port, uint32_t baudrate);
-/**
- * Enable UART receiver interrupt
- *
- * :param port: a enum of :c:type:`uart_port_t`
- */
-void uart_enable_rx_intr(uart_port_t port);
-/**
- * Disable UART receiver interrupt
- *
- * :param port: a enum of :c:type:`uart_port_t`
- */
-void uart_disable_rx_intr(uart_port_t port);
-/**
- * Enable UART transmitter interrupt
- *
- * :param port: a enum of :c:type:`uart_port_t`
- */
-void uart_enable_tx_intr(uart_port_t port);
-/**
- * Disable UART transmitter interrupt
- *
- * :param port: a enum of :c:type:`uart_port_t`
- */
-void uart_disable_tx_intr(uart_port_t port);
-/**
- * Read UART status flag
- *
- * :param port: a enum of :c:type:`uart_port_t`
- * :return: status flag
- */
-uint32_t uart_get_status(uart_port_t port);
-/**
- * Set UART parity
- *
- * :param port: a enum of :c:type:`uart_port_t`
- * :param parity: a enum of :c:type:`uart_parity_t`
- */
-void uart_set_parity(uart_port_t port, uart_parity_t parity);
-/**
- * Set UART stopbits
- *
- * :param port: a enum of :c:type:`uart_port_t`
- * :param stopbit: a enum of :c:type:`uart_stopbit_t`
- */
-void uart_set_stopbits(uart_port_t port, uart_stopbit_t stopbit);
-/**
- * Set UART data bit length
- *
- * :param port: a enum of :c:type:`uart_port_t`
- * :param wordsize: a enum of :c:type:`uart_wordsize_t`
- */
-void uart_set_wordsize(uart_port_t port, uart_wordsize_t wordsize);
+void uart_default_isr(uart_port_t uartp);
+
+#if defined(UNITTEST)
+void uart_teardown(void);
+#endif
 
 #if defined(__cplusplus)
 }
 #endif
 
-#endif /* ABOV_UART_HAL_H */
+#endif /* ABOV_UART_H */

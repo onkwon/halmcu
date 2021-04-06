@@ -9,7 +9,6 @@ Peripheral
    clock
    gpio
    power
-   timer
    uart
    watchdog
 

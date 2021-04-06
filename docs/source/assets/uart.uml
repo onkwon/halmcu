@@ -1,0 +1,34 @@
+@startuml
+class HAL_uart {
+	init()
+	deinit()
+	enable()
+	disable()
+	register_rx_handler()
+	register_tx_handler()
+	register_error_handler()
+	read()
+	write()
+}
+
+class LL_uart {
+	reset()
+	read_byte()
+	read_byte_nonblock()
+	write_byte()
+	set_baudrate()
+	enable_rx_intr()
+	disable_rx_intr()
+	enable_tx_intr()
+	disable_tx_intr()
+	get_status()
+	set_parity()
+	set_stopbits()
+	set_wordsize()
+}
+
+HAL_uart --> LL_uart
+HAL_uart ..> LL_power
+HAL_uart ..> LL_clock
+HAL_uart ..> LL_nvic
+@enduml

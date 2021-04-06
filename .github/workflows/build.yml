@@ -61,7 +61,7 @@ jobs:
           sonar-scanner \
               -Dsonar.organization=onkwon-github \
               -Dsonar.projectKey=onkwon_libabov \
-              -Dsonar.sources=arch,devices,drivers,examples,include \
+              -Dsonar.sources=arch,devices,hal,examples,include \
               -Dsonar.tests=tests \
               -Dsonar.test.inclusions=**/*_test.cpp \
               -Dsonar.cfamily.gcov.reportsPath=coverage_report \

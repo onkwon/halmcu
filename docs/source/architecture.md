@@ -20,7 +20,7 @@
 │       ├── a31l/
 │       ├── a33g/
 │       └── a34m/
-├── drivers/
+├── hal/
 │   ├── adc/
         ... 
 │   └── uart/
@@ -28,7 +28,7 @@
 ├── include
 │   └── abov
 │       ├── asm/
-│       ├── drivers/
+│       ├── ll/
 │       └── hal/
 ├── projects/
 │   └── common/
@@ -40,7 +40,7 @@
 | arch      |                                                                 |
 | docs      |                                                                 |
 | devices   | low level and hardware dependent code for the specific device   |
-| drivers   | device abstraction code for drivers. no hardware dependency     |
+| hal       | hardware abstraction code. no hardware dependency               |
 | examples  |                                                                 |
 | include   |                                                                 |
 | projects  |                                                                 |
@@ -55,7 +55,7 @@ increase complexity.
 
 1. You shoud specify device you want to build for, something like: `make DEVICE=a33g`
 2. It will automatically include a project Makefile according to the device. e.g. `projects/a33g.mk`
-3. In the project Makefile, all drivers it supports are included by `drivers/a33g/driver.mk`
+3. In the project Makefile, all drivers it supports are included by `devices/a33g/devices.mk`
 4. Then it decides what cpu architecture is of the device
 5. And build based on the architecture with its Makefile, `arch/arm/armv7-m/m3/m3.mk`
 
@@ -72,3 +72,4 @@ increase complexity.
 ### Driver Layer
 
 ## Porting
+* `ABOV_PREFIX`

@@ -1,4 +1,4 @@
-#include "abov/irq.h"
+#include "abov/hal/irq.h"
 #include "abov/asm/arm/cmsis.h"
 
 void irq_enable(irq_t irq)

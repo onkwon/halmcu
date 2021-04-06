@@ -2,9 +2,9 @@
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTestExt/MockSupport.h"
 
-#include "abov/drivers/wdt.h"
-#include "abov/hal/pwr.h"
-#include "abov/hal/clk.h"
+#include "abov/hal/wdt.h"
+#include "abov/ll/pwr.h"
+#include "abov/ll/clk.h"
 
 void pwr_enable_peripheral(peripheral_t peri) {
 	mock().actualCall(__func__).withParameter("peri", peri);

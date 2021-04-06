@@ -1,0 +1,30 @@
+@startuml
+class HAL_watchdog {
+	enable()
+	disable()
+	set_ms()
+	feed()
+	set_clock_source()
+	get_clock_source()
+	get_clock_frequency()
+}
+
+class LL_watchdog {
+	reset()
+	set_prescaler()
+	get_prescaler()
+	reload()
+	get_reload()
+	start()
+	stop()
+	set_debug_hold_mode()
+	is_event_raised()
+	set_interrupt()
+	get_count()
+}
+
+HAL_watchdog --> LL_watchdog
+HAL_watchdog ..> LL_power
+HAL_watchdog ..> LL_clock
+HAL_watchdog ..> LL_nvic
+@enduml
