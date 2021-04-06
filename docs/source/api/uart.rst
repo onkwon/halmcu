@@ -3,6 +3,13 @@ UART
 
 .. note:: The default `UART_MAX_DRIVER_HANDLE` is 2.
 
+Examples
+--------
+.. literalinclude:: ../../../examples/hello-world/src/main.c
+   :language: C
+
+API
+---
 .. c:autodoc:: ../../include/abov/drivers/uart.h
 
 HAL Driver

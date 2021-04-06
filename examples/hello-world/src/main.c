@@ -19,14 +19,6 @@ static void system_clock_init(void)
 	while (!clk_is_pll_locked()) ;
 }
 
-static void system_init(void)
-{
-	errata_1();
-	wdt_stop();
-	system_clock_init();
-	interrupt_unlock();
-}
-
 static void uart_gpio_init(void)
 {
 	gpio_open(UART0_RX_PIN, GPIO_MODE_INPUT_PULLUP);
@@ -37,7 +29,7 @@ static void uart_gpio_init(void)
 
 int main(void)
 {
-	system_init();
+	system_clock_init();
 
 	uart_gpio_init();
 	uart_init(&uart0_handle, UART_PORT_0, &(struct uart_cfg) {

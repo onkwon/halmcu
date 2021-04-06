@@ -14,6 +14,7 @@ libabov Developer Documentation
    api/index
    examples
    devices
+   changelog
 
 Indices and tables
 ==================

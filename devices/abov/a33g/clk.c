@@ -447,6 +447,23 @@ uint32_t clk_get_pclk_frequency(void)
 	return clk_get_pll_frequency() / (clk_get_pclk_prescaler() + 1);
 }
 
+uint32_t clk_get_frequency(clk_source_t clk)
+{
+	switch (clk) {
+	case CLK_PLL:
+		return clk_get_hclk_frequency();
+	case CLK_INTERNAL_OSC:
+		return 1*MHZ;
+	case CLK_INTERNAL_OSC_16MHZ:
+		return 16*MHZ;
+	case CLK_EXTERNAL_OSC:
+		return XTAL;
+	case CLK_EXTERNAL_OSC_SUB:
+	default:
+		return 0;
+	}
+}
+
 bool clk_is_pll_locked(void)
 {
 	return !!(PMU->PLLCON & PLLLOCKSTS);

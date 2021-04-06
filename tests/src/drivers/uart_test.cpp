@@ -78,7 +78,6 @@ TEST_GROUP(uart_driver) {
 
 	void setup(void) {
 		mock().ignoreOtherCalls();
-
 	}
 	void teardown(void) {
 		uart_teardown();

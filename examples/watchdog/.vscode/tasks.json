@@ -1,0 +1,17 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build - Build project",
+            "type": "shell",
+            "command": "make",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
