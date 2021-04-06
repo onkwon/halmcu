@@ -26,7 +26,7 @@ uint32_t wdt_get_clock_frequency(void)
 	return get_clock_freqeuncy();
 }
 
-void wdt_set(uint32_t period_ms)
+void wdt_set_ms(uint32_t period_ms)
 {
 	uint32_t khz = get_clock_freqeuncy() / KHZ;
 	uint32_t ticks = khz * period_ms;

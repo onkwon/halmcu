@@ -36,6 +36,10 @@ uint32_t wdt_get_prescaler(void)
 
 void wdt_reload(uint32_t timeout)
 {
+	if (WDT->CON & WIE && timeout > 0) {
+		timeout -= 1;
+	}
+
 	WDT->LR = timeout;
 }
 
@@ -71,6 +75,8 @@ void wdt_set_interrupt(bool enable)
 	uint32_t val = WDT->CON & ~(WIE | WRE);
 	val |= ((uint32_t)enable << WIE_POS) | ((uint32_t)!enable << WRE_POS);
 	WDT->CON = val;
+
+	PMU->RSER |= 1U << 3;
 }
 
 uint32_t wdt_get_count(void)

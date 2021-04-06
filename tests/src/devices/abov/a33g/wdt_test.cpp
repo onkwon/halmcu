@@ -64,6 +64,11 @@ TEST(Watchdog, reload_ShouldReloadTimeoutCounter) {
 	LONGS_EQUAL(0xffffffff, WDT->LR);
 }
 
+TEST(Watchdog, get_reload_ShouldReturnReloadTimeout) {
+	WDT->LR = 1000;
+	LONGS_EQUAL(1000, wdt_get_reload());
+}
+
 TEST(Watchdog, start_ShouldSetWEN) {
 	wdt_start();
 	LONGS_EQUAL(0x67, WDT->CON);

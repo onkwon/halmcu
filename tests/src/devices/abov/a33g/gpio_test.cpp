@@ -52,6 +52,8 @@ TEST_GROUP(gpio) {
 		memset(PF, 0, sizeof(*PF));
 
 		PCA->CR = PCB->CR = PCC->CR = PCD->CR = PCE->CR = PCF->CR = 0xFFFFFFFF;
+
+		memset(PMU, 0, sizeof(*PMU));
 	}
 };
 
@@ -242,4 +244,19 @@ TEST(gpio, write_port_ShouldWriteValue) {
 TEST(gpio, read_port_ShouldReturnCurrentState) {
 	PA->IDR = 0xA5A5;
 	LONGS_EQUAL(0xA5A5, gpio_read_port(GPIOA));
+}
+
+TEST(gpio, enable_port_ShouldSetPmuPer) {
+	gpio_enable_port(GPIOA);
+	LONGS_EQUAL(0x100, PMU->PER);
+	gpio_enable_port(GPIOF);
+	LONGS_EQUAL(0x2100, PMU->PER);
+}
+
+TEST(gpio, disable_port_ShouldClearPmuPer) {
+	PMU->PER = 0x1200;
+	gpio_disable_port(GPIOB);
+	LONGS_EQUAL(0x1000, PMU->PER);
+	gpio_disable_port(GPIOE);
+	LONGS_EQUAL(0, PMU->PER);
 }
