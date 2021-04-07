@@ -139,7 +139,7 @@ TEST(uart_driver, deinit) {
 	LONGS_EQUAL(1, uart_init(&default_handle, UART_PORT_1, &default_cfg));
 	LONGS_EQUAL(1, uart_init(&default_handle, UART_PORT_2, &default_cfg));
 	LONGS_EQUAL(0, uart_init(&default_handle, UART_PORT_3, &default_cfg));
-	mock().expectOneCall("irq_disable").withParameter("irq", 14);
+	mock().expectOneCall("irq_disable").withParameter("irq", 14 + IRQ_FIXED);
 	mock().expectOneCall("uart_disable").withParameter("port", UART_PORT_2);
 	uart_deinit(&default_handle);
 	LONGS_EQUAL(1, uart_init(&default_handle, UART_PORT_3, &default_cfg));
@@ -147,7 +147,7 @@ TEST(uart_driver, deinit) {
 
 TEST(uart_driver, rx_interrupt_ShouldCallRxHandler) {
 	default_cfg.rx_interrupt = true;
-	mock().expectOneCall("irq_enable").withParameter("irq", 3);
+	mock().expectOneCall("irq_enable").withParameter("irq", 3 + IRQ_FIXED);
 	uart_init(&default_handle, UART_PORT_0, &default_cfg);
 	uart_register_rx_handler(&default_handle, intr_handler);
 	mock().expectOneCall("uart_get_status").withParameter("port", UART_PORT_0)
@@ -157,7 +157,7 @@ TEST(uart_driver, rx_interrupt_ShouldCallRxHandler) {
 }
 TEST(uart_driver, tx_interrupt_ShouldCallTxHandler) {
 	default_cfg.tx_interrupt = true;
-	mock().expectOneCall("irq_enable").withParameter("irq", 4);
+	mock().expectOneCall("irq_enable").withParameter("irq", 4 + IRQ_FIXED);
 	uart_init(&default_handle, UART_PORT_1, &default_cfg);
 	uart_register_tx_handler(&default_handle, intr_handler);
 	mock().expectOneCall("uart_get_status").withParameter("port", UART_PORT_1)
