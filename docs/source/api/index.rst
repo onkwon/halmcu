@@ -21,3 +21,10 @@ System
    irq
    peripheral
    system
+
+Other
+-----
+.. toctree::
+   :maxdepth: 1
+
+   systick

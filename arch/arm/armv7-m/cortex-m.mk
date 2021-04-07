@@ -8,6 +8,7 @@ CM_SRCS := \
 	$(LIBABOV_ROOT)/arch/arm/armv7-m/irq.c \
 	$(LIBABOV_ROOT)/arch/arm/armv7-m/vector.c \
 	$(LIBABOV_ROOT)/arch/arm/armv7-m/delay.c \
+	$(LIBABOV_ROOT)/arch/arm/armv7-m/systick.c \
 
 CM_INCS := $(LIBABOV_ROOT)/arch/arm/include/CMSIS_5/CMSIS/Core/Include
 

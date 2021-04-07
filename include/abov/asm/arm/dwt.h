@@ -5,10 +5,12 @@
 extern "C" {
 #endif
 
-#define DCB_DEMCR			(*(volatile uint32_t *)0xE000EDFC)
+#include <stdint.h>
 
-#define DWT_CTRL			(*(volatile uint32_t *)0xE0001000)
-#define DWT_CYCCNT			(*(volatile uint32_t *)0xE0001004)
+#define DCB_DEMCR			(*(volatile uint32_t *)0xE000EDFCUL)
+
+#define DWT_CTRL			(*(volatile uint32_t *)0xE0001000UL)
+#define DWT_CYCCNT			(*(volatile uint32_t *)0xE0001004UL)
 
 /** NOTE: These features are not supported in armv6m. */
 #define dwt_enable_cycle_counter()	(DWT_CTRL |= 1UL)
