@@ -7,7 +7,6 @@
 #include "abov/asm/arm/systick.h"
 #include "ARMCM3.h"
 #include "abov/ll/clk.h"
-#include "assert.h"
 
 extern "C" {
 static struct systick stkreg;
@@ -16,9 +15,6 @@ struct systick * const SysTick = &stkreg;
 
 uint32_t clk_get_hclk_frequency(void) {
 	return mock().actualCall(__func__).returnUnsignedIntValueOrDefault(1);
-}
-void myassert(void) {
-	mock().actualCall(__func__);
 }
 
 TEST_GROUP(systick) {
@@ -71,9 +67,4 @@ TEST(systick, set_frequency_ShouldSetSysTickFrequency_When1HzGiven) {
 	mock().expectOneCall("clk_get_hclk_frequency").andReturnValue(1000000);
 	LONGS_EQUAL(1, systick_set_frequency(1));
 	LONGS_EQUAL(1000000-1, SysTick->LOAD);
-}
-TEST(systick, set_frequency_ShouldCauseAssertion_WhenTooSlowFreqGiven) {
-	mock().expectOneCall("myassert");
-	mock().expectOneCall("clk_get_hclk_frequency").andReturnValue(75000000);
-	systick_set_frequency(1);
 }

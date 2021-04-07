@@ -15,6 +15,5 @@ INCLUDE_DIRS = \
 CPPUTEST_CPPFLAGS = \
 	-Darmv7m3 \
 	-DUNITTEST \
-	-Iassert.h \
 
 include MakefileRunner.mk

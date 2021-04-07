@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#undef assert
 #define assert(exp)		if (!(exp)) myassert()
 
 extern void myassert(void);
