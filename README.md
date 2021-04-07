@@ -6,7 +6,7 @@
 *libabov* provides a developing environment for ABOV devices by including low
 level hardware drivers, libraries, and examples for peripherals.
 
-Documentation including API reference for *libabov* is at [libabov.readthedocs.io](https://libabov.readthedocs.io/)
+See online documentation at [libabov.readthedocs.io](https://libabov.readthedocs.io/)
 
 # Getting Started
 ## Installing prerequisites
