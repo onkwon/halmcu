@@ -1,5 +1,5 @@
-#ifndef ABOV_UART_HAL_H
-#define ABOV_UART_HAL_H
+#ifndef ABOV_UART_LL_H
+#define ABOV_UART_LL_H
 
 #if defined(__cplusplus)
 extern "C" {
@@ -176,4 +176,4 @@ void uart_set_wordsize(uart_port_t port, uart_wordsize_t wordsize);
 }
 #endif
 
-#endif /* ABOV_UART_HAL_H */
+#endif /* ABOV_UART_LL_H */

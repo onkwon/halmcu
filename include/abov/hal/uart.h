@@ -1,5 +1,5 @@
-#ifndef ABOV_UART_H
-#define ABOV_UART_H
+#ifndef ABOV_UART_HAL_H
+#define ABOV_UART_HAL_H
 
 #if defined(__cplusplus)
 extern "C" {
@@ -109,4 +109,4 @@ void uart_teardown(void);
 }
 #endif
 
-#endif /* ABOV_UART_H */
+#endif /* ABOV_UART_HAL_H */

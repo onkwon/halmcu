@@ -1,5 +1,5 @@
-#ifndef ABOV_CLK_H
-#define ABOV_CLK_H
+#ifndef ABOV_CLK_HAL_H
+#define ABOV_CLK_HAL_H
 
 #if defined(__cplusplus)
 extern "C" {
@@ -11,4 +11,4 @@ extern "C" {
 }
 #endif
 
-#endif /* ABOV_CLK_H */
+#endif /* ABOV_CLK_HAL_H */

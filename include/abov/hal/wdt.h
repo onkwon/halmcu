@@ -1,5 +1,5 @@
-#ifndef ABOV_WDT_H
-#define ABOV_WDT_H
+#ifndef ABOV_WDT_HAL_H
+#define ABOV_WDT_HAL_H
 
 #if defined(__cplusplus)
 extern "C" {
@@ -29,4 +29,4 @@ uint32_t wdt_get_clock_frequency(void);
 }
 #endif
 
-#endif /* ABOV_WDT_H */
+#endif /* ABOV_WDT_HAL_H */

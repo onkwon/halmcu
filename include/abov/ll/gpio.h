@@ -1,5 +1,5 @@
-#ifndef ABOV_GPIO_HAL_H
-#define ABOV_GPIO_HAL_H
+#ifndef ABOV_GPIO_LL_H
+#define ABOV_GPIO_LL_H
 
 #if defined(__cplusplus)
 extern "C" {
@@ -151,4 +151,4 @@ void gpio_disable_port(gpio_port_t port);
 }
 #endif
 
-#endif /* ABOV_GPIO_HAL_H */
+#endif /* ABOV_GPIO_LL_H */
