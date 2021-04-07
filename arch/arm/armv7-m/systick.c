@@ -43,7 +43,6 @@ void systick_stop(void)
 	SysTick->CTRL &= ~(SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk);
 }
 
-
 uint32_t systick_set_frequency(uint32_t hz)
 {
 	uint32_t div = get_prescaler();
