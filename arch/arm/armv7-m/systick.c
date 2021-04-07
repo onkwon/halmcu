@@ -3,6 +3,9 @@
 #include "abov/asm/arm/cmsis.h"
 #include "abov/hal/clk.h"
 
+#if !defined(SYSTICK_PRESCALER)
+#define SYSTICK_PRESCALER			8
+#endif
 #define SYSTICK_RESOLUTION			SysTick_LOAD_RELOAD_Msk
 
 static uint32_t get_reload(void)
@@ -22,7 +25,7 @@ static uint32_t get_prescaler(void)
 	}
 
 	/* vendor specific */
-	return 1;
+	return SYSTICK_PRESCALER;
 }
 
 void systick_clear(void)

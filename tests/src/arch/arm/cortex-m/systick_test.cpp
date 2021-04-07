@@ -22,6 +22,7 @@ TEST_GROUP(systick) {
 		mock().ignoreOtherCalls();
 
 		memset(SysTick, 0, sizeof(*SysTick));
+		SysTick->CTRL = 0x4;
 	}
 	void teardown(void) {
 		mock().checkExpectations();
@@ -31,12 +32,12 @@ TEST_GROUP(systick) {
 
 TEST(systick, start_ShouldSetCtrlRegister) {
 	systick_start();
-	LONGS_EQUAL(SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk, SysTick->CTRL);
+	LONGS_EQUAL(4 | SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk, SysTick->CTRL);
 }
 TEST(systick, stop_ShouldClearCtrlRegister) {
 	SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk;
 	systick_stop();
-	LONGS_EQUAL(0, SysTick->CTRL);
+	LONGS_EQUAL(4, SysTick->CTRL);
 }
 TEST(systick, clear_ShouldClearCounter) {
 	SysTick->VAL = SysTick_LOAD_RELOAD_Msk;
