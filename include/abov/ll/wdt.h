@@ -1,5 +1,5 @@
-#ifndef ABOV_WDT_HAL_H
-#define ABOV_WDT_HAL_H
+#ifndef ABOV_WDT_LL_H
+#define ABOV_WDT_LL_H
 
 #if defined(__cplusplus)
 extern "C" {
@@ -46,4 +46,4 @@ uint32_t wdt_get_count(void);
 }
 #endif
 
-#endif /* ABOV_WDT_HAL_H */
+#endif /* ABOV_WDT_LL_H */

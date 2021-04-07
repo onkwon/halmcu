@@ -1,5 +1,5 @@
-#ifndef ABOV_PWR_HAL_H
-#define ABOV_PWR_HAL_H
+#ifndef ABOV_PWR_LL_H
+#define ABOV_PWR_LL_H
 
 #if defined(__cplusplus)
 extern "C" {
@@ -55,4 +55,4 @@ void pwr_disable_peripheral(peripheral_t peri);
 }
 #endif
 
-#endif /* ABOV_PWR_HAL_H */
+#endif /* ABOV_PWR_LL_H */

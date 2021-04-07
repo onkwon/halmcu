@@ -1,5 +1,5 @@
-#ifndef ABOV_CLK_HAL_H
-#define ABOV_CLK_HAL_H
+#ifndef ABOV_CLK_LL_H
+#define ABOV_CLK_LL_H
 
 #if defined(__cplusplus)
 extern "C" {
@@ -86,4 +86,4 @@ void clk_set_wdt_source(clk_source_t clk);
 }
 #endif
 
-#endif /* ABOV_CLK_HAL_H */
+#endif /* ABOV_CLK_LL_H */

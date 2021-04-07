@@ -1,5 +1,5 @@
-#ifndef ABOV_GPIO_H
-#define ABOV_GPIO_H
+#ifndef ABOV_GPIO_HAL_H
+#define ABOV_GPIO_HAL_H
 
 #if defined(__cplusplus)
 extern "C" {
@@ -11,4 +11,4 @@ extern "C" {
 }
 #endif
 
-#endif /* ABOV_GPIO_H */
+#endif /* ABOV_GPIO_HAL_H */
