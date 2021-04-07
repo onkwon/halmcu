@@ -5,11 +5,15 @@
 extern "C" {
 #endif
 
-#define DEFINE_IRQ(n, name) IRQ_ ## name = n,
+#define DEFINE_IRQ(n, name) IRQ_ ## name = (n) + IRQ_FIXED,
 #define RESERVE_IRQ(n)
 typedef enum {
+#if !defined(IRQ_FIXED)
+	IRQ_FIXED			= 16,
+#endif
 #include IRQ_DEFINES
-	IRQ_UNDEFINED = -1,
+	IRQ_MAX,
+	IRQ_UNDEFINED			= IRQ_MAX,
 } irq_t;
 #undef RESERVE_IRQ
 #undef DEFINE_IRQ
