@@ -6,7 +6,7 @@
 .
 ├── arch/
 │   └── arm/
-│       ├── armv7-m/
+│       ├── cortex-m/
 │       │   ├── m0plus/
 │       │   ├── m3/
 │       │   └── m4/
@@ -57,7 +57,7 @@ increase complexity.
 2. It will automatically include a project Makefile according to the device. e.g. `projects/a33g.mk`
 3. In the project Makefile, all drivers it supports are included by `devices/a33g/devices.mk`
 4. Then it decides what cpu architecture is of the device
-5. And build based on the architecture with its Makefile, `arch/arm/armv7-m/m3/m3.mk`
+5. And build based on the architecture with its Makefile, `arch/arm/cortex-m/m3/m3.mk`
 
 * `ABOV_CFLAGS`
 * `ABOV_WARNING_CFLAGS`

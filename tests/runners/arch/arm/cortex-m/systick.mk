@@ -1,7 +1,7 @@
 COMPONENT_NAME = systick
 
 SRC_FILES = \
-	../arch/arm/armv7-m/systick.c \
+	../arch/arm/cortex-m/systick.c \
 
 TEST_SRC_FILES = \
 	src/arch/arm/cortex-m/systick_test.cpp \

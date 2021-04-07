@@ -5,4 +5,4 @@ MEMORY
 	ram (rwx)	: ORIGIN = 0x20000000, LENGTH = 24K
 }
 
-INCLUDE armv7-m-generic.ld
+INCLUDE cortex-m-generic.ld
