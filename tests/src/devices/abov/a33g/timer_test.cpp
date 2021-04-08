@@ -9,7 +9,7 @@
 
 extern "C" {
 static uint8_t memspace[10 * 0x20];
-const uintptr_t T0_BASE = (const uintptr_t)&memspace[0];
+uintptr_t T0_BASE = (uintptr_t)&memspace[0];
 struct timer_stub * const T0 = (struct timer_stub *)&memspace[0];
 struct timer_stub * const T1 = (struct timer_stub *)&memspace[0x20];
 struct timer_stub * const T2 = (struct timer_stub *)&memspace[0x40];

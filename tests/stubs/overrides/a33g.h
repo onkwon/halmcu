@@ -106,7 +106,7 @@ extern struct uart_stub * const UART1;
 extern struct uart_stub * const UART2;
 extern struct uart_stub * const UART3;
 
-extern const uintptr_t T0_BASE;
+extern uintptr_t T0_BASE;
 
 #if defined(__cplusplus)
 }
