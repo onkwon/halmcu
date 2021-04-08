@@ -92,58 +92,37 @@ TEST(Timer, set_mode_ShouldSetConMode) {
 	LONGS_EQUAL(0, T0->CON);
 }
 
-TEST(Timer, enable_irq_ShouldSetIrqBit) {
+TEST(Timer, enable_irq_ShouldSetIrqFlags) {
 	timer_enable_irq(PERIPHERAL_TIMER0, TIMER_IRQ_OVERFLOW);
 	LONGS_EQUAL(0x400, T0->CON);
+	timer_enable_irq(PERIPHERAL_TIMER0, TIMER_IRQ_COMPARE_0);
+	LONGS_EQUAL(0x500, T0->CON);
+	timer_enable_irq(PERIPHERAL_TIMER0, TIMER_IRQ_COMPARE_1);
+	LONGS_EQUAL(0x700, T0->CON);
 }
 
-TEST(Timer, enable_irq_ShouldIgnore_WhenUnsupportedGiven) {
-	timer_enable_irq(PERIPHERAL_TIMER0, TIMER_IRQ_COMPARE);
+TEST(Timer, enable_irq_ShouldDoNothing_WhenUnsupportedGiven) {
+	timer_enable_irq(PERIPHERAL_TIMER0, TIMER_IRQ_COMPARE_2);
 	LONGS_EQUAL(0, T0->CON);
 }
 
-TEST(Timer, disable_irq_ShouldClearIrqBit) {
-	T1->CON = 0x400;
+TEST(Timer, disable_irq_ShouldClearIrqFlags) {
+	T1->CON = 0x700;
 	timer_disable_irq(PERIPHERAL_TIMER1, TIMER_IRQ_OVERFLOW);
+	LONGS_EQUAL(0x300, T1->CON);
+	timer_disable_irq(PERIPHERAL_TIMER1, TIMER_IRQ_COMPARE_0);
+	LONGS_EQUAL(0x200, T1->CON);
+	timer_disable_irq(PERIPHERAL_TIMER1, TIMER_IRQ_COMPARE_1);
 	LONGS_EQUAL(0, T1->CON);
 }
 
 TEST(Timer, clear_event_ShouldClearIrqFlag) {
 	timer_clear_event(PERIPHERAL_TIMER0, TIMER_IRQ_OVERFLOW);
 	LONGS_EQUAL(0x4000, T0->CON);
-}
-
-TEST(Timer, enable_channel_irq_ShouldSetTiex) {
-	timer_enable_channel_irq(PERIPHERAL_TIMER0, TIMER_CHANNEL_1, TIMER_IRQ_COMPARE);
-	LONGS_EQUAL(0x100, T0->CON);
-	timer_enable_channel_irq(PERIPHERAL_TIMER0, TIMER_CHANNEL_2, TIMER_IRQ_COMPARE);
-	LONGS_EQUAL(0x300, T0->CON);
-}
-
-TEST(Timer, enable_channel_irq_ShouldDoNothing_WhenUnsupportedChannelGiven) {
-	timer_enable_channel_irq(PERIPHERAL_TIMER0, TIMER_CHANNEL_3, TIMER_IRQ_COMPARE);
-	LONGS_EQUAL(0, T0->CON);
-}
-
-TEST(Timer, enable_channel_irq_ShouldDoNothing_WhenUnsupportedIRQGiven) {
-	timer_enable_channel_irq(PERIPHERAL_TIMER0, TIMER_CHANNEL_1, TIMER_IRQ_CAPTURE);
-	LONGS_EQUAL(0, T0->CON);
-}
-
-TEST(Timer, disable_channel_irq_ShouldClearTiex) {
-	T0->CON = 0x100;
-	timer_disable_channel_irq(PERIPHERAL_TIMER0, TIMER_CHANNEL_1, TIMER_IRQ_COMPARE);
-	LONGS_EQUAL(0, T0->CON);
-	T0->CON = 0x200;
-	timer_disable_channel_irq(PERIPHERAL_TIMER0, TIMER_CHANNEL_2, TIMER_IRQ_COMPARE);
-	LONGS_EQUAL(0, T0->CON);
-}
-
-TEST(Timer, clear_channel_event_ShouldClearIrqFlag) {
-	timer_clear_channel_event(PERIPHERAL_TIMER0, TIMER_CHANNEL_1, TIMER_IRQ_COMPARE);
-	LONGS_EQUAL(0x1000, T0->CON);
-	timer_clear_channel_event(PERIPHERAL_TIMER0, TIMER_CHANNEL_2, TIMER_IRQ_COMPARE);
-	LONGS_EQUAL(0x3000, T0->CON);
+	timer_clear_event(PERIPHERAL_TIMER0, TIMER_IRQ_COMPARE_0);
+	LONGS_EQUAL(0x5000, T0->CON);
+	timer_clear_event(PERIPHERAL_TIMER0, TIMER_IRQ_COMPARE_1);
+	LONGS_EQUAL(0x7000, T0->CON);
 }
 
 TEST(Timer, start_ShouldSetTEN) {
@@ -155,4 +134,35 @@ TEST(Timer, stop_ShouldClearTEN) {
 	T0->CMD = 1;
 	timer_stop(PERIPHERAL_TIMER0);
 	LONGS_EQUAL(0, T0->CMD);
+}
+
+TEST(Timer, set_compare_ShouldSetCompareRegister) {
+	timer_set_compare(PERIPHERAL_TIMER0, 0, 1234);
+	LONGS_EQUAL(1234, T0->GRA);
+	timer_set_compare(PERIPHERAL_TIMER1, 1, 5678);
+	LONGS_EQUAL(5678, T1->GRB);
+}
+
+TEST(Timer, set_counter_ShouldSetCnt) {
+	timer_set_counter(PERIPHERAL_TIMER0, 1234);
+	LONGS_EQUAL(1234, T0->CNT);
+}
+
+TEST(Timer, reset_ShouldClearAllRegs) {
+	T0->CON = T0->CMD = T0->GRA = T0->GRB = T0->PRS = T0->CNT = 0xa5a5a5a5;
+	timer_reset(PERIPHERAL_TIMER0);
+	LONGS_EQUAL(0x700, T0->CON);
+	LONGS_EQUAL(0, T0->CMD);
+	LONGS_EQUAL(0, T0->GRA);
+	LONGS_EQUAL(0, T0->GRB);
+	LONGS_EQUAL(0, T0->PRS);
+	LONGS_EQUAL(0, T0->CNT);
+}
+
+TEST(Timer, get_event_ShouldReturnCurrentFlags) {
+	T0->CON = 0x3000;
+	LONGS_EQUAL(TIMER_IRQ_COMPARE_0 | TIMER_IRQ_COMPARE_1,
+			timer_get_event(PERIPHERAL_TIMER0));
+	T0->CON = 0x4000;
+	LONGS_EQUAL(TIMER_IRQ_OVERFLOW, timer_get_event(PERIPHERAL_TIMER0));
 }

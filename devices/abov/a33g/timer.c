@@ -11,16 +11,6 @@ static TIMER_Type *get_timer_from_peripheral(peripheral_t peri)
 	return (TIMER_Type *)(T0_BASE + (n * 2 << 4));
 }
 
-static int get_irq_bitpos_from_channel(timer_channel_t channel)
-{
-	if (channel == TIMER_CHANNEL_1) {
-		return 8;
-	} else if (channel == TIMER_CHANNEL_2) {
-		return 9;
-	}
-	return -1;
-}
-
 void timer_set_prescaler(peripheral_t peri, uint32_t div_factor)
 {
 	bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->PRS,
@@ -31,6 +21,11 @@ void timer_set_divider(peripheral_t peri, uint32_t div_factor)
 {
 	bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
 			4, 7U << 4, div_factor);
+}
+
+void timer_set_counter(peripheral_t peri, uint32_t value)
+{
+	get_timer_from_peripheral(peri)->CNT = value;
 }
 
 uint32_t timer_get_counter(peripheral_t peri)
@@ -58,66 +53,91 @@ void timer_enable_irq(peripheral_t peri, timer_intr_t events)
 {
 	if (events & TIMER_IRQ_OVERFLOW) {
 		bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
-				10, 1U << 10, 1);
+				10, 1U << 10, 1); /* TOVE */
+	}
+	if (events & TIMER_IRQ_COMPARE_0) {
+		bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
+				8, 1U << 8, 1); /* TIE0 */
+	}
+	if (events & TIMER_IRQ_COMPARE_1) {
+		bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
+				9, 1U << 9, 1); /* TIE1 */
 	}
 }
 
 void timer_disable_irq(peripheral_t peri, timer_intr_t events)
 {
 	if (events & TIMER_IRQ_OVERFLOW) {
-		bitop_clear(&get_timer_from_peripheral(peri)->CON, 10);
+		bitop_clear(&get_timer_from_peripheral(peri)->CON, 10); /* TOVE */
+	}
+	if (events & TIMER_IRQ_COMPARE_0) {
+		bitop_clear(&get_timer_from_peripheral(peri)->CON, 8); /* TIE0 */
+	}
+	if (events & TIMER_IRQ_COMPARE_1) {
+		bitop_clear(&get_timer_from_peripheral(peri)->CON, 9); /* TIE1 */
 	}
 }
 
 void timer_clear_event(peripheral_t peri, timer_intr_t events)
 {
 	if (events & TIMER_IRQ_OVERFLOW) {
-		bitop_set(&get_timer_from_peripheral(peri)->CON, 14);
+		bitop_set(&get_timer_from_peripheral(peri)->CON, 14); /* IOVF */
 	}
-}
-
-void timer_enable_channel_irq(peripheral_t peri,
-		timer_channel_t channel, timer_intr_t events)
-{
-	if (events & TIMER_IRQ_COMPARE) {
-		int pos = get_irq_bitpos_from_channel(channel);
-		if (pos < 0) {
-			return;
-		}
-		bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
-				(uint32_t)pos, 1U << pos, 1);
+	if (events & TIMER_IRQ_COMPARE_0) {
+		bitop_set(&get_timer_from_peripheral(peri)->CON, 12); /* TIF0 */
 	}
-}
-
-void timer_disable_channel_irq(peripheral_t peri,
-		timer_channel_t channel, timer_intr_t events)
-{
-	if (events & TIMER_IRQ_COMPARE) {
-		int pos = get_irq_bitpos_from_channel(channel);
-		if (pos < 0) {
-			return;
-		}
-		bitop_clear(&get_timer_from_peripheral(peri)->CON, (uint32_t)pos);
+	if (events & TIMER_IRQ_COMPARE_1) {
+		bitop_set(&get_timer_from_peripheral(peri)->CON, 13); /* TIF1 */
 	}
-}
-
-void timer_clear_channel_event(peripheral_t peri,
-		timer_channel_t channel, timer_intr_t events)
-{
-	int pos = get_irq_bitpos_from_channel(channel);
-	if (pos < 0 || !(events & TIMER_IRQ_COMPARE)) {
-		return;
-	}
-
-	bitop_set(&get_timer_from_peripheral(peri)->CON, (uint32_t)pos + 4);
 }
 
 void timer_start(peripheral_t peri)
 {
-	bitop_set(&get_timer_from_peripheral(peri)->CMD, 0);
+	bitop_set(&get_timer_from_peripheral(peri)->CMD, 0); /* TEN */
 }
 
 void timer_stop(peripheral_t peri)
 {
-	bitop_clear(&get_timer_from_peripheral(peri)->CMD, 0);
+	bitop_clear(&get_timer_from_peripheral(peri)->CMD, 0); /* TEN */
+}
+
+void timer_set_compare(peripheral_t peri, uint32_t ncompare, uint32_t value)
+{
+	if (ncompare == 0) {
+		get_timer_from_peripheral(peri)->GRA = value;
+	}
+	if (ncompare == 1) {
+		get_timer_from_peripheral(peri)->GRB = value;
+	}
+}
+
+uint32_t timer_get_event(peripheral_t peri)
+{
+	uint32_t flags = get_timer_from_peripheral(peri)->CON >> 12;
+	uint32_t rc = 0;
+
+	if (flags & 1) {
+		rc |= TIMER_IRQ_COMPARE_0;
+	}
+	if (flags & 2) {
+		rc |= TIMER_IRQ_COMPARE_1;
+	}
+	if (flags & 4) {
+		rc |= TIMER_IRQ_OVERFLOW;
+	}
+
+	return rc;
+}
+
+void timer_reset(peripheral_t peri)
+{
+	TIMER_Type *tim = get_timer_from_peripheral(peri);
+	bitop_set(&tim->CMD, 1); /* TCLR */
+	tim->CMD = 0;
+	tim->CON = 0;
+	tim->CON = 0x700; /* clear interrupt flags */
+	tim->GRA = 0;
+	tim->GRB = 0;
+	tim->PRS = 0;
+	tim->CNT = 0;
 }
