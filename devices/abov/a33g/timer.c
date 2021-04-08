@@ -141,3 +141,15 @@ void timer_reset(peripheral_t peri)
 	tim->PRS = 0;
 	tim->CNT = 0;
 }
+
+void timer_set_polarity(peripheral_t peri, uint32_t level)
+{
+	bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
+			7, 1U << 7, level);
+}
+
+void timer_set_edge(peripheral_t peri, timer_edge_t edge)
+{
+	bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
+			3, 1U << 3, edge);
+}

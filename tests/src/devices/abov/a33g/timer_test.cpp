@@ -166,3 +166,17 @@ TEST(Timer, get_event_ShouldReturnCurrentFlags) {
 	T0->CON = 0x4000;
 	LONGS_EQUAL(TIMER_IRQ_OVERFLOW, timer_get_event(PERIPHERAL_TIMER0));
 }
+
+TEST(Timer, set_polarity_ShouldSetTstrt) {
+	timer_set_polarity(PERIPHERAL_TIMER0, 1);
+	LONGS_EQUAL(0x80, T0->CON);
+	timer_set_polarity(PERIPHERAL_TIMER0, 0);
+	LONGS_EQUAL(0, T0->CON);
+}
+
+TEST(Timer, set_edge_ShouldSetCapm) {
+	timer_set_edge(PERIPHERAL_TIMER0, TIMER_FALLING_EDGE);
+	LONGS_EQUAL(8, T0->CON);
+	timer_set_edge(PERIPHERAL_TIMER0, TIMER_RISING_EDGE);
+	LONGS_EQUAL(0, T0->CON);
+}

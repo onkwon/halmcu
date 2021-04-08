@@ -24,6 +24,11 @@ typedef enum {
 	TIMER_IRQ_COMPARE_3			= (1U << 5),
 } timer_intr_t;
 
+typedef enum {
+	TIMER_RISING_EDGE,
+	TIMER_FALLING_EDGE,
+} timer_edge_t;
+
 void timer_reset(peripheral_t peri);
 void timer_set_mode(peripheral_t peri, timer_mode_t mode);
 void timer_start(peripheral_t peri);
@@ -39,6 +44,8 @@ void timer_set_counter(peripheral_t peri, uint32_t value);
 uint32_t timer_get_reload(peripheral_t peri);
 uint32_t timer_get_counter(peripheral_t peri);
 void timer_set_compare(peripheral_t peri, uint32_t ncompare, uint32_t value);
+void timer_set_polarity(peripheral_t peri, uint32_t level);
+void timer_set_edge(peripheral_t peri, timer_edge_t edge);
 
 #if defined(__cplusplus)
 }
