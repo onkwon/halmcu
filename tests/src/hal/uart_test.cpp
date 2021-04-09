@@ -3,7 +3,7 @@
 #include "CppUTestExt/MockSupport.h"
 
 #include "abov/hal/uart.h"
-#include "abov/hal/irq.h"
+#include "abov/irq.h"
 
 #include <string.h>
 

@@ -3,4 +3,4 @@ IRQ
 
 `IRQ_FIXED`
 
-.. c:autodoc:: ../../include/abov/hal/irq.h
+.. c:autodoc:: ../../include/abov/irq.h
