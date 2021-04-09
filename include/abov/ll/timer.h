@@ -8,43 +8,81 @@ extern "C" {
 #include <stdint.h>
 #include "abov/hal/peripheral.h"
 
+/** Timer mode type */
 typedef enum {
+	/***/
 	TIMER_MODE_NORMAL,
+	/***/
 	TIMER_MODE_PWM,
+	/***/
 	TIMER_MODE_ONESHOT,
+	/***/
 	TIMER_MODE_INPUT_CAPTURE,
 } timer_mode_t;
 
+/** Timer IRQ type */
 typedef enum {
+	/***/
 	TIMER_IRQ_OVERFLOW			= (1U << 0),
+	/***/
 	TIMER_IRQ_UNDERFLOW			= (1U << 1),
+	/***/
 	TIMER_IRQ_COMPARE_0			= (1U << 2),
+	/***/
 	TIMER_IRQ_COMPARE_1			= (1U << 3),
+	/***/
 	TIMER_IRQ_COMPARE_2			= (1U << 4),
+	/***/
 	TIMER_IRQ_COMPARE_3			= (1U << 5),
-} timer_intr_t;
+} timer_irq_t;
 
+/** Timer edge type */
 typedef enum {
+	/***/
 	TIMER_RISING_EDGE,
+	/***/
 	TIMER_FALLING_EDGE,
 } timer_edge_t;
 
+/**
+ * Reset Timer interface
+ *
+ * This function makes the given Timer the reset default state.
+ *
+ * :param peri: a enum of :c:type:`peripheral_t`
+ */
 void timer_reset(peripheral_t peri);
+/***/
 void timer_set_mode(peripheral_t peri, timer_mode_t mode);
+/***/
 void timer_start(peripheral_t peri);
+/***/
 void timer_stop(peripheral_t peri);
+/***/
 void timer_set_prescaler(peripheral_t peri, uint32_t div_factor);
+/***/
 void timer_set_divider(peripheral_t peri, uint32_t div_factor);
-void timer_enable_irq(peripheral_t peri, timer_intr_t events);
-void timer_disable_irq(peripheral_t peri, timer_intr_t events);
-void timer_clear_event(peripheral_t peri, timer_intr_t events);
+/***/
+void timer_enable_irq(peripheral_t peri, timer_irq_t events);
+/***/
+void timer_disable_irq(peripheral_t peri, timer_irq_t events);
+/***/
+void timer_clear_event(peripheral_t peri, timer_irq_t events);
+/***/
 uint32_t timer_get_event(peripheral_t peri);
+/***/
 void timer_set_reload(peripheral_t peri, uint32_t value);
+/***/
 void timer_set_counter(peripheral_t peri, uint32_t value);
+/***/
 uint32_t timer_get_reload(peripheral_t peri);
+/***/
 uint32_t timer_get_counter(peripheral_t peri);
+/***/
 void timer_set_compare(peripheral_t peri, uint32_t ncompare, uint32_t value);
+/***/
 void timer_set_polarity(peripheral_t peri, uint32_t level);
+/***/
 void timer_set_edge(peripheral_t peri, timer_edge_t edge);
 
 #if defined(__cplusplus)

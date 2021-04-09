@@ -49,7 +49,7 @@ void timer_set_mode(peripheral_t peri, timer_mode_t mode)
 			0, 3, mode);
 }
 
-void timer_enable_irq(peripheral_t peri, timer_intr_t events)
+void timer_enable_irq(peripheral_t peri, timer_irq_t events)
 {
 	if (events & TIMER_IRQ_OVERFLOW) {
 		bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
@@ -65,7 +65,7 @@ void timer_enable_irq(peripheral_t peri, timer_intr_t events)
 	}
 }
 
-void timer_disable_irq(peripheral_t peri, timer_intr_t events)
+void timer_disable_irq(peripheral_t peri, timer_irq_t events)
 {
 	if (events & TIMER_IRQ_OVERFLOW) {
 		bitop_clear(&get_timer_from_peripheral(peri)->CON, 10); /* TOVE */
@@ -78,7 +78,7 @@ void timer_disable_irq(peripheral_t peri, timer_intr_t events)
 	}
 }
 
-void timer_clear_event(peripheral_t peri, timer_intr_t events)
+void timer_clear_event(peripheral_t peri, timer_irq_t events)
 {
 	if (events & TIMER_IRQ_OVERFLOW) {
 		bitop_set(&get_timer_from_peripheral(peri)->CON, 14); /* IOVF */
