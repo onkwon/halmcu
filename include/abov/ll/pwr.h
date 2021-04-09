@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "abov/hal/peripheral.h"
+#include "abov/peripheral.h"
 
 /** Power mode enumeration */
 typedef enum {

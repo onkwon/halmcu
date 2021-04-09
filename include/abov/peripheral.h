@@ -1,5 +1,5 @@
-#ifndef ABOV_PERIPHERAL_HAL_H
-#define ABOV_PERIPHERAL_HAL_H
+#ifndef ABOV_PERIPHERAL_H
+#define ABOV_PERIPHERAL_H
 
 #if defined(__cplusplus)
 extern "C" {
@@ -95,4 +95,4 @@ typedef enum {
 }
 #endif
 
-#endif /* ABOV_PERIPHERAL_HAL_H */
+#endif /* ABOV_PERIPHERAL_H */
