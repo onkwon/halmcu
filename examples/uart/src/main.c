@@ -6,6 +6,7 @@
 
 #define UART0_RX_PIN			(GPIOC + 8)
 #define UART0_TX_PIN			(GPIOC + 9)
+//#define POLLING
 
 static uart_handle_t uart0_handle;
 
@@ -44,13 +45,20 @@ int main(void)
 			.stopbit = UART_STOPBIT_1,
 			.parity = UART_PARITY_NONE,
 			.baudrate = 115200,
-			.rx_interrupt = true, });
+#if !defined(POLLING)
+			.rx_interrupt = true,
+#endif
+			});
 	uart_register_rx_handler(&uart0_handle, uart_rx_hander);
 
 	uart_write(&uart0_handle, "Hello, World!\r\n", 15);
 
 	while (1) {
-		/* hang */
+		uint8_t ch;
+		size_t received = uart_read(&uart0_handle, &ch, sizeof(ch));
+		if (received > 0) {
+			uart_write(&uart0_handle, &ch, sizeof(ch));
+		}
 	}
 
 	return 0;
