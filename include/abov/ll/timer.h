@@ -23,18 +23,18 @@ typedef enum {
 /** Timer IRQ type */
 typedef enum {
 	/***/
-	TIMER_IRQ_OVERFLOW			= (1U << 0),
+	TIMER_EVENT_OVERFLOW			= (1U << 0),
 	/***/
-	TIMER_IRQ_UNDERFLOW			= (1U << 1),
-	/***/
-	TIMER_IRQ_COMPARE_0			= (1U << 2),
-	/***/
-	TIMER_IRQ_COMPARE_1			= (1U << 3),
-	/***/
-	TIMER_IRQ_COMPARE_2			= (1U << 4),
-	/***/
-	TIMER_IRQ_COMPARE_3			= (1U << 5),
-} timer_irq_t;
+	TIMER_EVENT_UNDERFLOW			= (1U << 1),
+	/** Capture/Compare Channel 0 interrupt */
+	TIMER_EVENT_CC_0			= (1U << 2),
+	/** Capture/Compare Channel 1 interrupt */
+	TIMER_EVENT_CC_1			= (1U << 3),
+	/** Capture/Compare Channel 2 interrupt */
+	TIMER_EVENT_CC_2			= (1U << 4),
+	/** Capture/Compare Channel 3 interrupt */
+	TIMER_EVENT_CC_3			= (1U << 5),
+} timer_event_t;
 
 /** Timer edge type */
 typedef enum {
@@ -63,11 +63,11 @@ void timer_set_prescaler(peripheral_t peri, uint32_t div_factor);
 /***/
 void timer_set_divider(peripheral_t peri, uint32_t div_factor);
 /***/
-void timer_enable_irq(peripheral_t peri, timer_irq_t events);
+void timer_enable_irq(peripheral_t peri, timer_event_t events);
 /***/
-void timer_disable_irq(peripheral_t peri, timer_irq_t events);
+void timer_disable_irq(peripheral_t peri, timer_event_t events);
 /***/
-void timer_clear_event(peripheral_t peri, timer_irq_t events);
+void timer_clear_event(peripheral_t peri, timer_event_t events);
 /***/
 uint32_t timer_get_event(peripheral_t peri);
 /***/
@@ -78,8 +78,21 @@ void timer_set_counter(peripheral_t peri, uint32_t value);
 uint32_t timer_get_reload(peripheral_t peri);
 /***/
 uint32_t timer_get_counter(peripheral_t peri);
-/***/
-void timer_set_compare(peripheral_t peri, uint32_t ncompare, uint32_t value);
+/**
+ * Set Capture/Compare register
+ *
+ * :param peri: a enum of :c:type:`peripheral_t`
+ * :param cc: a number of capture/compare channel
+ * :param value: to be written to the capture/compare register
+ */
+void timer_set_cc(peripheral_t peri, uint32_t cc, uint32_t value);
+/**
+ * Get Capture/Compare register
+ *
+ * :param peri: a enum of :c:type:`peripheral_t`
+ * :param cc: a number of capture/compare channel
+ */
+uint32_t timer_get_cc(peripheral_t peri, uint32_t cc);
 /***/
 void timer_set_polarity(peripheral_t peri, uint32_t level);
 /***/

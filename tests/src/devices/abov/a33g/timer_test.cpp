@@ -93,35 +93,35 @@ TEST(Timer, set_mode_ShouldSetConMode) {
 }
 
 TEST(Timer, enable_irq_ShouldSetIrqFlags) {
-	timer_enable_irq(PERIPHERAL_TIMER0, TIMER_IRQ_OVERFLOW);
+	timer_enable_irq(PERIPHERAL_TIMER0, TIMER_EVENT_OVERFLOW);
 	LONGS_EQUAL(0x400, T0->CON);
-	timer_enable_irq(PERIPHERAL_TIMER0, TIMER_IRQ_COMPARE_0);
+	timer_enable_irq(PERIPHERAL_TIMER0, TIMER_EVENT_CC_0);
 	LONGS_EQUAL(0x500, T0->CON);
-	timer_enable_irq(PERIPHERAL_TIMER0, TIMER_IRQ_COMPARE_1);
+	timer_enable_irq(PERIPHERAL_TIMER0, TIMER_EVENT_CC_1);
 	LONGS_EQUAL(0x700, T0->CON);
 }
 
 TEST(Timer, enable_irq_ShouldDoNothing_WhenUnsupportedGiven) {
-	timer_enable_irq(PERIPHERAL_TIMER0, TIMER_IRQ_COMPARE_2);
+	timer_enable_irq(PERIPHERAL_TIMER0, TIMER_EVENT_CC_2);
 	LONGS_EQUAL(0, T0->CON);
 }
 
 TEST(Timer, disable_irq_ShouldClearIrqFlags) {
 	T1->CON = 0x700;
-	timer_disable_irq(PERIPHERAL_TIMER1, TIMER_IRQ_OVERFLOW);
+	timer_disable_irq(PERIPHERAL_TIMER1, TIMER_EVENT_OVERFLOW);
 	LONGS_EQUAL(0x300, T1->CON);
-	timer_disable_irq(PERIPHERAL_TIMER1, TIMER_IRQ_COMPARE_0);
+	timer_disable_irq(PERIPHERAL_TIMER1, TIMER_EVENT_CC_0);
 	LONGS_EQUAL(0x200, T1->CON);
-	timer_disable_irq(PERIPHERAL_TIMER1, TIMER_IRQ_COMPARE_1);
+	timer_disable_irq(PERIPHERAL_TIMER1, TIMER_EVENT_CC_1);
 	LONGS_EQUAL(0, T1->CON);
 }
 
 TEST(Timer, clear_event_ShouldClearIrqFlag) {
-	timer_clear_event(PERIPHERAL_TIMER0, TIMER_IRQ_OVERFLOW);
+	timer_clear_event(PERIPHERAL_TIMER0, TIMER_EVENT_OVERFLOW);
 	LONGS_EQUAL(0x4000, T0->CON);
-	timer_clear_event(PERIPHERAL_TIMER0, TIMER_IRQ_COMPARE_0);
+	timer_clear_event(PERIPHERAL_TIMER0, TIMER_EVENT_CC_0);
 	LONGS_EQUAL(0x5000, T0->CON);
-	timer_clear_event(PERIPHERAL_TIMER0, TIMER_IRQ_COMPARE_1);
+	timer_clear_event(PERIPHERAL_TIMER0, TIMER_EVENT_CC_1);
 	LONGS_EQUAL(0x7000, T0->CON);
 }
 
@@ -136,11 +136,18 @@ TEST(Timer, stop_ShouldClearTEN) {
 	LONGS_EQUAL(0, T0->CMD);
 }
 
-TEST(Timer, set_compare_ShouldSetCompareRegister) {
-	timer_set_compare(PERIPHERAL_TIMER0, 0, 1234);
+TEST(Timer, set_cc_ShouldSetCompareRegister) {
+	timer_set_cc(PERIPHERAL_TIMER0, 0, 1234);
 	LONGS_EQUAL(1234, T0->GRA);
-	timer_set_compare(PERIPHERAL_TIMER1, 1, 5678);
+	timer_set_cc(PERIPHERAL_TIMER1, 1, 5678);
 	LONGS_EQUAL(5678, T1->GRB);
+}
+
+TEST(Timer, get_cc_ShouldReturnCaptureRegister) {
+	T0->GRA = 0xa5a5;
+	T0->GRB = 0x5a5a;
+	LONGS_EQUAL(0xa5a5, timer_get_cc(PERIPHERAL_TIMER0, 0));
+	LONGS_EQUAL(0x5a5a, timer_get_cc(PERIPHERAL_TIMER0, 1));
 }
 
 TEST(Timer, set_counter_ShouldSetCnt) {
@@ -161,10 +168,10 @@ TEST(Timer, reset_ShouldClearAllRegs) {
 
 TEST(Timer, get_event_ShouldReturnCurrentFlags) {
 	T0->CON = 0x3000;
-	LONGS_EQUAL(TIMER_IRQ_COMPARE_0 | TIMER_IRQ_COMPARE_1,
+	LONGS_EQUAL(TIMER_EVENT_CC_0 | TIMER_EVENT_CC_1,
 			timer_get_event(PERIPHERAL_TIMER0));
 	T0->CON = 0x4000;
-	LONGS_EQUAL(TIMER_IRQ_OVERFLOW, timer_get_event(PERIPHERAL_TIMER0));
+	LONGS_EQUAL(TIMER_EVENT_OVERFLOW, timer_get_event(PERIPHERAL_TIMER0));
 }
 
 TEST(Timer, set_polarity_ShouldSetTstrt) {

@@ -49,44 +49,44 @@ void timer_set_mode(peripheral_t peri, timer_mode_t mode)
 			0, 3, mode);
 }
 
-void timer_enable_irq(peripheral_t peri, timer_irq_t events)
+void timer_enable_irq(peripheral_t peri, timer_event_t events)
 {
-	if (events & TIMER_IRQ_OVERFLOW) {
+	if (events & TIMER_EVENT_OVERFLOW) {
 		bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
 				10, 1U << 10, 1); /* TOVE */
 	}
-	if (events & TIMER_IRQ_COMPARE_0) {
+	if (events & TIMER_EVENT_CC_0) {
 		bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
 				8, 1U << 8, 1); /* TIE0 */
 	}
-	if (events & TIMER_IRQ_COMPARE_1) {
+	if (events & TIMER_EVENT_CC_1) {
 		bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
 				9, 1U << 9, 1); /* TIE1 */
 	}
 }
 
-void timer_disable_irq(peripheral_t peri, timer_irq_t events)
+void timer_disable_irq(peripheral_t peri, timer_event_t events)
 {
-	if (events & TIMER_IRQ_OVERFLOW) {
+	if (events & TIMER_EVENT_OVERFLOW) {
 		bitop_clear(&get_timer_from_peripheral(peri)->CON, 10); /* TOVE */
 	}
-	if (events & TIMER_IRQ_COMPARE_0) {
+	if (events & TIMER_EVENT_CC_0) {
 		bitop_clear(&get_timer_from_peripheral(peri)->CON, 8); /* TIE0 */
 	}
-	if (events & TIMER_IRQ_COMPARE_1) {
+	if (events & TIMER_EVENT_CC_1) {
 		bitop_clear(&get_timer_from_peripheral(peri)->CON, 9); /* TIE1 */
 	}
 }
 
-void timer_clear_event(peripheral_t peri, timer_irq_t events)
+void timer_clear_event(peripheral_t peri, timer_event_t events)
 {
-	if (events & TIMER_IRQ_OVERFLOW) {
+	if (events & TIMER_EVENT_OVERFLOW) {
 		bitop_set(&get_timer_from_peripheral(peri)->CON, 14); /* IOVF */
 	}
-	if (events & TIMER_IRQ_COMPARE_0) {
+	if (events & TIMER_EVENT_CC_0) {
 		bitop_set(&get_timer_from_peripheral(peri)->CON, 12); /* TIF0 */
 	}
-	if (events & TIMER_IRQ_COMPARE_1) {
+	if (events & TIMER_EVENT_CC_1) {
 		bitop_set(&get_timer_from_peripheral(peri)->CON, 13); /* TIF1 */
 	}
 }
@@ -101,14 +101,23 @@ void timer_stop(peripheral_t peri)
 	bitop_clear(&get_timer_from_peripheral(peri)->CMD, 0); /* TEN */
 }
 
-void timer_set_compare(peripheral_t peri, uint32_t ncompare, uint32_t value)
+void timer_set_cc(peripheral_t peri, uint32_t cc, uint32_t value)
 {
-	if (ncompare == 0) {
+	if (cc == 0) {
 		get_timer_from_peripheral(peri)->GRA = value;
-	}
-	if (ncompare == 1) {
+	} else if (cc == 1) {
 		get_timer_from_peripheral(peri)->GRB = value;
 	}
+}
+
+uint32_t timer_get_cc(peripheral_t peri, uint32_t cc)
+{
+	if (cc == 0) {
+		return get_timer_from_peripheral(peri)->GRA;
+	} else if (cc == 1) {
+		return get_timer_from_peripheral(peri)->GRB;
+	}
+	return 0;
 }
 
 uint32_t timer_get_event(peripheral_t peri)
@@ -117,13 +126,13 @@ uint32_t timer_get_event(peripheral_t peri)
 	uint32_t rc = 0;
 
 	if (flags & 1) {
-		rc |= TIMER_IRQ_COMPARE_0;
+		rc |= TIMER_EVENT_CC_0;
 	}
 	if (flags & 2) {
-		rc |= TIMER_IRQ_COMPARE_1;
+		rc |= TIMER_EVENT_CC_1;
 	}
 	if (flags & 4) {
-		rc |= TIMER_IRQ_OVERFLOW;
+		rc |= TIMER_EVENT_OVERFLOW;
 	}
 
 	return rc;
