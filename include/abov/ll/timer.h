@@ -17,7 +17,7 @@ typedef enum {
 	/***/
 	TIMER_MODE_ONESHOT,
 	/***/
-	TIMER_MODE_INPUT_CAPTURE,
+	TIMER_MODE_CAPTURE,
 } timer_mode_t;
 
 /** Timer IRQ enumeration */
@@ -69,7 +69,7 @@ void timer_disable_irq(peripheral_t peri, timer_event_t events);
 /***/
 void timer_clear_event(peripheral_t peri, timer_event_t events);
 /***/
-uint32_t timer_get_event(peripheral_t peri);
+timer_event_t timer_get_event(peripheral_t peri);
 /***/
 void timer_set_reload(peripheral_t peri, uint32_t value);
 /***/
