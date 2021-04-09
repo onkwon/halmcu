@@ -319,6 +319,10 @@ static uint32_t clk_get_pll_frequency(void)
 		p = clk_get_pll_divfactor() + 1;
 		return (clkin * n1) / (r * n2 * p) * d;
 	case CLK_PLL_BYPASS:
+		if (clk_get_pll_source() == CLK_HSE) {
+			return XTAL;
+		}
+		return 16*MHZ; /* HSI */
 	case CLK_LSE:
 	default:
 		return 0;
