@@ -51,7 +51,7 @@ static int read_receive_buffer_register(const UART_Type *uart)
 	return -1;
 }
 
-uint32_t uart_get_status(uart_port_t port)
+uart_event_t uart_get_event(uart_port_t port)
 {
 	const UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -74,35 +74,39 @@ uint32_t uart_get_status(uart_port_t port)
 		break;
 	}
 
-	return flags | (lsr << 8) | iir;
+	return (uart_event_t)(flags | (lsr << 8) | iir);
 }
 
-void uart_enable_rx_intr(uart_port_t port)
+void uart_clear_event(uart_port_t port, uart_event_t events)
+{
+	unused(port);
+	unused(events);
+}
+
+void uart_enable_irq(uart_port_t port, uart_event_t events)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
-	uart->IER |= DRIE;
+
+	if (events & UART_EVENT_RX) {
+		uart->IER |= DRIE;
+	}
+	if (events & UART_EVENT_TX_READY) {
+		uart->IER |= THREIE;
+	}
 }
 
-void uart_disable_rx_intr(uart_port_t port)
+void uart_disable_irq(uart_port_t port, uart_event_t events)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
-	uart->IER &= ~DRIE;
-}
 
-void uart_enable_tx_intr(uart_port_t port)
-{
-	UART_Type *uart = get_uart_from_port(port);
-	assert(uart != NULL);
-	uart->IER |= THREIE;
-}
-
-void uart_disable_tx_intr(uart_port_t port)
-{
-	UART_Type *uart = get_uart_from_port(port);
-	assert(uart != NULL);
-	uart->IER &= ~THREIE;
+	if (events & UART_EVENT_RX) {
+		uart->IER &= ~DRIE;
+	}
+	if (events & UART_EVENT_TX_READY) {
+		uart->IER &= ~THREIE;
+	}
 }
 
 void uart_set_parity(uart_port_t port, uart_parity_t parity)

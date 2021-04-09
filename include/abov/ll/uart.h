@@ -53,7 +53,7 @@ typedef enum {
 } uart_wordsize_t;
 
 /** UART event enumeration */
-enum uart_event_flag {
+typedef enum {
 	/***/
 	UART_EVENT_BIT			= 28,
 	/***/
@@ -65,7 +65,7 @@ enum uart_event_flag {
 	/***/
 	UART_EVENT_MASK			=
 		(UART_EVENT_RX | UART_EVENT_TX_READY | UART_EVENT_ERROR),
-};
+} uart_event_t;
 
 /**
  * Reset UART interface
@@ -120,36 +120,33 @@ void uart_write_byte(uart_port_t port, uint8_t val);
  */
 void uart_set_baudrate(uart_port_t port, uint32_t baudrate);
 /**
- * Enable UART receiver interrupt
+ * Enable UART interrupts
  *
  * :param port: a enum of :c:type:`uart_port_t`
+ * :param events: a mix enum of :c:type:`uart_event_t`
  */
-void uart_enable_rx_intr(uart_port_t port);
+void uart_enable_irq(uart_port_t port, uart_event_t events);
 /**
- * Disable UART receiver interrupt
+ * Disable UART interrupts
  *
  * :param port: a enum of :c:type:`uart_port_t`
+ * :param events: a mix enum of :c:type:`uart_event_t`
  */
-void uart_disable_rx_intr(uart_port_t port);
+void uart_disable_irq(uart_port_t port, uart_event_t events);
 /**
- * Enable UART transmitter interrupt
+ * Read UART event flag
  *
  * :param port: a enum of :c:type:`uart_port_t`
+ * :return: :c:type:`uart_event_t`
  */
-void uart_enable_tx_intr(uart_port_t port);
+uart_event_t uart_get_event(uart_port_t port);
 /**
- * Disable UART transmitter interrupt
+ * Clear UART event flag
  *
  * :param port: a enum of :c:type:`uart_port_t`
+ * :param events: a mix enum of :c:type:`uart_event_t`
  */
-void uart_disable_tx_intr(uart_port_t port);
-/**
- * Read UART status flag
- *
- * :param port: a enum of :c:type:`uart_port_t`
- * :return: status flag
- */
-uint32_t uart_get_status(uart_port_t port);
+void uart_clear_event(uart_port_t port, uart_event_t events);
 /**
  * Set UART parity
  *

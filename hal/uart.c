@@ -10,9 +10,9 @@
 struct uart {
 	uart_port_t port;
 	struct uart_cfg cfg;
-	uart_intr_callback_t rx_handler;
-	uart_intr_callback_t tx_handler;
-	uart_intr_callback_t error_handler;
+	uart_irq_callback_t rx_handler;
+	uart_irq_callback_t tx_handler;
+	uart_irq_callback_t error_handler;
 };
 ABOV_STATIC_ASSERT(sizeof(struct uart) == sizeof(uart_handle_t), "");
 
@@ -97,11 +97,11 @@ bool uart_init(uart_handle_t *handle, uart_port_t port, const struct uart_cfg *c
 	irq_t nirq = get_irq_from_port(self->port);
 	if (nirq != IRQ_UNDEFINED) {
 		if (self->cfg.rx_interrupt) {
-			uart_enable_rx_intr(self->port);
+			uart_enable_irq(self->port, UART_EVENT_RX);
 			irq_enable(nirq);
 		}
 		if (self->cfg.tx_interrupt) {
-			uart_enable_tx_intr(self->port);
+			uart_enable_irq(self->port, UART_EVENT_TX_READY);
 			irq_enable(nirq);
 		}
 	}
@@ -123,19 +123,19 @@ void uart_deinit(uart_handle_t *handle)
 	handles[index] = NULL;
 }
 
-void uart_register_rx_handler(uart_handle_t *handle, uart_intr_callback_t handler)
+void uart_register_rx_handler(uart_handle_t *handle, uart_irq_callback_t handler)
 {
 	struct uart *self = (struct uart *)handle;
 	self->rx_handler = handler;
 }
 
-void uart_register_tx_handler(uart_handle_t *handle, uart_intr_callback_t handler)
+void uart_register_tx_handler(uart_handle_t *handle, uart_irq_callback_t handler)
 {
 	struct uart *self = (struct uart *)handle;
 	self->tx_handler = handler;
 }
 
-void uart_register_error_handler(uart_handle_t *handle, uart_intr_callback_t handler)
+void uart_register_error_handler(uart_handle_t *handle, uart_irq_callback_t handler)
 {
 	struct uart *self = (struct uart *)handle;
 	self->error_handler = handler;
@@ -173,8 +173,9 @@ size_t uart_write(uart_handle_t *handle, const void *data, size_t datasize)
 
 void uart_default_isr(uart_port_t uartp)
 {
-	uint32_t flags = uart_get_status(uartp);
+	uart_event_t events = uart_get_event(uartp);
 	int index = get_index_of_handle_by_port(uartp);
+	uart_clear_event(uartp, events);
 
 	if (index < 0) { /* not found */
 		return;
@@ -182,14 +183,14 @@ void uart_default_isr(uart_port_t uartp)
 
 	const struct uart *obj = handles[index];
 
-	if ((flags & UART_EVENT_RX) && obj->rx_handler) {
-		obj->rx_handler(flags);
+	if ((events & UART_EVENT_RX) && obj->rx_handler) {
+		obj->rx_handler(events);
 	}
-	if ((flags & UART_EVENT_TX_READY) && obj->tx_handler) {
-		obj->tx_handler(flags);
+	if ((events & UART_EVENT_TX_READY) && obj->tx_handler) {
+		obj->tx_handler(events);
 	}
-	if ((flags & UART_EVENT_ERROR) && obj->error_handler) {
-		obj->error_handler(flags);
+	if ((events & UART_EVENT_ERROR) && obj->error_handler) {
+		obj->error_handler(events);
 	}
 }
 
