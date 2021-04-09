@@ -150,6 +150,10 @@ TEST(Timer, get_cc_ShouldReturnCaptureRegister) {
 	LONGS_EQUAL(0x5a5a, timer_get_cc(PERIPHERAL_TIMER0, 1));
 }
 
+TEST(Timer, get_cc_ShouldReturnZero_WhenUnsupportedChannelGiven) {
+	LONGS_EQUAL(0, timer_get_cc(PERIPHERAL_TIMER2, 0));
+}
+
 TEST(Timer, set_counter_ShouldSetCnt) {
 	timer_set_counter(PERIPHERAL_TIMER0, 1234);
 	LONGS_EQUAL(1234, T0->CNT);
