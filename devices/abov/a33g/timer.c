@@ -5,6 +5,11 @@
 #include "a33g.h"
 #include "abov/compiler.h"
 
+ABOV_STATIC_ASSERT(TIMER_MODE_NORMAL == 0, "");
+ABOV_STATIC_ASSERT(TIMER_MODE_PWM == 1, "");
+ABOV_STATIC_ASSERT(TIMER_MODE_ONESHOT == 2, "");
+ABOV_STATIC_ASSERT(TIMER_MODE_CAPTURE == 3, "");
+
 static TIMER_Type *get_timer_from_peripheral(peripheral_t peri)
 {
 	uint32_t n = peri & (PERIPHERAL_SPACE_SIZE - 1);
@@ -93,6 +98,7 @@ void timer_clear_event(peripheral_t peri, timer_event_t events)
 
 void timer_start(peripheral_t peri)
 {
+	bitop_set(&get_timer_from_peripheral(peri)->CMD, 1); /* TCLR */
 	bitop_set(&get_timer_from_peripheral(peri)->CMD, 0); /* TEN */
 }
 
@@ -120,7 +126,7 @@ uint32_t timer_get_cc(peripheral_t peri, uint32_t cc)
 	return 0;
 }
 
-uint32_t timer_get_event(peripheral_t peri)
+timer_event_t timer_get_event(peripheral_t peri)
 {
 	uint32_t flags = get_timer_from_peripheral(peri)->CON >> 12;
 	uint32_t rc = 0;
@@ -135,7 +141,7 @@ uint32_t timer_get_event(peripheral_t peri)
 		rc |= TIMER_EVENT_OVERFLOW;
 	}
 
-	return rc;
+	return (timer_event_t)rc;
 }
 
 void timer_reset(peripheral_t peri)
@@ -144,7 +150,7 @@ void timer_reset(peripheral_t peri)
 	bitop_set(&tim->CMD, 1); /* TCLR */
 	tim->CMD = 0;
 	tim->CON = 0;
-	tim->CON = 0x700; /* clear interrupt flags */
+	tim->CON = 0x7000; /* clear interrupt flags */
 	tim->GRA = 0;
 	tim->GRB = 0;
 	tim->PRS = 0;
@@ -154,11 +160,11 @@ void timer_reset(peripheral_t peri)
 void timer_set_polarity(peripheral_t peri, uint32_t level)
 {
 	bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
-			7, 1U << 7, level);
+			7, 1U << 7, level); /* TSTRT */
 }
 
 void timer_set_edge(peripheral_t peri, timer_edge_t edge)
 {
 	bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
-			3, 1U << 3, edge);
+			3, 1U << 3, edge); /* CAPM */
 }

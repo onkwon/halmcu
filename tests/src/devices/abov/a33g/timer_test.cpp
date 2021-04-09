@@ -84,7 +84,7 @@ TEST(Timer, get_reload_ShouldReturnGra) {
 TEST(Timer, set_mode_ShouldSetConMode) {
 	timer_set_mode(PERIPHERAL_TIMER0, TIMER_MODE_PWM);
 	LONGS_EQUAL(1, T0->CON);
-	timer_set_mode(PERIPHERAL_TIMER0, TIMER_MODE_INPUT_CAPTURE);
+	timer_set_mode(PERIPHERAL_TIMER0, TIMER_MODE_CAPTURE);
 	LONGS_EQUAL(3, T0->CON);
 	timer_set_mode(PERIPHERAL_TIMER0, TIMER_MODE_ONESHOT);
 	LONGS_EQUAL(2, T0->CON);
@@ -127,7 +127,7 @@ TEST(Timer, clear_event_ShouldClearIrqFlag) {
 
 TEST(Timer, start_ShouldSetTEN) {
 	timer_start(PERIPHERAL_TIMER0);
-	LONGS_EQUAL(1, T0->CMD);
+	LONGS_EQUAL(3, T0->CMD); /* TEN + TCLR */
 }
 
 TEST(Timer, stop_ShouldClearTEN) {
@@ -162,7 +162,7 @@ TEST(Timer, set_counter_ShouldSetCnt) {
 TEST(Timer, reset_ShouldClearAllRegs) {
 	T0->CON = T0->CMD = T0->GRA = T0->GRB = T0->PRS = T0->CNT = 0xa5a5a5a5;
 	timer_reset(PERIPHERAL_TIMER0);
-	LONGS_EQUAL(0x700, T0->CON);
+	LONGS_EQUAL(0x7000, T0->CON);
 	LONGS_EQUAL(0, T0->CMD);
 	LONGS_EQUAL(0, T0->GRA);
 	LONGS_EQUAL(0, T0->GRB);
