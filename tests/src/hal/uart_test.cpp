@@ -83,8 +83,6 @@ TEST_GROUP(uart_driver) {
 		mock().ignoreOtherCalls();
 	}
 	void teardown(void) {
-		uart_teardown();
-
 		mock().checkExpectations();
 		mock().clear();
 	}
@@ -114,17 +112,6 @@ TEST(uart_driver, init_ShouldReturnTrue_WhenAllGivenParamVaild) {
 
 	LONGS_EQUAL(1, uart_init(&default_handle, UART_PORT_0, &default_cfg));
 }
-TEST(uart_driver, init_ShouldReturnFalse_WhenFailedAllocateHandle) {
-	// UART_MAX_DRIVER_HANDLE == 3
-	LONGS_EQUAL(1, uart_init(&default_handle, UART_PORT_0, &default_cfg));
-	LONGS_EQUAL(1, uart_init(&default_handle, UART_PORT_1, &default_cfg));
-	LONGS_EQUAL(1, uart_init(&default_handle, UART_PORT_2, &default_cfg));
-	LONGS_EQUAL(0, uart_init(&default_handle, UART_PORT_3, &default_cfg));
-}
-TEST(uart_driver, init_ShouldReturnFalse_WhenCalledWithSamePort) {
-	LONGS_EQUAL(1, uart_init(&default_handle, UART_PORT_0, &default_cfg));
-	LONGS_EQUAL(0, uart_init(&default_handle, UART_PORT_0, &default_cfg));
-}
 TEST(uart_driver, init_ShouldEnableRxInterrupt_WhenRxInterruptGiven) {
 	default_cfg.rx_interrupt = true;
 	mock().expectOneCall("uart_enable_irq")
@@ -141,15 +128,10 @@ TEST(uart_driver, init_ShouldEnableTxInterrupt_WhenTxInterruptGiven) {
 }
 
 TEST(uart_driver, deinit) {
-	// UART_MAX_DRIVER_HANDLE == 3
 	LONGS_EQUAL(1, uart_init(&default_handle, UART_PORT_0, &default_cfg));
-	LONGS_EQUAL(1, uart_init(&default_handle, UART_PORT_1, &default_cfg));
-	LONGS_EQUAL(1, uart_init(&default_handle, UART_PORT_2, &default_cfg));
-	LONGS_EQUAL(0, uart_init(&default_handle, UART_PORT_3, &default_cfg));
-	mock().expectOneCall("irq_disable").withParameter("irq", 14 + IRQ_FIXED);
-	mock().expectOneCall("uart_disable").withParameter("port", UART_PORT_2);
+	mock().expectOneCall("irq_disable").withParameter("irq", 3 + IRQ_FIXED);
+	mock().expectOneCall("uart_disable").withParameter("port", UART_PORT_0);
 	uart_deinit(&default_handle);
-	LONGS_EQUAL(1, uart_init(&default_handle, UART_PORT_3, &default_cfg));
 }
 
 TEST(uart_driver, rx_interrupt_ShouldCallRxHandler) {
@@ -160,7 +142,7 @@ TEST(uart_driver, rx_interrupt_ShouldCallRxHandler) {
 	mock().expectOneCall("uart_get_event").withParameter("port", UART_PORT_0)
 		.andReturnValue(UART_EVENT_RX);
 	mock().expectOneCall("intr_handler").withParameter("flags", UART_EVENT_RX);
-	uart_default_isr(UART_PORT_0);
+	uart_default_isr(UART_PORT_0, &default_handle);
 }
 TEST(uart_driver, tx_interrupt_ShouldCallTxHandler) {
 	default_cfg.tx_interrupt = true;
@@ -170,7 +152,7 @@ TEST(uart_driver, tx_interrupt_ShouldCallTxHandler) {
 	mock().expectOneCall("uart_get_event").withParameter("port", UART_PORT_1)
 		.andReturnValue(UART_EVENT_TX_READY);
 	mock().expectOneCall("intr_handler").withParameter("flags", UART_EVENT_TX_READY);
-	uart_default_isr(UART_PORT_1);
+	uart_default_isr(UART_PORT_1, &default_handle);
 }
 TEST(uart_driver, error_interrupt_ShouldCallErrorHandler) {
 	uart_init(&default_handle, UART_PORT_2, &default_cfg);
@@ -178,14 +160,14 @@ TEST(uart_driver, error_interrupt_ShouldCallErrorHandler) {
 	mock().expectOneCall("uart_get_event").withParameter("port", UART_PORT_2)
 		.andReturnValue(UART_EVENT_ERROR);
 	mock().expectOneCall("intr_handler").withParameter("flags", UART_EVENT_ERROR);
-	uart_default_isr(UART_PORT_2);
+	uart_default_isr(UART_PORT_2, &default_handle);
 }
 TEST(uart_driver, error_interrupt_ShouldCallNothing_WhenNohandlerRegistered) {
 	uart_init(&default_handle, UART_PORT_3, &default_cfg);
 	mock().expectOneCall("uart_get_event").withParameter("port", UART_PORT_3)
 		.andReturnValue(UART_EVENT_ERROR);
 	mock().expectNoCall("intr_handler");
-	uart_default_isr(UART_PORT_3);
+	uart_default_isr(UART_PORT_3, &default_handle);
 }
 TEST(uart_driver, multiple_interrupt_ShouldCallEachHandlers) {
 	default_cfg.rx_interrupt = true;
@@ -198,7 +180,7 @@ TEST(uart_driver, multiple_interrupt_ShouldCallEachHandlers) {
 		.andReturnValue(UART_EVENT_RX | UART_EVENT_TX_READY | UART_EVENT_ERROR);
 	mock().expectNCalls(3, "intr_handler")
 		.withParameter("flags", UART_EVENT_RX | UART_EVENT_TX_READY | UART_EVENT_ERROR);
-	uart_default_isr(UART_PORT_0);
+	uart_default_isr(UART_PORT_0, &default_handle);
 }
 
 TEST(uart_driver, read_ShouldReturnZero_WhenNoDataReceived) {

@@ -99,7 +99,7 @@ size_t uart_write(uart_handle_t *handle, const void *data, size_t datasize);
  * :note: Define :c:macro:`UART_MAX_DRIVER_HANDLE` to `0` not to occupy any
  *        memory if you don't use the default interrupt hander but your own.
  */
-void uart_default_isr(uart_port_t uartp);
+void uart_default_isr(uart_port_t uartp, uart_handle_t *handle);
 
 #if defined(UNITTEST)
 void uart_teardown(void);

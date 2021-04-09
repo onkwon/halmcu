@@ -3,10 +3,6 @@
 #include "abov/hal/irq.h"
 #include "abov/compiler.h"
 
-#if !defined(UART_MAX_DRIVER_HANDLE)
-#define UART_MAX_DRIVER_HANDLE			2
-#endif
-
 struct uart {
 	uart_port_t port;
 	struct uart_cfg cfg;
@@ -15,8 +11,6 @@ struct uart {
 	uart_irq_callback_t error_handler;
 };
 ABOV_STATIC_ASSERT(sizeof(struct uart) == sizeof(uart_handle_t), "");
-
-static struct uart *handles[UART_MAX_DRIVER_HANDLE];
 
 static irq_t get_irq_from_port(uart_port_t port)
 {
@@ -34,58 +28,17 @@ static irq_t get_irq_from_port(uart_port_t port)
 	}
 }
 
-static int get_index_of_empty_handle(void)
-{
-	for (int i = 0; i < UART_MAX_DRIVER_HANDLE; i++) {
-		if (handles[i] == NULL) {
-			return i;
-		}
-	}
-
-	return -1;
-}
-
-static int get_index_of_handle_by_obj(const struct uart *obj)
-{
-	for (int i = 0; i < UART_MAX_DRIVER_HANDLE; i++) {
-		if (handles[i] != NULL && handles[i] == obj) {
-			return i;
-		}
-	}
-
-	return -1;
-}
-
-static int get_index_of_handle_by_port(const uart_port_t port)
-{
-	for (int i = 0; i < UART_MAX_DRIVER_HANDLE; i++) {
-		if (handles[i] != NULL && handles[i]->port == port) {
-			return i;
-		}
-	}
-
-	return -1;
-}
-
 bool uart_init(uart_handle_t *handle, uart_port_t port, const struct uart_cfg *cfg)
 {
 	struct uart *self = (struct uart *)handle;
-	int index = get_index_of_empty_handle();
 
-	if (index < 0) { /* no handle to allocate */
-		return false;
-	}
 	if (self == NULL || cfg == NULL) {
-		return false;
-	}
-	if (get_index_of_handle_by_port(port) >= 0) { /* already in use */
 		return false;
 	}
 
 	memset(self, 0, sizeof(*self));
 	self->port = port;
 	self->cfg = *cfg;
-	handles[index] = self;
 
 	uart_enable(self->port);
 	uart_reset(self->port);
@@ -112,15 +65,12 @@ bool uart_init(uart_handle_t *handle, uart_port_t port, const struct uart_cfg *c
 void uart_deinit(uart_handle_t *handle)
 {
 	const struct uart *self = (const struct uart *)handle;
-	int index = get_index_of_handle_by_obj(self);
-	if (index < 0) { /* not found */
+	if (self == NULL) {
 		return;
 	}
 
 	irq_disable(get_irq_from_port(self->port));
 	uart_disable(self->port);
-
-	handles[index] = NULL;
 }
 
 void uart_register_rx_handler(uart_handle_t *handle, uart_irq_callback_t handler)
@@ -171,34 +121,24 @@ size_t uart_write(uart_handle_t *handle, const void *data, size_t datasize)
 	return datasize;
 }
 
-void uart_default_isr(uart_port_t uartp)
+void uart_default_isr(uart_port_t uartp, uart_handle_t *handle)
 {
 	uart_event_t events = uart_get_event(uartp);
-	int index = get_index_of_handle_by_port(uartp);
 	uart_clear_event(uartp, events);
 
-	if (index < 0) { /* not found */
+	if (handle == NULL) {
 		return;
 	}
 
-	const struct uart *obj = handles[index];
+	const struct uart *self = (const struct uart *)handle;
 
-	if ((events & UART_EVENT_RX) && obj->rx_handler) {
-		obj->rx_handler(events);
+	if ((events & UART_EVENT_RX) && self->rx_handler) {
+		self->rx_handler(events);
 	}
-	if ((events & UART_EVENT_TX_READY) && obj->tx_handler) {
-		obj->tx_handler(events);
+	if ((events & UART_EVENT_TX_READY) && self->tx_handler) {
+		self->tx_handler(events);
 	}
-	if ((events & UART_EVENT_ERROR) && obj->error_handler) {
-		obj->error_handler(events);
+	if ((events & UART_EVENT_ERROR) && self->error_handler) {
+		self->error_handler(events);
 	}
 }
-
-#if defined(UNITTEST)
-void uart_teardown(void)
-{
-	for (int i = 0; i < UART_MAX_DRIVER_HANDLE; i++) {
-		handles[i] = NULL;
-	}
-}
-#endif
