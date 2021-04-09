@@ -1,5 +1,5 @@
 #include "abov/asm/arm/systick.h"
-#include "abov/hal/irq.h"
+#include "abov/irq.h"
 #include "abov/hal/gpio.h"
 
 #define LED_PIN			(GPIOD + 1)

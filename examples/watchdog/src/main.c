@@ -1,5 +1,5 @@
 #include "abov/hal/wdt.h"
-#include "abov/hal/irq.h"
+#include "abov/irq.h"
 #include "abov/delay.h"
 
 int main(void)

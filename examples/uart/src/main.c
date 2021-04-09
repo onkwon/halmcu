@@ -1,8 +1,8 @@
 #include "abov/system.h"
+#include "abov/irq.h"
 #include "abov/hal/uart.h"
 #include "abov/hal/gpio.h"
 #include "abov/hal/clk.h"
-#include "abov/hal/irq.h"
 
 #define UART0_RX_PIN			(GPIOC + 8)
 #define UART0_TX_PIN			(GPIOC + 9)

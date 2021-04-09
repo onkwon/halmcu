@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "abov/hal/peripheral.h"
+#include "abov/peripheral.h"
 
 /** Clock source type */
 typedef enum {

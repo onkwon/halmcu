@@ -1,4 +1,4 @@
-#include "abov/hal/irq.h"
+#include "abov/irq.h"
 #include <stdint.h>
 #include <assert.h>
 #include "abov/compiler.h"

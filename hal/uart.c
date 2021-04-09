@@ -1,6 +1,6 @@
 #include "abov/hal/uart.h"
 #include <string.h>
-#include "abov/hal/irq.h"
+#include "abov/irq.h"
 #include "abov/compiler.h"
 
 struct uart {

@@ -1,5 +1,5 @@
-#ifndef ABOV_IRQ_HAL_H
-#define ABOV_IRQ_HAL_H
+#ifndef ABOV_IRQ_H
+#define ABOV_IRQ_H
 
 #if defined(__cplusplus)
 extern "C" {
@@ -61,4 +61,4 @@ void ISR_systick(void);
 }
 #endif
 
-#endif /* ABOV_IRQ_HAL_H */
+#endif /* ABOV_IRQ_H */
