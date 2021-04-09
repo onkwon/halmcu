@@ -128,7 +128,7 @@ static void set_gpio_alt(PCU_Type *ctrl, uint32_t pin, int altfunc)
 	bitop_clean_set_with_mask(&ctrl->MR, pos, 3U << pos, (uint32_t)altfunc);
 }
 
-static void disable_gpio_intr(PCU_Type *ctrl, uint32_t pin)
+static void disable_gpio_irq(PCU_Type *ctrl, uint32_t pin)
 {
 	ctrl->IER &= ~(3U << (pin * 2));
 }
@@ -173,7 +173,7 @@ static bool set_gpio(uint32_t ngpio, gpio_mode_t mode)
 	set_gpio_mode(ctrl, pin, mode);
 	set_gpio_pullmode(ctrl, pin, mode);
 	set_gpio_alt(ctrl, pin, 0);
-	disable_gpio_intr(ctrl, pin);
+	disable_gpio_irq(ctrl, pin);
 	disable_gpio_debounce(ctrl, pin);
 
 	return true;
@@ -189,7 +189,7 @@ bool gpio_close(uint32_t ngpio)
 	return set_gpio(ngpio, GPIO_MODE_ANALOG);
 }
 
-bool gpio_enable_intr(uint32_t ngpio, gpio_intr_t intr_type)
+bool gpio_enable_irq(uint32_t ngpio, gpio_irq_t irq_type)
 {
 	PCU_Type *ctrl = get_pcu_from_gpio_number(ngpio);
 	uint32_t pin = get_pin_from_gpio_number(ngpio);
@@ -200,20 +200,20 @@ bool gpio_enable_intr(uint32_t ngpio, gpio_intr_t intr_type)
 
 	uint32_t val = 0;
 	bool edge = false;
-	switch (intr_type) {
-	case GPIO_INTR_EDGE_RISING:
+	switch (irq_type) {
+	case GPIO_IRQ_EDGE_RISING:
 		edge = true;
 		/* fall through */
-	case GPIO_INTR_LEVEL_HIGH:
+	case GPIO_IRQ_LEVEL_HIGH:
 		val = 2;
 		break;
-	case GPIO_INTR_EDGE_FALLING:
+	case GPIO_IRQ_EDGE_FALLING:
 		edge = true;
 		/* fall through */
-	case GPIO_INTR_LEVEL_LOW:
+	case GPIO_IRQ_LEVEL_LOW:
 		val = 1;
 		break;
-	case GPIO_INTR_EDGE_ANY:
+	case GPIO_IRQ_EDGE_ANY:
 		edge = true;
 		val = 3;
 		break;
@@ -228,7 +228,7 @@ bool gpio_enable_intr(uint32_t ngpio, gpio_intr_t intr_type)
 	return true;
 }
 
-bool gpio_disable_intr(uint32_t ngpio)
+bool gpio_disable_irq(uint32_t ngpio)
 {
 	PCU_Type *ctrl = get_pcu_from_gpio_number(ngpio);
 	uint32_t pin = get_pin_from_gpio_number(ngpio);
@@ -242,7 +242,7 @@ bool gpio_disable_intr(uint32_t ngpio)
 	return true;
 }
 
-void gpio_clear_intr_flag(uint32_t ngpio)
+void gpio_clear_irq_flag(uint32_t ngpio)
 {
 	PCU_Type *ctrl = get_pcu_from_gpio_number(ngpio);
 	uint32_t pin = get_pin_from_gpio_number(ngpio);

@@ -8,7 +8,7 @@ extern "C" {
 #include <stdint.h>
 #include "abov/hal/peripheral.h"
 
-/** Timer mode type */
+/** Timer mode enumeration */
 typedef enum {
 	/***/
 	TIMER_MODE_NORMAL,
@@ -20,7 +20,7 @@ typedef enum {
 	TIMER_MODE_INPUT_CAPTURE,
 } timer_mode_t;
 
-/** Timer IRQ type */
+/** Timer IRQ enumeration */
 typedef enum {
 	/***/
 	TIMER_EVENT_OVERFLOW			= (1U << 0),
@@ -36,7 +36,7 @@ typedef enum {
 	TIMER_EVENT_CC_3			= (1U << 5),
 } timer_event_t;
 
-/** Timer edge type */
+/** Timer edge enumeration */
 typedef enum {
 	/***/
 	TIMER_RISING_EDGE,

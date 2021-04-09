@@ -12,7 +12,7 @@ extern "C" {
 #include "abov/ll/uart.h"
 
 /** UART handler type */
-typedef void (*uart_intr_callback_t)(uint32_t flags);
+typedef void (*uart_irq_callback_t)(uint32_t flags);
 
 /** UART configuration */
 struct uart_cfg {
@@ -61,21 +61,21 @@ void uart_deinit(uart_handle_t *handle);
  * :param handle: handle of uart port
  * :param handler: rx interrupt handler
  */
-void uart_register_rx_handler(uart_handle_t *handle, uart_intr_callback_t handler);
+void uart_register_rx_handler(uart_handle_t *handle, uart_irq_callback_t handler);
 /**
  * Register tx ready interrupt handler
  *
  * :param handle: handle of uart port
  * :param handler: tx ready interrupt handler
  */
-void uart_register_tx_handler(uart_handle_t *handle, uart_intr_callback_t handler);
+void uart_register_tx_handler(uart_handle_t *handle, uart_irq_callback_t handler);
 /**
  * Register error interrupt handler
  *
  * :param handle: handle of uart port
  * :param handler: error interrupt handler
  */
-void uart_register_error_handler(uart_handle_t *handle, uart_intr_callback_t handler);
+void uart_register_error_handler(uart_handle_t *handle, uart_irq_callback_t handler);
 /**
  * Read bytes from UART port
  *
@@ -99,7 +99,7 @@ size_t uart_write(uart_handle_t *handle, const void *data, size_t datasize);
  * :note: Define :c:macro:`UART_MAX_DRIVER_HANDLE` to `0` not to occupy any
  *        memory if you don't use the default interrupt hander but your own.
  */
-void uart_default_isr(uart_port_t uartp);
+void uart_default_isr(uart_port_t uartp, uart_handle_t *handle);
 
 #if defined(UNITTEST)
 void uart_teardown(void);

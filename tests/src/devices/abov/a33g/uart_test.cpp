@@ -60,32 +60,43 @@ TEST_GROUP(uart) {
 	}
 };
 
-TEST(uart, get_status_ShouldReturnLRS) {
+TEST(uart, get_event_ShouldReturnLRS) {
 	uint32_t expected = 0xA55A;
 	UART0->LSR = expected >> 8;
 	UART0->IIR = expected & 0xff;
-	LONGS_EQUAL(expected | UART_EVENT_TX_READY, uart_get_status(UART_PORT_0));
+	LONGS_EQUAL(expected | UART_EVENT_TX_READY, uart_get_event(UART_PORT_0));
 }
 
-TEST(uart, enable_rx_intr_ShouldSetDrieInIER) {
-	uart_enable_rx_intr(UART_PORT_0);
+TEST(uart, enable_irq_ShouldSetDrieInIER_WhenRxGiven) {
+	uart_enable_irq(UART_PORT_0, UART_EVENT_RX);
 	LONGS_EQUAL(1, UART0->IER);
 }
 
-TEST(uart, disable_rx_intr_ShouldClearDrieInIER) {
+TEST(uart, disable_irq_ShouldClearDrieInIER_WhenRxGiven) {
 	UART0->IER = 1;
-	uart_disable_rx_intr(UART_PORT_0);
+	uart_disable_irq(UART_PORT_0, UART_EVENT_RX);
 	LONGS_EQUAL(0, UART0->IER);
 }
 
-TEST(uart, enable_tx_intr_ShouldSetDrieInIER) {
-	uart_enable_tx_intr(UART_PORT_0);
+TEST(uart, enable_irq_ShouldSetDrieInIER_WhenTxGiven) {
+	uart_enable_irq(UART_PORT_0, UART_EVENT_TX_READY);
 	LONGS_EQUAL(2, UART0->IER);
 }
 
-TEST(uart, disable_tx_intr_ShouldClearDrieInIER) {
+TEST(uart, disable_irq_ShouldClearDrieInIER_WhenTxGiven) {
 	UART0->IER = 2;
-	uart_disable_tx_intr(UART_PORT_0);
+	uart_disable_irq(UART_PORT_0, UART_EVENT_TX_READY);
+	LONGS_EQUAL(0, UART0->IER);
+}
+
+TEST(uart, enable_irq_ShouldSetMultiIntr_WhenMixedGiven) {
+	uart_enable_irq(UART_PORT_0, (uart_event_t)(UART_EVENT_RX | UART_EVENT_TX_READY));
+	LONGS_EQUAL(3, UART0->IER);
+}
+
+TEST(uart, disable_irq_ShouldClearMultiIntr_WhenMixedGiven) {
+	UART0->IER = 3;
+	uart_disable_irq(UART_PORT_0, (uart_event_t)(UART_EVENT_RX | UART_EVENT_TX_READY));
 	LONGS_EQUAL(0, UART0->IER);
 }
 

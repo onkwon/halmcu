@@ -46,17 +46,17 @@ typedef enum {
 
 /** GPIO interrupt type */
 typedef enum {
-	/** Interrupt trigger on rising edge */
-	GPIO_INTR_EDGE_RISING,
-	/** Interrupt trigger on falling edge */
-	GPIO_INTR_EDGE_FALLING,
-	/** Interrupt trigger on both rising and falling edges */
-	GPIO_INTR_EDGE_ANY,
-	/** Interrupt trigger on logic level high */
-	GPIO_INTR_LEVEL_HIGH,
-	/** Interrupt trigger on logic level low */
-	GPIO_INTR_LEVEL_LOW,
-} gpio_intr_t;
+	/** Rising edge interrupt */
+	GPIO_IRQ_EDGE_RISING,
+	/** Falling edge interrupt */
+	GPIO_IRQ_EDGE_FALLING,
+	/** Both rising and falling edge interrupts */
+	GPIO_IRQ_EDGE_ANY,
+	/** Logic level high interrupt */
+	GPIO_IRQ_LEVEL_HIGH,
+	/** Logic level low interrupt */
+	GPIO_IRQ_LEVEL_LOW,
+} gpio_irq_t;
 
 /**
  * Reset GPIO port
@@ -119,21 +119,21 @@ int gpio_read_port(gpio_port_t port);
  * Enable interrupt on the given GPIO pin
  *
  * :param ngpio: GPIO number
- * :param intr_type: sets interrupt trigger type
+ * :param irq_type: sets interrupt trigger type
  */
-bool gpio_enable_intr(uint32_t ngpio, gpio_intr_t intr_type);
+bool gpio_enable_irq(uint32_t ngpio, gpio_irq_t irq_type);
 /**
  * Disable interrupt on the given GPIO pin
  *
  * :param ngpio: GPIO number
  */
-bool gpio_disable_intr(uint32_t ngpio);
+bool gpio_disable_irq(uint32_t ngpio);
 /**
  * Clear interru flag on the given GPIO pin
  *
  * :param ngpio: GPIO number
  */
-void gpio_clear_intr_flag(uint32_t ngpio);
+void gpio_clear_irq_flag(uint32_t ngpio);
 /**
  * Enable the given port
  *

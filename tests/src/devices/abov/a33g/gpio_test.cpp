@@ -154,48 +154,48 @@ TEST(gpio, close_ShouldSetGpioAnalog) {
 	LONGS_EQUAL(0x3, PCA->CR);
 }
 
-TEST(gpio, clear_intr_flag_ShouldWriteValueOneInIsr) {
-	gpio_clear_intr_flag(GPIOA);
+TEST(gpio, clear_irq_flag_ShouldWriteValueOneInIsr) {
+	gpio_clear_irq_flag(GPIOA);
 	LONGS_EQUAL(0x1, PCA->ISR);
-	gpio_clear_intr_flag(GPIOA + 15);
+	gpio_clear_irq_flag(GPIOA + 15);
 	LONGS_EQUAL(0x40000001, PCA->ISR);
 }
 
-TEST(gpio, enable_intr_ShouldReturnFalse_WhenUnsupportedGpioGiven) {
-	LONGS_EQUAL(0, gpio_enable_intr(GPIOF + GPIO_PORT_SIZE, GPIO_INTR_EDGE_ANY));
-	LONGS_EQUAL(0, gpio_enable_intr(GPIOA + 16, GPIO_INTR_EDGE_ANY));
+TEST(gpio, enable_irq_ShouldReturnFalse_WhenUnsupportedGpioGiven) {
+	LONGS_EQUAL(0, gpio_enable_irq(GPIOF + GPIO_PORT_SIZE, GPIO_IRQ_EDGE_ANY));
+	LONGS_EQUAL(0, gpio_enable_irq(GPIOA + 16, GPIO_IRQ_EDGE_ANY));
 }
 
-TEST(gpio, enable_intr_ShouldSetIcrRegister) {
-	gpio_enable_intr(GPIOA, GPIO_INTR_EDGE_ANY);
+TEST(gpio, enable_irq_ShouldSetIcrRegister) {
+	gpio_enable_irq(GPIOA, GPIO_IRQ_EDGE_ANY);
 	LONGS_EQUAL(0x3, PCA->ICR);
-	gpio_enable_intr(GPIOA, GPIO_INTR_EDGE_RISING);
+	gpio_enable_irq(GPIOA, GPIO_IRQ_EDGE_RISING);
 	LONGS_EQUAL(0x2, PCA->ICR);
-	gpio_enable_intr(GPIOA, GPIO_INTR_EDGE_FALLING);
+	gpio_enable_irq(GPIOA, GPIO_IRQ_EDGE_FALLING);
 	LONGS_EQUAL(0x1, PCA->ICR);
-	gpio_enable_intr(GPIOA, GPIO_INTR_LEVEL_LOW);
+	gpio_enable_irq(GPIOA, GPIO_IRQ_LEVEL_LOW);
 	LONGS_EQUAL(0x1, PCA->ICR);
-	gpio_enable_intr(GPIOA, GPIO_INTR_LEVEL_HIGH);
+	gpio_enable_irq(GPIOA, GPIO_IRQ_LEVEL_HIGH);
 	LONGS_EQUAL(0x2, PCA->ICR);
 }
 
-TEST(gpio, disable_intr_ShouldClearIerRegister) {
-	gpio_enable_intr(GPIOA, GPIO_INTR_EDGE_ANY);
-	gpio_enable_intr(GPIOA + 1, GPIO_INTR_EDGE_ANY);
-	gpio_enable_intr(GPIOA + 15, GPIO_INTR_EDGE_ANY);
+TEST(gpio, disable_irq_ShouldClearIerRegister) {
+	gpio_enable_irq(GPIOA, GPIO_IRQ_EDGE_ANY);
+	gpio_enable_irq(GPIOA + 1, GPIO_IRQ_EDGE_ANY);
+	gpio_enable_irq(GPIOA + 15, GPIO_IRQ_EDGE_ANY);
 	LONGS_EQUAL(0xC000000F, PCA->IER);
 
-	gpio_disable_intr(GPIOA);
+	gpio_disable_irq(GPIOA);
 	LONGS_EQUAL(0xC000000C, PCA->IER);
-	gpio_disable_intr(GPIOA + 1);
+	gpio_disable_irq(GPIOA + 1);
 	LONGS_EQUAL(0xC0000000, PCA->IER);
-	gpio_disable_intr(GPIOA + 15);
+	gpio_disable_irq(GPIOA + 15);
 	LONGS_EQUAL(0x00000000, PCA->IER);
 }
 
-TEST(gpio, disable_intr_ShouldReturnFalse_WhenUnsupportedGpioGiven) {
-	LONGS_EQUAL(0, gpio_disable_intr(GPIOF + GPIO_PORT_SIZE));
-	LONGS_EQUAL(0, gpio_disable_intr(GPIOA + 16));
+TEST(gpio, disable_irq_ShouldReturnFalse_WhenUnsupportedGpioGiven) {
+	LONGS_EQUAL(0, gpio_disable_irq(GPIOF + GPIO_PORT_SIZE));
+	LONGS_EQUAL(0, gpio_disable_irq(GPIOA + 16));
 }
 
 TEST(gpio, write_ShouldSetSpecificPin) {
