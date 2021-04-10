@@ -65,6 +65,7 @@ TEST_GROUP(Timer) {
 		.frequency = 1,
 		.irq = TIMER_EVENT_NONE,
 		.irq_priority = 3,
+		.set_clock_source = NULL,
 	};
 
 	void setup(void) {
