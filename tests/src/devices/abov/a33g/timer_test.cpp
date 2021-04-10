@@ -43,14 +43,14 @@ TEST(Timer, set_prescaler_ShouldSetPrs) {
 	LONGS_EQUAL(16, T9->PRS);
 }
 
-TEST(Timer, set_divider_ShouldSetTimerClockSource) {
-	timer_set_divider(PERIPHERAL_TIMER0, 4);
+TEST(Timer, set_clock_divider_ShouldSetTimerClockSource) {
+	timer_set_clock_divider(PERIPHERAL_TIMER0, 4);
 	LONGS_EQUAL(0x40, T0->CON);
-	timer_set_divider(PERIPHERAL_TIMER0, 6);
+	timer_set_clock_divider(PERIPHERAL_TIMER0, 6);
 	LONGS_EQUAL(0x60, T0->CON);
-	timer_set_divider(PERIPHERAL_TIMER0, 1);
+	timer_set_clock_divider(PERIPHERAL_TIMER0, 1);
 	LONGS_EQUAL(0x10, T0->CON);
-	timer_set_divider(PERIPHERAL_TIMER0, 0);
+	timer_set_clock_divider(PERIPHERAL_TIMER0, 0);
 	LONGS_EQUAL(0, T0->CON);
 }
 

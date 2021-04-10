@@ -329,6 +329,44 @@ static uint32_t clk_get_pll_frequency(void)
 	}
 }
 
+static clk_source_t clk_get_timer_source(peripheral_t timer)
+{
+	uint32_t pos = 4;
+
+	switch (timer) {
+	case PERIPHERAL_TIMER0: /* fall through */
+	case PERIPHERAL_TIMER1:
+		pos = 4;
+		break;
+	case PERIPHERAL_TIMER2: /* fall through */
+	case PERIPHERAL_TIMER3: /* fall through */
+	case PERIPHERAL_TIMER4: /* fall through */
+	case PERIPHERAL_TIMER5:
+		pos = 6;
+		break;
+	case PERIPHERAL_TIMER6: /* fall through */
+	case PERIPHERAL_TIMER7: /* fall through */
+	case PERIPHERAL_TIMER8: /* fall through */
+	case PERIPHERAL_TIMER9:
+		pos = 8;
+		break;
+	default:
+		return CLK_PLL;
+	}
+
+	switch ((PMU->PCSR >> pos) & 0x3) {
+	case 1:
+		return CLK_HSI;
+	case 2:
+		return CLK_LSE;
+	case 3:
+		return CLK_LSI;
+	case 0: /* fall through */
+	default:
+		return CLK_PLL;
+	}
+}
+
 void clk_enable_peripheral(peripheral_t peri)
 {
 	PMU->PCCR |= get_activation_bitmask_from_peripheral(peri);
@@ -465,6 +503,16 @@ uint32_t clk_get_frequency(clk_source_t clk)
 	case CLK_LSE:
 	default:
 		return 0;
+	}
+}
+
+clk_source_t clk_get_peripheral_clock_source(peripheral_t peri)
+{
+	switch (PERIPHERAL_GROUP(peri)) {
+	case PERIPHERAL_TIMER:
+		return clk_get_timer_source(peri);
+	default:
+		return CLK_PLL;
 	}
 }
 

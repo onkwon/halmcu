@@ -22,10 +22,10 @@ void timer_set_prescaler(peripheral_t peri, uint32_t div_factor)
 			0, 0x3ffU, div_factor);
 }
 
-void timer_set_divider(peripheral_t peri, uint32_t div_factor)
+void timer_set_clock_divider(peripheral_t peri, uint32_t div_factor)
 {
 	bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
-			4, 7U << 4, div_factor);
+			4, 7U << 4, div_factor); /* TCS */
 }
 
 void timer_set_counter(peripheral_t peri, uint32_t value)
@@ -167,4 +167,29 @@ void timer_set_edge(peripheral_t peri, timer_edge_t edge)
 {
 	bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
 			3, 1U << 3, edge); /* CAPM */
+}
+
+uint32_t timer_get_frequency(peripheral_t peri, uint32_t tclk)
+{
+	TIMER_Type *tim = get_timer_from_peripheral(peri);
+	uint32_t tcs = (tim->CON >> 4) & 0x7;
+
+	switch (tcs) {
+	case 0:
+		return tclk / 2;
+	case 1:
+		return tclk / 4;
+	case 2:
+		return tclk / 16;
+	case 3:
+		return tclk / 64;
+	default:
+		break;
+	}
+
+	if (tcs >= 6) {
+		return 0;
+	}
+
+	return tclk;
 }

@@ -156,3 +156,14 @@ TEST(Clock, is_pll_locked_ShouldReturnPllStatus) {
 	PMU->PLLCON |= 1U << 12;
 	LONGS_EQUAL(1, clk_is_pll_locked());
 }
+
+TEST(Clock, get_peripheral_clock_source_ShouldReturnClockSource) {
+	PMU->PCSR = 0x390;
+	LONGS_EQUAL(CLK_LSI, clk_get_peripheral_clock_source(PERIPHERAL_TIMER9));
+	LONGS_EQUAL(CLK_LSE, clk_get_peripheral_clock_source(PERIPHERAL_TIMER5));
+	LONGS_EQUAL(CLK_HSI, clk_get_peripheral_clock_source(PERIPHERAL_TIMER1));
+	PMU->PCSR = 0xE0;
+	LONGS_EQUAL(CLK_PLL, clk_get_peripheral_clock_source(PERIPHERAL_TIMER9));
+	LONGS_EQUAL(CLK_LSI, clk_get_peripheral_clock_source(PERIPHERAL_TIMER5));
+	LONGS_EQUAL(CLK_LSE, clk_get_peripheral_clock_source(PERIPHERAL_TIMER1));
+}

@@ -7,6 +7,9 @@ extern "C" {
 
 #define PERIPHERAL_SPACE_SIZE		0x100U
 
+#define PERIPHERAL_GROUP(x)		((x) & ~(PERIPHERAL_SPACE_SIZE - 1))
+#define PERIPHERAL_MASK(x)		((x) & (PERIPHERAL_SPACE_SIZE - 1))
+
 /** Each peripheral space is defined at 256 intervals.
  * Say there are 3 UARTs, each UART can be accessed with PERIPHERAL_GPIO + n. */
 typedef enum {

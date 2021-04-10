@@ -23,6 +23,8 @@ typedef enum {
 /** Timer IRQ enumeration */
 typedef enum {
 	/***/
+	TIMER_EVENT_NONE			= 0,
+	/***/
 	TIMER_EVENT_OVERFLOW			= (1U << 0),
 	/***/
 	TIMER_EVENT_UNDERFLOW			= (1U << 1),
@@ -45,43 +47,77 @@ typedef enum {
 } timer_edge_t;
 
 /**
- * Reset Timer interface
+ * Reset the timer interface
  *
- * This function makes the given Timer the reset default state.
+ * This function makes the given timer in the reset default state.
  *
- * :param peri: a enum of :c:type:`peripheral_t`
+ * :param peri: a peripheral enumerated in :c:type:`peripheral_t`
  */
 void timer_reset(peripheral_t peri);
-/***/
+/**
+ * Set the timer mode
+ *
+ * :param peri: a peripheral enumerated in :c:type:`peripheral_t`
+ * :param mode: :c:type:`timer_mode_t`
+ */
 void timer_set_mode(peripheral_t peri, timer_mode_t mode);
-/***/
+/**
+ * Start the timer
+ *
+ * :param peri: a peripheral enumerated in :c:type:`peripheral_t`
+ */
 void timer_start(peripheral_t peri);
-/***/
+/**
+ * Stop the timer
+ *
+ * :param peri: a peripheral enumerated in :c:type:`peripheral_t`
+ */
 void timer_stop(peripheral_t peri);
-/***/
+/**
+ * Set the timer prescaler
+ *
+ * :param peri: a peripheral enumerated in :c:type:`peripheral_t`
+ * :param div_factor: prescaler values
+ */
 void timer_set_prescaler(peripheral_t peri, uint32_t div_factor);
-/***/
-void timer_set_divider(peripheral_t peri, uint32_t div_factor);
-/***/
+/**
+ * Set the timer clock divider
+ *
+ * :param peri: a peripheral enumerated in :c:type:`peripheral_t`
+ * :param div_factor: clock divider
+ */
+void timer_set_clock_divider(peripheral_t peri, uint32_t div_factor);
+/**
+ * Enable interrupts on events for a timer
+ *
+ * :param peri: a peripheral enumerated in :c:type:`peripheral_t`
+ * :param events: events to be enabled
+ */
 void timer_enable_irq(peripheral_t peri, timer_event_t events);
-/***/
+/**
+ * Disable interrupts on events for a timer
+ *
+ * :param peri: a peripheral enumerated in :c:type:`peripheral_t`
+ * :param events: events to be disabled
+ */
 void timer_disable_irq(peripheral_t peri, timer_event_t events);
-/***/
+/**
+ * Clear event flags
+ *
+ * :param peri: a peripheral enumerated in :c:type:`peripheral_t`
+ * :param events: events to be cleared
+ */
 void timer_clear_event(peripheral_t peri, timer_event_t events);
-/***/
+/**
+ * Read event flags
+ *
+ * :param peri: a peripheral enumerated in :c:type:`peripheral_t`
+ */
 timer_event_t timer_get_event(peripheral_t peri);
-/***/
-void timer_set_reload(peripheral_t peri, uint32_t value);
-/***/
-void timer_set_counter(peripheral_t peri, uint32_t value);
-/***/
-uint32_t timer_get_reload(peripheral_t peri);
-/***/
-uint32_t timer_get_counter(peripheral_t peri);
 /**
  * Set Capture/Compare register
  *
- * :param peri: a enum of :c:type:`peripheral_t`
+ * :param peri: a peripheral enumerated in :c:type:`peripheral_t`
  * :param cc: a number of capture/compare channel
  * :param value: to be written to the capture/compare register
  */
@@ -89,14 +125,45 @@ void timer_set_cc(peripheral_t peri, uint32_t cc, uint32_t value);
 /**
  * Get Capture/Compare register
  *
- * :param peri: a enum of :c:type:`peripheral_t`
+ * :param peri: a peripheral enumerated in :c:type:`peripheral_t`
  * :param cc: a number of capture/compare channel
+ * :return: capture/compare value
  */
 uint32_t timer_get_cc(peripheral_t peri, uint32_t cc);
+/**
+ * Set the timer counter
+ *
+ * :param peri: a peripheral enumerated in :c:type:`peripheral_t`
+ * :param value: to be written
+ */
+void timer_set_counter(peripheral_t peri, uint32_t value);
+/**
+ * Get the timer counter
+ *
+ * :param peri: a peripheral enumerated in :c:type:`peripheral_t`
+ * :return: timer counter
+ */
+uint32_t timer_get_counter(peripheral_t peri);
+/**
+ * Set the timer period
+ *
+ * :param peri: a peripheral enumerated in :c:type:`peripheral_t`
+ * :param value: to be written
+ */
+void timer_set_reload(peripheral_t peri, uint32_t value);
+/**
+ * Get the timer period
+ *
+ * :param peri: a peripheral enumerated in :c:type:`peripheral_t`
+ * :return: timer period
+ */
+uint32_t timer_get_reload(peripheral_t peri);
 /***/
 void timer_set_polarity(peripheral_t peri, uint32_t level);
 /***/
 void timer_set_edge(peripheral_t peri, timer_edge_t edge);
+/***/
+uint32_t timer_get_frequency(peripheral_t peri, uint32_t tclk);
 
 #if defined(__cplusplus)
 }
