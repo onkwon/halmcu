@@ -147,6 +147,7 @@ timer_event_t timer_get_event(peripheral_t peri)
 void timer_reset(peripheral_t peri)
 {
 	TIMER_Type *tim = get_timer_from_peripheral(peri);
+	uint32_t clk_div = tim->CON & 0x70; /* should keep the clock divider */
 	bitop_set(&tim->CMD, 1); /* TCLR */
 	tim->CMD = 0;
 	tim->CON = 0;
@@ -155,6 +156,7 @@ void timer_reset(peripheral_t peri)
 	tim->GRB = 0;
 	tim->PRS = 0;
 	tim->CNT = 0;
+	tim->CON = clk_div;
 }
 
 void timer_set_polarity(peripheral_t peri, uint32_t level)

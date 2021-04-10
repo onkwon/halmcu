@@ -10,7 +10,6 @@ extern "C" {
 
 /** Timer configuration */
 struct timer_cfg {
-	peripheral_t timer;
 	timer_mode_t mode;
 	uint32_t frequency;
 	timer_event_t irq;
