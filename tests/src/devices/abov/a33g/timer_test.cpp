@@ -43,14 +43,14 @@ TEST(Timer, set_prescaler_ShouldSetPrs) {
 	LONGS_EQUAL(16, T9->PRS);
 }
 
-TEST(Timer, set_divider_ShouldSetTimerClockSource) {
-	timer_set_divider(PERIPHERAL_TIMER0, 4);
+TEST(Timer, set_clock_divider_ShouldSetTimerClockSource) {
+	timer_set_clock_divider(PERIPHERAL_TIMER0, 4);
 	LONGS_EQUAL(0x40, T0->CON);
-	timer_set_divider(PERIPHERAL_TIMER0, 6);
+	timer_set_clock_divider(PERIPHERAL_TIMER0, 6);
 	LONGS_EQUAL(0x60, T0->CON);
-	timer_set_divider(PERIPHERAL_TIMER0, 1);
+	timer_set_clock_divider(PERIPHERAL_TIMER0, 1);
 	LONGS_EQUAL(0x10, T0->CON);
-	timer_set_divider(PERIPHERAL_TIMER0, 0);
+	timer_set_clock_divider(PERIPHERAL_TIMER0, 0);
 	LONGS_EQUAL(0, T0->CON);
 }
 
@@ -160,9 +160,10 @@ TEST(Timer, set_counter_ShouldSetCnt) {
 }
 
 TEST(Timer, reset_ShouldClearAllRegs) {
-	T0->CON = T0->CMD = T0->GRA = T0->GRB = T0->PRS = T0->CNT = 0xa5a5a5a5;
+	T0->CMD = T0->GRA = T0->GRB = T0->PRS = T0->CNT = 0xa5a5a5a5;
+	T0->CON = 0xff8f;
 	timer_reset(PERIPHERAL_TIMER0);
-	LONGS_EQUAL(0x7000, T0->CON);
+	LONGS_EQUAL(0, T0->CON);
 	LONGS_EQUAL(0, T0->CMD);
 	LONGS_EQUAL(0, T0->GRA);
 	LONGS_EQUAL(0, T0->GRB);
@@ -190,4 +191,20 @@ TEST(Timer, set_edge_ShouldSetCapm) {
 	LONGS_EQUAL(8, T0->CON);
 	timer_set_edge(PERIPHERAL_TIMER0, TIMER_RISING_EDGE);
 	LONGS_EQUAL(0, T0->CON);
+}
+
+TEST(Timer, get_frequency_ShouldReturnTclk_WhenTCSIs4) {
+	uint32_t tclk = 12345;
+	T0->CON = 4U << 4;
+	LONGS_EQUAL(tclk, timer_get_frequency(PERIPHERAL_TIMER0, tclk));
+}
+TEST(Timer, get_frequency_ShouldReturnTclkDividedBy16_WhenTCSIs2) {
+	uint32_t tclk = 6000;
+	T0->CON = 2U << 4;
+	LONGS_EQUAL(tclk/16, timer_get_frequency(PERIPHERAL_TIMER0, tclk));
+}
+TEST(Timer, get_frequency_ShouldReturnZero_WhenTCSIs6) {
+	uint32_t tclk = 6000;
+	T0->CON = 6U << 4;
+	LONGS_EQUAL(0, timer_get_frequency(PERIPHERAL_TIMER0, tclk));
 }

@@ -24,13 +24,10 @@ static void target_timer_init(void)
 {
 	target_timer_gpio_init();
 
-	pwr_enable_peripheral(PERIPHERAL_TIMER0);
-	clk_enable_peripheral(PERIPHERAL_TIMER0);
-
-	timer_reset(PERIPHERAL_TIMER0);
-	timer_set_mode(PERIPHERAL_TIMER0, TIMER_MODE_NORMAL);
-	timer_set_divider(PERIPHERAL_TIMER0, 3); // 16MHz/64 = 250KHz
-	timer_set_prescaler(PERIPHERAL_TIMER0, 250 - 1); // 1-msec tick
+	timer_set_clock_divider(PERIPHERAL_TIMER0, 3); // 16MHz/64 = 250KHz
+	timer_init(PERIPHERAL_TIMER0, &(struct timer_cfg) {
+			.mode = TIMER_MODE_NORMAL,
+			.frequency = 1000, });
 	timer_set_reload(PERIPHERAL_TIMER0, 1000 - 1); // every 1-sec
 
 	timer_start(PERIPHERAL_TIMER0);
@@ -40,17 +37,11 @@ static void capture_timer_init(void)
 {
 	capture_timer_gpio_init();
 
-	pwr_enable_peripheral(PERIPHERAL_TIMER1);
-	clk_enable_peripheral(PERIPHERAL_TIMER1);
-
-	timer_reset(PERIPHERAL_TIMER1);
-	timer_set_mode(PERIPHERAL_TIMER1, TIMER_MODE_CAPTURE);
+	timer_init(PERIPHERAL_TIMER1, &(struct timer_cfg) {
+			.mode = TIMER_MODE_CAPTURE,
+			.irq = (timer_event_t)(TIMER_EVENT_CC_0 | TIMER_EVENT_CC_1 | TIMER_EVENT_OVERFLOW),
+			.irq_priority = 3, });
 	timer_set_edge(PERIPHERAL_TIMER1, TIMER_RISING_EDGE);
-	timer_enable_irq(PERIPHERAL_TIMER1, (timer_event_t)
-			(TIMER_EVENT_CC_0 | TIMER_EVENT_CC_1 | TIMER_EVENT_OVERFLOW));
-
-	irq_set_priority(IRQ_TIMER1, 3);
-	irq_enable(IRQ_TIMER1);
 
 	timer_start(PERIPHERAL_TIMER1);
 }

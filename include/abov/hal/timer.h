@@ -5,16 +5,31 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
 #include "abov/ll/timer.h"
-#include "abov/ll/clk.h"
-#include "abov/ll/pwr.h"
 
+/** Timer configuration */
 struct timer_cfg {
 	timer_mode_t mode;
-	uint32_t f_hz;
+	uint32_t frequency;
+	timer_event_t irq;
+	int irq_priority;
 };
 
-void timer_set_clock_source(peripheral_t peri, clk_source_t clk);
+/**
+ * Initialize the timer
+ *
+ * :param timer: a peripheral enumerated in :c:type:`peripheral_t`
+ * :param cfg: pointer to the structure with the initial configuration
+ * :return: true on success
+ */
+bool timer_init(peripheral_t timer, const struct timer_cfg *cfg);
+/**
+ * Deinitialize the timer
+ *
+ * :param timer: a peripheral enumerated in :c:type:`peripheral_t`
+ */
+void timer_deinit(peripheral_t timer);
 
 #if defined(__cplusplus)
 }

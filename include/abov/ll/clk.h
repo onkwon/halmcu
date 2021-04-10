@@ -11,14 +11,14 @@ extern "C" {
 
 /** Clock source type */
 typedef enum {
-	/** Internal oscillator */
+	/** Low-speed internal oscillator */
 	CLK_LSI,
-	/** Internal 16MHz oscillator */
+	/** High-speed internal oscillator */
 	CLK_HSI,
-	/** External oscillator */
-	CLK_HSE,
-	/** External sub oscillator */
+	/** Low-speed external oscillator */
 	CLK_LSE,
+	/** High-speed external oscillator */
+	CLK_HSE,
 	/** PLL */
 	CLK_PLL,
 	/** PLL bypass */
@@ -79,8 +79,9 @@ uint32_t clk_get_pclk_frequency(void);
 /** Get clock frequency in Hz */
 uint32_t clk_get_frequency(clk_source_t clk);
 
-/** Select watchdog clock source */
-void clk_set_wdt_source(clk_source_t clk);
+/** Get peripheral clock source */
+clk_source_t clk_get_peripheral_clock_source(peripheral_t peri);
+void clk_set_peripheral_clock_source(peripheral_t peri, clk_source_t clk);
 
 #if defined(__cplusplus)
 }

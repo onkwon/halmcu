@@ -1,0 +1,33 @@
+@startuml
+class HAL_timer {
+	init()
+	deinit()
+	start()
+	stop()
+	set_cc()
+	get_cc()
+}
+
+class LL_timer {
+	reset()
+	set_mode()
+	set_prescaler()
+	set_clock_divider()
+	enable_irq()
+	disable_irq()
+	set_counter()
+	get_counter()
+	set_reload()
+	get_reload()
+	set_polarity()
+	set_edge()
+	get_frequency()
+	get_event()
+	clear_event()
+}
+
+HAL_timer --> LL_timer
+HAL_timer ..> LL_power
+HAL_timer ..> LL_clock
+HAL_timer ..> IRQ
+@enduml
