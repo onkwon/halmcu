@@ -16,9 +16,19 @@ struct timer_cfg {
 	int irq_priority;
 };
 
-/***/
+/**
+ * Initialize the timer
+ *
+ * :param timer: a peripheral enumerated in :c:type:`peripheral_t`
+ * :param cfg: pointer to the structure with the initial configuration
+ * :return: true on success
+ */
 bool timer_init(peripheral_t timer, const struct timer_cfg *cfg);
-/***/
+/**
+ * Deinitialize the timer
+ *
+ * :param timer: a peripheral enumerated in :c:type:`peripheral_t`
+ */
 void timer_deinit(peripheral_t timer);
 
 #if defined(__cplusplus)
