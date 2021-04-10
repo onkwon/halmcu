@@ -13,6 +13,7 @@ INCLUDE_DIRS = \
 	$(CPPUTEST_HOME)/include \
 
 CPPUTEST_CPPFLAGS = \
+	-DIRQ_DEFINES=\"../devices/common/irq.def\" \
 	-Darmv7m3 \
 	-DUNITTEST \
 

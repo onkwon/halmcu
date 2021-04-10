@@ -6,18 +6,6 @@
 #include "abov/ll/pwr.h"
 #include "abov/ll/clk.h"
 
-static irq_t get_irq_from_peripheral(peripheral_t peri)
-{
-	switch (peri) {
-	case PERIPHERAL_TIMER0:
-		return IRQ_TIMER0;
-	case PERIPHERAL_TIMER1:
-		return IRQ_TIMER1;
-	default:
-		return IRQ_UNDEFINED;
-	}
-}
-
 static void set_frequency(peripheral_t timer, const struct timer_cfg *cfg)
 {
 	uint32_t tclk = clk_get_frequency(clk_get_peripheral_clock_source(timer));
@@ -29,9 +17,6 @@ static void set_frequency(peripheral_t timer, const struct timer_cfg *cfg)
 
 bool timer_init(peripheral_t timer, const struct timer_cfg *cfg)
 {
-	if (PERIPHERAL_GROUP(timer) != PERIPHERAL_TIMER) {
-		return false;
-	}
 	if (cfg == NULL) {
 		return false;
 	}
@@ -40,6 +25,11 @@ bool timer_init(peripheral_t timer, const struct timer_cfg *cfg)
 	clk_enable_peripheral(timer);
 
 	timer_reset(timer);
+
+	if (cfg->set_clock_source != NULL) {
+		cfg->set_clock_source();
+	}
+
 	timer_set_mode(timer, cfg->mode);
 	if (cfg->mode != TIMER_MODE_CAPTURE) {
 		set_frequency(timer, cfg);
@@ -48,8 +38,8 @@ bool timer_init(peripheral_t timer, const struct timer_cfg *cfg)
 	if (cfg->irq != TIMER_EVENT_NONE) {
 		timer_enable_irq(timer, cfg->irq);
 
-		irq_set_priority(get_irq_from_peripheral(timer), cfg->irq_priority);
-		irq_enable(get_irq_from_peripheral(timer));
+		irq_set_priority(PERI_TO_IRQ(timer), cfg->irq_priority);
+		irq_enable(PERI_TO_IRQ(timer));
 	}
 
 	return true;
@@ -57,10 +47,6 @@ bool timer_init(peripheral_t timer, const struct timer_cfg *cfg)
 
 void timer_deinit(peripheral_t timer)
 {
-	if (PERIPHERAL_GROUP(timer) != PERIPHERAL_TIMER) {
-		return;
-	}
-
 	clk_disable_peripheral(timer);
 	pwr_disable_peripheral(timer);
 }

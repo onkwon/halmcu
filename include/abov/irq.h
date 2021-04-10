@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#define PERI_TO_IRQ(peri)		((irq_t)((peri) + IRQ_FIXED))
+
 #define DEFINE_IRQ(n, name) IRQ_ ## name = (n) + IRQ_FIXED,
 #define RESERVE_IRQ(n)
 typedef enum {

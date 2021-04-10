@@ -21,27 +21,27 @@ TEST_GROUP(Clock) {
 };
 
 TEST(Clock, enable_peripheral_ShouldActivateClock) {
-	clk_enable_peripheral(PERIPHERAL_ADC);
+	clk_enable_peripheral(PERI_ADC);
 	LONGS_EQUAL(0x10000118, PMU->PCCR);
-	clk_enable_peripheral(PERIPHERAL_UART2);
+	clk_enable_peripheral(PERI_UART2);
 	LONGS_EQUAL(0x10400118, PMU->PCCR);
-	clk_enable_peripheral(PERIPHERAL_I2C);
+	clk_enable_peripheral(PERI_I2C0);
 	LONGS_EQUAL(0x10440118, PMU->PCCR);
-	clk_enable_peripheral(PERIPHERAL_SPI1);
+	clk_enable_peripheral(PERI_SPI1);
 	LONGS_EQUAL(0x10460118, PMU->PCCR);
-	clk_enable_peripheral(PERIPHERAL_GPIO);
+	clk_enable_peripheral(PERI_GPIOA);
 	LONGS_EQUAL(0x10460118, PMU->PCCR);
 }
 
 TEST(Clock, disable_peripheral_ShouldDeactivateClock) {
 	PMU->PCCR = 0xffffffff;
-	clk_disable_peripheral(PERIPHERAL_ADC);
+	clk_disable_peripheral(PERI_ADC);
 	LONGS_EQUAL(0xefffffff, PMU->PCCR);
-	clk_disable_peripheral(PERIPHERAL_GPIO);
+	clk_disable_peripheral(PERI_GPIOB);
 	LONGS_EQUAL(0xeffffeff, PMU->PCCR);
-	clk_disable_peripheral(PERIPHERAL_WDT);
+	clk_disable_peripheral(PERI_WDT);
 	LONGS_EQUAL(0xeffffef7, PMU->PCCR);
-	clk_disable_peripheral(PERIPHERAL_FRT);
+	clk_disable_peripheral(PERI_FRT);
 	LONGS_EQUAL(0xeffffee7, PMU->PCCR);
 }
 
@@ -159,11 +159,11 @@ TEST(Clock, is_pll_locked_ShouldReturnPllStatus) {
 
 TEST(Clock, get_peripheral_clock_source_ShouldReturnClockSource) {
 	PMU->PCSR = 0x390;
-	LONGS_EQUAL(CLK_LSI, clk_get_peripheral_clock_source(PERIPHERAL_TIMER9));
-	LONGS_EQUAL(CLK_LSE, clk_get_peripheral_clock_source(PERIPHERAL_TIMER5));
-	LONGS_EQUAL(CLK_HSI, clk_get_peripheral_clock_source(PERIPHERAL_TIMER1));
+	LONGS_EQUAL(CLK_LSI, clk_get_peripheral_clock_source(PERI_TIMER9));
+	LONGS_EQUAL(CLK_LSE, clk_get_peripheral_clock_source(PERI_TIMER5));
+	LONGS_EQUAL(CLK_HSI, clk_get_peripheral_clock_source(PERI_TIMER1));
 	PMU->PCSR = 0xE0;
-	LONGS_EQUAL(CLK_PLL, clk_get_peripheral_clock_source(PERIPHERAL_TIMER9));
-	LONGS_EQUAL(CLK_LSI, clk_get_peripheral_clock_source(PERIPHERAL_TIMER5));
-	LONGS_EQUAL(CLK_LSE, clk_get_peripheral_clock_source(PERIPHERAL_TIMER1));
+	LONGS_EQUAL(CLK_PLL, clk_get_peripheral_clock_source(PERI_TIMER9));
+	LONGS_EQUAL(CLK_LSI, clk_get_peripheral_clock_source(PERI_TIMER5));
+	LONGS_EQUAL(CLK_LSE, clk_get_peripheral_clock_source(PERI_TIMER1));
 }

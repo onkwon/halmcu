@@ -11,14 +11,14 @@ static uint32_t get_clock_freqeuncy(void)
 
 void wdt_enable(void)
 {
-	pwr_enable_peripheral(PERIPHERAL_WDT);
-	clk_enable_peripheral(PERIPHERAL_WDT);
+	pwr_enable_peripheral(PERI_WDT);
+	clk_enable_peripheral(PERI_WDT);
 }
 
 void wdt_disable(void)
 {
-	pwr_disable_peripheral(PERIPHERAL_WDT);
-	clk_disable_peripheral(PERIPHERAL_WDT);
+	pwr_disable_peripheral(PERI_WDT);
+	clk_disable_peripheral(PERI_WDT);
 }
 
 uint32_t wdt_get_clock_frequency(void)
