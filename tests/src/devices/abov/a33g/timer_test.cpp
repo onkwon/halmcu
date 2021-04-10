@@ -160,9 +160,10 @@ TEST(Timer, set_counter_ShouldSetCnt) {
 }
 
 TEST(Timer, reset_ShouldClearAllRegs) {
-	T0->CON = T0->CMD = T0->GRA = T0->GRB = T0->PRS = T0->CNT = 0xa5a5a5a5;
+	T0->CMD = T0->GRA = T0->GRB = T0->PRS = T0->CNT = 0xa5a5a5a5;
+	T0->CON = 0xff8f;
 	timer_reset(PERIPHERAL_TIMER0);
-	LONGS_EQUAL(0x7000, T0->CON);
+	LONGS_EQUAL(0, T0->CON);
 	LONGS_EQUAL(0, T0->CMD);
 	LONGS_EQUAL(0, T0->GRA);
 	LONGS_EQUAL(0, T0->GRB);
