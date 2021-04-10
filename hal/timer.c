@@ -13,22 +13,6 @@ static irq_t get_irq_from_peripheral(peripheral_t peri)
 		return IRQ_TIMER0;
 	case PERIPHERAL_TIMER1:
 		return IRQ_TIMER1;
-	case PERIPHERAL_TIMER2:
-		return IRQ_TIMER2;
-	case PERIPHERAL_TIMER3:
-		return IRQ_TIMER3;
-	case PERIPHERAL_TIMER4:
-		return IRQ_TIMER4;
-	case PERIPHERAL_TIMER5:
-		return IRQ_TIMER5;
-	case PERIPHERAL_TIMER6:
-		return IRQ_TIMER6;
-	case PERIPHERAL_TIMER7:
-		return IRQ_TIMER7;
-	case PERIPHERAL_TIMER8:
-		return IRQ_TIMER8;
-	case PERIPHERAL_TIMER9:
-		return IRQ_TIMER9;
 	default:
 		return IRQ_UNDEFINED;
 	}
