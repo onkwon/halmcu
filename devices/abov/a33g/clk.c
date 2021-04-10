@@ -49,54 +49,57 @@ static void unlock_pllcon(void)
 static uint32_t get_activation_bitmask_from_peripheral(peripheral_t peri)
 {
 	switch (peri) {
-	case PERIPHERAL_ADC:
+	case PERI_ADC:
 		return 1U << 28;
-	case PERIPHERAL_PWM7:
-	case PERIPHERAL_PWM6:
-	case PERIPHERAL_PWM5:
-	case PERIPHERAL_PWM4:
+	case PERI_PWM7: /* fall through */
+	case PERI_PWM6: /* fall through */
+	case PERI_PWM5: /* fall through */
+	case PERI_PWM4:
 		return 1U << 25;
-	case PERIPHERAL_PWM3:
-	case PERIPHERAL_PWM2:
-	case PERIPHERAL_PWM1:
-	case PERIPHERAL_PWM0:
+	case PERI_PWM3: /* fall through */
+	case PERI_PWM2: /* fall through */
+	case PERI_PWM1: /* fall through */
+	case PERI_PWM0:
 		return 1U << 24;
-	case PERIPHERAL_UART3:
+	case PERI_UART3:
 		return 1U << 23;
-	case PERIPHERAL_UART2:
+	case PERI_UART2:
 		return 1U << 22;
-	case PERIPHERAL_UART1:
+	case PERI_UART1:
 		return 1U << 21;
-	case PERIPHERAL_UART0:
+	case PERI_UART0:
 		return 1U << 20;
-	case PERIPHERAL_I2C1:
+	case PERI_I2C1:
 		return 1U << 19;
-	case PERIPHERAL_I2C0 + 0:
+	case PERI_I2C0 + 0:
 		return 1U << 18;
-	case PERIPHERAL_SPI1:
+	case PERI_SPI1:
 		return 1U << 17;
-	case PERIPHERAL_SPI0 + 0:
+	case PERI_SPI0 + 0:
 		return 1U << 16;
-	case PERIPHERAL_CRC:
-		return 1U << 14;
-	case PERIPHERAL_GPIO:
+	case PERI_GPIOA: /* fall through */
+	case PERI_GPIOB: /* fall through */
+	case PERI_GPIOC: /* fall through */
+	case PERI_GPIOD: /* fall through */
+	case PERI_GPIOE: /* fall through */
+	case PERI_GPIOF:
 		return 1U << 8;
-	case PERIPHERAL_TIMER9:
-	case PERIPHERAL_TIMER8:
-	case PERIPHERAL_TIMER7:
-	case PERIPHERAL_TIMER6:
+	case PERI_TIMER9: /* fall through */
+	case PERI_TIMER8: /* fall through */
+	case PERI_TIMER7: /* fall through */
+	case PERI_TIMER6:
 		return 1U << 7;
-	case PERIPHERAL_TIMER5:
-	case PERIPHERAL_TIMER4:
-	case PERIPHERAL_TIMER3:
-	case PERIPHERAL_TIMER2:
+	case PERI_TIMER5: /* fall through */
+	case PERI_TIMER4: /* fall through */
+	case PERI_TIMER3: /* fall through */
+	case PERI_TIMER2:
 		return 1U << 6;
-	case PERIPHERAL_TIMER1:
-	case PERIPHERAL_TIMER0:
+	case PERI_TIMER1: /* fall through */
+	case PERI_TIMER0:
 		return 1U << 5;
-	case PERIPHERAL_FRT:
+	case PERI_FRT:
 		return 1U << 4;
-	case PERIPHERAL_WDT:
+	case PERI_WDT:
 		return 1U << 3;
 	default:
 		return 0;
@@ -334,20 +337,20 @@ static clk_source_t clk_get_timer_source(peripheral_t timer)
 	uint32_t pos = 4;
 
 	switch (timer) {
-	case PERIPHERAL_TIMER0: /* fall through */
-	case PERIPHERAL_TIMER1:
+	case PERI_TIMER0: /* fall through */
+	case PERI_TIMER1:
 		pos = 4;
 		break;
-	case PERIPHERAL_TIMER2: /* fall through */
-	case PERIPHERAL_TIMER3: /* fall through */
-	case PERIPHERAL_TIMER4: /* fall through */
-	case PERIPHERAL_TIMER5:
+	case PERI_TIMER2: /* fall through */
+	case PERI_TIMER3: /* fall through */
+	case PERI_TIMER4: /* fall through */
+	case PERI_TIMER5:
 		pos = 6;
 		break;
-	case PERIPHERAL_TIMER6: /* fall through */
-	case PERIPHERAL_TIMER7: /* fall through */
-	case PERIPHERAL_TIMER8: /* fall through */
-	case PERIPHERAL_TIMER9:
+	case PERI_TIMER6: /* fall through */
+	case PERI_TIMER7: /* fall through */
+	case PERI_TIMER8: /* fall through */
+	case PERI_TIMER9:
 		pos = 8;
 		break;
 	default:
@@ -508,12 +511,7 @@ uint32_t clk_get_frequency(clk_source_t clk)
 
 clk_source_t clk_get_peripheral_clock_source(peripheral_t peri)
 {
-	switch (PERIPHERAL_GROUP(peri)) {
-	case PERIPHERAL_TIMER:
-		return clk_get_timer_source(peri);
-	default:
-		return CLK_PLL;
-	}
+	return clk_get_timer_source(peri);
 }
 
 bool clk_is_pll_locked(void)

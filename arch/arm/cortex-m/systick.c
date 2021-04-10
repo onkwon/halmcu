@@ -1,5 +1,4 @@
 #include "abov/asm/arm/systick.h"
-#include <assert.h>
 #include "abov/asm/arm/cmsis.h"
 #include "abov/hal/clk.h"
 
@@ -48,8 +47,11 @@ uint32_t systick_set_frequency(uint32_t hz)
 	uint32_t div = get_prescaler();
 	uint32_t clk = clk_get_hclk_frequency() / div;
 	uint32_t period = clk / hz;
-	assert(period > 0);
-	assert(period <= SYSTICK_RESOLUTION);
+
+	if (period <= 0 || period > SYSTICK_RESOLUTION) {
+		return 0;
+	}
+
 	set_reload(period - 1);
 
 	return clk / period;

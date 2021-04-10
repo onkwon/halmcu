@@ -14,16 +14,21 @@
 
 static uint32_t get_wakeup_bitmask_from_enum(uint32_t x)
 {
-	switch (PERIPHERAL_GROUP(x)) {
-	case PERIPHERAL_GPIO:
-		return 1U << (x - PERIPHERAL_GPIO + 5);
-	case PERIPHERAL_FRT:
+	switch (x) {
+	case PERI_GPIOA: /* fall through */
+	case PERI_GPIOB: /* fall through */
+	case PERI_GPIOC: /* fall through */
+	case PERI_GPIOD: /* fall through */
+	case PERI_GPIOE: /* fall through */
+	case PERI_GPIOF:
+		return 1U << (x - PERI_GPIOA + 5);
+	case PERI_FRT:
 		return 1U << 4;
-	case PERIPHERAL_WDT:
+	case PERI_WDT:
 		return 1U << 3;
-	case PERIPHERAL_MXFAIL:
+	case PERI_MXOSCFAIL:
 		return 1U << 1;
-	case PERIPHERAL_LVD:
+	case PERI_LVDFAIL:
 		return 1U << 0;
 	default:
 		return 0;
@@ -32,35 +37,56 @@ static uint32_t get_wakeup_bitmask_from_enum(uint32_t x)
 
 static uint32_t get_activation_bitmask_from_enum(uint32_t x)
 {
-	switch (PERIPHERAL_GROUP(x)) {
-	case PERIPHERAL_JTAG:
+	switch (x) {
+	case PERI_JTAG:
 		return 1U << 31;
-	case PERIPHERAL_PMC:
+	case PERI_PMC:
 		return 1U << 29;
-	case PERIPHERAL_ADC:
+	case PERI_ADC:
 		return 1U << 28;
-	case PERIPHERAL_PWM:
-		return 1U << (((x - PERIPHERAL_PWM) >> 2) + 24);
-	case PERIPHERAL_UART:
-		return 1U << (x - PERIPHERAL_UART + 20);
-	case PERIPHERAL_I2C:
-		return 1U << (x - PERIPHERAL_I2C + 18);
-	case PERIPHERAL_SPI:
-		return 1U << (x - PERIPHERAL_SPI + 16);
-	case PERIPHERAL_CRC:
-		return 1U << 14;
-	case PERIPHERAL_GPIO:
-		return 1U << (x - PERIPHERAL_GPIO + 8);
-	case PERIPHERAL_TIMER:
-		if (x > PERIPHERAL_TIMER5) { /* TIMER6 ~ TIMER9 */
-			return 1U << 7;
-		} else if (x >= PERIPHERAL_TIMER2) { /* TIMER2 ~ TIMER5 */
-			return 1U << 6;
-		}
-		return 1U << 5; /* TIMER0 and TIMER1 */
-	case PERIPHERAL_FRT:
+	case PERI_PWM0: /* fall through */
+	case PERI_PWM1: /* fall through */
+	case PERI_PWM2: /* fall through */
+	case PERI_PWM3: /* fall through */
+	case PERI_PWM4: /* fall through */
+	case PERI_PWM5: /* fall through */
+	case PERI_PWM6: /* fall through */
+	case PERI_PWM7:
+		return 1U << (((x - PERI_PWM0) >> 2) + 24);
+	case PERI_UART0: /* fall through */
+	case PERI_UART1: /* fall through */
+	case PERI_UART2: /* fall through */
+	case PERI_UART3:
+		return 1U << (x - PERI_UART0 + 20);
+	case PERI_I2C0: /* fall through */
+	case PERI_I2C1:
+		return 1U << (x - PERI_I2C0 + 18);
+	case PERI_SPI0: /* fall through */
+	case PERI_SPI1:
+		return 1U << (x - PERI_SPI0 + 16);
+	case PERI_GPIOA: /* fall through */
+	case PERI_GPIOB: /* fall through */
+	case PERI_GPIOC: /* fall through */
+	case PERI_GPIOD: /* fall through */
+	case PERI_GPIOE: /* fall through */
+	case PERI_GPIOF:
+		return 1U << (x - PERI_GPIOA + 8);
+	case PERI_TIMER0: /* fall through */
+	case PERI_TIMER1:
+		return 1U << 5;
+	case PERI_TIMER2: /* fall through */
+	case PERI_TIMER3: /* fall through */
+	case PERI_TIMER4: /* fall through */
+	case PERI_TIMER5:
+		return 1U << 6;
+	case PERI_TIMER6: /* fall through */
+	case PERI_TIMER7: /* fall through */
+	case PERI_TIMER8: /* fall through */
+	case PERI_TIMER9:
+		return 1U << 7;
+	case PERI_FRT:
 		return 1U << 4;
-	case PERIPHERAL_WDT:
+	case PERI_WDT:
 		return 1U << 3;
 	default:
 		return 0;

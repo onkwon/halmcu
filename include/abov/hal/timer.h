@@ -14,6 +14,7 @@ struct timer_cfg {
 	uint32_t frequency;
 	timer_event_t irq;
 	int irq_priority;
+	void (*set_clock_source)(void);
 };
 
 /**

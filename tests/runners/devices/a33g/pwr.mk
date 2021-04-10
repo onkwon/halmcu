@@ -1,4 +1,4 @@
-COMPONENT_NAME = power
+COMPONENT_NAME = power_a33g
 
 SRC_FILES = \
 	../devices/abov/a33g/pwr.c \
@@ -13,6 +13,7 @@ INCLUDE_DIRS = \
 	$(CPPUTEST_HOME)/include \
 
 CPPUTEST_CPPFLAGS = \
+	-DIRQ_DEFINES=\"../devices/abov/a33g/irq.def\" \
 	-DDEVICE=a33g \
 	-Darmv7m3 \
 	-DA33G52x_H \

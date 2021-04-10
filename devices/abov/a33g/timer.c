@@ -12,7 +12,8 @@ ABOV_STATIC_ASSERT(TIMER_MODE_CAPTURE == 3, "");
 
 static TIMER_Type *get_timer_from_peripheral(peripheral_t peri)
 {
-	return (TIMER_Type *)(T0_BASE + (PERIPHERAL_MASK(peri) * 2 << 4));
+	uint32_t timer_index = peri - PERI_TIMER0;
+	return (TIMER_Type *)(T0_BASE + (timer_index * 2 << 4));
 }
 
 void timer_set_prescaler(peripheral_t peri, uint32_t div_factor)
@@ -146,7 +147,6 @@ timer_event_t timer_get_event(peripheral_t peri)
 void timer_reset(peripheral_t peri)
 {
 	TIMER_Type *tim = get_timer_from_peripheral(peri);
-	uint32_t clk_div = tim->CON & 0x70; /* should keep the clock divider */
 	bitop_set(&tim->CMD, 1); /* TCLR */
 	tim->CMD = 0;
 	tim->CON = 0;
@@ -155,7 +155,6 @@ void timer_reset(peripheral_t peri)
 	tim->GRB = 0;
 	tim->PRS = 0;
 	tim->CNT = 0;
-	tim->CON = clk_div;
 }
 
 void timer_set_polarity(peripheral_t peri, uint32_t level)

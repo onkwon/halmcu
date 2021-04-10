@@ -202,32 +202,32 @@ TEST(uart, set_wordsize_ShouldSetWordsize_When5Given) {
 
 TEST(uart, enable_ShouldCallPwrAndClk_WhenUart0Given) {
 	mock().expectOneCall("pwr_enable_peripheral")
-		.withParameter("peri", PERIPHERAL_UART0);
+		.withParameter("peri", PERI_UART0);
 	mock().expectOneCall("clk_enable_peripheral")
-		.withParameter("peri", PERIPHERAL_UART0);
+		.withParameter("peri", PERI_UART0);
 	uart_enable(UART_PORT_0);
 }
 
 TEST(uart, enable_ShouldCallPwrAndClk_WhenUart3Given) {
 	mock().expectOneCall("pwr_enable_peripheral")
-		.withParameter("peri", PERIPHERAL_UART3);
+		.withParameter("peri", PERI_UART3);
 	mock().expectOneCall("clk_enable_peripheral")
-		.withParameter("peri", PERIPHERAL_UART3);
+		.withParameter("peri", PERI_UART3);
 	uart_enable(UART_PORT_3);
 }
 
 TEST(uart, disable_ShouldCallPwrAndClk_WhenUart1Given) {
 	mock().expectOneCall("clk_disable_peripheral")
-		.withParameter("peri", PERIPHERAL_UART1);
+		.withParameter("peri", PERI_UART1);
 	mock().expectOneCall("pwr_disable_peripheral")
-		.withParameter("peri", PERIPHERAL_UART1);
+		.withParameter("peri", PERI_UART1);
 	uart_disable(UART_PORT_1);
 }
 
 TEST(uart, disable_ShouldCallPwrAndClk_WhenUart2Given) {
 	mock().expectOneCall("clk_disable_peripheral")
-		.withParameter("peri", PERIPHERAL_UART2);
+		.withParameter("peri", PERI_UART2);
 	mock().expectOneCall("pwr_disable_peripheral")
-		.withParameter("peri", PERIPHERAL_UART2);
+		.withParameter("peri", PERI_UART2);
 	uart_disable(UART_PORT_2);
 }
