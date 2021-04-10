@@ -192,3 +192,19 @@ TEST(Timer, set_edge_ShouldSetCapm) {
 	timer_set_edge(PERIPHERAL_TIMER0, TIMER_RISING_EDGE);
 	LONGS_EQUAL(0, T0->CON);
 }
+
+TEST(Timer, get_frequency_ShouldReturnTclk_WhenTCSIs4) {
+	uint32_t tclk = 12345;
+	T0->CON = 4U << 4;
+	LONGS_EQUAL(tclk, timer_get_frequency(PERIPHERAL_TIMER0, tclk));
+}
+TEST(Timer, get_frequency_ShouldReturnTclkDividedBy16_WhenTCSIs2) {
+	uint32_t tclk = 6000;
+	T0->CON = 2U << 4;
+	LONGS_EQUAL(tclk/16, timer_get_frequency(PERIPHERAL_TIMER0, tclk));
+}
+TEST(Timer, get_frequency_ShouldReturnZero_WhenTCSIs6) {
+	uint32_t tclk = 6000;
+	T0->CON = 6U << 4;
+	LONGS_EQUAL(0, timer_get_frequency(PERIPHERAL_TIMER0, tclk));
+}

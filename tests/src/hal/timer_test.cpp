@@ -133,3 +133,9 @@ TEST(Timer, init_ShouldNotCallIrqRelated_WhenNoEventGiven) {
 	default_cfg.irq = TIMER_EVENT_NONE;
 	timer_init(PERIPHERAL_TIMER0, &default_cfg);
 }
+
+TEST(Timer, deinit_ShouldDisablePowerAndClock) {
+	mock().expectOneCall("pwr_disable_peripheral").withParameter("peri", PERIPHERAL_TIMER0);
+	mock().expectOneCall("clk_disable_peripheral").withParameter("peri", PERIPHERAL_TIMER0);
+	timer_deinit(PERIPHERAL_TIMER0);
+}
