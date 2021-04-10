@@ -14,9 +14,7 @@
 
 static uint32_t get_wakeup_bitmask_from_enum(uint32_t x)
 {
-	uint32_t peri = x & ~(PERIPHERAL_SPACE_SIZE - 1);
-
-	switch (peri) {
+	switch (PERIPHERAL_GROUP(x)) {
 	case PERIPHERAL_GPIO:
 		return 1U << (x - PERIPHERAL_GPIO + 5);
 	case PERIPHERAL_FRT:
@@ -34,9 +32,7 @@ static uint32_t get_wakeup_bitmask_from_enum(uint32_t x)
 
 static uint32_t get_activation_bitmask_from_enum(uint32_t x)
 {
-	uint32_t peri = x & ~(PERIPHERAL_SPACE_SIZE - 1);
-
-	switch (peri) {
+	switch (PERIPHERAL_GROUP(x)) {
 	case PERIPHERAL_JTAG:
 		return 1U << 31;
 	case PERIPHERAL_PMC:

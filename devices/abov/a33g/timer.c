@@ -12,8 +12,7 @@ ABOV_STATIC_ASSERT(TIMER_MODE_CAPTURE == 3, "");
 
 static TIMER_Type *get_timer_from_peripheral(peripheral_t peri)
 {
-	uint32_t n = peri & (PERIPHERAL_SPACE_SIZE - 1);
-	return (TIMER_Type *)(T0_BASE + (n * 2 << 4));
+	return (TIMER_Type *)(T0_BASE + (PERIPHERAL_MASK(peri) * 2 << 4));
 }
 
 void timer_set_prescaler(peripheral_t peri, uint32_t div_factor)

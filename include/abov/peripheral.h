@@ -5,10 +5,13 @@
 extern "C" {
 #endif
 
-#define PERIPHERAL_SPACE_SIZE		0x100U
+/** PERIPHERAL_GROUP_SIZE should be power of 2 */
+#define PERIPHERAL_GROUP_SIZE		0x200U /* is going to be enough size
+						  since armv7m nvic has 496
+						  vectors at most. */
 
-#define PERIPHERAL_GROUP(x)		((x) & ~(PERIPHERAL_SPACE_SIZE - 1))
-#define PERIPHERAL_MASK(x)		((x) & (PERIPHERAL_SPACE_SIZE - 1))
+#define PERIPHERAL_GROUP(x)		((x) & ~(PERIPHERAL_GROUP_SIZE - 1))
+#define PERIPHERAL_MASK(x)		((x) & (PERIPHERAL_GROUP_SIZE - 1))
 
 /** Each peripheral space is defined at 256 intervals.
  * Say there are 3 UARTs, each UART can be accessed with PERIPHERAL_GPIO + n. */
