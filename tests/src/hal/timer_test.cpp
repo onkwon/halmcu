@@ -58,6 +58,9 @@ void timer_enable_irq(peripheral_t peri, timer_event_t events) {
 	mock().actualCall(__func__)
 		.withParameter("peri", peri).withParameter("events", events);
 }
+static void set_clock_source(void) {
+	mock().actualCall(__func__);
+}
 
 TEST_GROUP(Timer) {
 	struct timer_cfg default_cfg = {
@@ -132,6 +135,11 @@ TEST(Timer, init_ShouldNotCallIrqRelated_WhenNoEventGiven) {
 	mock().expectNoCall("irq_set_priority");
 	mock().expectNoCall("irq_enable");
 	default_cfg.irq = TIMER_EVENT_NONE;
+	timer_init(PERI_TIMER0, &default_cfg);
+}
+TEST(Timer, init_ShouldRunCallback_WhenGiven) {
+	mock().expectOneCall("set_clock_source");
+	default_cfg.set_clock_source = set_clock_source;
 	timer_init(PERI_TIMER0, &default_cfg);
 }
 
