@@ -1,6 +1,8 @@
 Timer
 =====
 
+.. image:: ../assets/images/timer.svg
+
 Examples
 --------
 .. literalinclude:: ../../../examples/timer/src/main.c

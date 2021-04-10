@@ -173,7 +173,7 @@ void timer_set_edge(peripheral_t peri, timer_edge_t edge)
 
 uint32_t timer_get_frequency(peripheral_t peri, uint32_t tclk)
 {
-	TIMER_Type *tim = get_timer_from_peripheral(peri);
+	const TIMER_Type *tim = get_timer_from_peripheral(peri);
 	uint32_t tcs = (tim->CON >> 4) & 0x7;
 
 	switch (tcs) {
