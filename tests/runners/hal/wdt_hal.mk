@@ -7,6 +7,10 @@ TEST_SRC_FILES = \
 	src/hal/wdt_test.cpp \
 	src/test_all.cpp \
 
+MOCKS_SRC_DIRS = \
+	mocks/ll \
+	mocks \
+
 INCLUDE_DIRS = \
 	../include \
 	$(CPPUTEST_HOME)/include \

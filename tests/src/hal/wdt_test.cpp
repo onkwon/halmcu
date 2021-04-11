@@ -3,37 +3,6 @@
 #include "CppUTestExt/MockSupport.h"
 
 #include "abov/hal/wdt.h"
-#include "abov/ll/pwr.h"
-#include "abov/ll/clk.h"
-
-void pwr_enable_peripheral(peripheral_t peri) {
-	mock().actualCall(__func__).withParameter("peri", peri);
-}
-void pwr_disable_peripheral(peripheral_t peri) {
-	mock().actualCall(__func__).withParameter("peri", peri);
-}
-void clk_enable_peripheral(peripheral_t peri) {
-	mock().actualCall(__func__).withParameter("peri", peri);
-}
-void clk_disable_peripheral(peripheral_t peri) {
-	mock().actualCall(__func__).withParameter("peri", peri);
-}
-uint32_t clk_get_frequency(clk_source_t clk) {
-	return mock().actualCall(__func__).withParameter("clk", clk)
-		.returnUnsignedIntValueOrDefault(1000000);
-}
-uint32_t wdt_get_prescaler(void) {
-	return mock().actualCall(__func__).returnUnsignedIntValueOrDefault(1);
-}
-clk_source_t wdt_get_clock_source(void) {
-	return (clk_source_t)mock().actualCall(__func__).returnUnsignedIntValueOrDefault(CLK_PLL);
-}
-void wdt_reload(uint32_t timeout) {
-	mock().actualCall(__func__).withParameter("timeout", timeout);
-}
-uint32_t wdt_get_reload(void) {
-	return mock().actualCall(__func__).returnUnsignedIntValueOrDefault(0);
-}
 
 TEST_GROUP(Watchdog) {
 	void setup(void) {
