@@ -110,22 +110,22 @@ i2c_event_t i2c_get_event(peripheral_t i2c)
 	i2c_event_t event = I2C_EVENT_NONE;
 
 	if (status & 0x40) { /* TEND */
-		event |= I2C_EVENT_TX;
+		event = (i2c_event_t)(event | I2C_EVENT_TX);
 	}
 	if (status & 0x20) { /* STOP */
-		event |= I2C_EVENT_STOP;
+		event = (i2c_event_t)(event | I2C_EVENT_STOP);
 	}
 	if (status & 0x10) { /* SSEL */
-		event |= I2C_EVENT_SLAVE;
+		event = (i2c_event_t)(event | I2C_EVENT_SLAVE);
 	}
 	if (status & 0x08) { /* MLOST */
-		event |= I2C_EVENT_COLLISION;
+		event = (i2c_event_t)(event | I2C_EVENT_COLLISION);
 	}
 	if (status & 0x04) { /* BUSY */
-		event |= I2C_EVENT_BUSY;
+		event = (i2c_event_t)(event | I2C_EVENT_BUSY);
 	}
 	if (status & 0x01) { /* RXACK */
-		event |= I2C_EVENT_RX;
+		event = (i2c_event_t)(event | I2C_EVENT_RX);
 	}
 
 	return event;
