@@ -1,4 +1,4 @@
-COMPONENT_NAME = uart_driver
+COMPONENT_NAME = uart_hal
 
 SRC_FILES = \
 	../hal/uart.c \
@@ -6,6 +6,10 @@ SRC_FILES = \
 TEST_SRC_FILES = \
 	src/hal/uart_test.cpp \
 	src/test_all.cpp \
+
+MOCKS_SRC_DIRS = \
+	mocks/ll \
+	mocks \
 
 INCLUDE_DIRS = \
 	../include \

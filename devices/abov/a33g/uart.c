@@ -2,12 +2,11 @@
 
 #include <assert.h>
 #include <stddef.h>
+#include <stdbool.h>
 
 #include "abov/bitop.h"
 #include "abov/compiler.h"
 
-#include "abov/ll/pwr.h"
-#include "abov/ll/clk.h"
 #include "abov/asm/arm/cmsis.h"
 #include "a33g.h"
 
@@ -22,16 +21,16 @@
 #define DRIE				1U
 #define THREIE				(1U << 1)
 
-static UART_Type *get_uart_from_port(uart_port_t port)
+static UART_Type *get_uart_from_port(peripheral_t port)
 {
 	switch (port) {
-	case UART_PORT_0:
+	case PERI_UART0:
 		return UART0;
-	case UART_PORT_1:
+	case PERI_UART1:
 		return UART1;
-	case UART_PORT_2:
+	case PERI_UART2:
 		return UART2;
-	case UART_PORT_3:
+	case PERI_UART3:
 		return UART3;
 	default:
 		return NULL;
@@ -51,7 +50,7 @@ static int read_receive_buffer_register(const UART_Type *uart)
 	return -1;
 }
 
-uart_event_t uart_get_event(uart_port_t port)
+uart_event_t uart_get_event(peripheral_t port)
 {
 	const UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -77,13 +76,13 @@ uart_event_t uart_get_event(uart_port_t port)
 	return (uart_event_t)(flags | (lsr << 8) | iir);
 }
 
-void uart_clear_event(uart_port_t port, uart_event_t events)
+void uart_clear_event(peripheral_t port, uart_event_t events)
 {
 	unused(port);
 	unused(events);
 }
 
-void uart_enable_irq(uart_port_t port, uart_event_t events)
+void uart_enable_irq(peripheral_t port, uart_event_t events)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -96,7 +95,7 @@ void uart_enable_irq(uart_port_t port, uart_event_t events)
 	}
 }
 
-void uart_disable_irq(uart_port_t port, uart_event_t events)
+void uart_disable_irq(peripheral_t port, uart_event_t events)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -109,7 +108,7 @@ void uart_disable_irq(uart_port_t port, uart_event_t events)
 	}
 }
 
-void uart_set_parity(uart_port_t port, uart_parity_t parity)
+void uart_set_parity(peripheral_t port, uart_parity_t parity)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -123,7 +122,7 @@ void uart_set_parity(uart_port_t port, uart_parity_t parity)
 	}
 }
 
-void uart_set_stopbits(uart_port_t port, uart_stopbit_t stopbit)
+void uart_set_stopbits(peripheral_t port, uart_stopbit_t stopbit)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -133,7 +132,7 @@ void uart_set_stopbits(uart_port_t port, uart_stopbit_t stopbit)
 			STOPBIT_POS, 1U << STOPBIT_POS, val);
 }
 
-void uart_set_wordsize(uart_port_t port, uart_wordsize_t wordsize)
+void uart_set_wordsize(peripheral_t port, uart_wordsize_t wordsize)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -142,12 +141,12 @@ void uart_set_wordsize(uart_port_t port, uart_wordsize_t wordsize)
 			WORDSIZE_POS, 3U << WORDSIZE_POS, (uint32_t)wordsize-5);
 }
 
-void uart_set_baudrate(uart_port_t port, uint32_t baudrate)
+void uart_set_baudrate(peripheral_t port, uint32_t baudrate, uint32_t pclk)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
 
-	uint32_t n = clk_get_pclk_frequency() / 2;
+	uint32_t n = pclk / 2;
 	uint32_t d = 16 * baudrate;
 	uint32_t y = n / d;
 	uint32_t r = n - y * d;
@@ -164,7 +163,7 @@ void uart_set_baudrate(uart_port_t port, uint32_t baudrate)
 	uart->LCR = lcr;
 }
 
-int uart_read_byte_nonblock(uart_port_t port)
+int uart_read_byte_nonblock(peripheral_t port)
 {
 	const UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -172,7 +171,7 @@ int uart_read_byte_nonblock(uart_port_t port)
 	return read_receive_buffer_register(uart);
 }
 
-int uart_read_byte(uart_port_t port)
+int uart_read_byte(peripheral_t port)
 {
 	const UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -185,7 +184,7 @@ int uart_read_byte(uart_port_t port)
 	return res;
 }
 
-void uart_write_byte(uart_port_t port, uint8_t val)
+void uart_write_byte(peripheral_t port, uint8_t val)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -197,25 +196,7 @@ void uart_write_byte(uart_port_t port, uint8_t val)
 	uart->THR = (uint32_t)val;
 }
 
-void uart_enable(uart_port_t port)
-{
-	uint32_t peri = (uint32_t)port + PERI_UART0;
-	assert(peri >= PERI_UART0 && peri <= PERI_UART3);
-
-	pwr_enable_peripheral((peripheral_t)peri);
-	clk_enable_peripheral((peripheral_t)peri);
-}
-
-void uart_disable(uart_port_t port)
-{
-	uint32_t peri = (uint32_t)port + PERI_UART0;
-	assert(peri >= PERI_UART0 && peri <= PERI_UART3);
-
-	clk_disable_peripheral((peripheral_t)peri);
-	pwr_disable_peripheral((peripheral_t)peri);
-}
-
-void uart_reset(uart_port_t port)
+void uart_reset(peripheral_t port)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);

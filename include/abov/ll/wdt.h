@@ -42,6 +42,13 @@ void wdt_set_interrupt(bool enable);
 /** Get the current watchdog count */
 uint32_t wdt_get_count(void);
 
+#include "abov/ll/clk.h"
+
+/***/
+void wdt_set_clock_source(clk_source_t clk);
+/***/
+clk_source_t wdt_get_clock_source(void);
+
 #if defined(__cplusplus)
 }
 #endif

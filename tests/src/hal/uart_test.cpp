@@ -4,68 +4,13 @@
 
 #include "abov/hal/uart.h"
 #include "abov/irq.h"
+#include "abov/ll/pwr.h"
+#include "abov/ll/clk.h"
 
 #include <string.h>
 
 static void intr_handler(uint32_t flags) {
 	mock().actualCall(__func__).withParameter("flags", flags);
-}
-
-void uart_reset(uart_port_t port) {
-	mock().actualCall(__func__).withParameter("port", port);
-}
-void uart_set_baudrate(uart_port_t port, uint32_t baudrate) {
-	mock().actualCall(__func__)
-		.withParameter("port", port)
-		.withParameter("baudrate", baudrate);
-}
-void uart_set_wordsize(uart_port_t port, uart_wordsize_t wordsize) {
-	mock().actualCall(__func__)
-		.withParameter("port", port)
-		.withParameter("wordsize", wordsize);
-}
-void uart_set_stopbits(uart_port_t port, uart_stopbit_t stopbit) {
-	mock().actualCall(__func__)
-		.withParameter("port", port)
-		.withParameter("stopbit", stopbit);
-}
-void uart_set_parity(uart_port_t port, uart_parity_t parity) {
-	mock().actualCall(__func__)
-		.withParameter("port", port)
-		.withParameter("parity", parity);
-}
-void uart_enable_irq(uart_port_t port, uart_event_t events) {
-	mock().actualCall(__func__)
-		.withParameter("port", port).withParameter("events", events);
-}
-void irq_enable(irq_t irq) {
-	mock().actualCall(__func__).withParameter("irq", irq);
-}
-void irq_disable(irq_t irq) {
-	mock().actualCall(__func__).withParameter("irq", irq);
-}
-uart_event_t uart_get_event(uart_port_t port) {
-	return (uart_event_t)mock().actualCall(__func__)
-		.withParameter("port", port)
-		.returnUnsignedIntValueOrDefault(0);
-}
-void uart_clear_event(uart_port_t port, uart_event_t events) {
-	mock().actualCall(__func__)
-		.withParameter("port", port).withParameter("events", events);
-}
-int uart_read_byte_nonblock(uart_port_t port) {
-	return mock().actualCall(__func__).withParameter("port", port)
-		.returnIntValueOrDefault(-1);
-}
-void uart_write_byte(uart_port_t port, uint8_t val) {
-	mock().actualCall(__func__).withParameter("port", port);
-	(void)val;
-}
-void uart_enable(uart_port_t port) {
-	mock().actualCall(__func__).withParameter("port", port);
-}
-void uart_disable(uart_port_t port) {
-	mock().actualCall(__func__).withParameter("port", port);
 }
 
 TEST_GROUP(uart_driver) {
@@ -89,132 +34,134 @@ TEST_GROUP(uart_driver) {
 };
 
 TEST(uart_driver, init_ShouldReturnFalse_WhenNullObjGiven) {
-	LONGS_EQUAL(0, uart_init(NULL, UART_PORT_0, NULL));
-	LONGS_EQUAL(0, uart_init(&default_handle, UART_PORT_0, NULL));
-	LONGS_EQUAL(0, uart_init(NULL, UART_PORT_0, &default_cfg));
+	LONGS_EQUAL(0, uart_init(PERI_UART0, NULL, NULL));
 }
 TEST(uart_driver, init_ShouldReturnTrue_WhenAllGivenParamVaild) {
-	mock().expectOneCall("uart_enable").withParameter("port", UART_PORT_0);
-	mock().expectOneCall("uart_reset").withParameter("port", UART_PORT_0);
+	mock().expectOneCall("pwr_enable_peripheral").withParameter("peri", PERI_UART0);
+	mock().expectOneCall("clk_enable_peripheral").withParameter("peri", PERI_UART0);
+	mock().expectOneCall("uart_reset").withParameter("port", PERI_UART0);
+	mock().expectOneCall("clk_get_pclk_frequency").andReturnValue(16000000);
 	mock().expectOneCall("uart_set_baudrate")
-		.withParameter("port", UART_PORT_0)
-		.withParameter("baudrate", 115200);
+		.withParameter("port", PERI_UART0)
+		.withParameter("baudrate", 115200)
+		.withParameter("pclk", 16000000);
 	mock().expectOneCall("uart_set_wordsize")
-		.withParameter("port", UART_PORT_0)
+		.withParameter("port", PERI_UART0)
 		.withParameter("wordsize", 8);
 	mock().expectOneCall("uart_set_stopbits")
-		.withParameter("port", UART_PORT_0)
+		.withParameter("port", PERI_UART0)
 		.withParameter("stopbit", UART_STOPBIT_1);
 	mock().expectOneCall("uart_set_parity")
-		.withParameter("port", UART_PORT_0)
+		.withParameter("port", PERI_UART0)
 		.withParameter("parity", UART_PARITY_NONE);
 	mock().expectNoCall("irq_enable");
 
-	LONGS_EQUAL(1, uart_init(&default_handle, UART_PORT_0, &default_cfg));
+	LONGS_EQUAL(1, uart_init(PERI_UART0, &default_cfg, &default_handle));
 }
 TEST(uart_driver, init_ShouldEnableRxInterrupt_WhenRxInterruptGiven) {
 	default_cfg.rx_interrupt = true;
 	mock().expectOneCall("uart_enable_irq")
-		.withParameter("port", UART_PORT_0)
+		.withParameter("port", PERI_UART0)
 		.withParameter("events", UART_EVENT_RX);
-	LONGS_EQUAL(1, uart_init(&default_handle, UART_PORT_0, &default_cfg));
+	LONGS_EQUAL(1, uart_init(PERI_UART0, &default_cfg, &default_handle));
 }
 TEST(uart_driver, init_ShouldEnableTxInterrupt_WhenTxInterruptGiven) {
 	default_cfg.tx_interrupt = true;
 	mock().expectOneCall("uart_enable_irq")
-		.withParameter("port", UART_PORT_0)
+		.withParameter("port", PERI_UART0)
 		.withParameter("events", UART_EVENT_TX_READY);
-	LONGS_EQUAL(1, uart_init(&default_handle, UART_PORT_0, &default_cfg));
+	LONGS_EQUAL(1, uart_init(PERI_UART0, &default_cfg, &default_handle));
 }
 
 TEST(uart_driver, deinit) {
-	LONGS_EQUAL(1, uart_init(&default_handle, UART_PORT_0, &default_cfg));
+	LONGS_EQUAL(1, uart_init(PERI_UART0, &default_cfg, &default_handle));
 	mock().expectOneCall("irq_disable").withParameter("irq", 3 + IRQ_FIXED);
-	mock().expectOneCall("uart_disable").withParameter("port", UART_PORT_0);
-	uart_deinit(&default_handle);
+	mock().expectOneCall("clk_disable_peripheral").withParameter("peri", PERI_UART0);
+	mock().expectOneCall("pwr_disable_peripheral").withParameter("peri", PERI_UART0);
+	uart_deinit(PERI_UART0);
 }
 
 TEST(uart_driver, rx_interrupt_ShouldCallRxHandler) {
 	default_cfg.rx_interrupt = true;
 	mock().expectOneCall("irq_enable").withParameter("irq", 3 + IRQ_FIXED);
-	uart_init(&default_handle, UART_PORT_0, &default_cfg);
+	uart_init(PERI_UART0, &default_cfg, &default_handle);
 	uart_register_rx_handler(&default_handle, intr_handler);
-	mock().expectOneCall("uart_get_event").withParameter("port", UART_PORT_0)
+	mock().expectOneCall("uart_get_event").withParameter("port", PERI_UART0)
 		.andReturnValue(UART_EVENT_RX);
 	mock().expectOneCall("intr_handler").withParameter("flags", UART_EVENT_RX);
-	uart_default_isr(UART_PORT_0, &default_handle);
+	uart_default_isr(PERI_UART0, &default_handle);
 }
 TEST(uart_driver, tx_interrupt_ShouldCallTxHandler) {
 	default_cfg.tx_interrupt = true;
 	mock().expectOneCall("irq_enable").withParameter("irq", 4 + IRQ_FIXED);
-	uart_init(&default_handle, UART_PORT_1, &default_cfg);
+	uart_init(PERI_UART1, &default_cfg, &default_handle);
 	uart_register_tx_handler(&default_handle, intr_handler);
-	mock().expectOneCall("uart_get_event").withParameter("port", UART_PORT_1)
+	mock().expectOneCall("uart_get_event").withParameter("port", PERI_UART1)
 		.andReturnValue(UART_EVENT_TX_READY);
 	mock().expectOneCall("intr_handler").withParameter("flags", UART_EVENT_TX_READY);
-	uart_default_isr(UART_PORT_1, &default_handle);
+	uart_default_isr(PERI_UART1, &default_handle);
 }
 TEST(uart_driver, error_interrupt_ShouldCallErrorHandler) {
-	uart_init(&default_handle, UART_PORT_2, &default_cfg);
+	uart_init(PERI_UART2, &default_cfg, &default_handle);
 	uart_register_error_handler(&default_handle, intr_handler);
-	mock().expectOneCall("uart_get_event").withParameter("port", UART_PORT_2)
+	mock().expectOneCall("uart_get_event").withParameter("port", PERI_UART2)
 		.andReturnValue(UART_EVENT_ERROR);
 	mock().expectOneCall("intr_handler").withParameter("flags", UART_EVENT_ERROR);
-	uart_default_isr(UART_PORT_2, &default_handle);
+	uart_default_isr(PERI_UART2, &default_handle);
 }
 TEST(uart_driver, error_interrupt_ShouldCallNothing_WhenNohandlerRegistered) {
-	uart_init(&default_handle, UART_PORT_3, &default_cfg);
-	mock().expectOneCall("uart_get_event").withParameter("port", UART_PORT_3)
+	uart_init(PERI_UART3, &default_cfg, &default_handle);
+	mock().expectOneCall("uart_get_event").withParameter("port", PERI_UART3)
 		.andReturnValue(UART_EVENT_ERROR);
 	mock().expectNoCall("intr_handler");
-	uart_default_isr(UART_PORT_3, &default_handle);
+	uart_default_isr(PERI_UART3, &default_handle);
 }
 TEST(uart_driver, multiple_interrupt_ShouldCallEachHandlers) {
 	default_cfg.rx_interrupt = true;
 	default_cfg.tx_interrupt = true;
-	uart_init(&default_handle, UART_PORT_0, &default_cfg);
+	uart_init(PERI_UART0, &default_cfg, &default_handle);
 	uart_register_rx_handler(&default_handle, intr_handler);
 	uart_register_tx_handler(&default_handle, intr_handler);
 	uart_register_error_handler(&default_handle, intr_handler);
-	mock().expectOneCall("uart_get_event").withParameter("port", UART_PORT_0)
+	mock().expectOneCall("uart_get_event").withParameter("port", PERI_UART0)
 		.andReturnValue(UART_EVENT_RX | UART_EVENT_TX_READY | UART_EVENT_ERROR);
 	mock().expectNCalls(3, "intr_handler")
 		.withParameter("flags", UART_EVENT_RX | UART_EVENT_TX_READY | UART_EVENT_ERROR);
-	uart_default_isr(UART_PORT_0, &default_handle);
+	uart_default_isr(PERI_UART0, &default_handle);
 }
 
 TEST(uart_driver, read_ShouldReturnZero_WhenNoDataReceived) {
 	uint8_t c;
-	uart_init(&default_handle, UART_PORT_0, &default_cfg);
-	mock().expectOneCall("uart_read_byte_nonblock").withParameter("port", UART_PORT_0);
-	LONGS_EQUAL(0, uart_read(&default_handle, &c, 1));
+	uart_init(PERI_UART0, &default_cfg, &default_handle);
+	mock().expectOneCall("uart_read_byte_nonblock").withParameter("port", PERI_UART0);
+	LONGS_EQUAL(0, uart_read(PERI_UART0, &c, 1));
 }
 TEST(uart_driver, read_ShouldReturnReceivedData) {
 	uint8_t buf[3];
-	uart_init(&default_handle, UART_PORT_0, &default_cfg);
+	uart_init(PERI_UART0, &default_cfg, &default_handle);
 	mock().expectNCalls(3, "uart_read_byte_nonblock")
-		.withParameter("port", UART_PORT_0)
+		.withParameter("port", PERI_UART0)
 		.andReturnValue(1);
-	LONGS_EQUAL(3, uart_read(&default_handle, buf, sizeof(buf)));
+	LONGS_EQUAL(3, uart_read(PERI_UART0, buf, sizeof(buf)));
 	LONGS_EQUAL(1, buf[0]);
 	LONGS_EQUAL(1, buf[1]);
 	LONGS_EQUAL(1, buf[2]);
 }
 TEST(uart_driver, read_ShouldStopReading_WhenBufsizeShort) {
 	uint8_t buf[1];
-	uart_init(&default_handle, UART_PORT_0, &default_cfg);
+	uart_init(PERI_UART0, &default_cfg, &default_handle);
 	mock().expectNCalls(1, "uart_read_byte_nonblock")
-		.withParameter("port", UART_PORT_0)
+		.withParameter("port", PERI_UART0)
 		.andReturnValue(1);
-	LONGS_EQUAL(1, uart_read(&default_handle, buf, sizeof(buf)));
+	LONGS_EQUAL(1, uart_read(PERI_UART0, buf, sizeof(buf)));
 	LONGS_EQUAL(1, buf[0]);
 }
 
 TEST(uart_driver, wrte_ShouldWrite) {
 	const char *data = "Hello, World!";
 	size_t datalen = strlen(data);
-	uart_init(&default_handle, UART_PORT_0, &default_cfg);
+	uart_init(PERI_UART0, &default_cfg, &default_handle);
 	mock().expectNCalls((unsigned int)datalen, "uart_write_byte")
-		.withParameter("port", UART_PORT_0);
-	LONGS_EQUAL(datalen, uart_write(&default_handle, data, datalen));
+		.withParameter("port", PERI_UART0);
+	LONGS_EQUAL(datalen, uart_write(PERI_UART0, data, datalen));
 }

@@ -6,7 +6,6 @@ extern "C" {
 #endif
 
 #include "abov/ll/wdt.h"
-#include "abov/ll/clk.h"
 
 /** Enable Watchdog */
 void wdt_enable(void);
@@ -18,10 +17,6 @@ void wdt_set_ms(uint32_t period_ms);
 /***/
 void wdt_feed(void);
 
-/***/
-void wdt_set_clock_source(clk_source_t clk);
-/***/
-clk_source_t wdt_get_clock_source(void);
 /***/
 uint32_t wdt_get_clock_frequency(void);
 

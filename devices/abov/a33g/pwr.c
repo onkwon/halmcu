@@ -2,8 +2,6 @@
 #include "abov/asm/arm/cmsis.h"
 #include "a33g.h"
 
-#include <assert.h>
-
 #define PMUMODE_POS				0
 #define VDCLP_POS				2
 
