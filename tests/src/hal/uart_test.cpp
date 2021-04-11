@@ -4,8 +4,6 @@
 
 #include "abov/hal/uart.h"
 #include "abov/irq.h"
-#include "abov/ll/pwr.h"
-#include "abov/ll/clk.h"
 
 #include <string.h>
 

@@ -6,15 +6,10 @@
 
 #include "abov/asm/arm/systick.h"
 #include "ARMCM3.h"
-#include "abov/ll/clk.h"
 
 extern "C" {
 static struct systick stkreg;
 struct systick * const SysTick = &stkreg;
-}
-
-uint32_t clk_get_hclk_frequency(void) {
-	return mock().actualCall(__func__).returnUnsignedIntValueOrDefault(1);
 }
 
 TEST_GROUP(systick) {
