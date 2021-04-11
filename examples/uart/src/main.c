@@ -10,12 +10,12 @@
 
 static uart_handle_t uart0_handle;
 
-static void uart_rx_hander(uint32_t flags)
+static void uart_rx_handler(uint32_t flags)
 {
 	(void)flags;
 	uint8_t c;
-	uart_read(&uart0_handle, &c, 1);
-	uart_write(&uart0_handle, "Received!\r\n", 11);
+	uart_read(PERI_UART0, &c, 1);
+	uart_write(PERI_UART0, "Received!\r\n", 11);
 }
 
 static void system_clock_init(void)
@@ -40,7 +40,7 @@ int main(void)
 	system_clock_init();
 
 	uart_gpio_init();
-	uart_init(&uart0_handle, UART_PORT_0, &(struct uart_cfg) {
+	uart_init(PERI_UART0, &(struct uart_cfg) {
 			.wordsize = UART_WORDSIZE_8,
 			.stopbit = UART_STOPBIT_1,
 			.parity = UART_PARITY_NONE,
@@ -48,16 +48,17 @@ int main(void)
 #if !defined(POLLING)
 			.rx_interrupt = true,
 #endif
-			});
-	uart_register_rx_handler(&uart0_handle, uart_rx_hander);
+			},
+			&uart0_handle);
+	uart_register_rx_handler(&uart0_handle, uart_rx_handler);
 
-	uart_write(&uart0_handle, "Hello, World!\r\n", 15);
+	uart_write(PERI_UART0, "Hello, World!\r\n", 15);
 
 	while (1) {
 		uint8_t ch;
-		size_t received = uart_read(&uart0_handle, &ch, sizeof(ch));
+		size_t received = uart_read(PERI_UART0, &ch, sizeof(ch));
 		if (received > 0) {
-			uart_write(&uart0_handle, &ch, sizeof(ch));
+			uart_write(PERI_UART0, &ch, sizeof(ch));
 		}
 	}
 
@@ -66,5 +67,5 @@ int main(void)
 
 void ISR_UART0(void)
 {
-	uart_default_isr(UART_PORT_0, &uart0_handle);
+	uart_default_isr(PERI_UART0, &uart0_handle);
 }

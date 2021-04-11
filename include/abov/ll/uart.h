@@ -6,19 +6,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include <stdbool.h>
-
-/** UART port enumeration */
-typedef enum {
-	/***/
-	UART_PORT_0,
-	/***/
-	UART_PORT_1,
-	/***/
-	UART_PORT_2,
-	/***/
-	UART_PORT_3,
-} uart_port_t;
+#include "abov/peripheral.h"
 
 /** UART parity enumeration */
 typedef enum {
@@ -72,102 +60,103 @@ typedef enum {
  *
  * This function makes the given UART the reset default state.
  *
- * :param port: a enum of :c:type:`uart_port_t`
+ * :param port: a peripheral enumerated in :c:type:`peripheral_t`
  */
-void uart_reset(uart_port_t port);
+void uart_reset(peripheral_t port);
 /**
  * Enable UART
  *
- * :param port: a enum of :c:type:`uart_port_t`
+ * :param port: a peripheral enumerated in :c:type:`peripheral_t`
  */
-void uart_enable(uart_port_t port);
+void uart_enable(peripheral_t port);
 /**
  * Disable UART
  *
- * :param port: a enum of :c:type:`uart_port_t`
+ * :param port: a peripheral enumerated in :c:type:`peripheral_t`
  */
-void uart_disable(uart_port_t port);
+void uart_disable(peripheral_t port);
 /**
  * Read a byte from UART
  *
- * :param port: a enum of :c:type:`uart_port_t`
+ * :param port: a peripheral enumerated in :c:type:`peripheral_t`
  * :return: received byte
  */
-int uart_read_byte(uart_port_t port);
+int uart_read_byte(peripheral_t port);
 /**
  * Read a byte from UART
  *
- * :param port: a enum of :c:type:`uart_port_t`
+ * :param port: a peripheral enumerated in :c:type:`peripheral_t`
  * :return: * received byte on success
  *          * -1 when no received data
  * :note: This function is non-blocking.
  */
-int uart_read_byte_nonblock(uart_port_t port);
+int uart_read_byte_nonblock(peripheral_t port);
 /**
  * Write a byte to UART
  *
  * This function will block until the byte gets written into the hold register.
  *
- * :param port: a enum of :c:type:`uart_port_t`
+ * :param port: a peripheral enumerated in :c:type:`peripheral_t`
  * :param val: value to write
  */
-void uart_write_byte(uart_port_t port, uint8_t val);
+void uart_write_byte(peripheral_t port, uint8_t val);
 /**
  * Set UART baudrate
  *
- * :param port: a enum of :c:type:`uart_port_t`
+ * :param port: a peripheral enumerated in :c:type:`peripheral_t`
  * :param baudrate: baudrate
+ * :param pclk: pclk
  */
-void uart_set_baudrate(uart_port_t port, uint32_t baudrate);
+void uart_set_baudrate(peripheral_t port, uint32_t baudrate, uint32_t pclk);
 /**
  * Enable UART interrupts
  *
- * :param port: a enum of :c:type:`uart_port_t`
+ * :param port: a peripheral enumerated in :c:type:`peripheral_t`
  * :param events: a mix enum of :c:type:`uart_event_t`
  */
-void uart_enable_irq(uart_port_t port, uart_event_t events);
+void uart_enable_irq(peripheral_t port, uart_event_t events);
 /**
  * Disable UART interrupts
  *
- * :param port: a enum of :c:type:`uart_port_t`
+ * :param port: a peripheral enumerated in :c:type:`peripheral_t`
  * :param events: a mix enum of :c:type:`uart_event_t`
  */
-void uart_disable_irq(uart_port_t port, uart_event_t events);
+void uart_disable_irq(peripheral_t port, uart_event_t events);
 /**
  * Read UART event flag
  *
- * :param port: a enum of :c:type:`uart_port_t`
+ * :param port: a peripheral enumerated in :c:type:`peripheral_t`
  * :return: :c:type:`uart_event_t`
  */
-uart_event_t uart_get_event(uart_port_t port);
+uart_event_t uart_get_event(peripheral_t port);
 /**
  * Clear UART event flag
  *
- * :param port: a enum of :c:type:`uart_port_t`
+ * :param port: a peripheral enumerated in :c:type:`peripheral_t`
  * :param events: a mix enum of :c:type:`uart_event_t`
  */
-void uart_clear_event(uart_port_t port, uart_event_t events);
+void uart_clear_event(peripheral_t port, uart_event_t events);
 /**
  * Set UART parity
  *
- * :param port: a enum of :c:type:`uart_port_t`
+ * :param port: a peripheral enumerated in :c:type:`peripheral_t`
  * :param parity: a enum of :c:type:`uart_parity_t`
  */
-void uart_set_parity(uart_port_t port, uart_parity_t parity);
+void uart_set_parity(peripheral_t port, uart_parity_t parity);
 /**
  * Set UART stopbits
  *
- * :param port: a enum of :c:type:`uart_port_t`
+ * :param port: a peripheral enumerated in :c:type:`peripheral_t`
  * :param stopbit: a enum of :c:type:`uart_stopbit_t`
  */
-void uart_set_stopbits(uart_port_t port, uart_stopbit_t stopbit);
+void uart_set_stopbits(peripheral_t port, uart_stopbit_t stopbit);
 /**
  * Set UART data bit length
  *
- * :param port: a enum of :c:type:`uart_port_t`
+ * :param port: a peripheral enumerated in :c:type:`peripheral_t`
  * :param wordsize: a enum of :c:type:`uart_wordsize_t`
  */
-void uart_set_wordsize(uart_port_t port, uart_wordsize_t wordsize);
+void uart_set_wordsize(peripheral_t port, uart_wordsize_t wordsize);
 
 #if defined(__cplusplus)
 }

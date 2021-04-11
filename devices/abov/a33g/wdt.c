@@ -84,9 +84,6 @@ uint32_t wdt_get_count(void)
 	return WDT->CVR;
 }
 
-#include "abov/hal/wdt.h"
-#include "abov/ll/clk.h"
-
 void wdt_set_clock_source(clk_source_t clk)
 {
 	uint32_t val = 0;
