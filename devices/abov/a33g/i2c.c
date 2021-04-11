@@ -4,11 +4,11 @@
 #include "abov/asm/arm/cmsis.h"
 #include "a33g.h"
 
-#define KHZ					1000UL
+#define KHZ					1000U
 #define MHZ					(KHZ * KHZ)
-#define SDA_HOLD_TIME_NS			300
+#define SDA_HOLD_TIME_NS			300U
 
-#define SOFTRESET				(1UL << 5)
+#define SOFTRESET				(1U << 5)
 
 static I2C_Type *get_regs_from_peri(peripheral_t peri)
 {
@@ -100,7 +100,7 @@ uint8_t i2c_read_byte(peripheral_t i2c)
 void i2c_clear_event(peripheral_t i2c, i2c_event_t events)
 {
 	I2C_Type *regs = get_regs_from_peri(i2c);
-	regs->SR = 0xffUL | events;
+	regs->SR = 0xffU | events;
 }
 
 i2c_event_t i2c_get_event(peripheral_t i2c)
