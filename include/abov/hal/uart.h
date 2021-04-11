@@ -98,7 +98,7 @@ void uart_register_error_handler(uart_handle_t *handle, uart_irq_callback_t hand
  * :param port: a peripheral enumerated in :c:type:`peripheral_t`
  * :param handle: handle of uart port
  */
-void uart_default_isr(peripheral_t uart, uart_handle_t *handle);
+void uart_default_isr(peripheral_t uart, const uart_handle_t *handle);
 
 #if defined(__cplusplus)
 }

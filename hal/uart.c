@@ -104,7 +104,7 @@ void uart_register_error_handler(uart_handle_t *handle, uart_irq_callback_t hand
 	self->error_handler = handler;
 }
 
-void uart_default_isr(peripheral_t uart, uart_handle_t *handle)
+void uart_default_isr(peripheral_t uart, const uart_handle_t *handle)
 {
 	uart_event_t events = uart_get_event(uart);
 	uart_clear_event(uart, events);
