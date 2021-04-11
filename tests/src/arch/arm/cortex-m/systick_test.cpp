@@ -2,6 +2,8 @@
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTestExt/MockSupport.h"
 
+#include <string.h>
+
 #include "abov/asm/arm/systick.h"
 #include "ARMCM3.h"
 
