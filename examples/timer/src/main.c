@@ -29,7 +29,6 @@ static void target_timer_init(void)
 {
 	target_timer_gpio_init();
 
-	timer_set_clock_divider(PERI_TIMER0, 3); // 16MHz/64 = 250KHz
 	timer_init(PERI_TIMER0, &(struct timer_cfg) {
 			.mode = TIMER_MODE_NORMAL,
 			.frequency = 1000,

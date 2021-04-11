@@ -26,5 +26,5 @@ class LL_watchdog {
 HAL_watchdog --> LL_watchdog
 HAL_watchdog ..> LL_power
 HAL_watchdog ..> LL_clock
-HAL_watchdog ..> LL_nvic
+HAL_watchdog ..> IRQ
 @enduml

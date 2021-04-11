@@ -1,10 +1,10 @@
-COMPONENT_NAME = watchdog_a33g
+COMPONENT_NAME = i2c_a33g
 
 SRC_FILES = \
-	../devices/abov/a33g/wdt.c \
+	../devices/abov/a33g/i2c.c \
 
 TEST_SRC_FILES = \
-	src/devices/abov/a33g/wdt_test.cpp \
+	src/devices/abov/a33g/i2c_test.cpp \
 	src/test_all.cpp \
 
 INCLUDE_DIRS = \
