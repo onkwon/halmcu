@@ -1,6 +1,7 @@
 #include "abov/ll/i2c.h"
 #include <stddef.h>
 #include "abov/bitop.h"
+#include "abov/delay.h"
 #include "abov/asm/arm/cmsis.h"
 #include "a33g.h"
 
@@ -9,6 +10,16 @@
 #define SDA_HOLD_TIME_NS			300U
 
 #define SOFTRESET				(1U << 5)
+
+typedef enum {
+	I2C_FSM_WAITING,
+	I2C_FSM_STOP,
+	I2C_FSM_START_SEND,
+	I2C_FSM_START_RECV,
+	I2C_FSM_SENDING,
+	I2C_FSM_RECEIVING,
+	I2C_FSM_ERROR,
+} i2c_fsm_t;
 
 static I2C_Type *get_regs_from_peri(peripheral_t peri)
 {
@@ -19,6 +30,128 @@ static I2C_Type *get_regs_from_peri(peripheral_t peri)
 		return I2C1;
 	default:
 		return NULL;
+	}
+}
+
+static void clear_event(peripheral_t i2c)
+{
+	I2C_Type *regs = get_regs_from_peri(i2c);
+	regs->SR = 0xffU;
+}
+
+static uint32_t get_event(peripheral_t i2c)
+{
+	return get_regs_from_peri(i2c)->SR;
+}
+
+static void set_start(peripheral_t i2c)
+{
+	I2C_Type *regs = get_regs_from_peri(i2c);
+	bitop_set(&regs->CR, 0); /* START */
+}
+
+static void set_stop(peripheral_t i2c)
+{
+	I2C_Type *regs = get_regs_from_peri(i2c);
+	bitop_set(&regs->CR, 1); /* STOP */
+}
+
+static void clear_stop(peripheral_t i2c)
+{
+	I2C_Type *regs = get_regs_from_peri(i2c);
+	bitop_clear(&regs->CR, 1); /* STOP */
+}
+
+static void set_txd(peripheral_t i2c, uint8_t value)
+{
+	I2C_Type *regs = get_regs_from_peri(i2c);
+	regs->DR = (uint32_t)value;
+}
+
+static uint8_t get_rxd(peripheral_t i2c)
+{
+	return (uint8_t)get_regs_from_peri(i2c)->DR;
+}
+
+static void enable_ack(peripheral_t i2c)
+{
+	I2C_Type *regs = get_regs_from_peri(i2c);
+	bitop_set(&regs->CR, 3); /* ACKEN */
+}
+
+static void disable_ack(peripheral_t i2c)
+{
+	I2C_Type *regs = get_regs_from_peri(i2c);
+	bitop_clear(&regs->CR, 3); /* ACKEN */
+}
+
+static i2c_fsm_t process_gcall(uint32_t event)
+{
+	if (!(event & 1)) { /* ACK */
+		return I2C_FSM_ERROR;
+	} else if (event & 2) { /* TMODE */
+		return I2C_FSM_START_SEND;
+	}
+	return I2C_FSM_START_RECV;
+}
+
+static i2c_fsm_t process_xfer(uint32_t event)
+{
+	if (event & 0x2) { /* TMODE */
+		if (!(event & 1)) { /* ACK */
+			return I2C_FSM_ERROR;
+		}
+		return I2C_FSM_SENDING;
+	}
+	return I2C_FSM_RECEIVING;
+}
+
+static i2c_fsm_t process_slave(uint32_t event)
+{
+	if (event & 0x2) { /* TMODE */
+		return I2C_FSM_START_SEND;
+	}
+	return I2C_FSM_START_RECV;
+}
+
+static i2c_fsm_t run_fsm(uint32_t event)
+{
+	if ((event & ~6U) == 0) {
+		return I2C_FSM_WAITING;
+	} else if (event & 0x20) { /* STOP */
+		return I2C_FSM_STOP;
+	} else if (event & 0x08) { /* MLOST */
+		return I2C_FSM_ERROR;
+	} else if (event & 0x80) { /* GCALL */
+		return process_gcall(event);
+	} else if (event & 0x40) { /* TEND */
+		return process_xfer(event);
+	} else if (event & 0x10) { /* SSEL */
+		return process_slave(event);
+	}
+	return I2C_FSM_ERROR;
+}
+
+static i2c_fsm_t poll_event(peripheral_t i2c)
+{
+	while (1) {
+		i2c_fsm_t rc = run_fsm(get_event(i2c));
+
+		switch (rc) {
+			case I2C_FSM_ERROR:
+				set_stop(i2c);
+				/* fall through */
+			case I2C_FSM_STOP: /* fall through */
+			case I2C_FSM_START_SEND: /* fall through */
+			case I2C_FSM_START_RECV: /* fall through */
+			case I2C_FSM_SENDING: /* fall through */
+			case I2C_FSM_RECEIVING:
+				return rc;
+			default:
+				/* TODO: figure out why it doesn't work without delay? */
+				udelay(10);
+				continue;
+		}
 	}
 }
 
@@ -36,99 +169,32 @@ void i2c_reset(peripheral_t i2c)
 	regs->CR = 0;
 }
 
-void i2c_start(peripheral_t i2c)
-{
-	I2C_Type *regs = get_regs_from_peri(i2c);
-
-	bitop_set(&regs->CR, 0); /* START */
-}
-
-void i2c_stop(peripheral_t i2c)
-{
-	I2C_Type *regs = get_regs_from_peri(i2c);
-
-	bitop_set(&regs->CR, 1); /* STOP */
-}
-
 void i2c_set_slave_address(peripheral_t i2c, uint16_t slave_addr)
 {
 	I2C_Type *regs = get_regs_from_peri(i2c);
-
 	regs->SAR = (slave_addr << 1) & 0xfe;
 }
 
 void i2c_enable_ack(peripheral_t i2c)
 {
-	I2C_Type *regs = get_regs_from_peri(i2c);
-
-	bitop_set(&regs->CR, 3); /* ACKEN */
+	enable_ack(i2c);
 }
 
 void i2c_disable_ack(peripheral_t i2c)
 {
-	I2C_Type *regs = get_regs_from_peri(i2c);
-
-	bitop_clear(&regs->CR, 3); /* ACKEN */
+	disable_ack(i2c);
 }
 
 void i2c_enable_irq(peripheral_t i2c)
 {
 	I2C_Type *regs = get_regs_from_peri(i2c);
-
 	bitop_set(&regs->CR, 4); /* IINTEN */
 }
 
 void i2c_disable_irq(peripheral_t i2c)
 {
 	I2C_Type *regs = get_regs_from_peri(i2c);
-
 	bitop_clear(&regs->CR, 4); /* IINTEN */
-}
-
-void i2c_write_byte(peripheral_t i2c, uint8_t value)
-{
-	I2C_Type *regs = get_regs_from_peri(i2c);
-	regs->DR = (uint32_t)value;
-}
-
-uint8_t i2c_read_byte(peripheral_t i2c)
-{
-	const I2C_Type *regs = get_regs_from_peri(i2c);
-	return (uint8_t)regs->DR;
-}
-
-void i2c_clear_event(peripheral_t i2c, i2c_event_t events)
-{
-	I2C_Type *regs = get_regs_from_peri(i2c);
-	regs->SR = 0xffU | events;
-}
-
-i2c_event_t i2c_get_event(peripheral_t i2c)
-{
-	const I2C_Type *regs = get_regs_from_peri(i2c);
-	uint32_t status = regs->SR;
-	i2c_event_t event = I2C_EVENT_NONE;
-
-	if (status & 0x40) { /* TEND */
-		event = (i2c_event_t)(event | I2C_EVENT_TX);
-	}
-	if (status & 0x20) { /* STOP */
-		event = (i2c_event_t)(event | I2C_EVENT_STOP);
-	}
-	if (status & 0x10) { /* SSEL */
-		event = (i2c_event_t)(event | I2C_EVENT_SLAVE);
-	}
-	if (status & 0x08) { /* MLOST */
-		event = (i2c_event_t)(event | I2C_EVENT_COLLISION);
-	}
-	if (status & 0x04) { /* BUSY */
-		event = (i2c_event_t)(event | I2C_EVENT_BUSY);
-	}
-	if (status & 0x01) { /* RXACK */
-		event = (i2c_event_t)(event | I2C_EVENT_RX);
-	}
-
-	return event;
 }
 
 void i2c_set_frequency(peripheral_t i2c, uint32_t hz, uint32_t pclk)
@@ -143,4 +209,66 @@ void i2c_set_frequency(peripheral_t i2c, uint32_t hz, uint32_t pclk)
 	regs->SCLL = scl - 1;
 	regs->SCLH = scl - 3;
 	regs->SDH = (sdh < 4)? 0 : sdh - 4;
+}
+
+bool i2c_start(peripheral_t i2c, uint16_t slave_address, bool readonly)
+{
+	// TODO: support 10-bit slave address
+	set_txd(i2c, (uint8_t)((slave_address << 1) | readonly));
+	set_start(i2c);
+
+	i2c_fsm_t rc = poll_event(i2c);
+
+	if (rc == I2C_FSM_START_RECV && readonly) {
+		return true;
+	} else if (rc == I2C_FSM_START_SEND && !readonly) {
+		return true;
+	} else if (rc == I2C_FSM_SENDING) {
+		clear_event(i2c);
+		return poll_event(i2c) == I2C_FSM_START_RECV;
+	}
+
+	return false;
+}
+
+void i2c_stop(peripheral_t i2c)
+{
+	set_stop(i2c);
+	while (get_regs_from_peri(i2c)->SR & 0x4) {
+		clear_event(i2c);
+	}
+	clear_stop(i2c);
+}
+
+bool i2c_write_byte(peripheral_t i2c, uint8_t value)
+{
+	set_txd(i2c, value);
+	clear_event(i2c);
+
+	i2c_fsm_t rc = poll_event(i2c);
+	if (rc == I2C_FSM_SENDING) {
+		return true;
+	}
+
+	i2c_stop(i2c);
+	return false;
+}
+
+int i2c_read_byte(peripheral_t i2c, bool ack)
+{
+	if (ack) {
+		enable_ack(i2c);
+	} else {
+		disable_ack(i2c);
+	}
+
+	clear_event(i2c);
+	i2c_fsm_t rc = poll_event(i2c);
+
+	if (rc != I2C_FSM_RECEIVING) {
+		i2c_stop(i2c);
+		return -1;
+	}
+
+	return (int)get_rxd(i2c);
 }
