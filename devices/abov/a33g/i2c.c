@@ -93,7 +93,7 @@ void i2c_write_byte(peripheral_t i2c, uint8_t value)
 
 uint8_t i2c_read_byte(peripheral_t i2c)
 {
-	I2C_Type *regs = get_regs_from_peri(i2c);
+	const I2C_Type *regs = get_regs_from_peri(i2c);
 	return (uint8_t)regs->DR;
 }
 
@@ -105,7 +105,7 @@ void i2c_clear_event(peripheral_t i2c, i2c_event_t events)
 
 i2c_event_t i2c_get_event(peripheral_t i2c)
 {
-	I2C_Type *regs = get_regs_from_peri(i2c);
+	const I2C_Type *regs = get_regs_from_peri(i2c);
 	uint32_t status = regs->SR;
 	i2c_event_t event = I2C_EVENT_NONE;
 
