@@ -2,13 +2,11 @@
 class HAL_uart {
 	init()
 	deinit()
-	enable()
-	disable()
+	read()
+	write()
 	register_rx_handler()
 	register_tx_handler()
 	register_error_handler()
-	read()
-	write()
 }
 
 class LL_uart {
@@ -29,5 +27,5 @@ class LL_uart {
 HAL_uart --> LL_uart
 HAL_uart ..> LL_power
 HAL_uart ..> LL_clock
-HAL_uart ..> LL_nvic
+HAL_uart ..> IRQ
 @enduml

@@ -79,10 +79,21 @@ struct timer_stub {
 	uint32_t CNT;
 };
 
+struct i2c_stub {
+	uint32_t DR;
+	uint32_t SR;
+	uint32_t SAR;
+	uint32_t CR;
+	uint32_t SCLL;
+	uint32_t SCLH;
+	uint32_t SDH;
+};
+
 typedef struct pcu_stub PCU_Type;
 typedef struct gpio_stub GPIO_Type;
 typedef struct uart_stub UART_Type;
 typedef struct timer_stub TIMER_Type;
+typedef struct i2c_stub I2C_Type;
 
 extern struct wdt_stub * const WDT;
 extern struct pmu_stub * const PMU;
@@ -107,6 +118,9 @@ extern struct uart_stub * const UART2;
 extern struct uart_stub * const UART3;
 
 extern uintptr_t T0_BASE;
+
+extern struct i2c_stub * const I2C0;
+extern struct i2c_stub * const I2C1;
 
 #if defined(__cplusplus)
 }

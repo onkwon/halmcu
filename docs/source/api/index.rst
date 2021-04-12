@@ -8,6 +8,7 @@ Peripheral
 
    clock
    gpio
+   i2c
    power
    timer
    uart

@@ -64,18 +64,6 @@ typedef enum {
  */
 void uart_reset(peripheral_t port);
 /**
- * Enable UART
- *
- * :param port: a peripheral enumerated in :c:type:`peripheral_t`
- */
-void uart_enable(peripheral_t port);
-/**
- * Disable UART
- *
- * :param port: a peripheral enumerated in :c:type:`peripheral_t`
- */
-void uart_disable(peripheral_t port);
-/**
  * Read a byte from UART
  *
  * :param port: a peripheral enumerated in :c:type:`peripheral_t`
