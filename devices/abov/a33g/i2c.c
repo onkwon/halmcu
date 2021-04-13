@@ -148,10 +148,10 @@ void i2c_reset(peripheral_t i2c)
 	regs->CR = 0;
 }
 
-void i2c_set_slave_address(peripheral_t i2c, uint16_t slave_addr)
+void i2c_set_slave_address(peripheral_t i2c, uint16_t slave_address)
 {
 	I2C_Type *regs = get_regs_from_peri(i2c);
-	regs->SAR = (slave_addr << 1) & 0xfe;
+	regs->SAR = (slave_address << 1) & 0xfe;
 }
 
 void i2c_enable_ack(peripheral_t i2c)
