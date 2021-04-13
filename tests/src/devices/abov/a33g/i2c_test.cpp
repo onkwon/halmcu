@@ -15,6 +15,7 @@ struct i2c_stub * const I2C1 = &reg1;
 
 void udelay(unsigned int usec) {
 	mock().actualCall(__func__);
+	(void)usec;
 }
 
 TEST_GROUP(I2C) {
