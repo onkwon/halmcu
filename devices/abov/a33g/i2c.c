@@ -87,9 +87,9 @@ static void disable_ack(peripheral_t i2c)
 
 static i2c_fsm_t process_gcall(uint32_t event)
 {
-	if (!(event & 1)) { /* ACK */
+	if (!(event & 0x01)) { /* ACK */
 		return I2C_FSM_ERROR;
-	} else if (event & 2) { /* TMODE */
+	} else if (event & 0x02) { /* TMODE */
 		return I2C_FSM_START_SEND;
 	}
 	return I2C_FSM_START_RECV;
@@ -97,21 +97,13 @@ static i2c_fsm_t process_gcall(uint32_t event)
 
 static i2c_fsm_t process_xfer(uint32_t event)
 {
-	if (event & 0x2) { /* TMODE */
-		if (!(event & 1)) { /* ACK */
+	if (event & 0x02) { /* TMODE */
+		if (!(event & 0x01)) { /* ACK */
 			return I2C_FSM_ERROR;
 		}
 		return I2C_FSM_SENDING;
 	}
 	return I2C_FSM_RECEIVING;
-}
-
-static i2c_fsm_t process_slave(uint32_t event)
-{
-	if (event & 0x2) { /* TMODE */
-		return I2C_FSM_START_SEND;
-	}
-	return I2C_FSM_START_RECV;
 }
 
 static i2c_fsm_t run_fsm(uint32_t event)
@@ -126,33 +118,20 @@ static i2c_fsm_t run_fsm(uint32_t event)
 		return process_gcall(event);
 	} else if (event & 0x40) { /* TEND */
 		return process_xfer(event);
-	} else if (event & 0x10) { /* SSEL */
-		return process_slave(event);
 	}
 	return I2C_FSM_ERROR;
 }
 
 static i2c_fsm_t poll_event(peripheral_t i2c)
 {
-	while (1) {
-		i2c_fsm_t rc = run_fsm(get_event(i2c));
+	i2c_fsm_t rc;
 
-		switch (rc) {
-			case I2C_FSM_ERROR:
-				set_stop(i2c);
-				/* fall through */
-			case I2C_FSM_STOP: /* fall through */
-			case I2C_FSM_START_SEND: /* fall through */
-			case I2C_FSM_START_RECV: /* fall through */
-			case I2C_FSM_SENDING: /* fall through */
-			case I2C_FSM_RECEIVING:
-				return rc;
-			default:
-				/* TODO: figure out why it doesn't work without delay? */
-				udelay(10);
-				continue;
-		}
+	while ((rc = run_fsm(get_event(i2c))) == I2C_FSM_WAITING) {
+		/* TODO: figure out why it doesn't work without delay? */
+		udelay(10);
 	}
+
+	return rc;
 }
 
 void i2c_reset(peripheral_t i2c)
@@ -219,29 +198,30 @@ bool i2c_start(peripheral_t i2c, uint16_t slave_address, bool readonly)
 
 	i2c_fsm_t rc = poll_event(i2c);
 
-	if (rc == I2C_FSM_START_RECV && readonly) {
-		return true;
-	} else if (rc == I2C_FSM_START_SEND && !readonly) {
+	if (rc == I2C_FSM_START_RECV || rc == I2C_FSM_START_SEND) {
 		return true;
 	} else if (rc == I2C_FSM_SENDING) {
 		clear_event(i2c);
 		return poll_event(i2c) == I2C_FSM_START_RECV;
 	}
 
+	i2c_stop(i2c);
 	return false;
 }
 
 void i2c_stop(peripheral_t i2c)
 {
 	set_stop(i2c);
-	while (get_regs_from_peri(i2c)->SR & 0x4) {
+	while (!(get_event(i2c) & 0x20)) { /* STOP */
 		clear_event(i2c);
+		poll_event(i2c);
 	}
 	clear_stop(i2c);
 }
 
 bool i2c_write_byte(peripheral_t i2c, uint8_t value)
 {
+	udelay(200);
 	set_txd(i2c, value);
 	clear_event(i2c);
 
