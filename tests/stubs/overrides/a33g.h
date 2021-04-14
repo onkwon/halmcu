@@ -89,11 +89,19 @@ struct i2c_stub {
 	uint32_t SDH;
 };
 
+struct adc_stub {
+	uint32_t CR;
+	uint32_t MR;
+	uint32_t DR;
+	uint32_t TEST;
+};
+
 typedef struct pcu_stub PCU_Type;
 typedef struct gpio_stub GPIO_Type;
 typedef struct uart_stub UART_Type;
 typedef struct timer_stub TIMER_Type;
 typedef struct i2c_stub I2C_Type;
+typedef struct adc_stub ADC_Type;
 
 extern struct wdt_stub * const WDT;
 extern struct pmu_stub * const PMU;
@@ -121,6 +129,8 @@ extern uintptr_t T0_BASE;
 
 extern struct i2c_stub * const I2C0;
 extern struct i2c_stub * const I2C1;
+
+extern struct adc_stub * const ADC;
 
 #if defined(__cplusplus)
 }
