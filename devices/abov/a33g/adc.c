@@ -50,6 +50,7 @@ void adc_set_mode(peripheral_t adc, adc_mode_t mode)
 void adc_start(peripheral_t adc)
 {
 	unused(adc);
+	bitop_clear(&ADC->CR, 8); /* ADEOC */
 	bitop_set(&ADC->CR, 7); /* ADST */
 }
 
@@ -106,6 +107,12 @@ bool adc_is_busy(peripheral_t adc)
 {
 	unused(adc);
 	return !(ADC->CR & 0x40); /* AFLAG */
+}
+
+bool adc_is_completed(peripheral_t adc)
+{
+	unused(adc);
+	return !!(ADC->CR & 0x100); /* ADEOC */
 }
 
 adc_event_t adc_get_event(peripheral_t adc)

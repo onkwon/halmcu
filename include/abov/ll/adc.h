@@ -105,6 +105,8 @@ void adc_clear_event(peripheral_t adc, adc_event_t events);
 /***/
 bool adc_is_busy(peripheral_t adc);
 /***/
+bool adc_is_completed(peripheral_t adc);
+/***/
 void adc_set_clock_frequency(peripheral_t adc, uint32_t hz, uint32_t pclk);
 
 #if defined(__cplusplus)

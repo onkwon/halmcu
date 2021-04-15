@@ -47,7 +47,8 @@ TEST(ADC, set_mode_ShouldSetADSTBY) {
 	LONGS_EQUAL(0x40ff, ADC->MR);
 }
 
-TEST(ADC, start_ShouldSetADST) {
+TEST(ADC, start_ShouldSetADSTAndClearAdeoc) {
+	ADC->CR |= 0x100; /* ADEOC */
 	adc_start(PERI_ADC);
 	LONGS_EQUAL(0x80, ADC->CR);
 }
@@ -96,6 +97,13 @@ TEST(ADC, is_busy_ShouldReturnTrue_WhenBusy) {
 TEST(ADC, is_busy_ShouldReturnFalse_WhenNotBusy) {
 	ADC->CR |= 0x40;
 	LONGS_EQUAL(0, adc_is_busy(PERI_ADC));
+}
+TEST(ADC, is_complete_ShouldReturnTrue_WhenConversionCompleted) {
+	ADC->CR |= 0x100;
+	LONGS_EQUAL(1, adc_is_completed(PERI_ADC));
+}
+TEST(ADC, is_complete_ShouldReturnFalse_WhenNotCompleted) {
+	LONGS_EQUAL(0, adc_is_completed(PERI_ADC));
 }
 
 TEST(ADC, get_event_ShouldReturnComplete_WhenConversionDone) {
