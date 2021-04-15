@@ -98,6 +98,7 @@ void adc_disable_irq(peripheral_t adc)
 
 uint32_t adc_read(peripheral_t adc)
 {
+	unused(adc);
 	return ADC->DR >> 3;
 }
 
@@ -110,14 +111,14 @@ bool adc_is_busy(peripheral_t adc)
 adc_event_t adc_get_event(peripheral_t adc)
 {
 	unused(adc);
-	adc_event_t evt = 0;
+	adc_event_t evt = ADC_EVENT_NONE;
 	uint32_t cr = ADC->CR;
 
 	if (cr & 0x100) { /* ADEOC */
-		evt |= ADC_EVENT_COMPLETE;
+		evt = (adc_event_t)(evt | ADC_EVENT_COMPLETE);
 	}
 	if (!(cr & 0x40)) { /* AFLAG */
-		evt |= ADC_EVENT_BUSY;
+		evt = (adc_event_t)(evt | ADC_EVENT_BUSY);
 	}
 
 	return evt;
@@ -141,6 +142,7 @@ void adc_clear_event(peripheral_t adc, adc_event_t events)
  */
 void adc_set_clock_frequency(peripheral_t adc, uint32_t hz, uint32_t pclk)
 {
+	unused(adc);
 	assert(hz <= pclk && hz != 0);
 	uint32_t cnt = pclk / hz - 1;
 	bitop_clean_set_with_mask(&ADC->MR, 0, 0xff, cnt);
