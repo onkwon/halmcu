@@ -6,6 +6,7 @@ Peripheral
 .. toctree::
    :maxdepth: 1
 
+   adc
    clock
    gpio
    i2c
