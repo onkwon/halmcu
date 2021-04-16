@@ -11,6 +11,7 @@ Peripheral
    gpio
    i2c
    power
+   spi
    timer
    uart
    watchdog
