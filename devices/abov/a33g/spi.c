@@ -1,6 +1,224 @@
 #include "abov/ll/spi.h"
+
+#include <assert.h>
+
 #include "abov/compiler.h"
 #include "abov/bitop.h"
 #include "abov/asm/arm/cmsis.h"
 #include "a33g.h"
 
+static SPI_Type *get_interface_from_type(peripheral_t peri)
+{
+	SPI_Type *spi = NULL;
+
+	switch (peri) {
+	case PERI_SPI0:
+		spi = SPI0;
+		break;
+	case PERI_SPI1:
+		spi = SPI1;
+		break;
+	default:
+		break;
+	}
+
+	assert(spi != NULL);
+
+	return spi;
+}
+
+void spi_reset(peripheral_t spi)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+
+	unused(self->RDR); /* read to clear RRDY in SR register */
+	self->TDR = 0;
+	self->CR = 0x820;
+	self->SR = 0;
+	self->BR = 0xff;
+	self->EN = 0;
+	self->LR = 0x1866;
+}
+
+uint32_t spi_get_rxd(peripheral_t spi)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+	return self->RDR;
+}
+
+void spi_set_txd(peripheral_t spi, uint32_t value)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+	self->TDR = value;
+}
+
+void spi_clear_rx_buffer(peripheral_t spi)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+	bitop_set(&self->CR, 19); /* RXBC */
+}
+
+void spi_clear_tx_buffer(peripheral_t spi)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+	bitop_set(&self->CR, 20); /* TXBC */
+}
+
+void spi_enable_chip_select(peripheral_t spi)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+	bitop_set(&self->CR, 8); /* SSMO */
+}
+
+void spi_disable_chip_select(peripheral_t spi)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+	bitop_clear(&self->CR, 8); /* SSMO */
+}
+
+void spi_set_chip_select_mode(peripheral_t spi, bool manual)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+
+	if (manual) {
+		bitop_set(&self->CR, 12); /* SSMODE */
+	} else {
+		bitop_clear(&self->CR, 12); /* SSMODE */
+	}
+}
+
+void spi_set_chip_select_level(peripheral_t spi, int level)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+
+	if (level == 0) {
+		bitop_clear(&self->CR, 11); /* SSOUT */
+	} else {
+		bitop_set(&self->CR, 11); /* SSOUT */
+	}
+}
+
+void spi_set_chip_select_polarity(peripheral_t spi, int level)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+
+	if (level == 0) {
+		bitop_clear(&self->CR, 7); /* SSPOL */
+	} else {
+		bitop_set(&self->CR, 7); /* SSPOL */
+	}
+}
+
+void spi_set_loopback(peripheral_t spi, bool enable)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+
+	if (enable) {
+		bitop_set(&self->CR, 10); /* LBE */
+	} else {
+		bitop_clear(&self->CR, 10); /* LBE */
+	}
+}
+
+void spi_set_mode(peripheral_t spi, spi_mode_t mode)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+
+	if (mode == SPI_MODE_MASTER) {
+		bitop_set(&self->CR, 5); /* MS */
+	} else if (mode == SPI_MODE_SLAVE) {
+		bitop_clear(&self->CR, 5); /* MS */
+	}
+}
+
+void spi_set_clock_phase(peripheral_t spi, int cpha)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+
+	if (cpha == 2) {
+		bitop_set(&self->CR, 3); /* CPHA */
+	} else if (cpha == 1) {
+		bitop_clear(&self->CR, 3); /* CPHA */
+	}
+}
+
+void spi_set_clock_polarity(peripheral_t spi, int cpol)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+
+	if (cpol == 1) {
+		bitop_set(&self->CR, 2); /* CPOL */
+	} else if (cpol == 0) {
+		bitop_clear(&self->CR, 2); /* CPOL */
+	}
+}
+
+void spi_set_data_width(peripheral_t spi, uint32_t data_width)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+
+	uint32_t val = 0;
+	switch (data_width) {
+	case 8:
+		val = 0;
+		break;
+	case 9:
+		val = 1;
+		break;
+	case 16:
+		val = 2;
+		break;
+	case 17:
+		val = 3;
+		break;
+	default:
+		break;
+	}
+
+	bitop_clean_set_with_mask(&self->CR, 0, 0x3, val);
+}
+
+void spi_set_bitorder(peripheral_t spi, bool lsb_first)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+	bitop_clean_set_with_mask(&self->CR, 4, 1U << 4, !lsb_first); /* MSBF */
+}
+
+void spi_enable_irq(peripheral_t spi, spi_irq_t irqs)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+
+	if (irqs & SPI_IRQ_RX) {
+		bitop_set(&self->CR, 13); /* RXIE */
+	}
+	if (irqs & SPI_IRQ_TX) {
+		bitop_set(&self->CR, 14); /* TXIE */
+	}
+	if (irqs & SPI_IRQ_EDGE_CHAGNE) {
+		bitop_set(&self->CR, 15); /* SSCIE */
+	}
+}
+
+void spi_disable_irq(peripheral_t spi, spi_irq_t irqs)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+
+	if (irqs & SPI_IRQ_RX) {
+		bitop_clear(&self->CR, 13); /* RXIE */
+	}
+	if (irqs & SPI_IRQ_TX) {
+		bitop_clear(&self->CR, 14); /* TXIE */
+	}
+	if (irqs & SPI_IRQ_EDGE_CHAGNE) {
+		bitop_clear(&self->CR, 15); /* SSCIE */
+	}
+}
+
+void spi_set_frequency(peripheral_t spi, uint32_t hz, uint32_t pclk)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+	assert(pclk > hz);
+	uint32_t brr = pclk / hz - 1;
+	assert(brr > 0);
+	self->BR = brr;
+}
