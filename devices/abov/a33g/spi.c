@@ -1,5 +1,6 @@
 #include "abov/ll/spi.h"
 
+#include <stddef.h>
 #include <assert.h>
 
 #include "abov/compiler.h"
