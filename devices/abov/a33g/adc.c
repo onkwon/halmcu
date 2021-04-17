@@ -80,7 +80,7 @@ void adc_set_trigger(peripheral_t adc, adc_trigger_t trigger)
 	if (trigger == ADC_TRIGGER_MANUAL) {
 		bitop_clear(&ADC->MR, 11); /* EXTRG */
 	} else {
-		bitop_clean_set_with_mask(&ADC->MR, 8, 7U << 8, trigger - 1);
+		bitop_clean_set_with_mask(&ADC->MR, 8, 7U, trigger - 1);
 		bitop_set(&ADC->MR, 11); /* EXTRG */
 	}
 }

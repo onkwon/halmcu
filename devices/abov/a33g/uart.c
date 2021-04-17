@@ -117,7 +117,7 @@ void uart_set_parity(peripheral_t port, uart_parity_t parity)
 
 	if (!!parity) {
 		bitop_clean_set_with_mask(&uart->LCR,
-				PARITY_POS, 1U << PARITY_POS, (uint32_t)parity - 1);
+				PARITY_POS, 1U, (uint32_t)parity - 1);
 		bitop_set(&uart->LCR, PARITY_EN_POS);
 	}
 }
@@ -129,7 +129,7 @@ void uart_set_stopbits(peripheral_t port, uart_stopbit_t stopbit)
 
 	uint32_t val = (stopbit == UART_STOPBIT_1)? 0 : 1;
 	bitop_clean_set_with_mask(&uart->LCR,
-			STOPBIT_POS, 1U << STOPBIT_POS, val);
+			STOPBIT_POS, 1U, val);
 }
 
 void uart_set_wordsize(peripheral_t port, uart_wordsize_t wordsize)
@@ -138,7 +138,7 @@ void uart_set_wordsize(peripheral_t port, uart_wordsize_t wordsize)
 	assert(uart != NULL);
 
 	bitop_clean_set_with_mask(&uart->LCR,
-			WORDSIZE_POS, 3U << WORDSIZE_POS, (uint32_t)wordsize-5);
+			WORDSIZE_POS, 3U, (uint32_t)wordsize-5);
 }
 
 void uart_set_baudrate(peripheral_t port, uint32_t baudrate, uint32_t pclk)

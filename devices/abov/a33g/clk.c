@@ -190,42 +190,42 @@ static uint32_t clk_get_pll_prescaler(void)
 
 static void clk_set_pll_prescaler(uint32_t div_factor)
 {
-	bitop_clean_set_with_mask(&PMU->BCCR, PLLCLKDIV_POS, PLLCLKDIV_MASK, div_factor);
+	bitop_clean_set_with_mask(&PMU->BCCR, PLLCLKDIV_POS, 1U, div_factor);
 }
 
 static void clk_set_hclk_prescaler(uint32_t div_factor)
 {
-	bitop_clean_set_with_mask(&PMU->BCCR, HCLKDIV_POS, HCLKDIV_MASK, div_factor);
+	bitop_clean_set_with_mask(&PMU->BCCR, HCLKDIV_POS, 3U, div_factor);
 }
 
 static void clk_set_pclk_prescaler(uint32_t div_factor)
 {
-	bitop_clean_set_with_mask(&PMU->BCCR, PCLKDIV_POS, PCLKDIV_MASK, div_factor);
+	bitop_clean_set_with_mask(&PMU->BCCR, PCLKDIV_POS, 1U, div_factor);
 }
 
 static void clk_set_pll_post_multifactor(uint32_t mul_factor) // N1
 {
-	bitop_clean_set_with_mask(&PMU->PLLCON, VCO_N1_POS, VCO_N1_MASK, mul_factor);
+	bitop_clean_set_with_mask(&PMU->PLLCON, VCO_N1_POS, 0xffU, mul_factor);
 }
 
 static void clk_set_pll_post_divfactor(uint32_t div_factor) // N2
 {
-	bitop_clean_set_with_mask(&PMU->PLLCON, VCO_N2_POS, VCO_N2_MASK, div_factor);
+	bitop_clean_set_with_mask(&PMU->PLLCON, VCO_N2_POS, 0xfU, div_factor);
 }
 
 static void clk_set_pll_pre_divfactor(uint32_t div_factor) // R
 {
-	bitop_clean_set_with_mask(&PMU->PLLCON, PREDIV_POS, PREDIV_MASK, div_factor);
+	bitop_clean_set_with_mask(&PMU->PLLCON, PREDIV_POS, 7U, div_factor);
 }
 
 static void clk_set_pll_divfactor(uint32_t div_factor) // P
 {
-	bitop_clean_set_with_mask(&PMU->PLLCON, POSTDIV_POS, POSTDIV_MASK, div_factor);
+	bitop_clean_set_with_mask(&PMU->PLLCON, POSTDIV_POS, 0xfU, div_factor);
 }
 
 static void clk_set_pll_vco_mode(uint32_t mode) // D
 {
-	bitop_clean_set_with_mask(&PMU->PLLCON, VCO_MODE_POS, VCO_MODE_MASK, mode);
+	bitop_clean_set_with_mask(&PMU->PLLCON, VCO_MODE_POS, 1U, mode);
 }
 
 static bool configure_pll(clk_source_t clkin)

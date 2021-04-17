@@ -82,7 +82,6 @@ static void disable_port(gpio_port_t port)
 static void set_gpio_mode(PCU_Type *ctrl, uint32_t pin, gpio_mode_t mode)
 {
 	uint32_t pos = pin * 2;
-	uint32_t mask = 3U << pos;
 	uint32_t val = 0;
 
 	switch (mode) {
@@ -102,7 +101,7 @@ static void set_gpio_mode(PCU_Type *ctrl, uint32_t pin, gpio_mode_t mode)
 		break;
 	}
 
-	bitop_clean_set_with_mask(&ctrl->CR, pos, mask, val);
+	bitop_clean_set_with_mask(&ctrl->CR, pos, 3U, val);
 }
 
 static void set_gpio_pullmode(PCU_Type *ctrl, uint32_t pin, gpio_mode_t mode)
@@ -125,7 +124,7 @@ static void set_gpio_pullmode(PCU_Type *ctrl, uint32_t pin, gpio_mode_t mode)
 static void set_gpio_alt(PCU_Type *ctrl, uint32_t pin, int altfunc)
 {
 	uint32_t pos = pin * 2;
-	bitop_clean_set_with_mask(&ctrl->MR, pos, 3U << pos, (uint32_t)altfunc);
+	bitop_clean_set_with_mask(&ctrl->MR, pos, 3U, (uint32_t)altfunc);
 }
 
 static void disable_gpio_irq(PCU_Type *ctrl, uint32_t pin)
@@ -222,8 +221,8 @@ bool gpio_enable_irq(uint32_t ngpio, gpio_irq_t irq_type)
 	}
 
 	uint32_t pos = pin * 2;
-	bitop_clean_set_with_mask(&ctrl->ICR, pos, 3U << pos, val);
-	bitop_clean_set_with_mask(&ctrl->IER, pos, 3U << pos, ((uint32_t)edge << 1) + 1);
+	bitop_clean_set_with_mask(&ctrl->ICR, pos, 3U, val);
+	bitop_clean_set_with_mask(&ctrl->IER, pos, 3U, ((uint32_t)edge << 1) + 1);
 
 	return true;
 }

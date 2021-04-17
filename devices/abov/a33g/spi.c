@@ -182,7 +182,7 @@ void spi_set_data_width(peripheral_t spi, uint32_t data_width)
 void spi_set_bitorder(peripheral_t spi, bool lsb_first)
 {
 	SPI_Type *self = get_interface_from_type(spi);
-	bitop_clean_set_with_mask(&self->CR, 4, 1U << 4, !lsb_first); /* MSBF */
+	bitop_clean_set_with_mask(&self->CR, 4, 1U, !lsb_first); /* MSBF */
 }
 
 void spi_enable_irq(peripheral_t spi, spi_irq_t irqs)

@@ -21,8 +21,8 @@ static inline void bitop_clean_set_with_mask(volatile uint32_t *reg,
 		uint32_t pos, uint32_t mask, uint32_t val)
 {
 	uint32_t t = *reg;
-	t &= ~mask;
-	t |= (val << pos) & mask;
+	t &= ~(mask << pos);
+	t |= (val << pos) & (mask << pos);
 	*reg = t;
 }
 

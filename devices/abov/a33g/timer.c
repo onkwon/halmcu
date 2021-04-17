@@ -25,7 +25,7 @@ void timer_set_prescaler(peripheral_t peri, uint32_t div_factor)
 void timer_set_clock_divider(peripheral_t peri, uint32_t div_factor)
 {
 	bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
-			4, 7U << 4, div_factor); /* TCS */
+			4, 7U, div_factor); /* TCS */
 }
 
 void timer_set_counter(peripheral_t peri, uint32_t value)
@@ -58,15 +58,15 @@ void timer_enable_irq(peripheral_t peri, timer_event_t events)
 {
 	if (events & TIMER_EVENT_OVERFLOW) {
 		bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
-				10, 1U << 10, 1); /* TOVE */
+				10, 1U, 1); /* TOVE */
 	}
 	if (events & TIMER_EVENT_CC_0) {
 		bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
-				8, 1U << 8, 1); /* TIE0 */
+				8, 1U, 1); /* TIE0 */
 	}
 	if (events & TIMER_EVENT_CC_1) {
 		bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
-				9, 1U << 9, 1); /* TIE1 */
+				9, 1U, 1); /* TIE1 */
 	}
 }
 
@@ -160,13 +160,13 @@ void timer_reset(peripheral_t peri)
 void timer_set_polarity(peripheral_t peri, uint32_t level)
 {
 	bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
-			7, 1U << 7, level); /* TSTRT */
+			7, 1U, level); /* TSTRT */
 }
 
 void timer_set_edge(peripheral_t peri, timer_edge_t edge)
 {
 	bitop_clean_set_with_mask(&get_timer_from_peripheral(peri)->CON,
-			3, 1U << 3, edge); /* CAPM */
+			3, 1U, edge); /* CAPM */
 }
 
 uint32_t timer_get_frequency(peripheral_t peri, uint32_t tclk)
