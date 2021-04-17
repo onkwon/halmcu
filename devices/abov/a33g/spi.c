@@ -43,7 +43,7 @@ void spi_reset(peripheral_t spi)
 
 uint32_t spi_get_rxd(peripheral_t spi)
 {
-	SPI_Type *self = get_interface_from_type(spi);
+	const SPI_Type *self = get_interface_from_type(spi);
 	return self->RDR;
 }
 
@@ -136,9 +136,9 @@ void spi_set_clock_phase(peripheral_t spi, int cpha)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 
-	if (cpha == 2) {
+	if (cpha == 1) {
 		bitop_set(&self->CR, 3); /* CPHA */
-	} else if (cpha == 1) {
+	} else if (cpha == 0) {
 		bitop_clear(&self->CR, 3); /* CPHA */
 	}
 }
@@ -222,4 +222,62 @@ void spi_set_frequency(peripheral_t spi, uint32_t hz, uint32_t pclk)
 	uint32_t brr = pclk / hz - 1;
 	assert(brr > 0);
 	self->BR = brr;
+}
+
+void spi_start(peripheral_t spi)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+	bitop_set(&self->EN, 0);
+}
+
+void spi_stop(peripheral_t spi)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+	bitop_clear(&self->EN, 0);
+}
+
+spi_event_t spi_get_event(peripheral_t spi)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+	spi_event_t events = SPI_EVENT_NONE;
+	uint32_t flags = self->SR;
+
+	if (flags & 1) { /* RRDY */
+		events = (spi_event_t)(events | SPI_EVENT_RX);
+	}
+	if (flags & 2) { /* TRDY */
+		events = (spi_event_t)(events | SPI_EVENT_TX_COMPLETE);
+	}
+	if (flags & 4) { /* SBUSY */
+		events = (spi_event_t)(events | SPI_EVENT_BUSY);
+	}
+	if (flags & 8) { /* UDRF */
+		events = (spi_event_t)(events | SPI_EVENT_UNDERRUN);
+	}
+	if (flags & 0x10) { /* OVRF */
+		events = (spi_event_t)(events | SPI_EVENT_OVERRUN);
+	}
+	if (flags & 0x20) { /* SSON */
+		events = (spi_event_t)(events | SPI_EVENT_CHIP_SELECTED);
+	}
+	if (flags & 0x40) { /* SSDET */
+		events = (spi_event_t)(events | SPI_EVENT_CHIP_DESELECTED);
+	}
+
+	return events;
+}
+
+void spi_clear_event(peripheral_t spi, spi_event_t events)
+{
+	SPI_Type *self = get_interface_from_type(spi);
+
+	if (events & SPI_EVENT_CHIP_DESELECTED) {
+		bitop_clear(&self->SR, 6);
+	}
+	if (events & SPI_EVENT_OVERRUN) {
+		bitop_clear(&self->SR, 4);
+	}
+	if (events & SPI_EVENT_UNDERRUN) {
+		bitop_clear(&self->SR, 3);
+	}
 }

@@ -93,9 +93,9 @@ TEST(SPI, set_mode_ShouldSetMS) {
 }
 
 TEST(SPI, set_clock_phase_ShouldSetCPHA) {
-	spi_set_clock_phase(PERI_SPI0, 2);
-	LONGS_EQUAL(0x8, SPI0->CR & 0x8);
 	spi_set_clock_phase(PERI_SPI0, 1);
+	LONGS_EQUAL(0x8, SPI0->CR & 0x8);
+	spi_set_clock_phase(PERI_SPI0, 0);
 	LONGS_EQUAL(0, SPI0->CR & 0x8);
 }
 
@@ -146,4 +146,30 @@ TEST(SPI, disable_irq_ShouldDisableInterrupts) {
 TEST(SPI, set_frequency_ShouldSetBR) {
 	spi_set_frequency(PERI_SPI0, 1000000, 16000000);
 	LONGS_EQUAL(16-1, SPI0->BR);
+}
+
+TEST(SPI, start_ShouldSetEN) {
+	spi_start(PERI_SPI0);
+	LONGS_EQUAL(1, SPI0->EN);
+}
+
+TEST(SPI, stop_ShouldClearEN) {
+	spi_start(PERI_SPI0);
+	spi_stop(PERI_SPI0);
+	LONGS_EQUAL(0, SPI0->EN);
+}
+
+TEST(SPI, get_event_ShouldReturnSR) {
+	SPI0->SR = 0x7f;
+	LONGS_EQUAL(SPI_EVENT_MASK, spi_get_event(PERI_SPI0));
+}
+
+TEST(SPI, clear_event_ShouldClearSR) {
+	SPI0->SR = 0x7f;
+	spi_clear_event(PERI_SPI0, SPI_EVENT_OVERRUN);
+	LONGS_EQUAL(0x6f, SPI0->SR);
+	spi_clear_event(PERI_SPI0, SPI_EVENT_UNDERRUN);
+	LONGS_EQUAL(0x67, SPI0->SR);
+	spi_clear_event(PERI_SPI0, SPI_EVENT_CHIP_DESELECTED);
+	LONGS_EQUAL(0x27, SPI0->SR);
 }
