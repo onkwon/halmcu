@@ -238,7 +238,7 @@ void spi_stop(peripheral_t spi)
 
 spi_event_t spi_get_event(peripheral_t spi)
 {
-	SPI_Type *self = get_interface_from_type(spi);
+	const SPI_Type *self = get_interface_from_type(spi);
 	spi_event_t events = SPI_EVENT_NONE;
 	uint32_t flags = self->SR;
 
