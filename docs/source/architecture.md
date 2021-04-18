@@ -63,7 +63,8 @@ increase complexity.
 * `ABOV_WARNING_CFLAGS`
 * `CROSS_COMPILE`
 * `DEVICE`
-* `XTAL`
+* `HSE`
+* `HSI`
 * `NDEBUG`
 
 ## Software Layers

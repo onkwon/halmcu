@@ -4,7 +4,6 @@
 
 #include "abov/ll/adc.h"
 #include "a33g.h"
-#include "abov/peripheral.h"
 
 extern "C" {
 static struct adc_stub adcreg;
