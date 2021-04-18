@@ -1,10 +1,10 @@
-COMPONENT_NAME = clock
+COMPONENT_NAME = exti_stm32f1
 
 SRC_FILES = \
-	../devices/abov/a33g/clk.c \
+	../devices/st/stm32f1/exti.c \
 
 TEST_SRC_FILES = \
-	src/devices/abov/a33g/clk_test.cpp \
+	src/devices/st/stm32f1/exti_test.cpp \
 	src/test_all.cpp \
 
 INCLUDE_DIRS = \
@@ -13,12 +13,11 @@ INCLUDE_DIRS = \
 	$(CPPUTEST_HOME)/include \
 
 CPPUTEST_CPPFLAGS = \
-	-DIRQ_DEFINES=\"../devices/abov/a33g/irq.def\" \
-	-DDEVICE=a33g \
+	-DIRQ_DEFINES=\"../devices/st/stm32f1/irq.def\" \
+	-DDEVICE=stm32f1 \
 	-Darmv7m3 \
-	-DA33G52x_H \
-	-DHSE=8000000 \
+	-DSTM32F1_H \
 	-DUNITTEST \
-	-include a33g.h
+	-include stm32f1.h
 
 include MakefileRunner.mk

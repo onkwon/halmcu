@@ -1,5 +1,8 @@
-VENDOR := abov
+VENDOR := st
 HSE ?= 8000000
+HSI ?= 16000000
+VDD ?= 33
+AVDD ?= 33
 IRQ_DEFINES ?= ../devices/$(VENDOR)/$(DEVICE)/irq.def
 
 include $(LIBABOV_ROOT)/arch/arm/cortex-m/m3/m3.mk

@@ -11,6 +11,7 @@ extern "C" {
 /** Each port can have a number of pins up to `GPIO_PORT_SIZE`.
  * It should be kept power of 2. */
 #define GPIO_PORT_SIZE			0x100U
+#define GPIO_PORT_SIZE_PWR2		8
 
 /** GPIO port type */
 typedef enum {

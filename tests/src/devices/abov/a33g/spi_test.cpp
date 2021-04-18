@@ -4,7 +4,6 @@
 
 #include "abov/ll/spi.h"
 #include "a33g.h"
-#include "abov/peripheral.h"
 
 extern "C" {
 static struct spi_stub spireg0, spireg1;

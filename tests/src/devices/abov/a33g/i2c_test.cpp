@@ -4,7 +4,6 @@
 
 #include "abov/ll/i2c.h"
 #include "a33g.h"
-#include "abov/peripheral.h"
 
 extern "C" {
 static struct i2c_stub reg0, reg1;

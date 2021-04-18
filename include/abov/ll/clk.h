@@ -81,6 +81,7 @@ uint32_t clk_get_frequency(clk_source_t clk);
 
 /** Get peripheral clock source */
 clk_source_t clk_get_peripheral_clock_source(peripheral_t peri);
+/***/
 void clk_set_peripheral_clock_source(peripheral_t peri, clk_source_t clk);
 
 #if defined(__cplusplus)
