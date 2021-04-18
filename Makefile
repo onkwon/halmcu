@@ -1,4 +1,4 @@
-include projects/common/runner.mk
+include projects/runner.mk
 
 .PHONY: test
 test:

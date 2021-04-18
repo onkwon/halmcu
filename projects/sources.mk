@@ -2,9 +2,9 @@ ifeq ($(DEVICE),)
 $(error no device specified)
 endif
 
-include $(LIBABOV_ROOT)/projects/$(DEVICE).mk
-include $(LIBABOV_ROOT)/projects/common/version.mk
-include $(LIBABOV_ROOT)/projects/common/toolchain.mk
+include $(LIBABOV_ROOT)/projects/devices/$(DEVICE).mk
+include $(LIBABOV_ROOT)/projects/version.mk
+include $(LIBABOV_ROOT)/projects/toolchain.mk
 
 ifeq ($(ARCH),)
 $(error no cpu architecture specified)

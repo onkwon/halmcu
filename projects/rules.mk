@@ -2,7 +2,7 @@ OUTDIR := $(BUILDIR)/$(DEVICE)
 
 $(info building    $(DEVICE))
 
-include $(LIBABOV_ROOT)/projects/common/sources.mk
+include $(LIBABOV_ROOT)/projects/sources.mk
 
 OBJS += $(addprefix $(OUTDIR)/, $(SRCS:.c=.o))
 DEPS += $(LIBABOV_OBJS:.o=.d) $(OBJS:.o=.d)
