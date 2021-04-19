@@ -6,9 +6,8 @@
 #include "abov/asm/arm/cmsis.h"
 #include "stm32f1.h"
 
-#define MHZ				1000000
 #if !defined(F_HSI)
-#define F_HSI				(8*MHZ)
+#define F_HSI				(8000000)
 #endif
 
 static int get_ahb_activation_bitpos_from_peri(peripheral_t peri)
