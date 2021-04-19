@@ -83,14 +83,14 @@ TEST(Clock, get_source_ShouldReturnSourceClock) {
 	LONGS_EQUAL(CLK_LSE, clk_get_source());
 }
 
-TEST(Clock, enable_pll_ShouldEnablePLL) {
-	clk_enable_pll();
+TEST(Clock, start_pll_ShouldEnablePLL) {
+	clk_start_pll();
 	LONGS_EQUAL(0xE000, PMU->PLLCON);
 }
 
-TEST(Clock, disable_pll_ShouldDisablePLL) {
-	clk_enable_pll();
-	clk_disable_pll();
+TEST(Clock, stop_pll_ShouldDisablePLL) {
+	clk_start_pll();
+	clk_stop_pll();
 	LONGS_EQUAL(0, PMU->PLLCON);
 }
 

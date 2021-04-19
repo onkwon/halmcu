@@ -155,6 +155,26 @@ static uint32_t get_pllclk(void)
 	return (F_HSE >> 1) * pllm;
 }
 
+static uint32_t get_hclk(void)
+{
+	switch (get_sysclk_source()) {
+	case CLK_HSI:
+		return F_HSI;
+	case CLK_HSE:
+		return F_HSE;
+	case CLK_PLL:
+		break;
+	default:
+		return 0;
+	}
+
+	uint32_t pllclk = get_pllclk();
+	uint32_t pre = (RCC->CFGR >> 4) & 0xf; /* mask HPRE[7:4] */
+	uint32_t shift_factor = (pre == 0)? 0 : pre - 7;
+
+	return pllclk >> shift_factor;
+}
+
 void clk_enable_peripheral(peripheral_t peri)
 {
 	volatile uint32_t *reg = NULL;
@@ -177,20 +197,23 @@ void clk_disable_peripheral(peripheral_t peri)
 
 uint32_t clk_get_hclk_frequency(void)
 {
-	switch (get_sysclk_source()) {
-	case CLK_HSI:
-		return F_HSI;
-	case CLK_HSE:
-		return F_HSE;
-	case CLK_PLL:
-		break;
-	default:
-		return 0;
-	}
-
-	uint32_t pllclk = get_pllclk();
-	uint32_t pre = (RCC->CFGR >> 4) & 0xf; /* mask HPRE[7:4] */
-	uint32_t shift_factor = (pre == 0)? 0 : pre - 7;
-
-	return pllclk >> shift_factor;
+	return get_hclk();
 }
+
+uint32_t clk_get_pclk_frequency(void)
+{
+	uint32_t hclk = get_hclk();
+	uint32_t pre = (RCC->CFGR >> 8) & 0x7; /* PPRE1 */
+	uint32_t shift_factor = (pre == 0)? 0 : pre - 3;
+	return hclk >> shift_factor;
+}
+
+#if 0
+uint32_t clk_get_pclk2_frequency(void)
+{
+	uint32_t hclk = get_hclk();
+	uint32_t pre = (RCC->CFGR >> 11) & 0x7; /* PPRE2 */
+	uint32_t shift_factor = (pre == 0)? 0 : pre - 3;
+	return hclk >> shift_factor;
+}
+#endif

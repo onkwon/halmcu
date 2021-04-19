@@ -66,9 +66,9 @@ clk_source_t clk_get_source(void);
 /** Set frequency */
 bool clk_set_pll_frequency(clk_source_t clk, clk_source_t clkin, uint32_t hz);
 /** Enable PLL */
-void clk_enable_pll(void);
+void clk_start_pll(void);
 /** Disable PLL */
-void clk_disable_pll(void);
+void clk_stop_pll(void);
 /** Check if PLL is locked */
 bool clk_is_pll_locked(void);
 

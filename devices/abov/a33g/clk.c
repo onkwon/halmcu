@@ -435,13 +435,13 @@ clk_source_t clk_get_source(void)
 	return clk_get_source_internal();
 }
 
-void clk_enable_pll(void)
+void clk_start_pll(void)
 {
 	PMU->PLLCON |= PLLEN | PLLRST | nBYPASS;
 	PMU->MCMR |= MCKMNT;
 }
 
-void clk_disable_pll(void)
+void clk_stop_pll(void)
 {
 	PMU->PLLCON &= ~(PLLEN | PLLRST | nBYPASS);
 }
