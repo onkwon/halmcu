@@ -6,6 +6,7 @@
 
 #include "abov/ll/gpio.h"
 #include "a33g.h"
+#include "assert.h"
 
 extern "C" {
 static struct pcu_stub regPA, regPB, regPC, regPD, regPE, regPF;
