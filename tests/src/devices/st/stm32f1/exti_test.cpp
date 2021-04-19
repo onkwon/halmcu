@@ -82,7 +82,7 @@ TEST(EXTI, disable_event_ShouldClearEMR) {
 
 TEST(EXTI, set_source_ShouldSetEXTICR_WhenGpioAGiven) {
 	for (uint32_t i = 0; i < 16; i++) {
-		exti_set_source(GPIOA + i);
+		exti_set_source(PERI_GPIOA, i);
 	}
 
 	LONGS_EQUAL(0, SYSCFG->CR1);
@@ -92,7 +92,7 @@ TEST(EXTI, set_source_ShouldSetEXTICR_WhenGpioAGiven) {
 }
 TEST(EXTI, set_source_ShouldSetEXTICR_WhenGpioBGiven) {
 	for (uint32_t i = 0; i < 16; i++) {
-		exti_set_source(GPIOB + i);
+		exti_set_source(PERI_GPIOB, i);
 	}
 
 	LONGS_EQUAL(0x1111, SYSCFG->CR1);
@@ -102,7 +102,7 @@ TEST(EXTI, set_source_ShouldSetEXTICR_WhenGpioBGiven) {
 }
 TEST(EXTI, set_source_ShouldSetEXTICR_WhenGpioCGiven) {
 	for (uint32_t i = 0; i < 16; i++) {
-		exti_set_source(GPIOC + i);
+		exti_set_source(PERI_GPIOC, i);
 	}
 
 	LONGS_EQUAL(0x2222, SYSCFG->CR1);
@@ -112,7 +112,7 @@ TEST(EXTI, set_source_ShouldSetEXTICR_WhenGpioCGiven) {
 }
 TEST(EXTI, set_source_ShouldSetEXTICR_WhenGpioDGiven) {
 	for (uint32_t i = 0; i < 16; i++) {
-		exti_set_source(GPIOD + i);
+		exti_set_source(PERI_GPIOD, i);
 	}
 
 	LONGS_EQUAL(0x3333, SYSCFG->CR1);

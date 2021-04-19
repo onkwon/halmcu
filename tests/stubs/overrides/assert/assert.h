@@ -6,9 +6,9 @@ extern "C" {
 #endif
 
 #undef assert
-#define assert(exp)		if (!(exp)) myassert()
+#define assert(exp)		if (!(exp)) assert_override()
 
-extern void myassert(void);
+extern void assert_override(void);
 
 #if defined(__cplusplus)
 }
