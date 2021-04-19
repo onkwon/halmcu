@@ -86,6 +86,6 @@ int gpio_read(peripheral_t port, uint32_t pin)
 void gpio_write(peripheral_t port, uint32_t pin, int value)
 {
 	assert(pin < MAX_PIN_NUMBER);
-	uint32_t pos = !value * 16 + pin;
+	uint32_t pos = !value * 16U + pin;
 	get_reg_from_port(port)->BSRR = 1U << pos;
 }
