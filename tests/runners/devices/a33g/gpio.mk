@@ -10,9 +10,11 @@ TEST_SRC_FILES = \
 INCLUDE_DIRS = \
 	../include \
 	stubs/overrides \
+	stubs/overrides/assert \
 	$(CPPUTEST_HOME)/include \
 
 CPPUTEST_CPPFLAGS = \
+	-DIRQ_DEFINES=\"../devices/abov/a33g/irq.def\" \
 	-DDEVICE=a33g \
 	-Darmv7m3 \
 	-DA33G52x_H \

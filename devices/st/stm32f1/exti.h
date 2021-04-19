@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include "abov/peripheral.h"
 
 typedef enum {
 	EXTI_0,
@@ -34,7 +35,7 @@ void exti_enable_irq(exti_t exti);
 void exti_disable_irq(exti_t exti);
 void exti_enable_event(exti_t exti);
 void exti_disable_event(exti_t exti);
-void exti_set_source(uint32_t ngpio);
+void exti_set_source(peripheral_t port, uint32_t pin);
 void exti_set_rising_trigger(exti_t exti);
 void exti_clear_rising_trigger(exti_t exti);
 void exti_set_falling_trigger(exti_t exti);

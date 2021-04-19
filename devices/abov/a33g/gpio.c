@@ -1,81 +1,89 @@
 #include "abov/ll/gpio.h"
+
 #include <stddef.h>
+#include <stdbool.h>
+#include <assert.h>
+
 #include "abov/bitop.h"
 #include "abov/compiler.h"
 #include "abov/asm/arm/cmsis.h"
 #include "a33g.h"
 
 /* a33g supports 15 pins per port */
-#define MAX_PIN_NUMBER				15U
-#define PIN_NUMBER_MASK				(GPIO_PORT_SIZE - 1)
+#define MAX_PIN_NUMBER				16U
 #define PER_BASE_POS				8U
 
-ABOV_STATIC_ASSERT(GPIO_PORT_SIZE == 0x100, "");
-
-static uint32_t get_pin_from_gpio_number(uint32_t ngpio)
+static PCU_Type *get_pcu_from_port(peripheral_t port)
 {
-	return ngpio & PIN_NUMBER_MASK;
-}
+	PCU_Type *pcu = NULL;
 
-static gpio_port_t get_port_from_gpio_number(uint32_t ngpio)
-{
-	return (gpio_port_t)(ngpio & ~PIN_NUMBER_MASK);
-}
-
-static PCU_Type *get_pcu_from_gpio_number(uint32_t ngpio)
-{
-	switch (get_port_from_gpio_number(ngpio)) {
-	case GPIOA:
-		return PCA;
-	case GPIOB:
-		return PCB;
-	case GPIOC:
-		return PCC;
-	case GPIOD:
-		return PCD;
-	case GPIOE:
-		return PCE;
-	case GPIOF:
-		return PCF;
-	default:
-		return NULL;
-	}
-}
-
-static GPIO_Type *get_reg_from_port(gpio_port_t port)
-{
 	switch (port) {
-	case GPIOA:
-		return PA;
-	case GPIOB:
-		return PB;
-	case GPIOC:
-		return PC;
-	case GPIOD:
-		return PD;
-	case GPIOE:
-		return PE;
-	case GPIOF:
-		return PF;
+	case PERI_GPIOA:
+		pcu = PCA;
+		break;
+	case PERI_GPIOB:
+		pcu = PCB;
+		break;
+	case PERI_GPIOC:
+		pcu = PCC;
+		break;
+	case PERI_GPIOD:
+		pcu = PCD;
+		break;
+	case PERI_GPIOE:
+		pcu = PCE;
+		break;
+	case PERI_GPIOF:
+		pcu = PCF;
+		break;
 	default:
-		return NULL;
+		break;
 	}
+
+	assert(pcu != NULL);
+	return pcu;
 }
 
-static GPIO_Type *get_reg_from_gpio_number(uint32_t ngpio)
+static GPIO_Type *get_reg_from_port(peripheral_t port)
 {
-	return get_reg_from_port(get_port_from_gpio_number(ngpio));
+	GPIO_Type *reg = NULL;
+
+	switch (port) {
+	case PERI_GPIOA:
+		reg = PA;
+		break;
+	case PERI_GPIOB:
+		reg = PB;
+		break;
+	case PERI_GPIOC:
+		reg = PC;
+		break;
+	case PERI_GPIOD:
+		reg = PD;
+		break;
+	case PERI_GPIOE:
+		reg = PE;
+		break;
+	case PERI_GPIOF:
+		reg = PF;
+		break;
+	default:
+		break;
+	}
+
+	assert(reg != NULL);
+	return reg;
 }
 
-static void enable_port(gpio_port_t port)
+static void enable_port(peripheral_t port)
 {
-	uint32_t pos = port >> 8;
+	uint32_t pos = port - PERI_GPIOA;
 	bitop_set(&PMU->PER, pos + PER_BASE_POS);
 }
 
-static void disable_port(gpio_port_t port)
+static void disable_port(peripheral_t port)
 {
-	uint32_t pos = port >> 8;
+	uint32_t pos = port - PERI_GPIOA;
 	bitop_clear(&PMU->PER, pos + PER_BASE_POS);
 }
 
@@ -85,11 +93,13 @@ static void set_gpio_mode(PCU_Type *ctrl, uint32_t pin, gpio_mode_t mode)
 	uint32_t val = 0;
 
 	switch (mode) {
-	case GPIO_MODE_OPENDRAIN:
+	case GPIO_MODE_OPENDRAIN: /* fall through */
+	case GPIO_MODE_OPENDRAIN_PULLUP: /* fall through */
+	case GPIO_MODE_OPENDRAIN_PULLDOWN:
 		val = 1;
 		break;
-	case GPIO_MODE_INPUT:
-	case GPIO_MODE_INPUT_PULLUP:
+	case GPIO_MODE_INPUT: /* fall through */
+	case GPIO_MODE_INPUT_PULLUP: /* fall through */
 	case GPIO_MODE_INPUT_PULLDOWN:
 		val = 2;
 		break;
@@ -111,10 +121,12 @@ static void set_gpio_pullmode(PCU_Type *ctrl, uint32_t pin, gpio_mode_t mode)
 	bitop_clear(&reg, pin);
 	bitop_clear(&reg, pin + 16);
 
-	if (mode == GPIO_MODE_INPUT_PULLDOWN) {
+	if (mode == GPIO_MODE_INPUT_PULLDOWN ||
+			mode == GPIO_MODE_OPENDRAIN_PULLDOWN) {
 		bitop_set(&reg, pin + 16);
 		bitop_set(&reg, pin);
-	} else if (mode == GPIO_MODE_INPUT_PULLUP) {
+	} else if (mode == GPIO_MODE_INPUT_PULLUP ||
+			mode == GPIO_MODE_OPENDRAIN_PULLUP) {
 		bitop_set(&reg, pin);
 	}
 
@@ -137,68 +149,45 @@ static void disable_gpio_debounce(PCU_Type *ctrl, uint32_t pin)
 	ctrl->DER &= ~(3U << pin);
 }
 
-bool gpio_set_altfunc(uint32_t ngpio, int altfunc)
+static void set_gpio(peripheral_t port, uint32_t pin, gpio_mode_t mode)
 {
-	if (altfunc > 3) {
-		return false;
-	}
+	assert(pin < MAX_PIN_NUMBER);
+	PCU_Type *ctrl = get_pcu_from_port(port);
 
-	PCU_Type *ctrl = get_pcu_from_gpio_number(ngpio);
-	if (ctrl == NULL) {
-		return false;
-	}
-
-	uint32_t pin = get_pin_from_gpio_number(ngpio);
-	if (pin > MAX_PIN_NUMBER) {
-		return false;
-	}
-
-	set_gpio_alt(ctrl, pin, altfunc);
-
-	return true;
-}
-
-static bool set_gpio(uint32_t ngpio, gpio_mode_t mode)
-{
-	PCU_Type *ctrl = get_pcu_from_gpio_number(ngpio);
-	uint32_t pin = get_pin_from_gpio_number(ngpio);
-
-	if (ctrl == NULL || pin > MAX_PIN_NUMBER) {
-		return false;
-	}
-
-	enable_port(get_port_from_gpio_number(ngpio));
-
+	enable_port(port);
 	set_gpio_mode(ctrl, pin, mode);
 	set_gpio_pullmode(ctrl, pin, mode);
 	set_gpio_alt(ctrl, pin, 0);
 	disable_gpio_irq(ctrl, pin);
 	disable_gpio_debounce(ctrl, pin);
-
-	return true;
 }
 
-bool gpio_open(uint32_t ngpio, gpio_mode_t mode)
+void gpio_open(peripheral_t port, uint32_t pin, gpio_mode_t mode)
 {
-	return set_gpio(ngpio, mode);
+	set_gpio(port, pin, mode);
 }
 
-bool gpio_close(uint32_t ngpio)
+void gpio_close(peripheral_t port, uint32_t pin)
 {
-	return set_gpio(ngpio, GPIO_MODE_ANALOG);
+	set_gpio(port, pin, GPIO_MODE_ANALOG);
 }
 
-bool gpio_enable_irq(uint32_t ngpio, gpio_irq_t irq_type)
+void gpio_set_altfunc(peripheral_t port, uint32_t pin, int altfunc)
 {
-	PCU_Type *ctrl = get_pcu_from_gpio_number(ngpio);
-	uint32_t pin = get_pin_from_gpio_number(ngpio);
+	assert(altfunc < 4);
+	assert(pin < MAX_PIN_NUMBER);
+	PCU_Type *ctrl = get_pcu_from_port(port);
+	set_gpio_alt(ctrl, pin, altfunc);
+}
 
-	if (ctrl == NULL || pin > MAX_PIN_NUMBER) {
-		return false;
-	}
-
+void gpio_enable_irq(peripheral_t port, uint32_t pin, gpio_irq_t irq_type)
+{
+	assert(pin < MAX_PIN_NUMBER);
+	PCU_Type *ctrl = get_pcu_from_port(port);
+	uint32_t pos = pin * 2;
 	uint32_t val = 0;
 	bool edge = false;
+
 	switch (irq_type) {
 	case GPIO_IRQ_EDGE_RISING:
 		edge = true;
@@ -220,94 +209,60 @@ bool gpio_enable_irq(uint32_t ngpio, gpio_irq_t irq_type)
 		break;
 	}
 
-	uint32_t pos = pin * 2;
 	bitop_clean_set_with_mask(&ctrl->ICR, pos, 3U, val);
 	bitop_clean_set_with_mask(&ctrl->IER, pos, 3U, ((uint32_t)edge << 1) + 1);
-
-	return true;
 }
 
-bool gpio_disable_irq(uint32_t ngpio)
+void gpio_disable_irq(peripheral_t port, uint32_t pin)
 {
-	PCU_Type *ctrl = get_pcu_from_gpio_number(ngpio);
-	uint32_t pin = get_pin_from_gpio_number(ngpio);
-
-	if (ctrl == NULL || pin > MAX_PIN_NUMBER) {
-		return false;
-	}
-
+	assert(pin < MAX_PIN_NUMBER);
+	PCU_Type *ctrl = get_pcu_from_port(port);
 	ctrl->IER &= ~(3U << (pin * 2));
-
-	return true;
 }
 
-void gpio_clear_irq_flag(uint32_t ngpio)
+void gpio_clear_event(peripheral_t port, uint32_t pin)
 {
-	PCU_Type *ctrl = get_pcu_from_gpio_number(ngpio);
-	uint32_t pin = get_pin_from_gpio_number(ngpio);
-
-	if (ctrl == NULL || pin > MAX_PIN_NUMBER) {
-		return;
-	}
-
+	assert(pin < MAX_PIN_NUMBER);
+	PCU_Type *ctrl = get_pcu_from_port(port);
 	ctrl->ISR |= 1U << (pin * 2);
 }
 
-void gpio_write(uint32_t ngpio, int value)
+void gpio_write(peripheral_t port, uint32_t pin, int value)
 {
-	GPIO_Type *reg = get_reg_from_gpio_number(ngpio);
-	uint32_t pin = get_pin_from_gpio_number(ngpio);
-
-	if (reg == NULL || pin > MAX_PIN_NUMBER) {
-		return;
-	}
-
+	assert(pin < MAX_PIN_NUMBER);
+	GPIO_Type *reg = get_reg_from_port(port);
 	reg->SRR = 1U << (pin + ((uint32_t)!(value & 1) * 16));
 }
 
-int gpio_read(uint32_t ngpio)
+int gpio_read(peripheral_t port, uint32_t pin)
 {
-	const GPIO_Type *reg = get_reg_from_gpio_number(ngpio);
-	uint32_t pin = get_pin_from_gpio_number(ngpio);
-
-	if (reg == NULL || pin > MAX_PIN_NUMBER) {
-		return -1;
-	}
-
+	assert(pin < MAX_PIN_NUMBER);
+	const GPIO_Type *reg = get_reg_from_port(port);
 	return (reg->IDR >> pin) & 0x1;
 }
 
-void gpio_write_port(gpio_port_t port, int value)
+void gpio_write_port(peripheral_t port, int value)
 {
-	GPIO_Type *reg = get_reg_from_port(port);
-
-	if (reg != NULL) {
-		reg->ODR = (uint32_t)value;
-	}
+	get_reg_from_port(port)->ODR = (uint32_t)value;
 }
 
-int gpio_read_port(gpio_port_t port)
+int gpio_read_port(peripheral_t port)
 {
 	const GPIO_Type *reg = get_reg_from_port(port);
-
-	if (reg == NULL) {
-		return -1;
-	}
-
 	return (int)reg->IDR;
 }
 
-void gpio_enable_port(gpio_port_t port)
+void gpio_enable_port(peripheral_t port)
 {
 	enable_port(port);
 }
 
-void gpio_disable_port(gpio_port_t port)
+void gpio_disable_port(peripheral_t port)
 {
 	disable_port(port);
 }
 
-void gpio_reset(gpio_port_t port)
+void gpio_reset(peripheral_t port)
 {
 	unused(port);
 }
