@@ -62,3 +62,7 @@ RESERVE_IRQ(60)
 RESERVE_IRQ(61)
 RESERVE_IRQ(62)
 RESERVE_IRQ(63)
+
+/* dummies to be referenced in the implementation */
+DEFINE_IRQ (64, JTAG)
+DEFINE_IRQ (65, PMC)

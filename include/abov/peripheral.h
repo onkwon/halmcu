@@ -10,8 +10,6 @@ extern "C" {
 /** Peripherals enumeration */
 typedef enum {
 #include IRQ_DEFINES
-	PERI_JTAG,
-	PERI_PMC,
 	PERI_MAX,
 	PERI_UNDEFINED			= PERI_MAX,
 } peripheral_t;

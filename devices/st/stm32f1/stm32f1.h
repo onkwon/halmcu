@@ -14,6 +14,7 @@ extern "C" {
 
 #define SYSCFG_BASE			(APB2_BASE + 0)
 #define EXTI_BASE			(APB2_BASE + 0x400)
+#define RCC_BASE			(AHB_BASE + 0x9000)
 
 typedef struct {
 	volatile uint32_t EVCR;
@@ -34,8 +35,22 @@ typedef struct {
 	volatile uint32_t PR;
 } EXTI_Type;
 
+typedef struct {
+	volatile uint32_t CR;
+	volatile uint32_t CFGR;
+	volatile uint32_t CIR;
+	volatile uint32_t APB2RSTR;
+	volatile uint32_t APB1RSTR;
+	volatile uint32_t AHBENR;
+	volatile uint32_t APB2ENR;
+	volatile uint32_t APB1ENR;
+	volatile uint32_t BDCR;
+	volatile uint32_t CSR;
+} RCC_Type;
+
 #define SYSCFG				((SYSCFG_Type *)SYSCFG_BASE)
 #define EXTI				((EXTI_Type *)EXTI_BASE)
+#define RCC				((RCC_Type *)RCC_BASE)
 
 #if defined(__cplusplus)
 }

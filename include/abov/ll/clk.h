@@ -66,13 +66,13 @@ clk_source_t clk_get_source(void);
 /** Set frequency */
 bool clk_set_pll_frequency(clk_source_t clk, clk_source_t clkin, uint32_t hz);
 /** Enable PLL */
-void clk_enable_pll(void);
+void clk_start_pll(void);
 /** Disable PLL */
-void clk_disable_pll(void);
+void clk_stop_pll(void);
 /** Check if PLL is locked */
 bool clk_is_pll_locked(void);
 
-/** Get HCLK frequency in Hz */
+/** Get processor clock frequency in Hz */
 uint32_t clk_get_hclk_frequency(void);
 /** Get PCLK frequency in Hz */
 uint32_t clk_get_pclk_frequency(void);
@@ -83,6 +83,15 @@ uint32_t clk_get_frequency(clk_source_t clk);
 clk_source_t clk_get_peripheral_clock_source(peripheral_t peri);
 /***/
 void clk_set_peripheral_clock_source(peripheral_t peri, clk_source_t clk);
+
+/***/
+void clk_enable_output(void);
+/***/
+void clk_disable_output(void);
+/***/
+void clk_set_output_prescaler(uint32_t div_factor);
+/***/
+void clk_set_output_source(clk_source_t clk);
 
 #if defined(__cplusplus)
 }

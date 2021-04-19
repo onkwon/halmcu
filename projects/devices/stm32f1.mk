@@ -1,6 +1,6 @@
 VENDOR := st
 HSE ?= 8000000
-HSI ?= 16000000
+HSI ?= 8000000
 VDD ?= 33
 AVDD ?= 33
 IRQ_DEFINES ?= ../devices/$(VENDOR)/$(DEVICE)/irq.def
