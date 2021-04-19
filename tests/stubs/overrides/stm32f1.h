@@ -39,9 +39,26 @@ typedef struct {
 	volatile uint32_t CSR;
 } RCC_Type;
 
+typedef struct {
+	volatile uint32_t CRL;
+	volatile uint32_t CRH;
+	volatile uint32_t IDR;
+	volatile uint32_t ODR;
+	volatile uint32_t BSRR;
+	volatile uint32_t BRR;
+	volatile uint32_t LCKR;
+} GPIO_Type;
+
 extern SYSCFG_Type * const SYSCFG;
 extern EXTI_Type * const EXTI;
 extern RCC_Type * const RCC;
+extern GPIO_Type * const GPIOA;
+extern GPIO_Type * const GPIOB;
+extern GPIO_Type * const GPIOC;
+extern GPIO_Type * const GPIOD;
+extern GPIO_Type * const GPIOE;
+extern GPIO_Type * const GPIOF;
+extern GPIO_Type * const GPIOG;
 
 #if defined(__cplusplus)
 }
