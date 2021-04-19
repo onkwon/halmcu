@@ -17,7 +17,7 @@ CPPUTEST_CPPFLAGS = \
 	-DDEVICE=a33g \
 	-Darmv7m3 \
 	-DA33G52x_H \
-	-DHSE=8000000 \
+	-DF_HSE=8000000 \
 	-DUNITTEST \
 	-include a33g.h
 

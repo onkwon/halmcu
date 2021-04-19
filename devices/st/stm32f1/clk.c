@@ -6,6 +6,11 @@
 #include "abov/asm/arm/cmsis.h"
 #include "stm32f1.h"
 
+#define MHZ				1000000
+#if !defined(F_HSI)
+#define F_HSI				(8*MHZ)
+#endif
+
 static int get_ahb_activation_bitpos_from_peri(peripheral_t peri)
 {
 	switch (peri) {
@@ -122,6 +127,35 @@ static int get_activation_bitpos_and_reg(peripheral_t peri,
 	return bitpos;
 }
 
+static clk_source_t get_sysclk_source(void)
+{
+	switch ((RCC->CFGR >> 2) & 0x3) { /* SWS */
+	case 1:
+		return CLK_HSE;
+	case 2:
+		return CLK_PLL;
+	case 0: /* fall through */
+	default:
+		return CLK_HSI;
+	}
+}
+
+static uint32_t get_pllclk(void)
+{
+	uint32_t reg = RCC->CFGR;
+	uint32_t pllm = ((reg >> 18) & 0xf) + 2; /* PLLMUL */
+
+	if (((reg >> 16) & 0x1) == 0) {
+		return (F_HSI >> 1) * pllm;
+	}
+
+	if (((reg >> 17) & 1) == 0) { /* PLLXTPRE */
+		return F_HSE * pllm;
+	}
+
+	return (F_HSE >> 1) * pllm;
+}
+
 void clk_enable_peripheral(peripheral_t peri)
 {
 	volatile uint32_t *reg = NULL;
@@ -140,4 +174,24 @@ void clk_disable_peripheral(peripheral_t peri)
 	if (reg != NULL) {
 		bitop_clear(reg, (uint32_t)bitpos);
 	}
+}
+
+uint32_t clk_get_hclk_frequency(void)
+{
+	switch (get_sysclk_source()) {
+	case CLK_HSI:
+		return F_HSI;
+	case CLK_HSE:
+		return F_HSE;
+	case CLK_PLL:
+		break;
+	default:
+		return 0;
+	}
+
+	uint32_t pllclk = get_pllclk();
+	uint32_t pre = (RCC->CFGR >> 4) & 0xf; /* mask HPRE[7:4] */
+	uint32_t shift_factor = (pre == 0)? 0 : pre - 7;
+
+	return pllclk >> shift_factor;
 }

@@ -19,7 +19,8 @@ LIBABOV_OBJS := $(addprefix $(OUTDIR)/, $(LIBABOV_SRCS_STRIPPED:.c=.o))
 LIBABOV_INCS += $(LIBABOV_ROOT)/include
 LIBABOV_DEFS += \
 	$(ARCH) \
-	HSE=$(HSE) \
+	F_HSE=$(HSE) \
+	F_HSI=$(HSI) \
 	IRQ_DEFINES=\"$(IRQ_DEFINES)\" \
 	LIBABOV_BUILD_DATE=\""$(shell date)"\" \
 	LIBABOV_VERSION=$(LIBABOV_VERSION) \

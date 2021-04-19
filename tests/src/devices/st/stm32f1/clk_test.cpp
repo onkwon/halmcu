@@ -93,3 +93,7 @@ TEST(CLK, disable_peripheral_ShouldSetAPB1ENR_WhenAPB1PeriphGiven) {
 	clk_disable_peripheral(PERI_TIM4);
 	LONGS_EQUAL(0xEFD7F7FB, RCC->APB1ENR);
 }
+
+TEST(CLK, get_hclk_freq_ShouldReturnHSI_WhenResetStatusGiven) {
+	LONGS_EQUAL(8000000, clk_get_hclk_frequency());
+}

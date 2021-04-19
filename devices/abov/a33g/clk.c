@@ -310,7 +310,7 @@ static uint32_t clk_get_pll_frequency(void)
 		return 1*MHZ;
 	case CLK_PLL:
 		if (clk_get_pll_source() == CLK_HSE) {
-			clkin = HSE;
+			clkin = F_HSE;
 		} else {
 			clkin = 16*MHZ;
 		}
@@ -323,7 +323,7 @@ static uint32_t clk_get_pll_frequency(void)
 		return (clkin * n1) / (r * n2 * p) * d;
 	case CLK_PLL_BYPASS:
 		if (clk_get_pll_source() == CLK_HSE) {
-			return HSE;
+			return F_HSE;
 		}
 		return 16*MHZ; /* HSI */
 	case CLK_LSE:
@@ -460,8 +460,8 @@ bool clk_set_pll_frequency(clk_source_t clk, clk_source_t clkin, uint32_t hz)
 		}
 		if (clkin == CLK_HSE) {
 			// NOTE: according to UM_A33G52x: 4 <= xtal <= 8MHz
-			assert(HSE >= 4*MHZ && HSE <= 8*MHZ);
-			src_hz = HSE;
+			assert(F_HSE >= 4*MHZ && F_HSE <= 8*MHZ);
+			src_hz = F_HSE;
 		}
 		break;
 	case CLK_LSI:
@@ -502,7 +502,7 @@ uint32_t clk_get_frequency(clk_source_t clk)
 	case CLK_HSI:
 		return 16*MHZ;
 	case CLK_HSE:
-		return HSE;
+		return F_HSE;
 	case CLK_LSE:
 	default:
 		return 0;
