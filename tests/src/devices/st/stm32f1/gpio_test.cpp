@@ -209,3 +209,102 @@ TEST(GPIO, clear_event_ShouldCallExtiClearEvent) {
 	mock().expectOneCall("exti_clear_event").withParameter("exti", 6);
 	gpio_clear_event(PERI_GPIOA, 6);
 }
+
+TEST(GPIO, set_mode_ShouldCauseAssert_WhenInvalidPortGiven) {
+	mock().expectOneCall("assert_override");
+	gpio_set_mode(PERI_USART1, 0, GPIO_MODE_PUSHPULL);
+}
+TEST(GPIO, set_mode_ShouldCauseAssert_WhenInvalidPinGiven) {
+	mock().expectOneCall("assert_override");
+	gpio_set_mode(PERI_GPIOA, 16, GPIO_MODE_PUSHPULL);
+}
+TEST(GPIO, set_mode_ShouldSetCRL_WhenPin0To7Given) {
+	gpio_set_mode(PERI_GPIOA, 0, GPIO_MODE_INPUT);
+	LONGS_EQUAL(0x4, GPIOA->CRL);
+	gpio_set_mode(PERI_GPIOA, 1, GPIO_MODE_PUSHPULL);
+	LONGS_EQUAL(0x24, GPIOA->CRL);
+	gpio_set_mode(PERI_GPIOA, 0, GPIO_MODE_ANALOG);
+	LONGS_EQUAL(0x20, GPIOA->CRL);
+	gpio_set_mode(PERI_GPIOA, 2, GPIO_MODE_OPENDRAIN);
+	LONGS_EQUAL(0x620, GPIOA->CRL);
+	gpio_set_mode(PERI_GPIOA, 3, GPIO_MODE_INPUT_PULLUP);
+	LONGS_EQUAL(0x8620, GPIOA->CRL);
+}
+TEST(GPIO, set_mode_ShouldSetCRH_WhenPin8To15Given) {
+	gpio_set_mode(PERI_GPIOA, 15, GPIO_MODE_INPUT);
+	LONGS_EQUAL(0x40000000, GPIOA->CRH);
+	gpio_set_mode(PERI_GPIOA, 13, GPIO_MODE_PUSHPULL);
+	LONGS_EQUAL(0x40200000, GPIOA->CRH);
+}
+
+TEST(GPIO, set_altfunc_ShouldCauseAssert_WhenInvalidPortGiven) {
+	mock().expectOneCall("assert_override");
+	gpio_set_altfunc(PERI_USART1, 0, 0);
+}
+TEST(GPIO, set_altfunc_ShouldCauseAssert_WhenInvalidPinGiven) {
+	mock().expectOneCall("assert_override");
+	gpio_set_altfunc(PERI_GPIOA, 20, 0);
+}
+TEST(GPIO, set_altfunc_ShouldSetCRL_WhenPin0To7Given) {
+	gpio_set_altfunc(PERI_GPIOG, 0, 0);
+	LONGS_EQUAL(0x8, GPIOG->CRL);
+	gpio_set_altfunc(PERI_GPIOG, 1, 0);
+	LONGS_EQUAL(0x88, GPIOG->CRL);
+	gpio_set_altfunc(PERI_GPIOG, 2, 0);
+	LONGS_EQUAL(0x888, GPIOG->CRL);
+	gpio_set_altfunc(PERI_GPIOG, 4, 0);
+	LONGS_EQUAL(0x80888, GPIOG->CRL);
+	gpio_set_altfunc(PERI_GPIOG, 7, 0);
+	LONGS_EQUAL(0x80080888, GPIOG->CRL);
+}
+TEST(GPIO, set_altfunc_ShouldSetCRH_WhenPin8To15Given) {
+	gpio_set_altfunc(PERI_GPIOA, 15, 0);
+	LONGS_EQUAL(0x80000000, GPIOA->CRH);
+	gpio_set_altfunc(PERI_GPIOA, 14, 0);
+	LONGS_EQUAL(0x88000000, GPIOA->CRH);
+	gpio_set_altfunc(PERI_GPIOA, 13, 0);
+	LONGS_EQUAL(0x88800000, GPIOA->CRH);
+	gpio_set_altfunc(PERI_GPIOA, 11, 0);
+	LONGS_EQUAL(0x88808000, GPIOA->CRH);
+}
+TEST(GPIO, set_altfunc_ShouldSetModeAltPushpull_WhenPushpullModeGiven) {
+	gpio_set_mode(PERI_GPIOA, 0, GPIO_MODE_PUSHPULL);
+	gpio_set_altfunc(PERI_GPIOA, 0, 0);
+	LONGS_EQUAL(0xa, GPIOA->CRL);
+}
+TEST(GPIO, set_altfunc_ShouldSetModeAltOpendrain_WhenOpendrainModeGiven) {
+	gpio_set_mode(PERI_GPIOA, 0, GPIO_MODE_OPENDRAIN);
+	gpio_set_altfunc(PERI_GPIOA, 0, 0);
+	LONGS_EQUAL(0xe, GPIOA->CRL);
+}
+
+TEST(GPIO, set_speed_ShouldCauseAssert_WhenInvalidPortGiven) {
+	mock().expectOneCall("assert_override");
+	gpio_set_speed(PERI_USART1, 0, GPIO_SPEED_LOW);
+}
+TEST(GPIO, set_speed_ShouldCauseAssert_WhenInvalidPinGiven) {
+	mock().expectOneCall("assert_override");
+	gpio_set_speed(PERI_GPIOA, 16, GPIO_SPEED_LOW);
+}
+TEST(GPIO, set_speed_ShouldSetSpeed) {
+	gpio_set_speed(PERI_GPIOA, 0, GPIO_SPEED_HIGH);
+	LONGS_EQUAL(3, GPIOA->CRL);
+	gpio_set_speed(PERI_GPIOA, 1, GPIO_SPEED_MID);
+	LONGS_EQUAL(0x13, GPIOA->CRL);
+	gpio_set_speed(PERI_GPIOA, 0, GPIO_SPEED_LOW);
+	LONGS_EQUAL(0x12, GPIOA->CRL);
+}
+TEST(GPIO, set_speed_ShouldSetSpeed_WhenPushpullModeGiven) {
+	gpio_set_mode(PERI_GPIOA, 0, GPIO_MODE_PUSHPULL);
+	gpio_set_speed(PERI_GPIOA, 0, GPIO_SPEED_HIGH);
+	LONGS_EQUAL(3, GPIOA->CRL);
+	gpio_set_altfunc(PERI_GPIOA, 0, 0);
+	LONGS_EQUAL(0xb, GPIOA->CRL);
+}
+TEST(GPIO, set_speed_ShouldSetSpeed_WhenOpendrainModeGiven) {
+	gpio_set_mode(PERI_GPIOA, 0, GPIO_MODE_OPENDRAIN);
+	gpio_set_speed(PERI_GPIOA, 0, GPIO_SPEED_MID);
+	LONGS_EQUAL(5, GPIOA->CRL);
+	gpio_set_altfunc(PERI_GPIOA, 0, 0);
+	LONGS_EQUAL(0xd, GPIOA->CRL);
+}

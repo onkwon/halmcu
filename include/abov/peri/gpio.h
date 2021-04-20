@@ -42,6 +42,16 @@ typedef enum {
 	GPIO_IRQ_LEVEL_LOW,
 } gpio_irq_t;
 
+/***/
+typedef enum {
+	/***/
+	GPIO_SPEED_HIGH,
+	/***/
+	GPIO_SPEED_MID,
+	/***/
+	GPIO_SPEED_LOW,
+} gpio_speed_t;
+
 /**
  * Reset GPIO port
  *
@@ -50,25 +60,12 @@ typedef enum {
  * :param port: GPIO port enumerated in :c:type:`peripheral_t`
  */
 void gpio_reset(peripheral_t port);
-/**
- * Initialize the given GPIO pin to the specified mode
- *
- * :param port: GPIO port enumerated in :c:type:`peripheral_t`
- * :param pin: GPIO number starting from 0
- * :param mode: sets gpio operation mode
- * :return: true on success
- */
-void gpio_open(peripheral_t port, uint32_t pin, gpio_mode_t mode);
-/**
- * Deinitialize the given GPIO pin
- *
- * :param port: GPIO port enumerated in :c:type:`peripheral_t`
- * :param pin: GPIO number starting from 0
- * :return: true on success
- */
-void gpio_close(peripheral_t port, uint32_t pin);
+/***/
+void gpio_set_mode(peripheral_t port, uint32_t pin, gpio_mode_t mode);
 /**
  * Select GPIO alternate function
+ *
+ * Call this function after :c:function:`gpio_set_mode`
  *
  * :param port: GPIO port enumerated in :c:type:`peripheral_t`
  * :param pin: GPIO number starting from 0
@@ -76,6 +73,12 @@ void gpio_close(peripheral_t port, uint32_t pin);
  * :return: true on success
  */
 void gpio_set_altfunc(peripheral_t port, uint32_t pin, int altfunc);
+/**
+ *
+ * Call this function after :c:function:`gpio_set_altfunc`
+ *
+ */
+void gpio_set_speed(peripheral_t port, uint32_t pin, gpio_speed_t speed);
 /**
  * Write output level to the given GPIO pin
  *
