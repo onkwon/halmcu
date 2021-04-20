@@ -99,10 +99,10 @@ TEST(GPIO, write_port_ShouldCauseAssert_WhenInvalidPortGiven) {
 	gpio_write_port(PERI_USART1, 0xabcd);
 }
 TEST(GPIO, write_port_ShouldSetODR) {
-	gpio_write_port(PERI_GPIOA, 0xabcd);
-	LONGS_EQUAL(0xabcd, GPIOA->ODR);
-	gpio_write_port(PERI_GPIOB, 0xdcba);
-	LONGS_EQUAL(0xdcba, GPIOB->ODR);
+	gpio_write_port(PERI_GPIOC, 0xabcd);
+	LONGS_EQUAL(0xabcd, GPIOC->ODR);
+	gpio_write_port(PERI_GPIOD, 0xdcba);
+	LONGS_EQUAL(0xdcba, GPIOD->ODR);
 }
 
 TEST(GPIO, read_ShouldCauseAssert_WhenInvalidPortGiven) {
@@ -135,12 +135,77 @@ TEST(GPIO, write_ShouldCauseAssert_WhenInvalidPinGiven) {
 	gpio_write(PERI_GPIOA, 16, 0);
 }
 TEST(GPIO, write_ShouldSetBSRRBit) {
-	gpio_write(PERI_GPIOA, 0, 1);
-	LONGS_EQUAL(1, GPIOA->BSRR);
-	gpio_write(PERI_GPIOA, 1, 0);
-	LONGS_EQUAL(0x20000, GPIOA->BSRR);
-	gpio_write(PERI_GPIOA, 15, 0);
-	LONGS_EQUAL(0x80000000, GPIOA->BSRR);
-	gpio_write(PERI_GPIOA, 14, 1);
-	LONGS_EQUAL(0x4000, GPIOA->BSRR);
+	gpio_write(PERI_GPIOE, 0, 1);
+	LONGS_EQUAL(1, GPIOE->BSRR);
+	gpio_write(PERI_GPIOE, 1, 0);
+	LONGS_EQUAL(0x20000, GPIOE->BSRR);
+	gpio_write(PERI_GPIOE, 15, 0);
+	LONGS_EQUAL(0x80000000, GPIOE->BSRR);
+	gpio_write(PERI_GPIOE, 14, 1);
+	LONGS_EQUAL(0x4000, GPIOE->BSRR);
+}
+
+TEST(GPIO, enable_irq_ShouldCauseAssert_WhenInvalidPortGiven) {
+	mock().expectOneCall("assert_override");
+	gpio_enable_irq(PERI_USART1, 0, GPIO_IRQ_EDGE_ANY);
+}
+TEST(GPIO, enable_irq_ShouldCauseAssert_WhenInvalidPinGiven) {
+	mock().expectOneCall("assert_override");
+	gpio_enable_irq(PERI_GPIOA, 20, GPIO_IRQ_EDGE_ANY);
+}
+TEST(GPIO, enable_irq_ShouldResetExtiEdgeFirst) {
+	mock().expectOneCall("exti_clear_rising_trigger")
+		.withParameter("exti", 0);
+	mock().expectOneCall("exti_clear_falling_trigger")
+		.withParameter("exti", 0);
+	gpio_enable_irq(PERI_GPIOA, 0, GPIO_IRQ_EDGE_ANY);
+}
+TEST(GPIO, enable_irq_ShouldCallExtiEnableIrq) {
+	mock().expectOneCall("exti_enable_irq").withParameter("exti", 1);
+	gpio_enable_irq(PERI_GPIOA, 1, GPIO_IRQ_EDGE_ANY);
+}
+TEST(GPIO, enable_irq_ShouldSetRisingEdge_WhenRisingOptionGiven) {
+	mock().expectOneCall("exti_set_rising_trigger")
+		.withParameter("exti", 2);
+	mock().expectNoCall("exti_set_falling_trigger");
+	gpio_enable_irq(PERI_GPIOA, 2, GPIO_IRQ_EDGE_RISING);
+}
+TEST(GPIO, enable_irq_ShouldSetFallingEdge_WhenFallingOptionGiven) {
+	mock().expectOneCall("exti_set_falling_trigger")
+		.withParameter("exti", 3);
+	mock().expectNoCall("exti_set_rising_trigger");
+	gpio_enable_irq(PERI_GPIOA, 3, GPIO_IRQ_EDGE_FALLING);
+}
+TEST(GPIO, enable_irq_ShouldSetBothEdges_WhenAnyOptionGiven) {
+	mock().expectOneCall("exti_set_rising_trigger")
+		.withParameter("exti", 4);
+	mock().expectOneCall("exti_set_falling_trigger")
+		.withParameter("exti", 4);
+	gpio_enable_irq(PERI_GPIOA, 4, GPIO_IRQ_EDGE_ANY);
+}
+
+TEST(GPIO, disable_irq_ShouldCauseAssert_WhenInvalidPortGiven) {
+	mock().expectOneCall("assert_override");
+	gpio_disable_irq(PERI_USART1, 0);
+}
+TEST(GPIO, disable_irq_ShouldCauseAssert_WhenInvalidPinGiven) {
+	mock().expectOneCall("assert_override");
+	gpio_disable_irq(PERI_GPIOA, 20);
+}
+TEST(GPIO, disable_irq_ShouldCallExtiDisableIrq) {
+	mock().expectOneCall("exti_disable_irq").withParameter("exti", 5);
+	gpio_disable_irq(PERI_GPIOA, 5);
+}
+
+TEST(GPIO, clear_event_ShouldCauseAssert_WhenInvalidPortGiven) {
+	mock().expectOneCall("assert_override");
+	gpio_clear_event(PERI_USART1, 0);
+}
+TEST(GPIO, clear_event_ShouldCauseAssert_WhenInvalidPinGiven) {
+	mock().expectOneCall("assert_override");
+	gpio_clear_event(PERI_GPIOA, 20);
+}
+TEST(GPIO, clear_event_ShouldCallExtiClearEvent) {
+	mock().expectOneCall("exti_clear_event").withParameter("exti", 6);
+	gpio_clear_event(PERI_GPIOA, 6);
 }

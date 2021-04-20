@@ -6,13 +6,12 @@
 #include "abov/bitop.h"
 #include "abov/compiler.h"
 #include "stm32f1.h"
+#include "exti.h"
 
 #define MAX_PIN_NUMBER				16
 
 static GPIO_Type *get_reg_from_port(peripheral_t port)
 {
-	GPIO_Type *reg = NULL;
-
 	switch (port) {
 	case PERI_GPIOA:
 		return GPIOA;
@@ -32,7 +31,7 @@ static GPIO_Type *get_reg_from_port(peripheral_t port)
 		break;
 	}
 
-	assert(reg != NULL);
+	assert(0);
 	return GPIOA;
 }
 
@@ -88,4 +87,45 @@ void gpio_write(peripheral_t port, uint32_t pin, int value)
 	assert(pin < MAX_PIN_NUMBER);
 	uint32_t pos = !value * 16U + pin;
 	get_reg_from_port(port)->BSRR = 1U << pos;
+}
+
+void gpio_enable_irq(peripheral_t port, uint32_t pin, gpio_irq_t irq_type)
+{
+	assert(port >= PERI_GPIOA && port <= PERI_GPIOG);
+	assert(pin < MAX_PIN_NUMBER);
+
+	exti_t exti = (exti_t)pin;
+	exti_set_source(port, pin);
+
+	exti_clear_rising_trigger(exti);
+	exti_clear_falling_trigger(exti);
+
+	if (irq_type == GPIO_IRQ_EDGE_RISING) {
+		exti_set_rising_trigger(exti);
+	} else if (irq_type == GPIO_IRQ_EDGE_FALLING) {
+		exti_set_falling_trigger(exti);
+	} else if (irq_type == GPIO_IRQ_EDGE_ANY) {
+		exti_set_rising_trigger(exti);
+		exti_set_falling_trigger(exti);
+	}
+
+	exti_enable_irq(exti);
+}
+
+void gpio_disable_irq(peripheral_t port, uint32_t pin)
+{
+	assert(port >= PERI_GPIOA && port <= PERI_GPIOG);
+	assert(pin < MAX_PIN_NUMBER);
+
+	exti_t exti = (exti_t)pin;
+	exti_disable_irq(exti);
+}
+
+void gpio_clear_event(peripheral_t port, uint32_t pin)
+{
+	assert(port >= PERI_GPIOA && port <= PERI_GPIOG);
+	assert(pin < MAX_PIN_NUMBER);
+
+	exti_t exti = (exti_t)pin;
+	exti_clear_event(exti);
 }
