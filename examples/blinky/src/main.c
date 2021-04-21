@@ -1,7 +1,7 @@
 #include "abov/hal/gpio.h"
 #include "abov/delay.h"
 
-#define LED_PORT		PERI_GPIOD
+#define LED_PORT		PERIPH_GPIOD
 #define LED_PIN			1
 
 int main(void)

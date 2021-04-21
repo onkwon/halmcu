@@ -7,7 +7,7 @@
 #include "abov/ll/clk.h"
 #include "abov/irq.h"
 
-void gpio_open(peripheral_t port, uint32_t pin, const struct gpio_cfg *cfg)
+void gpio_open(periph_t port, uint32_t pin, const struct gpio_cfg *cfg)
 {
 	if (cfg == NULL) {
 		return;
@@ -30,11 +30,11 @@ void gpio_open(peripheral_t port, uint32_t pin, const struct gpio_cfg *cfg)
 	if (cfg->irq != 0) {
 		gpio_clear_event(port, pin);
 		gpio_enable_irq(port, pin, cfg->irq);
-		irq_enable(PERI_TO_IRQ(port));
+		irq_enable(PERIPH_TO_IRQ(port));
 	}
 }
 
-void gpio_open_output(peripheral_t port, uint32_t pin, gpio_mode_t mode)
+void gpio_open_output(periph_t port, uint32_t pin, gpio_mode_t mode)
 {
 	pwr_enable_peripheral(port);
 	clk_enable_peripheral(port);
@@ -44,10 +44,10 @@ void gpio_open_output(peripheral_t port, uint32_t pin, gpio_mode_t mode)
 	gpio_set_mode(port, pin, mode);
 }
 
-void gpio_close(peripheral_t port, uint32_t pin)
+void gpio_close(periph_t port, uint32_t pin)
 {
 	gpio_disable_irq(port, pin);
-	irq_disable(PERI_TO_IRQ(port));
+	irq_disable(PERIPH_TO_IRQ(port));
 
 	gpio_set_mode(port, pin, GPIO_MODE_ANALOG);
 	gpio_set_debouncer(port, pin, 0); /* turn it off */

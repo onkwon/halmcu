@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "abov/peripheral.h"
+#include "abov/periph.h"
 
 /** GPIO mode */
 typedef enum {
@@ -59,96 +59,96 @@ typedef enum {
  *
  * This function makes GPIO port the reset state.
  *
- * :param port: GPIO port enumerated in :c:type:`peripheral_t`
+ * :param port: GPIO port enumerated in :c:type:`periph_t`
  */
-void gpio_reset(peripheral_t port);
+void gpio_reset(periph_t port);
 /**
  * Enable the given port
  *
- * :param port: GPIO port enumerated in :c:type:`peripheral_t`
+ * :param port: GPIO port enumerated in :c:type:`periph_t`
  */
-void gpio_enable_port(peripheral_t port);
+void gpio_enable_port(periph_t port);
 /**
  * Disable the given port
  *
- * :param port: GPIO port enumerated in :c:type:`peripheral_t`
+ * :param port: GPIO port enumerated in :c:type:`periph_t`
  */
-void gpio_disable_port(peripheral_t port);
+void gpio_disable_port(periph_t port);
 /***/
-void gpio_set_mode(peripheral_t port, uint32_t pin, gpio_mode_t mode);
+void gpio_set_mode(periph_t port, uint32_t pin, gpio_mode_t mode);
 /**
  * Select GPIO alternate function
  *
  * Call this function after :c:func:`gpio_set_mode`
  *
- * :param port: GPIO port enumerated in :c:type:`peripheral_t`
+ * :param port: GPIO port enumerated in :c:type:`periph_t`
  * :param pin: GPIO number starting from 0
  * :param altfunc: alternate function number
  * :return: true on success
  */
-void gpio_set_altfunc(peripheral_t port, uint32_t pin, int altfunc);
+void gpio_set_altfunc(periph_t port, uint32_t pin, int altfunc);
 /**
  *
  * Call this function after :c:func:`gpio_set_altfunc`
  */
-void gpio_set_speed(peripheral_t port, uint32_t pin, gpio_speed_t speed);
+void gpio_set_speed(periph_t port, uint32_t pin, gpio_speed_t speed);
 /**
  *
  * :param pclk_clocks: 0 clock cycle to disable
  */
-void gpio_set_debouncer(peripheral_t port, uint32_t pin, uint32_t pclk_clocks);
+void gpio_set_debouncer(periph_t port, uint32_t pin, uint32_t pclk_clocks);
 /**
  * Enable interrupt on the given GPIO pin
  *
- * :param port: GPIO port enumerated in :c:type:`peripheral_t`
+ * :param port: GPIO port enumerated in :c:type:`periph_t`
  * :param pin: GPIO number starting from 0
  * :param irq_type: sets interrupt trigger type
  */
-void gpio_enable_irq(peripheral_t port, uint32_t pin, gpio_irq_t irq_type);
+void gpio_enable_irq(periph_t port, uint32_t pin, gpio_irq_t irq_type);
 /**
  * Disable interrupt on the given GPIO pin
  *
- * :param port: GPIO port enumerated in :c:type:`peripheral_t`
+ * :param port: GPIO port enumerated in :c:type:`periph_t`
  * :param pin: GPIO number starting from 0
  */
-void gpio_disable_irq(peripheral_t port, uint32_t pin);
+void gpio_disable_irq(periph_t port, uint32_t pin);
 /**
  * Clear interrupt flag on the given GPIO pin
  *
- * :param port: GPIO port enumerated in :c:type:`peripheral_t`
+ * :param port: GPIO port enumerated in :c:type:`periph_t`
  * :param pin: GPIO number starting from 0
  */
-void gpio_clear_event(peripheral_t port, uint32_t pin);
+void gpio_clear_event(periph_t port, uint32_t pin);
 /**
  * Write a value to the given GPIO port
  *
- * :param port: GPIO port enumerated in :c:type:`peripheral_t`
+ * :param port: GPIO port enumerated in :c:type:`periph_t`
  * :param value: to be written to the GPIO port
  */
-void gpio_write_port(peripheral_t port, int value);
+void gpio_write_port(periph_t port, int value);
 /**
  * Read the current value of the given GPIO port
  *
- * :param port: GPIO port enumerated in :c:type:`peripheral_t`
+ * :param port: GPIO port enumerated in :c:type:`periph_t`
  * :return: the value read from the specified GPIO port
  */
-int gpio_read_port(peripheral_t port);
+int gpio_read_port(periph_t port);
 /**
  * Write output level to the given GPIO pin
  *
- * :param port: GPIO port enumerated in :c:type:`peripheral_t`
+ * :param port: GPIO port enumerated in :c:type:`periph_t`
  * :param pin: GPIO number starting from 0
  * :param value: logic output level. Only 0(low) and 1(high) are possible
  */
-void gpio_write(peripheral_t port, uint32_t pin, int value);
+void gpio_write(periph_t port, uint32_t pin, int value);
 /**
  * Read the current input level from the given GPIO pin
  *
- * :param port: GPIO port enumerated in :c:type:`peripheral_t`
+ * :param port: GPIO port enumerated in :c:type:`periph_t`
  * :param pin: GPIO number starting from 0
  * :return: 0 when the logic level is low. 1 when the logic level is high
  */
-int gpio_read(peripheral_t port, uint32_t pin);
+int gpio_read(periph_t port, uint32_t pin);
 
 #if defined(__cplusplus)
 }

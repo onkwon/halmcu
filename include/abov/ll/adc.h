@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "abov/peripheral.h"
+#include "abov/periph.h"
 
 typedef enum {
 	ADC_MODE_NORMAL			= 0,
@@ -59,55 +59,55 @@ typedef enum {
  *
  * This function makes the given ADC the reset default state.
  *
- * :param adc: a peripheral enumerated in :c:type:`peripheral_t`
+ * :param adc: a peripheral enumerated in :c:type:`periph_t`
  */
-void adc_reset(peripheral_t adc);
+void adc_reset(periph_t adc);
 /**
  * Enable the ADC
  *
- * :param adc: a peripheral enumerated in :c:type:`peripheral_t`
+ * :param adc: a peripheral enumerated in :c:type:`periph_t`
  */
-void adc_enable(peripheral_t adc);
+void adc_enable(periph_t adc);
 /**
  * Disable the ADC
  *
- * :param adc: a peripheral enumerated in :c:type:`peripheral_t`
+ * :param adc: a peripheral enumerated in :c:type:`periph_t`
  */
-void adc_disable(peripheral_t adc);
+void adc_disable(periph_t adc);
 /***/
-void adc_set_mode(peripheral_t adc, adc_mode_t mode);
+void adc_set_mode(periph_t adc, adc_mode_t mode);
 /**
  * Start the ADC conversion
  *
- * :param adc: a peripheral enumerated in :c:type:`peripheral_t`
+ * :param adc: a peripheral enumerated in :c:type:`periph_t`
  */
-void adc_start(peripheral_t adc);
+void adc_start(periph_t adc);
 /**
  * Stop the ADC conversion
  *
- * :param adc: a peripheral enumerated in :c:type:`peripheral_t`
+ * :param adc: a peripheral enumerated in :c:type:`periph_t`
  */
-void adc_stop(peripheral_t adc);
+void adc_stop(periph_t adc);
 /***/
-void adc_select_channel(peripheral_t adc, adc_channel_t channel);
+void adc_select_channel(periph_t adc, adc_channel_t channel);
 /***/
-void adc_set_trigger(peripheral_t adc, adc_trigger_t trigger);
+void adc_set_trigger(periph_t adc, adc_trigger_t trigger);
 /***/
-uint32_t adc_read(peripheral_t adc);
+uint32_t adc_read(periph_t adc);
 /***/
-void adc_enable_irq(peripheral_t adc);
+void adc_enable_irq(periph_t adc);
 /***/
-void adc_disable_irq(peripheral_t adc);
+void adc_disable_irq(periph_t adc);
 /***/
-adc_event_t adc_get_event(peripheral_t adc);
+adc_event_t adc_get_event(periph_t adc);
 /***/
-void adc_clear_event(peripheral_t adc, adc_event_t events);
+void adc_clear_event(periph_t adc, adc_event_t events);
 /***/
-bool adc_is_busy(peripheral_t adc);
+bool adc_is_busy(periph_t adc);
 /***/
-bool adc_is_completed(peripheral_t adc);
+bool adc_is_completed(periph_t adc);
 /***/
-void adc_set_clock_frequency(peripheral_t adc, uint32_t hz, uint32_t pclk);
+void adc_set_clock_frequency(periph_t adc, uint32_t hz, uint32_t pclk);
 
 #if defined(__cplusplus)
 }

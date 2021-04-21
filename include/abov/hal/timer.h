@@ -20,17 +20,17 @@ struct timer_cfg {
 /**
  * Initialize the timer
  *
- * :param timer: a peripheral enumerated in :c:type:`peripheral_t`
+ * :param timer: a peripheral enumerated in :c:type:`periph_t`
  * :param cfg: pointer to the structure with the initial configuration
  * :return: true on success
  */
-bool timer_init(peripheral_t timer, const struct timer_cfg *cfg);
+bool timer_init(periph_t timer, const struct timer_cfg *cfg);
 /**
  * Deinitialize the timer
  *
- * :param timer: a peripheral enumerated in :c:type:`peripheral_t`
+ * :param timer: a peripheral enumerated in :c:type:`periph_t`
  */
-void timer_deinit(peripheral_t timer);
+void timer_deinit(periph_t timer);
 
 #if defined(__cplusplus)
 }

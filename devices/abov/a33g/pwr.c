@@ -13,20 +13,20 @@
 static uint32_t get_wakeup_bitmask_from_enum(uint32_t x)
 {
 	switch (x) {
-	case PERI_GPIOA: /* fall through */
-	case PERI_GPIOB: /* fall through */
-	case PERI_GPIOC: /* fall through */
-	case PERI_GPIOD: /* fall through */
-	case PERI_GPIOE: /* fall through */
-	case PERI_GPIOF:
-		return 1U << (x - PERI_GPIOA + 5);
-	case PERI_FRT:
+	case PERIPH_GPIOA: /* fall through */
+	case PERIPH_GPIOB: /* fall through */
+	case PERIPH_GPIOC: /* fall through */
+	case PERIPH_GPIOD: /* fall through */
+	case PERIPH_GPIOE: /* fall through */
+	case PERIPH_GPIOF:
+		return 1U << (x - PERIPH_GPIOA + 5);
+	case PERIPH_FRT:
 		return 1U << 4;
-	case PERI_WDT:
+	case PERIPH_WDT:
 		return 1U << 3;
-	case PERI_MXOSCFAIL:
+	case PERIPH_MXOSCFAIL:
 		return 1U << 1;
-	case PERI_LVDFAIL:
+	case PERIPH_LVDFAIL:
 		return 1U << 0;
 	default:
 		return 0;
@@ -36,55 +36,55 @@ static uint32_t get_wakeup_bitmask_from_enum(uint32_t x)
 static uint32_t get_activation_bitmask_from_enum(uint32_t x)
 {
 	switch (x) {
-	case PERI_JTAG:
+	case PERIPH_JTAG:
 		return 1U << 31;
-	case PERI_PMC:
+	case PERIPH_PMC:
 		return 1U << 29;
-	case PERI_ADC:
+	case PERIPH_ADC:
 		return 1U << 28;
-	case PERI_PWM0: /* fall through */
-	case PERI_PWM1: /* fall through */
-	case PERI_PWM2: /* fall through */
-	case PERI_PWM3: /* fall through */
-	case PERI_PWM4: /* fall through */
-	case PERI_PWM5: /* fall through */
-	case PERI_PWM6: /* fall through */
-	case PERI_PWM7:
-		return 1U << (((x - PERI_PWM0) >> 2) + 24);
-	case PERI_UART0: /* fall through */
-	case PERI_UART1: /* fall through */
-	case PERI_UART2: /* fall through */
-	case PERI_UART3:
-		return 1U << (x - PERI_UART0 + 20);
-	case PERI_I2C0: /* fall through */
-	case PERI_I2C1:
-		return 1U << (x - PERI_I2C0 + 18);
-	case PERI_SPI0: /* fall through */
-	case PERI_SPI1:
-		return 1U << (x - PERI_SPI0 + 16);
-	case PERI_GPIOA: /* fall through */
-	case PERI_GPIOB: /* fall through */
-	case PERI_GPIOC: /* fall through */
-	case PERI_GPIOD: /* fall through */
-	case PERI_GPIOE: /* fall through */
-	case PERI_GPIOF:
-		return 1U << (x - PERI_GPIOA + 8);
-	case PERI_TIMER0: /* fall through */
-	case PERI_TIMER1:
+	case PERIPH_PWM0: /* fall through */
+	case PERIPH_PWM1: /* fall through */
+	case PERIPH_PWM2: /* fall through */
+	case PERIPH_PWM3: /* fall through */
+	case PERIPH_PWM4: /* fall through */
+	case PERIPH_PWM5: /* fall through */
+	case PERIPH_PWM6: /* fall through */
+	case PERIPH_PWM7:
+		return 1U << (((x - PERIPH_PWM0) >> 2) + 24);
+	case PERIPH_UART0: /* fall through */
+	case PERIPH_UART1: /* fall through */
+	case PERIPH_UART2: /* fall through */
+	case PERIPH_UART3:
+		return 1U << (x - PERIPH_UART0 + 20);
+	case PERIPH_I2C0: /* fall through */
+	case PERIPH_I2C1:
+		return 1U << (x - PERIPH_I2C0 + 18);
+	case PERIPH_SPI0: /* fall through */
+	case PERIPH_SPI1:
+		return 1U << (x - PERIPH_SPI0 + 16);
+	case PERIPH_GPIOA: /* fall through */
+	case PERIPH_GPIOB: /* fall through */
+	case PERIPH_GPIOC: /* fall through */
+	case PERIPH_GPIOD: /* fall through */
+	case PERIPH_GPIOE: /* fall through */
+	case PERIPH_GPIOF:
+		return 1U << (x - PERIPH_GPIOA + 8);
+	case PERIPH_TIMER0: /* fall through */
+	case PERIPH_TIMER1:
 		return 1U << 5;
-	case PERI_TIMER2: /* fall through */
-	case PERI_TIMER3: /* fall through */
-	case PERI_TIMER4: /* fall through */
-	case PERI_TIMER5:
+	case PERIPH_TIMER2: /* fall through */
+	case PERIPH_TIMER3: /* fall through */
+	case PERIPH_TIMER4: /* fall through */
+	case PERIPH_TIMER5:
 		return 1U << 6;
-	case PERI_TIMER6: /* fall through */
-	case PERI_TIMER7: /* fall through */
-	case PERI_TIMER8: /* fall through */
-	case PERI_TIMER9:
+	case PERIPH_TIMER6: /* fall through */
+	case PERIPH_TIMER7: /* fall through */
+	case PERIPH_TIMER8: /* fall through */
+	case PERIPH_TIMER9:
 		return 1U << 7;
-	case PERI_FRT:
+	case PERIPH_FRT:
 		return 1U << 4;
-	case PERI_WDT:
+	case PERIPH_WDT:
 		return 1U << 3;
 	default:
 		return 0;
@@ -131,12 +131,12 @@ void pwr_set_mode(pwr_mode_t sleep_mode)
 	PMU->MR |= bit;
 }
 
-void pwr_set_wakeup_source(peripheral_t peri)
+void pwr_set_wakeup_source(periph_t peri)
 {
 	PMU->WSER |= get_wakeup_bitmask_from_enum(peri);
 }
 
-void pwr_clear_wakeup_source(peripheral_t peri)
+void pwr_clear_wakeup_source(periph_t peri)
 {
 	PMU->WSER &= ~get_wakeup_bitmask_from_enum(peri);
 }
@@ -146,12 +146,12 @@ uint32_t pwr_get_wakeup_source(void)
 	return PMU->WSSR;
 }
 
-void pwr_enable_peripheral(peripheral_t peri)
+void pwr_enable_peripheral(periph_t peri)
 {
 	PMU->PER |= get_activation_bitmask_from_enum(peri);
 }
 
-void pwr_disable_peripheral(peripheral_t peri)
+void pwr_disable_peripheral(periph_t peri)
 {
 	PMU->PER &= ~get_activation_bitmask_from_enum(peri);
 }

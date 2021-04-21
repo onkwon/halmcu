@@ -25,7 +25,7 @@ void exti_disable_event(exti_t exti)
 	bitop_clear(&EXTI->EMR, exti);
 }
 
-void exti_set_source(peripheral_t port, uint32_t pin)
+void exti_set_source(periph_t port, uint32_t pin)
 {
 	volatile uint32_t *p[] = {
 		&SYSCFG->CR1,
@@ -34,7 +34,7 @@ void exti_set_source(peripheral_t port, uint32_t pin)
 		&SYSCFG->CR4,
 	};
 
-	uint32_t pos = port - PERI_GPIOA;
+	uint32_t pos = port - PERIPH_GPIOA;
 	uint32_t index = pin / 4;
 	uint32_t bit = pin % 4 * 4;
 	assert(index < (sizeof(p) / sizeof(*p)));

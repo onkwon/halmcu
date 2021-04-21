@@ -21,16 +21,16 @@
 #define DRIE				1U
 #define THREIE				(1U << 1)
 
-static UART_Type *get_uart_from_port(peripheral_t port)
+static UART_Type *get_uart_from_port(periph_t port)
 {
 	switch (port) {
-	case PERI_UART0:
+	case PERIPH_UART0:
 		return UART0;
-	case PERI_UART1:
+	case PERIPH_UART1:
 		return UART1;
-	case PERI_UART2:
+	case PERIPH_UART2:
 		return UART2;
-	case PERI_UART3:
+	case PERIPH_UART3:
 		return UART3;
 	default:
 		return NULL;
@@ -50,7 +50,7 @@ static int read_receive_buffer_register(const UART_Type *uart)
 	return -1;
 }
 
-uart_event_t uart_get_event(peripheral_t port)
+uart_event_t uart_get_event(periph_t port)
 {
 	const UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -76,13 +76,13 @@ uart_event_t uart_get_event(peripheral_t port)
 	return (uart_event_t)(flags | (lsr << 8) | iir);
 }
 
-void uart_clear_event(peripheral_t port, uart_event_t events)
+void uart_clear_event(periph_t port, uart_event_t events)
 {
 	unused(port);
 	unused(events);
 }
 
-void uart_enable_irq(peripheral_t port, uart_event_t events)
+void uart_enable_irq(periph_t port, uart_event_t events)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -95,7 +95,7 @@ void uart_enable_irq(peripheral_t port, uart_event_t events)
 	}
 }
 
-void uart_disable_irq(peripheral_t port, uart_event_t events)
+void uart_disable_irq(periph_t port, uart_event_t events)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -108,7 +108,7 @@ void uart_disable_irq(peripheral_t port, uart_event_t events)
 	}
 }
 
-void uart_set_parity(peripheral_t port, uart_parity_t parity)
+void uart_set_parity(periph_t port, uart_parity_t parity)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -122,7 +122,7 @@ void uart_set_parity(peripheral_t port, uart_parity_t parity)
 	}
 }
 
-void uart_set_stopbits(peripheral_t port, uart_stopbit_t stopbit)
+void uart_set_stopbits(periph_t port, uart_stopbit_t stopbit)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -132,7 +132,7 @@ void uart_set_stopbits(peripheral_t port, uart_stopbit_t stopbit)
 			STOPBIT_POS, 1U, val);
 }
 
-void uart_set_wordsize(peripheral_t port, uart_wordsize_t wordsize)
+void uart_set_wordsize(periph_t port, uart_wordsize_t wordsize)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -141,7 +141,7 @@ void uart_set_wordsize(peripheral_t port, uart_wordsize_t wordsize)
 			WORDSIZE_POS, 3U, (uint32_t)wordsize-5);
 }
 
-void uart_set_baudrate(peripheral_t port, uint32_t baudrate, uint32_t pclk)
+void uart_set_baudrate(periph_t port, uint32_t baudrate, uint32_t pclk)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -163,7 +163,7 @@ void uart_set_baudrate(peripheral_t port, uint32_t baudrate, uint32_t pclk)
 	uart->LCR = lcr;
 }
 
-int uart_read_byte_nonblock(peripheral_t port)
+int uart_read_byte_nonblock(periph_t port)
 {
 	const UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -171,7 +171,7 @@ int uart_read_byte_nonblock(peripheral_t port)
 	return read_receive_buffer_register(uart);
 }
 
-int uart_read_byte(peripheral_t port)
+int uart_read_byte(periph_t port)
 {
 	const UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -184,7 +184,7 @@ int uart_read_byte(peripheral_t port)
 	return res;
 }
 
-void uart_write_byte(peripheral_t port, uint8_t val)
+void uart_write_byte(periph_t port, uint8_t val)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);
@@ -196,7 +196,7 @@ void uart_write_byte(peripheral_t port, uint8_t val)
 	uart->THR = (uint32_t)val;
 }
 
-void uart_reset(peripheral_t port)
+void uart_reset(periph_t port)
 {
 	UART_Type *uart = get_uart_from_port(port);
 	assert(uart != NULL);

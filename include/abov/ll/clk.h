@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "abov/peripheral.h"
+#include "abov/periph.h"
 
 /** Clock source type */
 typedef enum {
@@ -35,15 +35,15 @@ void clk_reset(void);
 /**
  * Enable peripheral clock.
  *
- * :param peri: Peripheral declared as :c:type:`peripheral_t` in `peripheral.h`
+ * :param peri: Peripheral declared as :c:type:`periph_t` in `periph.h`
  */
-void clk_enable_peripheral(peripheral_t peri);
+void clk_enable_peripheral(periph_t peri);
 /**
  * Disable peripheral clock
  *
- * :param peri: Peripheral declared as :c:type:`peripheral_t` in `peripheral.h`
+ * :param peri: Peripheral declared as :c:type:`periph_t` in `periph.h`
  */
-void clk_disable_peripheral(peripheral_t peri);
+void clk_disable_peripheral(periph_t peri);
 
 /**
  * Enable clock source
@@ -80,9 +80,9 @@ uint32_t clk_get_pclk_frequency(void);
 uint32_t clk_get_frequency(clk_source_t clk);
 
 /** Get peripheral clock source */
-clk_source_t clk_get_peripheral_clock_source(peripheral_t peri);
+clk_source_t clk_get_peripheral_clock_source(periph_t peri);
 /***/
-void clk_set_peripheral_clock_source(peripheral_t peri, clk_source_t clk);
+void clk_set_peripheral_clock_source(periph_t peri, clk_source_t clk);
 
 /***/
 void clk_enable_output(void);
