@@ -247,3 +247,10 @@ void gpio_set_debouncer(peripheral_t port, uint32_t pin, uint32_t pclk_clocks)
 	ctrl->DPR = get_log2(pclk_clocks) - 3;
 	bitop_set(&ctrl->DER, pin);
 }
+
+void gpio_set_speed(peripheral_t port, uint32_t pin, gpio_speed_t speed)
+{
+	unused(port);
+	unused(pin);
+	unused(speed);
+}

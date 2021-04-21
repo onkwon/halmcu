@@ -30,6 +30,8 @@ typedef enum {
 
 /** GPIO interrupt type */
 typedef enum {
+	/***/
+	GPIO_IRQ_NONE,
 	/** Rising edge interrupt */
 	GPIO_IRQ_EDGE_RISING,
 	/** Falling edge interrupt */
@@ -45,11 +47,11 @@ typedef enum {
 /***/
 typedef enum {
 	/***/
-	GPIO_SPEED_HIGH,
+	GPIO_SPEED_LOW,
 	/***/
 	GPIO_SPEED_MID,
 	/***/
-	GPIO_SPEED_LOW,
+	GPIO_SPEED_HIGH,
 } gpio_speed_t;
 
 /**
@@ -72,7 +74,6 @@ void gpio_enable_port(peripheral_t port);
  * :param port: GPIO port enumerated in :c:type:`peripheral_t`
  */
 void gpio_disable_port(peripheral_t port);
-//uint32_t gpio_get_active_pins(peripheral_t port);
 /***/
 void gpio_set_mode(peripheral_t port, uint32_t pin, gpio_mode_t mode);
 /**
