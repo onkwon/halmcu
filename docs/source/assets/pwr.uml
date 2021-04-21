@@ -1,0 +1,23 @@
+@startuml
+interface pwr {
+	reset()
+	reboot()
+	get_reboot_source()
+	clear_reboot_source()
+	enable_peripheral()
+	disable_peripheral()
+	set_mode()
+	set_wakeup_source()
+	clear_wakeup_source()
+	get_wakeup_source()
+}
+
+class LL_pwr {
+}
+
+class HAL_pwr {
+}
+
+pwr <|.. LL_pwr
+LL_pwr <-- HAL_pwr
+@enduml
