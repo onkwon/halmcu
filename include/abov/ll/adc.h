@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "abov/periph.h"
+#include "abov/periph/periph.h"
 
 typedef enum {
 	ADC_MODE_NORMAL			= 0,

@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "abov/periph.h"
+#include "abov/periph/periph.h"
 
 /** Timer mode enumeration */
 typedef enum {

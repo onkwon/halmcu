@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "abov/periph.h"
+#include "abov/periph/periph.h"
 
 typedef enum {
 	SPI_MODE_MASTER,
