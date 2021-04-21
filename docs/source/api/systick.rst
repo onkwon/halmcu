@@ -5,7 +5,7 @@ SysTick
 
 Examples
 --------
-.. literalinclude:: ../../../examples/systick/src/main.c
+.. literalinclude:: ../../../examples/peripheral/systick.c
    :language: C
 
 API

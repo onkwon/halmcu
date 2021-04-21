@@ -5,7 +5,7 @@ UART
 
 Examples
 --------
-.. literalinclude:: ../../../examples/uart/src/main.c
+.. literalinclude:: ../../../examples/peripheral/uart.c
    :language: C
 
 HAL

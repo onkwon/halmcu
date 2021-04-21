@@ -5,7 +5,7 @@ export DEVICE ?= a33g
 NDEBUG := true
 
 LIBABOV_ROOT := ../..
-include $(LIBABOV_ROOT)/projects/common/sources.mk
+include $(LIBABOV_ROOT)/projects/sources.mk
 
 SRCS := src/main.c \
 	$(LIBABOV_SRCS)

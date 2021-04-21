@@ -5,7 +5,7 @@ Timer
 
 Examples
 --------
-.. literalinclude:: ../../../examples/timer/src/main.c
+.. literalinclude:: ../../../examples/peripheral/timer_capture.c
    :language: C
 
 HAL
