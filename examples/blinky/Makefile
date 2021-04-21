@@ -1,6 +1,6 @@
 PROJECT = a33g526
 export DEVICE ?= a33g
-export XTAL ?= 8000000
+export HSE ?= 8000000
 
 LD_SCRIPT = ports/abov/a33g526.ld
 LDFLAGS = -specs=nano.specs #-specs=nosys.specs
@@ -10,7 +10,7 @@ SRCS = src/main.c
 #NDEBUG = true
 
 LIBABOV_ROOT ?= ../../
-include $(LIBABOV_ROOT)/projects/common/runner.mk
+include $(LIBABOV_ROOT)/projects/runner.mk
 
 .PHONY: flash erase gdbserver
 flash: build/a33g/$(PROJECT).hex
