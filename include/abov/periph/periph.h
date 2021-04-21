@@ -1,18 +1,18 @@
-#ifndef ABOV_PERIPHERAL_H
-#define ABOV_PERIPHERAL_H
+#ifndef ABOV_PERIPH_H
+#define ABOV_PERIPH_H
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-#define DEFINE_IRQ(n, name) PERI_ ## name = (n),
+#define DEFINE_IRQ(n, name) PERIPH_ ## name = (n),
 #define RESERVE_IRQ(n)
 /** Peripherals enumeration */
 typedef enum {
 #include IRQ_DEFINES
-	PERI_MAX,
-	PERI_UNDEFINED			= PERI_MAX,
-} peripheral_t;
+	PERIPH_MAX,
+	PERIPH_UNDEFINED			= PERIPH_MAX,
+} periph_t;
 #undef RESERVE_IRQ
 #undef DEFINE_IRQ
 
@@ -20,4 +20,4 @@ typedef enum {
 }
 #endif
 
-#endif /* ABOV_PERIPHERAL_H */
+#endif /* ABOV_PERIPH_H */

@@ -2,7 +2,7 @@
 
 #include "../devices/st/stm32f1/exti.h"
 
-void exti_set_source(peripheral_t port, uint32_t pin) {
+void exti_set_source(periph_t port, uint32_t pin) {
 	mock().actualCall(__func__)
 		.withParameter("port", port).withParameter("pin", pin);
 }

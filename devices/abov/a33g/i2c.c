@@ -10,19 +10,19 @@
 
 #define SOFTRESET				(1U << 5)
 
-static I2C_Type *get_regs_from_peri(peripheral_t peri)
+static I2C_Type *get_regs_from_peri(periph_t peri)
 {
 	switch (peri) {
-	case PERI_I2C0:
+	case PERIPH_I2C0:
 		return I2C0;
-	case PERI_I2C1:
+	case PERIPH_I2C1:
 		return I2C1;
 	default:
 		return NULL;
 	}
 }
 
-void i2c_reset(peripheral_t i2c)
+void i2c_reset(periph_t i2c)
 {
 	I2C_Type *regs = get_regs_from_peri(i2c);
 
@@ -36,74 +36,74 @@ void i2c_reset(peripheral_t i2c)
 	regs->CR = 0;
 }
 
-void i2c_start(peripheral_t i2c)
+void i2c_start(periph_t i2c)
 {
 	I2C_Type *regs = get_regs_from_peri(i2c);
 
 	bitop_set(&regs->CR, 0); /* START */
 }
 
-void i2c_stop(peripheral_t i2c)
+void i2c_stop(periph_t i2c)
 {
 	I2C_Type *regs = get_regs_from_peri(i2c);
 
 	bitop_set(&regs->CR, 1); /* STOP */
 }
 
-void i2c_set_slave_address(peripheral_t i2c, uint16_t slave_addr)
+void i2c_set_slave_address(periph_t i2c, uint16_t slave_addr)
 {
 	I2C_Type *regs = get_regs_from_peri(i2c);
 
 	regs->SAR = (slave_addr << 1) & 0xfe;
 }
 
-void i2c_enable_ack(peripheral_t i2c)
+void i2c_enable_ack(periph_t i2c)
 {
 	I2C_Type *regs = get_regs_from_peri(i2c);
 
 	bitop_set(&regs->CR, 3); /* ACKEN */
 }
 
-void i2c_disable_ack(peripheral_t i2c)
+void i2c_disable_ack(periph_t i2c)
 {
 	I2C_Type *regs = get_regs_from_peri(i2c);
 
 	bitop_clear(&regs->CR, 3); /* ACKEN */
 }
 
-void i2c_enable_irq(peripheral_t i2c)
+void i2c_enable_irq(periph_t i2c)
 {
 	I2C_Type *regs = get_regs_from_peri(i2c);
 
 	bitop_set(&regs->CR, 4); /* IINTEN */
 }
 
-void i2c_disable_irq(peripheral_t i2c)
+void i2c_disable_irq(periph_t i2c)
 {
 	I2C_Type *regs = get_regs_from_peri(i2c);
 
 	bitop_clear(&regs->CR, 4); /* IINTEN */
 }
 
-void i2c_write_byte(peripheral_t i2c, uint8_t value)
+void i2c_write_byte(periph_t i2c, uint8_t value)
 {
 	I2C_Type *regs = get_regs_from_peri(i2c);
 	regs->DR = (uint32_t)value;
 }
 
-uint8_t i2c_read_byte(peripheral_t i2c)
+uint8_t i2c_read_byte(periph_t i2c)
 {
 	const I2C_Type *regs = get_regs_from_peri(i2c);
 	return (uint8_t)regs->DR;
 }
 
-void i2c_clear_event(peripheral_t i2c, i2c_event_t events)
+void i2c_clear_event(periph_t i2c, i2c_event_t events)
 {
 	I2C_Type *regs = get_regs_from_peri(i2c);
 	regs->SR = 0xffU | events;
 }
 
-i2c_event_t i2c_get_event(peripheral_t i2c)
+i2c_event_t i2c_get_event(periph_t i2c)
 {
 	const I2C_Type *regs = get_regs_from_peri(i2c);
 	uint32_t status = regs->SR;
@@ -131,7 +131,7 @@ i2c_event_t i2c_get_event(peripheral_t i2c)
 	return event;
 }
 
-void i2c_set_frequency(peripheral_t i2c, uint32_t hz, uint32_t pclk)
+void i2c_set_frequency(periph_t i2c, uint32_t hz, uint32_t pclk)
 {
 	uint32_t khz = hz / KHZ;
 	uint32_t ksec = MHZ / khz / 2;

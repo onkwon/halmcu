@@ -14,7 +14,7 @@ HAL
 
 LL
 --
-.. c:autodoc:: ../../include/abov/peri/gpio.h
+.. c:autodoc:: ../../include/abov/periph/gpio.h
 
 Extra
 -----

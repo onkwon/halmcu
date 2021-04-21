@@ -56,50 +56,50 @@ TEST(Power, set_mode_ShouldChangeMode) {
 }
 
 TEST(Power, set_wakeup_source_ShouldSetSource) {
-	pwr_set_wakeup_source(PERI_GPIOA);
+	pwr_set_wakeup_source(PERIPH_GPIOA);
 	LONGS_EQUAL(0x20, PMU->WSER);
-	pwr_set_wakeup_source(PERI_GPIOB);
+	pwr_set_wakeup_source(PERIPH_GPIOB);
 	LONGS_EQUAL(0x60, PMU->WSER);
-	pwr_set_wakeup_source(PERI_GPIOF);
+	pwr_set_wakeup_source(PERIPH_GPIOF);
 	LONGS_EQUAL(0x460, PMU->WSER);
-	pwr_set_wakeup_source(PERI_MXOSCFAIL);
+	pwr_set_wakeup_source(PERIPH_MXOSCFAIL);
 	LONGS_EQUAL(0x462, PMU->WSER);
 }
 
 TEST(Power, clear_wakeup_source_ShouldClearSource) {
 	PMU->WSER = 0x7ff;
-	pwr_clear_wakeup_source(PERI_GPIOB);
+	pwr_clear_wakeup_source(PERIPH_GPIOB);
 	LONGS_EQUAL(0x7bf, PMU->WSER);
-	pwr_clear_wakeup_source(PERI_LVDFAIL);
+	pwr_clear_wakeup_source(PERIPH_LVDFAIL);
 	LONGS_EQUAL(0x7be, PMU->WSER);
-	pwr_clear_wakeup_source(PERI_WDT);
+	pwr_clear_wakeup_source(PERIPH_WDT);
 	LONGS_EQUAL(0x7b6, PMU->WSER);
 }
 
 TEST(Power, enable_peripheral_ShouldEnablePeripheral) {
 	PMU->PER = 0;
-	pwr_enable_peripheral(PERI_JTAG);
+	pwr_enable_peripheral(PERIPH_JTAG);
 	LONGS_EQUAL(0x80000000, PMU->PER);
-	pwr_enable_peripheral(PERI_PWM0);
+	pwr_enable_peripheral(PERIPH_PWM0);
 	LONGS_EQUAL(0x81000000, PMU->PER);
-	pwr_enable_peripheral(PERI_UART1);
+	pwr_enable_peripheral(PERIPH_UART1);
 	LONGS_EQUAL(0x81200000, PMU->PER);
-	pwr_enable_peripheral(PERI_I2C0);
+	pwr_enable_peripheral(PERIPH_I2C0);
 	LONGS_EQUAL(0x81240000, PMU->PER);
-	pwr_enable_peripheral(PERI_GPIOC);
+	pwr_enable_peripheral(PERIPH_GPIOC);
 	LONGS_EQUAL(0x81240400, PMU->PER);
 }
 
 TEST(Power, disable_peripheral_ShouldDisablePeripheral) {
-	pwr_disable_peripheral(PERI_GPIOA);
+	pwr_disable_peripheral(PERIPH_GPIOA);
 	LONGS_EQUAL(0xfffffeff, PMU->PER);
-	pwr_disable_peripheral(PERI_GPIOF);
+	pwr_disable_peripheral(PERIPH_GPIOF);
 	LONGS_EQUAL(0xffffdeff, PMU->PER);
-	pwr_disable_peripheral(PERI_UART2);
+	pwr_disable_peripheral(PERIPH_UART2);
 	LONGS_EQUAL(0xffbfdeff, PMU->PER);
-	pwr_disable_peripheral(PERI_ADC);
+	pwr_disable_peripheral(PERIPH_ADC);
 	LONGS_EQUAL(0xefbfdeff, PMU->PER);
-	pwr_disable_peripheral(PERI_WDT);
+	pwr_disable_peripheral(PERIPH_WDT);
 	LONGS_EQUAL(0xefbfdef7, PMU->PER);
 }
 

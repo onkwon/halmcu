@@ -17,9 +17,9 @@ package HAL <<Rectangle>> {
 }
 
 package AbstactDataType <<Rectangle>> {
-	abstract peripheral_t
-	peripheral_t <-- GPIO
-	peripheral_t <-- TIMER
+	abstract periph_t
+	periph_t <-- GPIO
+	periph_t <-- TIMER
 }
 
 HAL --> LL

@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "abov/peripheral.h"
+#include "abov/periph/periph.h"
 
 typedef enum {
 	I2C_EVENT_NONE				= 0,
@@ -19,21 +19,21 @@ typedef enum {
 	I2C_EVENT_MASK				= (1UL << 6) - 1,
 } i2c_event_t;
 
-void i2c_reset(peripheral_t i2c);
-void i2c_start(peripheral_t i2c);
-void i2c_stop(peripheral_t i2c);
-void i2c_set_slave_address(peripheral_t i2c, uint16_t slave_addr);
-void i2c_enable_ack(peripheral_t i2c);
-void i2c_disable_ack(peripheral_t i2c);
-void i2c_enable_irq(peripheral_t i2c);
-void i2c_disable_irq(peripheral_t i2c);
-void i2c_write_byte(peripheral_t i2c, uint8_t value);
-uint8_t i2c_read_byte(peripheral_t i2c);
+void i2c_reset(periph_t i2c);
+void i2c_start(periph_t i2c);
+void i2c_stop(periph_t i2c);
+void i2c_set_slave_address(periph_t i2c, uint16_t slave_addr);
+void i2c_enable_ack(periph_t i2c);
+void i2c_disable_ack(periph_t i2c);
+void i2c_enable_irq(periph_t i2c);
+void i2c_disable_irq(periph_t i2c);
+void i2c_write_byte(periph_t i2c, uint8_t value);
+uint8_t i2c_read_byte(periph_t i2c);
 
-i2c_event_t i2c_get_event(peripheral_t i2c);
-void i2c_clear_event(peripheral_t i2c, i2c_event_t events);
+i2c_event_t i2c_get_event(periph_t i2c);
+void i2c_clear_event(periph_t i2c, i2c_event_t events);
 
-void i2c_set_frequency(peripheral_t i2c, uint32_t hz, uint32_t pclk);
+void i2c_set_frequency(periph_t i2c, uint32_t hz, uint32_t pclk);
 
 #if defined(__cplusplus)
 }

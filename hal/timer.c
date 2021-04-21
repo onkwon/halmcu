@@ -6,7 +6,7 @@
 #include "abov/ll/pwr.h"
 #include "abov/ll/clk.h"
 
-static void set_frequency(peripheral_t timer, const struct timer_cfg *cfg)
+static void set_frequency(periph_t timer, const struct timer_cfg *cfg)
 {
 	uint32_t tclk = clk_get_frequency(clk_get_peripheral_clock_source(timer));
 	uint32_t fclk = timer_get_frequency(timer, tclk);
@@ -15,7 +15,7 @@ static void set_frequency(peripheral_t timer, const struct timer_cfg *cfg)
 	timer_set_prescaler(timer, tick - 1);
 }
 
-bool timer_init(peripheral_t timer, const struct timer_cfg *cfg)
+bool timer_init(periph_t timer, const struct timer_cfg *cfg)
 {
 	if (cfg == NULL) {
 		return false;
@@ -38,14 +38,14 @@ bool timer_init(peripheral_t timer, const struct timer_cfg *cfg)
 	if (cfg->irq != TIMER_EVENT_NONE) {
 		timer_enable_irq(timer, cfg->irq);
 
-		irq_set_priority(PERI_TO_IRQ(timer), cfg->irq_priority);
-		irq_enable(PERI_TO_IRQ(timer));
+		irq_set_priority(PERIPH_TO_IRQ(timer), cfg->irq_priority);
+		irq_enable(PERIPH_TO_IRQ(timer));
 	}
 
 	return true;
 }
 
-void timer_deinit(peripheral_t timer)
+void timer_deinit(periph_t timer)
 {
 	clk_disable_peripheral(timer);
 	pwr_disable_peripheral(timer);

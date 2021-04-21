@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "abov/peri/gpio.h"
+#include "abov/periph/gpio.h"
 
 #if defined(__cplusplus)
 }

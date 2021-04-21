@@ -1,4 +1,4 @@
 Peripheral
 ==========
 
-.. c:autodoc:: ../../include/abov/peripheral.h
+.. c:autodoc:: ../../include/abov/periph/periph.h

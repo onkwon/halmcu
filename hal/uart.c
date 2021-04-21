@@ -1,10 +1,11 @@
 #include "abov/hal/uart.h"
+
 #include <string.h>
-#include "abov/irq.h"
-#include "abov/compiler.h"
 
 #include "abov/ll/pwr.h"
 #include "abov/ll/clk.h"
+#include "abov/irq.h"
+#include "abov/compiler.h"
 
 struct uart {
 	struct uart_cfg cfg;
@@ -14,7 +15,7 @@ struct uart {
 };
 ABOV_STATIC_ASSERT(sizeof(struct uart) == sizeof(uart_handle_t), "");
 
-bool uart_init(peripheral_t uart, const struct uart_cfg *cfg, uart_handle_t *handle)
+bool uart_init(periph_t uart, const struct uart_cfg *cfg, uart_handle_t *handle)
 {
 	if (cfg == NULL) {
 		return false;
@@ -29,7 +30,7 @@ bool uart_init(peripheral_t uart, const struct uart_cfg *cfg, uart_handle_t *han
 	uart_set_stopbits(uart, cfg->stopbit);
 	uart_set_parity(uart, cfg->parity);
 
-	irq_t nirq = PERI_TO_IRQ(uart);
+	irq_t nirq = PERIPH_TO_IRQ(uart);
 	if (nirq != IRQ_UNDEFINED) {
 		if (cfg->rx_interrupt) {
 			uart_enable_irq(uart, UART_EVENT_RX);
@@ -50,15 +51,15 @@ bool uart_init(peripheral_t uart, const struct uart_cfg *cfg, uart_handle_t *han
 	return true;
 }
 
-void uart_deinit(peripheral_t uart)
+void uart_deinit(periph_t uart)
 {
-	irq_disable(PERI_TO_IRQ(uart));
+	irq_disable(PERIPH_TO_IRQ(uart));
 
 	clk_disable_peripheral(uart);
 	pwr_disable_peripheral(uart);
 }
 
-size_t uart_read(peripheral_t uart, void *buf, size_t bufsize)
+size_t uart_read(periph_t uart, void *buf, size_t bufsize)
 {
 	uint8_t *p = (uint8_t *)buf;
 	size_t received = 0;
@@ -75,7 +76,7 @@ size_t uart_read(peripheral_t uart, void *buf, size_t bufsize)
 	return received;
 }
 
-size_t uart_write(peripheral_t uart, const void *data, size_t datasize)
+size_t uart_write(periph_t uart, const void *data, size_t datasize)
 {
 	const uint8_t *p = (const uint8_t *)data;
 
@@ -104,7 +105,7 @@ void uart_register_error_handler(uart_handle_t *handle, uart_irq_callback_t hand
 	self->error_handler = handler;
 }
 
-void uart_default_isr(peripheral_t uart, const uart_handle_t *handle)
+void uart_default_isr(periph_t uart, const uart_handle_t *handle)
 {
 	uart_event_t events = uart_get_event(uart);
 	uart_clear_event(uart, events);

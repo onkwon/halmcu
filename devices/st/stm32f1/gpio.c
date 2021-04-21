@@ -10,22 +10,22 @@
 
 #define MAX_PIN_NUMBER				16
 
-static GPIO_Type *get_reg_from_port(peripheral_t port)
+static GPIO_Type *get_reg_from_port(periph_t port)
 {
 	switch (port) {
-	case PERI_GPIOA:
+	case PERIPH_GPIOA:
 		return GPIOA;
-	case PERI_GPIOB:
+	case PERIPH_GPIOB:
 		return GPIOB;
-	case PERI_GPIOC:
+	case PERIPH_GPIOC:
 		return GPIOC;
-	case PERI_GPIOD:
+	case PERIPH_GPIOD:
 		return GPIOD;
-	case PERI_GPIOE:
+	case PERIPH_GPIOE:
 		return GPIOE;
-	case PERI_GPIOF:
+	case PERIPH_GPIOF:
 		return GPIOF;
-	case PERI_GPIOG:
+	case PERIPH_GPIOG:
 		return GPIOG;
 	default:
 		break;
@@ -35,64 +35,64 @@ static GPIO_Type *get_reg_from_port(peripheral_t port)
 	return GPIOA;
 }
 
-static void enable_port(peripheral_t port)
+static void enable_port(periph_t port)
 {
-	uint32_t pos = port - PERI_GPIOA + 2;
+	uint32_t pos = port - PERIPH_GPIOA + 2;
 	bitop_set(&RCC->APB2ENR, pos);
 }
 
-static void disable_port(peripheral_t port)
+static void disable_port(periph_t port)
 {
-	uint32_t pos = port - PERI_GPIOA + 2;
+	uint32_t pos = port - PERIPH_GPIOA + 2;
 	bitop_clear(&RCC->APB2ENR, pos);
 }
 
-void gpio_reset(peripheral_t port)
+void gpio_reset(periph_t port)
 {
-	assert(port >= PERI_GPIOA && port <= PERI_GPIOG);
-	uint32_t pos = port - PERI_GPIOA + 2;
+	assert(port >= PERIPH_GPIOA && port <= PERIPH_GPIOG);
+	uint32_t pos = port - PERIPH_GPIOA + 2;
 	bitop_set(&RCC->APB2RSTR, pos);
 	bitop_clear(&RCC->APB2RSTR, pos);
 }
 
-void gpio_enable_port(peripheral_t port)
+void gpio_enable_port(periph_t port)
 {
-	assert(port >= PERI_GPIOA && port <= PERI_GPIOG);
+	assert(port >= PERIPH_GPIOA && port <= PERIPH_GPIOG);
 	enable_port(port);
 }
 
-void gpio_disable_port(peripheral_t port)
+void gpio_disable_port(periph_t port)
 {
-	assert(port >= PERI_GPIOA && port <= PERI_GPIOG);
+	assert(port >= PERIPH_GPIOA && port <= PERIPH_GPIOG);
 	disable_port(port);
 }
 
-int gpio_read_port(peripheral_t port)
+int gpio_read_port(periph_t port)
 {
 	return (int)get_reg_from_port(port)->IDR;
 }
 
-void gpio_write_port(peripheral_t port, int value)
+void gpio_write_port(periph_t port, int value)
 {
 	get_reg_from_port(port)->ODR = (uint32_t)value;
 }
 
-int gpio_read(peripheral_t port, uint32_t pin)
+int gpio_read(periph_t port, uint32_t pin)
 {
 	assert(pin < MAX_PIN_NUMBER);
 	return (get_reg_from_port(port)->IDR >> pin) & 0x1;
 }
 
-void gpio_write(peripheral_t port, uint32_t pin, int value)
+void gpio_write(periph_t port, uint32_t pin, int value)
 {
 	assert(pin < MAX_PIN_NUMBER);
 	uint32_t pos = !value * 16U + pin;
 	get_reg_from_port(port)->BSRR = 1U << pos;
 }
 
-void gpio_enable_irq(peripheral_t port, uint32_t pin, gpio_irq_t irq_type)
+void gpio_enable_irq(periph_t port, uint32_t pin, gpio_irq_t irq_type)
 {
-	assert(port >= PERI_GPIOA && port <= PERI_GPIOG);
+	assert(port >= PERIPH_GPIOA && port <= PERIPH_GPIOG);
 	assert(pin < MAX_PIN_NUMBER);
 
 	exti_t exti = (exti_t)pin;
@@ -113,25 +113,25 @@ void gpio_enable_irq(peripheral_t port, uint32_t pin, gpio_irq_t irq_type)
 	exti_enable_irq(exti);
 }
 
-void gpio_disable_irq(peripheral_t port, uint32_t pin)
+void gpio_disable_irq(periph_t port, uint32_t pin)
 {
-	assert(port >= PERI_GPIOA && port <= PERI_GPIOG);
+	assert(port >= PERIPH_GPIOA && port <= PERIPH_GPIOG);
 	assert(pin < MAX_PIN_NUMBER);
 
 	exti_t exti = (exti_t)pin;
 	exti_disable_irq(exti);
 }
 
-void gpio_clear_event(peripheral_t port, uint32_t pin)
+void gpio_clear_event(periph_t port, uint32_t pin)
 {
-	assert(port >= PERI_GPIOA && port <= PERI_GPIOG);
+	assert(port >= PERIPH_GPIOA && port <= PERIPH_GPIOG);
 	assert(pin < MAX_PIN_NUMBER);
 
 	exti_t exti = (exti_t)pin;
 	exti_clear_event(exti);
 }
 
-void gpio_set_mode(peripheral_t port, uint32_t pin, gpio_mode_t mode)
+void gpio_set_mode(periph_t port, uint32_t pin, gpio_mode_t mode)
 {
 	assert(pin < MAX_PIN_NUMBER);
 
@@ -164,7 +164,7 @@ void gpio_set_mode(peripheral_t port, uint32_t pin, gpio_mode_t mode)
 	bitop_clean_set_with_mask(reg, pos, 0xf, val);
 }
 
-void gpio_set_altfunc(peripheral_t port, uint32_t pin, int altfunc)
+void gpio_set_altfunc(periph_t port, uint32_t pin, int altfunc)
 {
 	assert(pin < MAX_PIN_NUMBER);
 	unused(altfunc);
@@ -183,7 +183,7 @@ void gpio_set_altfunc(peripheral_t port, uint32_t pin, int altfunc)
 	bitop_clean_set_with_mask(reg, pos, 0xf, val);
 }
 
-void gpio_set_speed(peripheral_t port, uint32_t pin, gpio_speed_t speed)
+void gpio_set_speed(periph_t port, uint32_t pin, gpio_speed_t speed)
 {
 	assert(pin < MAX_PIN_NUMBER);
 
@@ -207,7 +207,7 @@ void gpio_set_speed(peripheral_t port, uint32_t pin, gpio_speed_t speed)
 	bitop_clean_set_with_mask(reg, pos, 0xf, val);
 }
 
-void gpio_set_debouncer(peripheral_t port, uint32_t pin, uint32_t pclk_clocks)
+void gpio_set_debouncer(periph_t port, uint32_t pin, uint32_t pclk_clocks)
 {
 	unused(port);
 	unused(pin);

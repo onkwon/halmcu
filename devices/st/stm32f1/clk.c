@@ -11,108 +11,107 @@
 #define F_HSI				(8000000)
 #endif
 
-static int get_ahb_activation_bitpos_from_peri(peripheral_t peri)
+static int get_ahb_activation_bitpos_from_peri(periph_t peri)
 {
 	switch (peri) {
-	case PERI_SDIO:
+	case PERIPH_SDIO:
 		return 10;
-	case PERI_FSMC:
+	case PERIPH_FSMC:
 		return 8;
-	case PERI_FLASH: /* FLITF */
+	case PERIPH_FLASH: /* FLITF */
 		return 4;
-	case PERI_DMA2:
+	case PERIPH_DMA2:
 		return 1;
-	case PERI_DMA1:
+	case PERIPH_DMA1:
 		return 0;
 	default:
 		return -1;
 	}
 }
 
-static int get_apb2_activation_bitpos_from_peri(peripheral_t peri)
+static int get_apb2_activation_bitpos_from_peri(periph_t peri)
 {
 	switch (peri) {
-	case PERI_ADC3:
+	case PERIPH_ADC3:
 		return 15;
-	case PERI_USART1:
+	case PERIPH_USART1:
 		return 14;
-	case PERI_TIM8:
+	case PERIPH_TIM8:
 		return 13;
-	case PERI_SPI1:
+	case PERIPH_SPI1:
 		return 12;
-	case PERI_TIM1:
+	case PERIPH_TIM1:
 		return 11;
-	case PERI_ADC2:
+	case PERIPH_ADC2:
 		return 10;
-	case PERI_ADC1:
+	case PERIPH_ADC1:
 		return 9;
-	case PERI_GPIOG:
+	case PERIPH_GPIOG:
 		return 8;
-	case PERI_GPIOF:
+	case PERIPH_GPIOF:
 		return 7;
-	case PERI_GPIOE:
+	case PERIPH_GPIOE:
 		return 6;
-	case PERI_GPIOD:
+	case PERIPH_GPIOD:
 		return 5;
-	case PERI_GPIOC:
+	case PERIPH_GPIOC:
 		return 4;
-	case PERI_GPIOB:
+	case PERIPH_GPIOB:
 		return 3;
-	case PERI_GPIOA:
+	case PERIPH_GPIOA:
 		return 2;
-	case PERI_AFIO:
+	case PERIPH_AFIO:
 		return 0;
 	default:
 		return -1;
 	}
 }
 
-static int get_apb1_activation_bitpos_from_peri(peripheral_t peri)
+static int get_apb1_activation_bitpos_from_peri(periph_t peri)
 {
 	switch (peri) {
-	case PERI_PWR:
+	case PERIPH_PWR:
 		return 28;
-	case PERI_BKP:
+	case PERIPH_BKP:
 		return 27;
-	case PERI_USB:
+	case PERIPH_USB:
 		return 23;
-	case PERI_I2C2:
+	case PERIPH_I2C2:
 		return 22;
-	case PERI_I2C1:
+	case PERIPH_I2C1:
 		return 21;
-	case PERI_UART5:
+	case PERIPH_UART5:
 		return 20;
-	case PERI_UART4:
+	case PERIPH_UART4:
 		return 19;
-	case PERI_USART3:
+	case PERIPH_USART3:
 		return 18;
-	case PERI_USART2:
+	case PERIPH_USART2:
 		return 17;
-	case PERI_SPI3:
+	case PERIPH_SPI3:
 		return 15;
-	case PERI_SPI2:
+	case PERIPH_SPI2:
 		return 14;
-	case PERI_WDT:
+	case PERIPH_WDT:
 		return 11;
-	case PERI_TIM7:
+	case PERIPH_TIM7:
 		return 5;
-	case PERI_TIM6:
+	case PERIPH_TIM6:
 		return 4;
-	case PERI_TIM5:
+	case PERIPH_TIM5:
 		return 3;
-	case PERI_TIM4:
+	case PERIPH_TIM4:
 		return 2;
-	case PERI_TIM3:
+	case PERIPH_TIM3:
 		return 1;
-	case PERI_TIM2:
+	case PERIPH_TIM2:
 		return 0;
 	default:
 		return -1;
 	}
 }
 
-static int get_activation_bitpos_and_reg(peripheral_t peri,
-		volatile uint32_t **reg)
+static int get_activation_bitpos_and_reg(periph_t peri, volatile uint32_t **reg)
 {
 	int bitpos = get_ahb_activation_bitpos_from_peri(peri);
 
@@ -176,7 +175,7 @@ static uint32_t get_hclk(void)
 	return pllclk >> shift_factor;
 }
 
-void clk_enable_peripheral(peripheral_t peri)
+void clk_enable_peripheral(periph_t peri)
 {
 	volatile uint32_t *reg = NULL;
 	int bitpos = get_activation_bitpos_and_reg(peri, &reg);
@@ -186,7 +185,7 @@ void clk_enable_peripheral(peripheral_t peri)
 	}
 }
 
-void clk_disable_peripheral(peripheral_t peri)
+void clk_disable_peripheral(periph_t peri)
 {
 	volatile uint32_t *reg = NULL;
 	int bitpos = get_activation_bitpos_and_reg(peri, &reg);
