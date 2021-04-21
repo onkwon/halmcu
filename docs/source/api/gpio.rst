@@ -1,6 +1,8 @@
 GPIO
 ====
 
+.. image:: ../assets/images/gpio.svg
+
 Examples
 --------
 .. literalinclude:: ../../../examples/blinky/src/main.c

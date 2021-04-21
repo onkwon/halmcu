@@ -1,0 +1,34 @@
+@startuml
+interface gpio {
+	reset()
+	enable_port()
+	disable_port()
+	set_mode()
+	set_altfunc()
+	set_speed()
+	set_debouncer()
+	enable_irq()
+	disable_irq()
+	clear_event()
+	write_port()
+	read_port()
+	write()
+	read()
+}
+
+class LL_gpio {
+}
+
+class HAL_gpio {
+	open()
+	open_output()
+	close()
+}
+
+gpio <|.. LL_gpio
+LL_gpio <-- HAL_gpio
+
+HAL_gpio ..> LL_power
+HAL_gpio ..> LL_clock
+HAL_gpio ..> IRQ
+@enduml
