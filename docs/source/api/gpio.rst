@@ -1,6 +1,8 @@
 GPIO
 ====
 
+.. image:: ../assets/images/gpio.svg
+
 Examples
 --------
 .. literalinclude:: ../../../examples/blinky/src/main.c
@@ -12,4 +14,8 @@ HAL
 
 LL
 --
+.. c:autodoc:: ../../include/abov/peri/gpio.h
+
+Extra
+-----
 .. c:autodoc:: ../../include/abov/ll/gpio.h

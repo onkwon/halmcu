@@ -76,6 +76,6 @@ Please refer to a [custom build example](examples/custom-build).
 5. Add `${YOUR_THIRD_PARTY_DIR}/libabov/include` to the include paths for your
    project
 6. Add CMSIS include path to the include paths for your project
-7. Pass `DEVICE`, `ARCH`, and `XTAL` definitions to your compiler
+7. Pass `DEVICE`, `ARCH`, and `HSE` definitions to your compiler
 
 ## Running an example

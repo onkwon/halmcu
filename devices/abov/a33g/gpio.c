@@ -13,66 +13,55 @@
 #define MAX_PIN_NUMBER				16U
 #define PER_BASE_POS				8U
 
+static uint32_t get_log2(uint32_t value)
+{
+	uint32_t cnt = 0;
+	for (cnt = 0; value != 0; value >>= 1) {
+		cnt++;
+	}
+	return cnt;
+}
+
 static PCU_Type *get_pcu_from_port(peripheral_t port)
 {
-	PCU_Type *pcu = NULL;
-
 	switch (port) {
 	case PERI_GPIOA:
-		pcu = PCA;
-		break;
+		return PCA;
 	case PERI_GPIOB:
-		pcu = PCB;
-		break;
+		return PCB;
 	case PERI_GPIOC:
-		pcu = PCC;
-		break;
+		return PCC;
 	case PERI_GPIOD:
-		pcu = PCD;
-		break;
+		return PCD;
 	case PERI_GPIOE:
-		pcu = PCE;
-		break;
+		return PCE;
 	case PERI_GPIOF:
-		pcu = PCF;
-		break;
+		return PCF;
 	default:
-		break;
+		assert(0);
+		return PCA;
 	}
-
-	assert(pcu != NULL);
-	return pcu;
 }
 
 static GPIO_Type *get_reg_from_port(peripheral_t port)
 {
-	GPIO_Type *reg = NULL;
-
 	switch (port) {
 	case PERI_GPIOA:
-		reg = PA;
-		break;
+		return PA;
 	case PERI_GPIOB:
-		reg = PB;
-		break;
+		return PB;
 	case PERI_GPIOC:
-		reg = PC;
-		break;
+		return PC;
 	case PERI_GPIOD:
-		reg = PD;
-		break;
+		return PD;
 	case PERI_GPIOE:
-		reg = PE;
-		break;
+		return PE;
 	case PERI_GPIOF:
-		reg = PF;
-		break;
+		return PF;
 	default:
-		break;
+		assert(0);
+		return PA;
 	}
-
-	assert(reg != NULL);
-	return reg;
 }
 
 static void enable_port(peripheral_t port)
@@ -139,37 +128,12 @@ static void set_gpio_alt(PCU_Type *ctrl, uint32_t pin, int altfunc)
 	bitop_clean_set_with_mask(&ctrl->MR, pos, 3U, (uint32_t)altfunc);
 }
 
-static void disable_gpio_irq(PCU_Type *ctrl, uint32_t pin)
-{
-	ctrl->IER &= ~(3U << (pin * 2));
-}
-
-static void disable_gpio_debounce(PCU_Type *ctrl, uint32_t pin)
-{
-	ctrl->DER &= ~(3U << pin);
-}
-
-static void set_gpio(peripheral_t port, uint32_t pin, gpio_mode_t mode)
+void gpio_set_mode(peripheral_t port, uint32_t pin, gpio_mode_t mode)
 {
 	assert(pin < MAX_PIN_NUMBER);
 	PCU_Type *ctrl = get_pcu_from_port(port);
-
-	enable_port(port);
 	set_gpio_mode(ctrl, pin, mode);
 	set_gpio_pullmode(ctrl, pin, mode);
-	set_gpio_alt(ctrl, pin, 0);
-	disable_gpio_irq(ctrl, pin);
-	disable_gpio_debounce(ctrl, pin);
-}
-
-void gpio_open(peripheral_t port, uint32_t pin, gpio_mode_t mode)
-{
-	set_gpio(port, pin, mode);
-}
-
-void gpio_close(peripheral_t port, uint32_t pin)
-{
-	set_gpio(port, pin, GPIO_MODE_ANALOG);
 }
 
 void gpio_set_altfunc(peripheral_t port, uint32_t pin, int altfunc)
@@ -254,15 +218,39 @@ int gpio_read_port(peripheral_t port)
 
 void gpio_enable_port(peripheral_t port)
 {
+	assert(port >= PERI_GPIOA && port <= PERI_GPIOF);
 	enable_port(port);
 }
 
 void gpio_disable_port(peripheral_t port)
 {
+	assert(port >= PERI_GPIOA && port <= PERI_GPIOF);
 	disable_port(port);
 }
 
 void gpio_reset(peripheral_t port)
 {
 	unused(port);
+}
+
+void gpio_set_debouncer(peripheral_t port, uint32_t pin, uint32_t pclk_clocks)
+{
+	assert(pin < MAX_PIN_NUMBER);
+
+	PCU_Type *ctrl = get_pcu_from_port(port);
+
+	if (pclk_clocks == 0) {
+		bitop_clear(&ctrl->DER, pin);
+		return;
+	}
+
+	ctrl->DPR = get_log2(pclk_clocks) - 3;
+	bitop_set(&ctrl->DER, pin);
+}
+
+void gpio_set_speed(peripheral_t port, uint32_t pin, gpio_speed_t speed)
+{
+	unused(port);
+	unused(pin);
+	unused(speed);
 }

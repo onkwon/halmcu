@@ -33,12 +33,24 @@ void irq_enable(irq_t irq);
  */
 void irq_disable(irq_t irq);
 /**
+ * Clear pending bit on the given interrupt
+ *
+ * :param irq: a enum of :c:type:`irq_t`
+ */
+void irq_clear_pending(irq_t irq);
+/**
  * Set the priority for an interrupt
  *
  * :param irq: a enum of :c:type:`irq_t`
  * :param priority: supports 0 to 192. The smaller number the higher priority
  */
 void irq_set_priority(irq_t irq, int priority);
+/**
+ * Generate software interrupt
+ *
+ * :param irq: a enum of :c:type:`irq_t`
+ */
+void irq_raise(irq_t irq);
 
 void irq_default_handler(void);
 

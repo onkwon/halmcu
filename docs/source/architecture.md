@@ -1,5 +1,8 @@
 # Design and Architecture
 
+## API
+![api diagram](assets/images/api.png)
+
 ## Directory Structure
 
 ```
@@ -15,11 +18,13 @@
 ├── docs/
 ├── devices/
 │   ├── common/
-│   └── abov
+│   ├── abov/
 │       ├── a31g/
-│       ├── a31l/
-│       ├── a33g/
+            ...
 │       └── a34m/
+│   └── st/
+│       └── stm32f1/
+├── drivers/
 ├── hal/
 │   ├── adc/
         ... 
@@ -28,10 +33,11 @@
 ├── include
 │   └── abov
 │       ├── asm/
+│       ├── hal/
 │       ├── ll/
-│       └── hal/
+│       └── peri/
 ├── projects/
-│   └── common/
+│   └── devices/
 └── tests/
 ```
 
@@ -40,6 +46,7 @@
 | arch      |                                                                 |
 | docs      |                                                                 |
 | devices   | low level and hardware dependent code for the specific device   |
+| drivers   |                                                                 |
 | hal       | hardware abstraction code. no hardware dependency               |
 | examples  |                                                                 |
 | include   |                                                                 |
@@ -54,7 +61,7 @@ Additional tools like Kbuild or scripts are intentionally avoided not to
 increase complexity.
 
 1. You shoud specify device you want to build for, something like: `make DEVICE=a33g`
-2. It will automatically include a project Makefile according to the device. e.g. `projects/a33g.mk`
+2. It will automatically include a project Makefile according to the device. e.g. `projects/devices/a33g.mk`
 3. In the project Makefile, all drivers it supports are included by `devices/a33g/devices.mk`
 4. Then it decides what cpu architecture is of the device
 5. And build based on the architecture with its Makefile, `arch/arm/cortex-m/m3/m3.mk`
