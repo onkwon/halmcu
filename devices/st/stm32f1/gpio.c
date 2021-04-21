@@ -205,3 +205,10 @@ void gpio_set_speed(peripheral_t port, uint32_t pin, gpio_speed_t speed)
 
 	bitop_clean_set_with_mask(reg, pos, 0xf, val);
 }
+
+void gpio_set_debouncer(peripheral_t port, uint32_t pin, uint32_t pclk_clocks)
+{
+	unused(port);
+	unused(pin);
+	unused(pclk_clocks);
+}
