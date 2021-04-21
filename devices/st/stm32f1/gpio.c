@@ -52,6 +52,7 @@ void gpio_reset(peripheral_t port)
 	assert(port >= PERI_GPIOA && port <= PERI_GPIOG);
 	uint32_t pos = port - PERI_GPIOA + 2;
 	bitop_set(&RCC->APB2RSTR, pos);
+	bitop_clear(&RCC->APB2RSTR, pos);
 }
 
 void gpio_enable_port(peripheral_t port)

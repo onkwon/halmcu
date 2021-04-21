@@ -44,14 +44,6 @@ TEST_GROUP(GPIO) {
 	}
 };
 
-TEST(GPIO, reset_ShouldSetRccRSTR) {
-	gpio_reset(PERI_GPIOA);
-	LONGS_EQUAL(4, RCC->APB2RSTR);
-	gpio_reset(PERI_GPIOB);
-	LONGS_EQUAL(0xc, RCC->APB2RSTR);
-	gpio_reset(PERI_GPIOG);
-	LONGS_EQUAL(0x10c, RCC->APB2RSTR);
-}
 TEST(GPIO, reset_ShouldCauseAssert_WhenInvalidPortGiven) {
 	mock().expectOneCall("assert_override");
 	gpio_reset(PERI_USART1);
