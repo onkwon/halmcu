@@ -3,7 +3,7 @@ ADC
 
 Examples
 --------
-.. literalinclude:: ../../../examples/adc/src/main.c
+.. literalinclude:: ../../../examples/peripheral/adc.c
    :language: C
 
 HAL

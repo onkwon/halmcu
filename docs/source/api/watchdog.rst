@@ -5,7 +5,7 @@ Watchdog
 
 Examples
 --------
-.. literalinclude:: ../../../examples/watchdog/src/main.c
+.. literalinclude:: ../../../examples/peripheral/wdt.c
    :language: C
 
 HAL

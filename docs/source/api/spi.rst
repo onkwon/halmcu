@@ -3,7 +3,7 @@ SPI
 
 Examples
 --------
-.. literalinclude:: ../../../examples/spi/src/main.c
+.. literalinclude:: ../../../examples/peripheral/spi.c
    :language: C
 
 HAL
