@@ -8,14 +8,19 @@ extern "C" {
 #include "abov/ll/gpio.h"
 #include <stdbool.h>
 
+/** GPIO configuration */
 struct gpio_cfg {
+	/***/
 	gpio_mode_t mode;
+	/***/
 	gpio_irq_t irq;
+	/***/
 	gpio_speed_t speed;
-
+	/***/
 	bool altfunc;
+	/***/
 	int altfunc_number;
-
+	/***/
 	uint32_t debounce;
 };
 
