@@ -1,9 +1,10 @@
 @startuml
 interface uart {
 	reset()
-	read_byte()
-	read_byte_nonblock()
-	write_byte()
+	has_rx()
+	is_tx_ready()
+	get_rxd()
+	set_txd()
 	set_baudrate()
 	enable_irq()
 	disable_irq()
@@ -12,6 +13,8 @@ interface uart {
 	set_parity()
 	set_stopbits()
 	set_wordsize()
+	start()
+	stop()
 }
 
 class LL_uart {
@@ -22,6 +25,9 @@ class HAL_uart {
 	deinit()
 	read()
 	write()
+	read_byte()
+	read_byte_nonblock()
+	write_byte()
 	register_rx_handler()
 	register_tx_handler()
 	register_error_handler()

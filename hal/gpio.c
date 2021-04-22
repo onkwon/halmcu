@@ -16,7 +16,6 @@ void gpio_open(periph_t port, uint32_t pin, const struct gpio_cfg *cfg)
 	pwr_enable_peripheral(port);
 	clk_enable_peripheral(port);
 
-	gpio_reset(port);
 	gpio_enable_port(port);
 	gpio_set_mode(port, pin, cfg->mode);
 
@@ -39,7 +38,6 @@ void gpio_open_output(periph_t port, uint32_t pin, gpio_mode_t mode)
 	pwr_enable_peripheral(port);
 	clk_enable_peripheral(port);
 
-	gpio_reset(port);
 	gpio_enable_port(port);
 	gpio_set_mode(port, pin, mode);
 }
@@ -53,6 +51,7 @@ void gpio_close(periph_t port, uint32_t pin)
 	gpio_set_debouncer(port, pin, 0); /* turn it off */
 #if 0
 	if (gpio_get_active_pins(port) == 0) {
+		gpio_reset(port);
 		gpio_disable_port(port);
 	}
 #endif

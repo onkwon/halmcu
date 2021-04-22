@@ -173,12 +173,10 @@ void gpio_set_altfunc(periph_t port, uint32_t pin, int altfunc)
 		&get_reg_from_port(port)->CRL : &get_reg_from_port(port)->CRH;
 	uint32_t pos = (pin % 8) * 4;
 	uint32_t val = (*reg >> pos) & 0xfU;
-#if 0
-	if ((val & 0x3) == 0) { /* in case of input mode */
-		return;
+
+	if ((val & 0x3) != 0) { /* output mode */
+		val |= 0x8;
 	}
-#endif
-	val |= 0x8;
 
 	bitop_clean_set_with_mask(reg, pos, 0xf, val);
 }
@@ -191,11 +189,11 @@ void gpio_set_speed(periph_t port, uint32_t pin, gpio_speed_t speed)
 		&get_reg_from_port(port)->CRL : &get_reg_from_port(port)->CRH;
 	uint32_t pos = (pin % 8) * 4;
 	uint32_t val = (*reg >> pos) & 0xcU;
-#if 0
+
 	if ((val & 0x3) == 0) { /* in case of input mode */
 		return;
 	}
-#endif
+
 	if (speed == GPIO_SPEED_HIGH) {
 		val |= 3;
 	} else if (speed == GPIO_SPEED_MID) {

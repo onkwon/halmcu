@@ -72,6 +72,31 @@ size_t uart_read(periph_t uart, void *buf, size_t bufsize);
  */
 size_t uart_write(periph_t uart, const void *data, size_t datasize);
 /**
+ * Read a byte from UART
+ *
+ * :param port: a peripheral enumerated in :c:type:`periph_t`
+ * :return: received byte
+ */
+int uart_read_byte(periph_t port);
+/**
+ * Read a byte from UART
+ *
+ * :param port: a peripheral enumerated in :c:type:`periph_t`
+ * :return: * received byte on success
+ *          * -1 when no received data
+ * :note: This function is non-blocking.
+ */
+int uart_read_byte_nonblock(periph_t port);
+/**
+ * Write a byte to UART
+ *
+ * This function will block until the byte gets written into the hold register.
+ *
+ * :param port: a peripheral enumerated in :c:type:`periph_t`
+ * :param val: value to write
+ */
+void uart_write_byte(periph_t port, uint8_t val);
+/**
  * Register rx interrupt handler
  *
  * :param handle: handle of uart port
