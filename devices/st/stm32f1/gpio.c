@@ -188,11 +188,13 @@ void gpio_set_speed(periph_t port, uint32_t pin, gpio_speed_t speed)
 	volatile uint32_t *reg = ((pin / 8) == 0)?
 		&get_reg_from_port(port)->CRL : &get_reg_from_port(port)->CRH;
 	uint32_t pos = (pin % 8) * 4;
-	uint32_t val = (*reg >> pos) & 0xcU;
+	uint32_t val = (*reg >> pos) & 0xfU;
 
 	if ((val & 0x3) == 0) { /* in case of input mode */
 		return;
 	}
+
+	val &= 0xcU;
 
 	if (speed == GPIO_SPEED_HIGH) {
 		val |= 3;

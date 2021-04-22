@@ -237,27 +237,30 @@ TEST(GPIO, set_altfunc_ShouldCauseAssert_WhenInvalidPinGiven) {
 	mock().expectOneCall("assert_override");
 	gpio_set_altfunc(PERIPH_GPIOA, 20, 0);
 }
-TEST(GPIO, set_altfunc_ShouldSetCRL_WhenPin0To7Given) {
+TEST(GPIO, set_altfunc_ShouldSetCRL_WhenPin0To7AndPushpullGiven) {
+	gpio_set_mode(PERIPH_GPIOG, 0, GPIO_MODE_PUSHPULL);
 	gpio_set_altfunc(PERIPH_GPIOG, 0, 0);
-	LONGS_EQUAL(0x8, GPIOG->CRL);
-	gpio_set_altfunc(PERIPH_GPIOG, 1, 0);
-	LONGS_EQUAL(0x88, GPIOG->CRL);
-	gpio_set_altfunc(PERIPH_GPIOG, 2, 0);
-	LONGS_EQUAL(0x888, GPIOG->CRL);
-	gpio_set_altfunc(PERIPH_GPIOG, 4, 0);
-	LONGS_EQUAL(0x80888, GPIOG->CRL);
-	gpio_set_altfunc(PERIPH_GPIOG, 7, 0);
-	LONGS_EQUAL(0x80080888, GPIOG->CRL);
+	LONGS_EQUAL(0xa, GPIOG->CRL);
 }
-TEST(GPIO, set_altfunc_ShouldSetCRH_WhenPin8To15Given) {
+TEST(GPIO, set_altfunc_ShouldSetCRH_WhenPin8To15AndPushpullGiven) {
+	gpio_set_mode(PERIPH_GPIOA, 15, GPIO_MODE_PUSHPULL);
 	gpio_set_altfunc(PERIPH_GPIOA, 15, 0);
-	LONGS_EQUAL(0x80000000, GPIOA->CRH);
-	gpio_set_altfunc(PERIPH_GPIOA, 14, 0);
-	LONGS_EQUAL(0x88000000, GPIOA->CRH);
-	gpio_set_altfunc(PERIPH_GPIOA, 13, 0);
-	LONGS_EQUAL(0x88800000, GPIOA->CRH);
-	gpio_set_altfunc(PERIPH_GPIOA, 11, 0);
-	LONGS_EQUAL(0x88808000, GPIOA->CRH);
+	LONGS_EQUAL(0xa0000000, GPIOA->CRH);
+}
+TEST(GPIO, set_altfunc_ShouldSetCR_WhenInputModeGiven) {
+	gpio_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_INPUT);
+	gpio_set_altfunc(PERIPH_GPIOA, 0, 0);
+	LONGS_EQUAL(4, GPIOA->CRL);
+}
+TEST(GPIO, set_altfunc_ShouldSetCR_WhenInputPullupModeGiven) {
+	gpio_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_INPUT_PULLUP);
+	gpio_set_altfunc(PERIPH_GPIOA, 0, 0);
+	LONGS_EQUAL(8, GPIOA->CRL);
+}
+TEST(GPIO, set_altfunc_ShouldSetCR_WhenInputPulldownModeGiven) {
+	gpio_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_INPUT_PULLDOWN);
+	gpio_set_altfunc(PERIPH_GPIOA, 0, 0);
+	LONGS_EQUAL(8, GPIOA->CRL);
 }
 TEST(GPIO, set_altfunc_ShouldSetModeAltPushpull_WhenPushpullModeGiven) {
 	gpio_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_PUSHPULL);
@@ -279,8 +282,10 @@ TEST(GPIO, set_speed_ShouldCauseAssert_WhenInvalidPinGiven) {
 	gpio_set_speed(PERIPH_GPIOA, 16, GPIO_SPEED_LOW);
 }
 TEST(GPIO, set_speed_ShouldSetSpeed) {
+	gpio_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_PUSHPULL);
 	gpio_set_speed(PERIPH_GPIOA, 0, GPIO_SPEED_HIGH);
 	LONGS_EQUAL(3, GPIOA->CRL);
+	gpio_set_mode(PERIPH_GPIOA, 1, GPIO_MODE_PUSHPULL);
 	gpio_set_speed(PERIPH_GPIOA, 1, GPIO_SPEED_MID);
 	LONGS_EQUAL(0x13, GPIOA->CRL);
 	gpio_set_speed(PERIPH_GPIOA, 0, GPIO_SPEED_LOW);
