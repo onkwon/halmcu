@@ -1,19 +1,10 @@
 @startuml
-class HAL_uart {
-	init()
-	deinit()
-	read()
-	write()
-	register_rx_handler()
-	register_tx_handler()
-	register_error_handler()
-}
-
-class LL_uart {
+interface uart {
 	reset()
-	read_byte()
-	read_byte_nonblock()
-	write_byte()
+	has_rx()
+	is_tx_ready()
+	get_rxd()
+	set_txd()
 	set_baudrate()
 	enable_irq()
 	disable_irq()
@@ -22,9 +13,29 @@ class LL_uart {
 	set_parity()
 	set_stopbits()
 	set_wordsize()
+	start()
+	stop()
 }
 
-HAL_uart --> LL_uart
+class LL_uart {
+}
+
+class HAL_uart {
+	init()
+	deinit()
+	read()
+	write()
+	read_byte()
+	read_byte_nonblock()
+	write_byte()
+	register_rx_handler()
+	register_tx_handler()
+	register_error_handler()
+}
+
+uart <|.. LL_uart
+LL_uart <-- HAL_uart
+
 HAL_uart ..> LL_power
 HAL_uart ..> LL_clock
 HAL_uart ..> IRQ

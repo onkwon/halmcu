@@ -60,14 +60,14 @@ TEST(uart_driver, init_ShouldEnableRxInterrupt_WhenRxInterruptGiven) {
 	default_cfg.rx_interrupt = true;
 	mock().expectOneCall("uart_enable_irq")
 		.withParameter("port", PERIPH_UART0)
-		.withParameter("events", UART_EVENT_RX);
+		.withParameter("irqs", UART_IRQ_RX);
 	LONGS_EQUAL(1, uart_init(PERIPH_UART0, &default_cfg, &default_handle));
 }
 TEST(uart_driver, init_ShouldEnableTxInterrupt_WhenTxInterruptGiven) {
 	default_cfg.tx_interrupt = true;
 	mock().expectOneCall("uart_enable_irq")
 		.withParameter("port", PERIPH_UART0)
-		.withParameter("events", UART_EVENT_TX_READY);
+		.withParameter("irqs", UART_IRQ_TX_READY);
 	LONGS_EQUAL(1, uart_init(PERIPH_UART0, &default_cfg, &default_handle));
 }
 
@@ -131,14 +131,16 @@ TEST(uart_driver, multiple_interrupt_ShouldCallEachHandlers) {
 TEST(uart_driver, read_ShouldReturnZero_WhenNoDataReceived) {
 	uint8_t c;
 	uart_init(PERIPH_UART0, &default_cfg, &default_handle);
-	mock().expectOneCall("uart_read_byte_nonblock").withParameter("port", PERIPH_UART0);
+	mock().expectOneCall("uart_has_rx").withParameter("port", PERIPH_UART0)
+		.andReturnValue(false);
 	LONGS_EQUAL(0, uart_read(PERIPH_UART0, &c, 1));
 }
 TEST(uart_driver, read_ShouldReturnReceivedData) {
 	uint8_t buf[3];
 	uart_init(PERIPH_UART0, &default_cfg, &default_handle);
-	mock().expectNCalls(3, "uart_read_byte_nonblock")
-		.withParameter("port", PERIPH_UART0)
+	mock().expectNCalls(3, "uart_has_rx").withParameter("port", PERIPH_UART0)
+		.andReturnValue(true);
+	mock().expectNCalls(3, "uart_get_rxd").withParameter("port", PERIPH_UART0)
 		.andReturnValue(1);
 	LONGS_EQUAL(3, uart_read(PERIPH_UART0, buf, sizeof(buf)));
 	LONGS_EQUAL(1, buf[0]);
@@ -148,8 +150,9 @@ TEST(uart_driver, read_ShouldReturnReceivedData) {
 TEST(uart_driver, read_ShouldStopReading_WhenBufsizeShort) {
 	uint8_t buf[1];
 	uart_init(PERIPH_UART0, &default_cfg, &default_handle);
-	mock().expectNCalls(1, "uart_read_byte_nonblock")
-		.withParameter("port", PERIPH_UART0)
+	mock().expectNCalls(1, "uart_has_rx").withParameter("port", PERIPH_UART0)
+		.andReturnValue(true);
+	mock().expectNCalls(1, "uart_get_rxd").withParameter("port", PERIPH_UART0)
 		.andReturnValue(1);
 	LONGS_EQUAL(1, uart_read(PERIPH_UART0, buf, sizeof(buf)));
 	LONGS_EQUAL(1, buf[0]);
@@ -159,7 +162,10 @@ TEST(uart_driver, wrte_ShouldWrite) {
 	const char *data = "Hello, World!";
 	size_t datalen = strlen(data);
 	uart_init(PERIPH_UART0, &default_cfg, &default_handle);
-	mock().expectNCalls((unsigned int)datalen, "uart_write_byte")
+	mock().expectNCalls((unsigned int)datalen, "uart_is_tx_ready")
+		.withParameter("port", PERIPH_UART0)
+		.andReturnValue(true);
+	mock().expectNCalls((unsigned int)datalen, "uart_set_txd")
 		.withParameter("port", PERIPH_UART0);
 	LONGS_EQUAL(datalen, uart_write(PERIPH_UART0, data, datalen));
 }

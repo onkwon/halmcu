@@ -14,4 +14,8 @@ HAL
 
 LL
 --
+.. c:autodoc:: ../../include/abov/periph/uart.h
+
+Extra
+-----
 .. c:autodoc:: ../../include/abov/ll/uart.h

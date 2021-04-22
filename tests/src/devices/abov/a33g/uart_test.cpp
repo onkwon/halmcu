@@ -43,35 +43,35 @@ TEST(uart, get_event_ShouldReturnLRS) {
 }
 
 TEST(uart, enable_irq_ShouldSetDrieInIER_WhenRxGiven) {
-	uart_enable_irq(PERIPH_UART0, UART_EVENT_RX);
+	uart_enable_irq(PERIPH_UART0, UART_IRQ_RX);
 	LONGS_EQUAL(1, UART0->IER);
 }
 
 TEST(uart, disable_irq_ShouldClearDrieInIER_WhenRxGiven) {
 	UART0->IER = 1;
-	uart_disable_irq(PERIPH_UART0, UART_EVENT_RX);
+	uart_disable_irq(PERIPH_UART0, UART_IRQ_RX);
 	LONGS_EQUAL(0, UART0->IER);
 }
 
 TEST(uart, enable_irq_ShouldSetDrieInIER_WhenTxGiven) {
-	uart_enable_irq(PERIPH_UART0, UART_EVENT_TX_READY);
+	uart_enable_irq(PERIPH_UART0, UART_IRQ_TX_READY);
 	LONGS_EQUAL(2, UART0->IER);
 }
 
 TEST(uart, disable_irq_ShouldClearDrieInIER_WhenTxGiven) {
 	UART0->IER = 2;
-	uart_disable_irq(PERIPH_UART0, UART_EVENT_TX_READY);
+	uart_disable_irq(PERIPH_UART0, UART_IRQ_TX_READY);
 	LONGS_EQUAL(0, UART0->IER);
 }
 
 TEST(uart, enable_irq_ShouldSetMultiIntr_WhenMixedGiven) {
-	uart_enable_irq(PERIPH_UART0, (uart_event_t)(UART_EVENT_RX | UART_EVENT_TX_READY));
+	uart_enable_irq(PERIPH_UART0, (uart_irq_t)(UART_IRQ_RX | UART_IRQ_TX_READY));
 	LONGS_EQUAL(3, UART0->IER);
 }
 
 TEST(uart, disable_irq_ShouldClearMultiIntr_WhenMixedGiven) {
 	UART0->IER = 3;
-	uart_disable_irq(PERIPH_UART0, (uart_event_t)(UART_EVENT_RX | UART_EVENT_TX_READY));
+	uart_disable_irq(PERIPH_UART0, (uart_irq_t)(UART_IRQ_RX | UART_IRQ_TX_READY));
 	LONGS_EQUAL(0, UART0->IER);
 }
 
@@ -103,18 +103,13 @@ TEST(uart, set_baudrate_ShouldSetBaudrate_When9600With75MhzPclkGiven) {
 	LONGS_EQUAL(0x24, UART0->BFR);
 }
 
-TEST(uart, read_byte_ShouldReturnReceivedByte) {
+TEST(uart, get_rxd_ShouldReturnReceivedByte) {
 	UART0->RBR = 0xA5;
-	UART0->LSR |= 1;
-	LONGS_EQUAL(0xA5, uart_read_byte(PERIPH_UART0));
+	LONGS_EQUAL(0xA5, uart_get_rxd(PERIPH_UART0));
 }
 
-TEST(uart, read_byte_nonblock_ShouldReturnNegativeOne_WhenNonReceived) {
-	LONGS_EQUAL(-1, uart_read_byte_nonblock(PERIPH_UART0));
-}
-
-TEST(uart, write_byte_ShouldWriteByteToTHR) {
-	uart_write_byte(PERIPH_UART0, 0xA5);
+TEST(uart, set_txd_ShouldWriteByteToTHR) {
+	uart_set_txd(PERIPH_UART0, 0xA5);
 	LONGS_EQUAL(0xA5, UART0->THR);
 }
 
@@ -169,4 +164,20 @@ TEST(uart, set_wordsize_ShouldSetWordsize_When5Given) {
 	UART0->LCR = 1;
 	uart_set_wordsize(PERIPH_UART0, UART_WORDSIZE_5);
 	LONGS_EQUAL(0, UART0->LCR);
+}
+
+TEST(uart, has_rx_ShouldReturnFalse_WhenNoReceivedData) {
+	LONGS_EQUAL(0, uart_has_rx(PERIPH_UART0));
+}
+TEST(uart, has_rx_ShouldReturnTrue_WhenReceived) {
+	UART0->LSR = 1;
+	LONGS_EQUAL(1, uart_has_rx(PERIPH_UART0));
+}
+
+TEST(uart, is_tx_ready_ShouldReturnTrue_WhenReady) {
+	LONGS_EQUAL(1, uart_is_tx_ready(PERIPH_UART0));
+}
+TEST(uart, is_tx_ready_ShouldReturnFalse_WhenBusy) {
+	UART0->LSR = 0;
+	LONGS_EQUAL(0, uart_is_tx_ready(PERIPH_UART0));
 }
