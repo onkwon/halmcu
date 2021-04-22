@@ -28,6 +28,7 @@ int uart_get_rxd(periph_t port)
 void uart_set_txd(periph_t port, uint32_t value)
 {
 	mock().actualCall(__func__).withParameter("port", port);
+	(void)value;
 }
 
 void uart_set_baudrate(periph_t port, uint32_t baudrate, uint32_t pclk)
