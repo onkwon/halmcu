@@ -29,16 +29,13 @@ static USART_Type *get_uart_from_port(periph_t port)
 
 static uint32_t brr2reg(uint32_t baudrate, uint32_t pclk)
 {
-	uint32_t fraction, mantissa;
-
 	/* 25 * 4 = 100; to not lose the result below the decimal point */
-	fraction = (pclk * 25) / (baudrate * 4);
-	mantissa = fraction / 100; /* to get the actual integer part */
+	uint32_t fraction = (pclk * 25) / (baudrate * 4);
+	uint32_t mantissa = fraction / 100; /* to get the actual integer part */
 	fraction = fraction - (mantissa * 100); /* to get the fraction part */
 	fraction = ((fraction << 4/* sampling */) + 50/* round up */) / 100;
-	baudrate = (mantissa << 4) | (fraction & 0xf);
 
-	return baudrate;
+	return (mantissa << 4) | (fraction & 0xf);
 }
 
 void uart_reset(periph_t port)
