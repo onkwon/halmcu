@@ -6,8 +6,9 @@ extern "C" {
 #endif
 
 /**
- * TODO: PMULEGACY->LEGACY should be set before running the device according to
- * the official example code of A33G52x. don't know what and why it does so?
+ * @todo TODO: PMULEGACY->LEGACY should be set before running the device
+ * according to the official example code of A33G52x. don't know what and why
+ * it does so?
  */
 void errata_1(void);
 

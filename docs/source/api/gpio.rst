@@ -10,12 +10,15 @@ Examples
 
 HAL
 ---
-.. c:autodoc:: ../../include/abov/hal/gpio.h
+.. doxygenfile:: abov/hal/gpio.h
+   :project: libabov
 
 LL
 --
-.. c:autodoc:: ../../include/abov/periph/gpio.h
+.. doxygenfile:: abov/periph/gpio.h
+   :project: libabov
 
 Extra
 -----
-.. c:autodoc:: ../../include/abov/ll/gpio.h
+.. doxygenfile:: abov/ll/gpio.h
+   :project: libabov

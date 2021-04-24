@@ -21,34 +21,34 @@ typedef enum {
 #undef DEFINE_IRQ
 
 /**
- * Enable an interrupt
+ * @brief Enable an interrupt
  *
- * :param irq: a enum of :c:type:`irq_t`
+ * @param[in] irq a enum of @ref irq_t
  */
 void irq_enable(irq_t irq);
 /**
- * Disable an interrupt
+ * @brief Disable an interrupt
  *
- * :param irq: a enum of :c:type:`irq_t`
+ * @param[in] irq a enum of @ref irq_t
  */
 void irq_disable(irq_t irq);
 /**
- * Clear pending bit on the given interrupt
+ * @brief Clear pending bit on the given interrupt
  *
- * :param irq: a enum of :c:type:`irq_t`
+ * @param[in] irq a enum of @ref irq_t
  */
 void irq_clear_pending(irq_t irq);
 /**
- * Set the priority for an interrupt
+ * @brief Set the priority for an interrupt
  *
- * :param irq: a enum of :c:type:`irq_t`
- * :param priority: supports 0 to 192. The smaller number the higher priority
+ * @param[in] irq a enum of @ref irq_t
+ * @param[in] priority supports 0 to 192. The smaller number the higher priority
  */
 void irq_set_priority(irq_t irq, int priority);
 /**
- * Generate software interrupt
+ * @brief Generate software interrupt
  *
- * :param irq: a enum of :c:type:`irq_t`
+ * @param[in] irq a enum of @ref irq_t
  */
 void irq_raise(irq_t irq);
 

@@ -8,8 +8,10 @@ HAL
 
 LL
 --
-.. c:autodoc:: ../../include/abov/periph/pwr.h
+.. doxygenfile:: abov/periph/pwr.h
+   :project: libabov
 
 Extra
 -----
-.. c:autodoc:: ../../include/abov/ll/pwr.h
+.. doxygenfile:: abov/ll/pwr.h
+   :project: libabov

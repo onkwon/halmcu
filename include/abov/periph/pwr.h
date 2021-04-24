@@ -10,20 +10,18 @@ extern "C" {
 
 /** Power mode enumeration */
 typedef enum {
-	/** Normal running mode */
-	PWR_MODE_RUN,
-	/** CPU clock gets stopped while core peripherals are kept running */
-	PWR_MODE_SLEEP,
-	/** Not only CPU clock but also most of peripheral clocks get stopped.
-	 * External clock sources are also get off */
-	PWR_MODE_DEEP_SLEEP,
-	/** RTC is the only one running. SRAM and peripheral registers are not
-	 * preserved */
-	PWR_MODE_BLACKOUT,
+	PWR_MODE_RUN,        /**< Normal running mode */
+	PWR_MODE_SLEEP,      /**< CPU clock gets stopped while core peripherals
+			       are kept running */
+	PWR_MODE_DEEP_SLEEP, /**< Not only CPU clock but also most of peripheral
+			       clocks get stopped. External clock sources are
+			       also get off */
+	PWR_MODE_BLACKOUT,   /**< RTC is the only one running. SRAM and
+			       peripheral registers are not preserved */
 } pwr_mode_t;
 
 /**
- * Reset PWR unit
+ * @brief Reset PWR unit
  *
  * This function makes PWR unit the reset state.
  */

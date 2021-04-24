@@ -10,44 +10,39 @@ extern "C" {
 
 /** GPIO configuration */
 struct gpio_cfg {
-	/***/
 	gpio_mode_t mode;
-	/***/
 	gpio_irq_t irq;
-	/***/
 	gpio_speed_t speed;
-	/***/
 	bool altfunc;
-	/***/
 	int altfunc_number;
-	/***/
 	uint32_t debounce;
 };
 
 /**
- * Initialize the given GPIO pin to the specified mode
+ * @brief Initialize the given GPIO pin to the specified mode
  *
- * :param port: GPIO port enumerated in :c:type:`periph_t`
- * :param pin: GPIO number starting from 0
- * :param cfg: configuration
- * :return: true on success
+ * @param[in] port GPIO port enumerated in @ref periph_t
+ * @param[in] pin GPIO number starting from 0
+ * @param[in] cfg configuration
+ *
+ * @return true on success
  */
 void gpio_open(periph_t port, uint32_t pin, const struct gpio_cfg *cfg);
 /**
- * Initialize the given GPIO pin to the specified mode
+ * @brief Initialize the given GPIO pin to the specified mode
  *
- * :param port: GPIO port enumerated in :c:type:`periph_t`
- * :param pin: GPIO number starting from 0
- * :param mode: sets gpio operation mode
- * :return: true on success
+ * @param[in] port GPIO port enumerated in @ref periph_t
+ * @param[in] pin GPIO number starting from 0
+ * @param[in] mode sets gpio operation mode
+ * @return true on success
  */
 void gpio_open_output(periph_t port, uint32_t pin, gpio_mode_t mode);
 /**
- * Deinitialize the given GPIO pin
+ * @brief Deinitialize the given GPIO pin
  *
- * :param port: GPIO port enumerated in :c:type:`periph_t`
- * :param pin: GPIO number starting from 0
- * :return: true on success
+ * @param[in] port GPIO port enumerated in @ref periph_t
+ * @param[in] pin GPIO number starting from 0
+ * @return true on success
  */
 void gpio_close(periph_t port, uint32_t pin);
 
