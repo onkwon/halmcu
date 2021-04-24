@@ -2,3 +2,9 @@ build
 !tools/build
 .gdb_history
 tests/gcov
+
+examples/devel
+examples/scratch
+examples/stm32f1
+
+.adr-dir
