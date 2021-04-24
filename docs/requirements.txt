@@ -2,3 +2,4 @@ clang>=6
 hawkmoth>=0.7
 m2r2
 sphinx-markdown-tables
+breathe
