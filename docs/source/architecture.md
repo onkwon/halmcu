@@ -1,4 +1,4 @@
-# Design and Architecture
+# Architecture & Design
 
 ## API
 ![api diagram](assets/images/api.png)

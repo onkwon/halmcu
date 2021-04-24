@@ -17,6 +17,12 @@ from hawkmoth.util import readthedocs
 readthedocs.clang_setup()
 cautodoc_clang = '-I' + os.path.abspath('../../include')
 
+import subprocess
+subprocess.call('cd ../../ ; doxygen docs/Doxyfile', shell=True)
+#html_extra_path = ['../build/doxygen/html']
+
+breathe_projects = { "libabov": "../build/doxygen/xml" }
+breathe_default_project = "libabov"
 
 # -- Project information -----------------------------------------------------
 
@@ -37,6 +43,7 @@ extensions = [
     'hawkmoth',
     'm2r2',
     'sphinx_markdown_tables',
+    'breathe',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
