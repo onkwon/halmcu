@@ -10,12 +10,15 @@ Examples
 
 HAL
 ---
-.. c:autodoc:: ../../include/abov/hal/uart.h
+.. doxygenfile:: abov/hal/uart.h
+   :project: libabov
 
 LL
 --
-.. c:autodoc:: ../../include/abov/periph/uart.h
+.. doxygenfile:: abov/periph/uart.h
+   :project: libabov
 
 Extra
 -----
-.. c:autodoc:: ../../include/abov/ll/uart.h
+.. doxygenfile:: abov/ll/uart.h
+   :project: libabov

@@ -5,12 +5,15 @@ Clock
 
 HAL
 ---
-.. c:autodoc:: ../../include/abov/hal/clk.h
+.. doxygenfile:: abov/hal/clk.h
+   :project: libabov
 
 LL
 --
-.. c:autodoc:: ../../include/abov/periph/clk.h
+.. doxygenfile:: abov/periph/clk.h
+   :project: libabov
 
 Extra
 -----
-.. c:autodoc:: ../../include/abov/ll/clk.h
+.. doxygenfile:: abov/ll/gpio.h
+   :project: libabov
