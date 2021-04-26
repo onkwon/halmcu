@@ -18,6 +18,11 @@
 #define WIE					(1U << WIE_POS)
 #define WDH					(1U << WDH_POS)
 
+static void set_reload(uint32_t timeout)
+{
+	WDT->LR = timeout;
+}
+
 void wdt_set_prescaler(uint32_t div_factor)
 {
 	uint32_t val = WDT->CON & ~WPRS_MASK;
@@ -34,18 +39,23 @@ uint32_t wdt_get_prescaler(void)
 	return 1U << (val + 1);
 }
 
-void wdt_reload(uint32_t timeout)
+void wdt_set_reload(uint32_t timeout)
 {
-	if (WDT->CON & WIE && timeout > 0) {
+	if ((WDT->CON & WIE) && timeout > 0) {
 		timeout -= 1;
 	}
 
-	WDT->LR = timeout;
+	set_reload(timeout);
 }
 
 uint32_t wdt_get_reload(void)
 {
 	return WDT->LR;
+}
+
+void wdt_feed(void)
+{
+	set_reload(WDT->LR);
 }
 
 void wdt_start(void)
@@ -58,7 +68,7 @@ void wdt_stop(void)
 	WDT->CON &= ~WEN;
 }
 
-void wdt_set_debug_hold_mode(bool enable)
+void wdt_set_debug_stop_mode(bool enable)
 {
 	uint32_t val = WDT->CON & ~WDH;
 	val |= (uint32_t)enable << WDH_POS;

@@ -78,21 +78,21 @@ void uart_set_baudrate(periph_t port, uint32_t baudrate, uint32_t pclk);
  * @brief Enable UART interrupts
  *
  * @param[in] port a peripheral enumerated in @ref periph_t
- * @param[in] events a mix enum of @ref uart_event_t
+ * @param[in] irqs a mix enum of @ref uart_event_t
  */
 void uart_enable_irq(periph_t port, uart_irq_t irqs);
 /**
  * @brief Disable UART interrupts
  *
  * @param[in] port a peripheral enumerated in @ref periph_t
- * @param[in] events a mix enum of @ref uart_event_t
+ * @param[in] irqs a mix enum of @ref uart_event_t
  */
 void uart_disable_irq(periph_t port, uart_irq_t irqs);
 /**
  * @brief Read UART event flag
  *
  * @param[in] port a peripheral enumerated in @ref periph_t
- * @return @ref uart_event_t
+ * @return event @ref uart_event_t
  */
 uart_event_t uart_get_event(periph_t port);
 /**

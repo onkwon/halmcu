@@ -65,7 +65,6 @@ void gpio_set_mode(periph_t port, uint32_t pin, gpio_mode_t mode);
  * @param[in] port GPIO port enumerated in @ref periph_t
  * @param[in] pin GPIO number starting from 0
  * @param[in] altfunc alternate function number
- * @return true on success
  */
 void gpio_set_altfunc(periph_t port, uint32_t pin, int altfunc);
 /**

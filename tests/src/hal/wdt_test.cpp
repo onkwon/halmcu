@@ -65,8 +65,8 @@ TEST(Watchdog, set_ShouldSetTimeout_When1SecTimeoutGiven) {
 		.andReturnValue(1000000);
 	mock().expectOneCall("wdt_get_prescaler").andReturnValue(1);
 
-	mock().expectOneCall("wdt_reload").withParameter("timeout", 1000000);
-	wdt_set_ms(1000);
+	mock().expectOneCall("wdt_set_reload").withParameter("timeout", 1000000);
+	wdt_set_reload_ms(1000);
 }
 TEST(Watchdog, set_ShouldSetTimeout_When1MilliSecTimeoutGiven) {
 	mock().expectOneCall("wdt_get_clock_source").andReturnValue(CLK_LSI);
@@ -74,12 +74,6 @@ TEST(Watchdog, set_ShouldSetTimeout_When1MilliSecTimeoutGiven) {
 		.andReturnValue(1000000);
 	mock().expectOneCall("wdt_get_prescaler").andReturnValue(1);
 
-	mock().expectOneCall("wdt_reload").withParameter("timeout", 1000);
-	wdt_set_ms(1);
-}
-
-TEST(Watchdog, wdt_feed_ShouldReloadWatchdogTimeout) {
-	mock().expectOneCall("wdt_get_reload").andReturnValue(1000000);
-	mock().expectOneCall("wdt_reload").withParameter("timeout", 1000000);
-	wdt_feed();
+	mock().expectOneCall("wdt_set_reload").withParameter("timeout", 1000);
+	wdt_set_reload_ms(1);
 }

@@ -58,9 +58,9 @@ TEST(Watchdog, set_prescaler_ShouldIgnoreOutBoundValue_WhenUnsupportedDivFactorG
 }
 
 TEST(Watchdog, reload_ShouldReloadTimeoutCounter) {
-	wdt_reload(1);
+	wdt_set_reload(1);
 	LONGS_EQUAL(1, WDT->LR);
-	wdt_reload(0xffffffff);
+	wdt_set_reload(0xffffffff);
 	LONGS_EQUAL(0xffffffff, WDT->LR);
 }
 
@@ -81,13 +81,13 @@ TEST(Watchdog, stop_ShouldClearWEN) {
 }
 
 TEST(Watchdog, set_debug_ShouldSetWDH_WhenTrueGiven) {
-	wdt_set_debug_hold_mode(true);
+	wdt_set_debug_stop_mode(true);
 	LONGS_EQUAL(0x8047, WDT->CON);
 }
 
 TEST(Watchdog, set_debug_ShouldClearWDH_WhenfalseGiven) {
-	wdt_set_debug_hold_mode(true);
-	wdt_set_debug_hold_mode(false);
+	wdt_set_debug_stop_mode(true);
+	wdt_set_debug_stop_mode(false);
 	LONGS_EQUAL(0x47, WDT->CON);
 }
 
@@ -146,4 +146,8 @@ TEST(Watchdog, get_clock_source_ShouldReturnClockSource) {
 	LONGS_EQUAL(CLK_LSI, wdt_get_clock_source());
 	PMU->PCSR = 0;
 	LONGS_EQUAL(CLK_PLL, wdt_get_clock_source());
+}
+
+TEST(Watchdog, wdt_feed_ShouldSetLR) {
+	wdt_feed();
 }

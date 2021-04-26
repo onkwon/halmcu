@@ -12,7 +12,7 @@ int main(void)
 	irq_enable(IRQ_WDT);
 #endif
 	wdt_start();
-	wdt_set_ms(1000);
+	wdt_set_reload_ms(1000);
 
 	for (int i = 0; i < 10; i++) {
 		wdt_feed();
