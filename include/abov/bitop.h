@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include <stdbool.h>
 
 static inline void bitop_set(volatile uint32_t *reg, uint32_t pos)
 {
@@ -24,6 +25,11 @@ static inline void bitop_clean_set_with_mask(volatile uint32_t *reg,
 	t &= ~(mask << pos);
 	t |= (val << pos) & (mask << pos);
 	*reg = t;
+}
+
+static inline bool is_pwr2(uint32_t val)
+{
+	return val && !(val & (val - 1));
 }
 
 #if defined(__cplusplus)

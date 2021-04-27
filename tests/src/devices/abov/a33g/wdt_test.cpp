@@ -31,10 +31,16 @@ TEST_GROUP(Watchdog) {
 };
 
 TEST(Watchdog, set_prescaler_ShouldSetPrescaler) {
-	for (uint32_t i = 0; i <= 7; i++) {
-		wdt_set_prescaler(i);
-		LONGS_EQUAL(0x40 | i, WDT->CON);
-	}
+	wdt_set_prescaler(1);
+	LONGS_EQUAL(0, WDT->CON & 7);
+	wdt_set_prescaler(4);
+	LONGS_EQUAL(1, WDT->CON & 7);
+	wdt_set_prescaler(8);
+	LONGS_EQUAL(2, WDT->CON & 7);
+	wdt_set_prescaler(16);
+	LONGS_EQUAL(3, WDT->CON & 7);
+	wdt_set_prescaler(256);
+	LONGS_EQUAL(7, WDT->CON & 7);
 }
 
 TEST(Watchdog, get_prescaler_ShouldReturnDivFactor) {
@@ -48,13 +54,6 @@ TEST(Watchdog, get_prescaler_ShouldReturnDivFactor) {
 	LONGS_EQUAL(16, wdt_get_prescaler());
 	WDT->CON = 7;
 	LONGS_EQUAL(256, wdt_get_prescaler());
-}
-
-TEST(Watchdog, set_prescaler_ShouldIgnoreOutBoundValue_WhenUnsupportedDivFactorGiven) {
-	wdt_set_prescaler(8);
-	LONGS_EQUAL(0x40, WDT->CON);
-	wdt_set_prescaler(9);
-	LONGS_EQUAL(0x41, WDT->CON);
 }
 
 TEST(Watchdog, reload_ShouldReloadTimeoutCounter) {

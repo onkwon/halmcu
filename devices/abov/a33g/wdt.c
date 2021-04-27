@@ -1,6 +1,8 @@
 #include "abov/ll/wdt.h"
 #include "abov/bitop.h"
 
+#include <assert.h>
+
 #include "abov/asm/arm/cmsis.h"
 #include "a33g.h"
 
@@ -23,20 +25,39 @@ static void set_reload(uint32_t timeout)
 	WDT->LR = timeout;
 }
 
+static uint32_t get_prescaler_value_from_divisor(uint32_t divisor)
+{
+	uint32_t i = 0;
+
+	while (divisor != 0) {
+		divisor >>= 1;
+		i++;
+	}
+
+	if (i >= 3) {
+		return i - 2;
+	}
+
+	return 0;
+}
+
 void wdt_set_prescaler(uint32_t div_factor)
 {
-	uint32_t val = WDT->CON & ~WPRS_MASK;
-	val |= (div_factor << WPRS_POS) & WPRS_MASK;
-	WDT->CON = val;
+	assert(is_pwr2(div_factor) && div_factor <= 256 && div_factor != 2);
+
+	uint32_t val = get_prescaler_value_from_divisor(div_factor);
+	uint32_t reg = WDT->CON & ~WPRS_MASK;
+	reg |= (val << WPRS_POS) & WPRS_MASK;
+	WDT->CON = reg;
 }
 
 uint32_t wdt_get_prescaler(void)
 {
-	uint32_t val = (WDT->CON & WPRS_MASK) >> WPRS_POS;
-	if (val == 0) {
+	uint32_t prescaler = (WDT->CON & WPRS_MASK) >> WPRS_POS;
+	if (prescaler == 0) {
 		return 1;
 	}
-	return 1U << (val + 1);
+	return 1U << (prescaler + 1);
 }
 
 void wdt_set_reload(uint32_t timeout)
@@ -60,7 +81,14 @@ void wdt_feed(void)
 
 void wdt_start(void)
 {
-	WDT->CON |= WEN;
+	uint32_t val = WDT->CON;
+	if (!(val & (1U << WIE_POS))) {
+		PMU->RSER |= 1U << 3;
+		val |= (1U << WRE_POS);
+	}
+	val |= WEN;
+
+	WDT->CON = val;
 }
 
 void wdt_stop(void)
