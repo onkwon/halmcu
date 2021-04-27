@@ -1,30 +1,35 @@
 @startuml
-class HAL_watchdog {
-	enable()
-	disable()
-	set_ms()
-	feed()
-	set_clock_source()
-	get_clock_source()
-	get_clock_frequency()
-}
-
-class LL_watchdog {
-	reset()
+interface wdt {
 	set_prescaler()
 	get_prescaler()
-	reload()
+	set_reload()
 	get_reload()
+	feed()
 	start()
 	stop()
-	set_debug_hold_mode()
-	is_event_raised()
-	set_interrupt()
-	get_count()
+	set_debug_stop_mode()
 }
 
-HAL_watchdog --> LL_watchdog
-HAL_watchdog ..> LL_power
-HAL_watchdog ..> LL_clock
-HAL_watchdog ..> IRQ
+class LL_wdt {
+	reset()
+	get_count()
+	set_reload_ms()
+	set_interrupt()
+	is_event_raised()
+	set_clock_source()
+	get_clock_source()
+}
+
+class HAL_wdt {
+	enable()
+	disable()
+	get_clock_freqeuncy()
+}
+
+wdt <|.. LL_wdt
+LL_wdt ..> LL_clock
+HAL_wdt --> LL_wdt
+HAL_wdt ..> LL_power
+HAL_wdt ..> LL_clock
+HAL_wdt ..> IRQ
 @enduml

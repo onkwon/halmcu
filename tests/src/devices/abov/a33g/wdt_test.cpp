@@ -31,10 +31,16 @@ TEST_GROUP(Watchdog) {
 };
 
 TEST(Watchdog, set_prescaler_ShouldSetPrescaler) {
-	for (uint32_t i = 0; i <= 7; i++) {
-		wdt_set_prescaler(i);
-		LONGS_EQUAL(0x40 | i, WDT->CON);
-	}
+	wdt_set_prescaler(1);
+	LONGS_EQUAL(0, WDT->CON & 7);
+	wdt_set_prescaler(4);
+	LONGS_EQUAL(1, WDT->CON & 7);
+	wdt_set_prescaler(8);
+	LONGS_EQUAL(2, WDT->CON & 7);
+	wdt_set_prescaler(16);
+	LONGS_EQUAL(3, WDT->CON & 7);
+	wdt_set_prescaler(256);
+	LONGS_EQUAL(7, WDT->CON & 7);
 }
 
 TEST(Watchdog, get_prescaler_ShouldReturnDivFactor) {
@@ -50,17 +56,10 @@ TEST(Watchdog, get_prescaler_ShouldReturnDivFactor) {
 	LONGS_EQUAL(256, wdt_get_prescaler());
 }
 
-TEST(Watchdog, set_prescaler_ShouldIgnoreOutBoundValue_WhenUnsupportedDivFactorGiven) {
-	wdt_set_prescaler(8);
-	LONGS_EQUAL(0x40, WDT->CON);
-	wdt_set_prescaler(9);
-	LONGS_EQUAL(0x41, WDT->CON);
-}
-
 TEST(Watchdog, reload_ShouldReloadTimeoutCounter) {
-	wdt_reload(1);
+	wdt_set_reload(1);
 	LONGS_EQUAL(1, WDT->LR);
-	wdt_reload(0xffffffff);
+	wdt_set_reload(0xffffffff);
 	LONGS_EQUAL(0xffffffff, WDT->LR);
 }
 
@@ -81,13 +80,13 @@ TEST(Watchdog, stop_ShouldClearWEN) {
 }
 
 TEST(Watchdog, set_debug_ShouldSetWDH_WhenTrueGiven) {
-	wdt_set_debug_hold_mode(true);
+	wdt_set_debug_stop_mode(true);
 	LONGS_EQUAL(0x8047, WDT->CON);
 }
 
 TEST(Watchdog, set_debug_ShouldClearWDH_WhenfalseGiven) {
-	wdt_set_debug_hold_mode(true);
-	wdt_set_debug_hold_mode(false);
+	wdt_set_debug_stop_mode(true);
+	wdt_set_debug_stop_mode(false);
 	LONGS_EQUAL(0x47, WDT->CON);
 }
 
@@ -146,4 +145,23 @@ TEST(Watchdog, get_clock_source_ShouldReturnClockSource) {
 	LONGS_EQUAL(CLK_LSI, wdt_get_clock_source());
 	PMU->PCSR = 0;
 	LONGS_EQUAL(CLK_PLL, wdt_get_clock_source());
+}
+
+TEST(Watchdog, wdt_feed_ShouldSetLR) {
+	wdt_feed();
+}
+
+TEST(Watchdog, set_reload_ms_ShouldSetPrescalerAndReload) {
+	wdt_set_reload_ms(1000);
+	LONGS_EQUAL(7, WDT->CON & 0x7);
+	LONGS_EQUAL(3000, WDT->LR);
+	wdt_set_reload_ms(30000);
+	LONGS_EQUAL(7, WDT->CON & 0x7);
+	LONGS_EQUAL(90000, WDT->LR);
+	wdt_set_reload_ms(1);
+	LONGS_EQUAL(7, WDT->CON & 0x7);
+	LONGS_EQUAL(3, WDT->LR);
+	wdt_set_reload_ms(0);
+	LONGS_EQUAL(0, WDT->CON & 0x7);
+	LONGS_EQUAL(0, WDT->LR);
 }

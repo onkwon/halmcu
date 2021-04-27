@@ -12,6 +12,8 @@ extern "C" {
 #define APB2_BASE			(PERIPHERAL_BASE + 0x10000U)
 #define AHB_BASE			(PERIPHERAL_BASE + 0x20000U)
 
+#define DBGMCU_BASE			(0xE0042000U)
+
 #define RCC_BASE			(AHB_BASE + 0x1000U)
 
 #define SYSCFG_BASE			(APB2_BASE + 0)
@@ -29,6 +31,14 @@ extern "C" {
 #define USART3_BASE			(APB1_BASE + 0x4800U)
 #define UART4_BASE			(APB1_BASE + 0x4C00U)
 #define UART5_BASE			(APB1_BASE + 0x5000U)
+
+#define IWDT_BASE			(APB1_BASE + 0x3000U)
+#define WWDT_BASE			(APB1_BASE + 0x2C00U)
+
+typedef struct {
+	volatile uint32_t IDCODE;
+	volatile uint32_t CR;
+} DBGMCU_Type;
 
 typedef struct {
 	volatile uint32_t EVCR;
@@ -82,6 +92,15 @@ typedef struct {
 	volatile uint32_t GTPR;
 } USART_Type;
 
+typedef struct {
+	volatile uint32_t KR;
+	volatile uint32_t PR;
+	volatile uint32_t RLP;
+	volatile uint32_t SR;
+} IWDT_Type;
+
+#define DBGMCU				((DBGMCU_Type *)DBGMCU_BASE)
+
 #define SYSCFG				((SYSCFG_Type *)SYSCFG_BASE)
 #define EXTI				((EXTI_Type *)EXTI_BASE)
 #define RCC				((RCC_Type *)RCC_BASE)
@@ -99,6 +118,8 @@ typedef struct {
 #define USART3				((USART_Type *)USART3_BASE)
 #define UART4				((USART_Type *)UART4_BASE)
 #define UART5				((USART_Type *)UART5_BASE)
+
+#define IWDT				((IWDT_Type *)IWDT_BASE)
 
 #if defined(__cplusplus)
 }

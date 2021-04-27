@@ -7,17 +7,8 @@ extern "C" {
 
 #include "abov/ll/wdt.h"
 
-/** Enable Watchdog */
 void wdt_enable(void);
-/** Disable Watchdog */
 void wdt_disable(void);
-
-/***/
-void wdt_set_ms(uint32_t period_ms);
-/***/
-void wdt_feed(void);
-
-/***/
 uint32_t wdt_get_clock_frequency(void);
 
 #if defined(__cplusplus)

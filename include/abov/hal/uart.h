@@ -37,7 +37,7 @@ typedef union {
 /**
  * @brief Initialize UART port with given configuration
  *
- * @param[in] port a peripheral enumerated in @ref periph_t
+ * @param[in] uart a peripheral enumerated in @ref periph_t
  * @param[in] cfg configuration
  * @param[in] handle handle of uart port
  * @return true on success
@@ -46,13 +46,13 @@ bool uart_init(periph_t uart, const struct uart_cfg *cfg, uart_handle_t *handle)
 /**
  * @brief Deinitialize UART port
  *
- * @param[in] port a peripheral enumerated in @ref periph_t
+ * @param[in] uart a peripheral enumerated in @ref periph_t
  */
 void uart_deinit(periph_t uart);
 /**
  * @brief Read bytes from UART port
  *
- * @param[in] port a peripheral enumerated in @ref periph_t
+ * @param[in] uart a peripheral enumerated in @ref periph_t
  * @param[out] buf receive buffer address
  * @param[in] bufsize buffer sizie
  */
@@ -60,7 +60,7 @@ size_t uart_read(periph_t uart, void *buf, size_t bufsize);
 /**
  * @brief Write data to UART port
  *
- * @param[in] port a peripheral enumerated in @ref periph_t
+ * @param[in] uart a peripheral enumerated in @ref periph_t
  * @param[in] data data buffer address
  * @param[in] datasize data size to send
  */

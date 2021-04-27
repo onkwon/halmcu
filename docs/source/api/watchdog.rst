@@ -10,8 +10,12 @@ Examples
 
 HAL
 ---
-.. c:autodoc:: ../../include/abov/hal/wdt.h
+.. doxygenfile:: abov/hal/wdt.h
 
 LL
 --
-.. c:autodoc:: ../../include/abov/ll/wdt.h
+.. doxygenfile:: abov/periph/wdt.h
+
+Extra
+-----
+.. doxygenfile:: abov/ll/wdt.h

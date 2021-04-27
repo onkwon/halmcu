@@ -8,45 +8,31 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "abov/periph/wdt.h"
+
 /**
- * Reset WDT unit
+ * @brief Reset WDT unit
  *
  * This function makes WDT unit the reset state.
  */
 void wdt_reset(void);
+/** Get the current watchdog count */
+uint32_t wdt_get_count(void);
+void wdt_set_reload_ms(uint32_t period_ms);
 
-/***/
-void wdt_set_prescaler(uint32_t div_factor);
-/***/
-uint32_t wdt_get_prescaler(void);
-/***/
-void wdt_reload(uint32_t timeout);
-/***/
-uint32_t wdt_get_reload(void);
-/***/
-void wdt_start(void);
-/***/
-void wdt_stop(void);
-/***/
-void wdt_set_debug_hold_mode(bool enable);
-/***/
-bool wdt_is_event_raised(void);
 /**
- * Set watchdog interrupt
+ * @brief Set watchdog interrupt
  *
  * The default behavior is to reset the system if not interrupt set
  *
- * :param enable: true enables interrupt. false triggers reset
+ * @param[in] enable enables interrupt when true. disables when false
  */
 void wdt_set_interrupt(bool enable);
-/** Get the current watchdog count */
-uint32_t wdt_get_count(void);
+bool wdt_is_event_raised(void);
 
 #include "abov/ll/clk.h"
 
-/***/
 void wdt_set_clock_source(clk_source_t clk);
-/***/
 clk_source_t wdt_get_clock_source(void);
 
 #if defined(__cplusplus)

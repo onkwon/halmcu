@@ -97,3 +97,31 @@ TEST(CLK, disable_peripheral_ShouldSetAPB1ENR_WhenAPB1PeriphGiven) {
 TEST(CLK, get_hclk_freq_ShouldReturnHSI_WhenResetStatusGiven) {
 	LONGS_EQUAL(8000000, clk_get_hclk_frequency());
 }
+TEST(CLK, get_hclk_freq_ShouldReturnHSE_WhenSWSIsOne) {
+	RCC->CFGR |= 4;
+	LONGS_EQUAL(8000000, clk_get_hclk_frequency());
+}
+TEST(CLK, get_hclk_freq_ShouldReturnPLL_WhenSWSIsTwo) {
+	RCC->CFGR |= 8;
+	LONGS_EQUAL(8000000, clk_get_hclk_frequency());
+}
+TEST(CLK, get_hclk_freq_ShouldReturnPLL_WhenSWSIsTwoAndHSEGiven) {
+	RCC->CFGR |= 8 | 0x10000;
+	LONGS_EQUAL(8000000*2, clk_get_hclk_frequency());
+}
+TEST(CLK, get_hclk_freq_ShouldReturnPLL_WhenSWSIsTwoAndHSEAndXtpreGiven) {
+	RCC->CFGR |= 8 | 0x30000;
+	LONGS_EQUAL(8000000, clk_get_hclk_frequency());
+}
+
+TEST(CLK, get_pclk_freq_ShouldReturnHSI_WhenResetStatusGiven) {
+	LONGS_EQUAL(8000000, clk_get_pclk_frequency());
+}
+
+TEST(CLK, get_frequency_ShouldReturnClockFrequency) {
+	LONGS_EQUAL(40000, clk_get_frequency(CLK_LSI));
+	LONGS_EQUAL(8000000, clk_get_frequency(CLK_HSI));
+	LONGS_EQUAL(32768, clk_get_frequency(CLK_LSE));
+	LONGS_EQUAL(8000000, clk_get_frequency(CLK_HSE));
+	LONGS_EQUAL(8000000, clk_get_frequency(CLK_PLL));
+}
