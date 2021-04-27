@@ -7,8 +7,11 @@
 #include "abov/compiler.h"
 #include "stm32f1.h"
 
+#define MHZ					1000000U
+#define KHZ					1000U
+
 #if !defined(F_HSI)
-#define F_HSI				(8000000)
+#define F_HSI					(8000000U)
 #endif
 
 static int get_ahb_activation_bitpos_from_peri(periph_t peri)
@@ -206,6 +209,24 @@ uint32_t clk_get_pclk_frequency(void)
 	uint32_t pre = (RCC->CFGR >> 8) & 0x7; /* PPRE1 */
 	uint32_t shift_factor = (pre == 0)? 0 : pre - 3;
 	return hclk >> shift_factor;
+}
+
+uint32_t clk_get_frequency(clk_source_t clk)
+{
+	switch (clk) {
+	case CLK_PLL:
+		return get_hclk();
+	case CLK_LSI:
+		return 40*KHZ;
+	case CLK_HSI:
+		return 8*MHZ;
+	case CLK_HSE:
+		return F_HSE;
+	case CLK_LSE:
+		return 32768U;
+	default:
+		return 0;
+	}
 }
 
 #if 0

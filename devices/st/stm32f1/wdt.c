@@ -1,4 +1,4 @@
-#include "abov/periph/wdt.h"
+#include "abov/ll/wdt.h"
 
 #include <assert.h>
 
@@ -55,6 +55,10 @@ uint32_t wdt_get_prescaler(void)
 
 void wdt_set_reload(uint32_t timeout)
 {
+	if (timeout > 0xfff) {
+		timeout = 0xfff;
+	}
+
 	while (is_reload_busy()) {
 		/* waiting */
 	}
@@ -81,4 +85,9 @@ void wdt_start(void)
 void wdt_set_debug_stop_mode(bool enable)
 {
 	bitop_clean_set_with_mask(&DBGMCU->CR, 8/*DBG_IWDGSTOP*/, 1, enable);
+}
+
+clk_source_t wdt_get_clock_source(void)
+{
+	return CLK_LSI;
 }
