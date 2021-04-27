@@ -8,6 +8,11 @@ extern "C" {
 #include <stdint.h>
 
 typedef struct {
+	volatile uint32_t IDCODE;
+	volatile uint32_t CR;
+} DBGMCU_Type;
+
+typedef struct {
 	volatile uint32_t EVCR;
 	volatile uint32_t MAPR;
 	volatile uint32_t CR1;
@@ -59,6 +64,15 @@ typedef struct {
 	volatile uint32_t GTPR;
 } USART_Type;
 
+typedef struct {
+	volatile uint32_t KR;
+	volatile uint32_t PR;
+	volatile uint32_t RLP;
+	volatile uint32_t SR;
+} IWDT_Type;
+
+extern DBGMCU_Type * const DBGMCU;
+
 extern SYSCFG_Type * const SYSCFG;
 extern EXTI_Type * const EXTI;
 extern RCC_Type * const RCC;
@@ -76,6 +90,8 @@ extern USART_Type * const USART2;
 extern USART_Type * const USART3;
 extern USART_Type * const UART4;
 extern USART_Type * const UART5;
+
+extern IWDT_Type * const IWDT;
 
 #if defined(__cplusplus)
 }
