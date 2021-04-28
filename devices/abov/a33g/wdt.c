@@ -1,7 +1,6 @@
 #include "abov/ll/wdt.h"
+#include "abov/assert.h"
 #include "abov/bitop.h"
-
-#include <assert.h>
 
 #include "abov/asm/arm/cmsis.h"
 #include "a33g.h"

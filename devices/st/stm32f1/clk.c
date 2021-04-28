@@ -1,6 +1,5 @@
 #include "abov/ll/clk.h"
 
-#include <assert.h>
 #include <stddef.h>
 
 #include "abov/bitop.h"

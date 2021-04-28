@@ -6,7 +6,7 @@
 
 #include "abov/ll/gpio.h"
 #include "a33g.h"
-#include "assert.h"
+#include "abov/assert.h"
 
 extern "C" {
 static struct pcu_stub regPA, regPB, regPC, regPD, regPE, regPF;
@@ -29,10 +29,6 @@ struct gpio_stub * const PE = &regGE;
 struct gpio_stub * const PF = &regGF;
 
 struct pmu_stub * const PMU = &regPmu;
-}
-
-void assert_override(void) {
-	mock().actualCall(__func__);
 }
 
 TEST_GROUP(gpio) {
@@ -91,7 +87,7 @@ TEST(gpio, set_altfunc_ShouldSetMr_WhenAlt3Given) {
 }
 
 TEST(gpio, set_altfunc_ShouldCauseAssert_WhenUnsupportedAltFuncGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_ANALOG);
 	gpio_set_altfunc(PERIPH_GPIOA, 0, 4);
 }
@@ -104,7 +100,7 @@ TEST(gpio, clear_event_ShouldWriteValueOneInIsr) {
 }
 
 TEST(gpio, enable_irq_ShouldCauseAssert_WhenUnsupportedGpioGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_enable_irq(PERIPH_GPIOA, 16, GPIO_IRQ_EDGE_ANY);
 }
 TEST(gpio, enable_irq_ShouldSetIcrRegister) {
@@ -134,7 +130,7 @@ TEST(gpio, disable_irq_ShouldClearIerRegister) {
 	LONGS_EQUAL(0x00000000, PCA->IER);
 }
 TEST(gpio, disable_irq_ShouldCauseAssert_WhenUnsupportedGpioGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_disable_irq(PERIPH_GPIOA, 16);
 }
 
@@ -150,7 +146,7 @@ TEST(gpio, write_ShouldSetSpecificPin) {
 }
 
 TEST(gpio, write_ShouldCauseAssert_WhenUnsupportedGpioGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_write(PERIPH_GPIOA, 16, 1);
 }
 
@@ -170,7 +166,7 @@ TEST(gpio, read_ShouldReturnCurrentPinState) {
 }
 
 TEST(gpio, read_ShouldCauseAssert_WhenUnsupportedGpioGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_read(PERIPH_GPIOA, 16);
 }
 
@@ -187,7 +183,7 @@ TEST(gpio, read_port_ShouldReturnCurrentState) {
 }
 
 TEST(gpio, enable_port_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_disable_port(PERIPH_UART1);
 }
 TEST(gpio, enable_port_ShouldSetPmuPer) {
@@ -198,7 +194,7 @@ TEST(gpio, enable_port_ShouldSetPmuPer) {
 }
 
 TEST(gpio, disable_port_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_disable_port(PERIPH_UART1);
 }
 TEST(gpio, disable_port_ShouldClearPmuPer) {
@@ -210,11 +206,11 @@ TEST(gpio, disable_port_ShouldClearPmuPer) {
 }
 
 TEST(gpio, set_mode_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_set_mode(PERIPH_UART1, 0, GPIO_MODE_PUSHPULL);
 }
 TEST(gpio, set_mode_ShouldCauseAssert_WhenUnsupportedGpioGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_set_mode(PERIPH_GPIOA, 16, GPIO_MODE_PUSHPULL);
 }
 TEST(gpio, set_mode_ShouldSetCR_WhenPushpullModeGiven) {
@@ -255,11 +251,11 @@ TEST(gpio, set_mode_ShouldSetPulldown_WhenInputModeWithPulldownGiven) {
 }
 
 TEST(gpio, set_debouncer_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_set_debouncer(PERIPH_UART1, 0, 0);
 }
 TEST(gpio, set_debouncer_ShouldCauseAssert_WhenInvalidPinGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_set_debouncer(PERIPH_GPIOA, 16, 0);
 }
 TEST(gpio, set_debouncer_ShouldSetDER_WhenClockCycleGiven) {

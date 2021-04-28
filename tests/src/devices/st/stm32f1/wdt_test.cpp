@@ -6,17 +6,13 @@
 
 #include "abov/ll/wdt.h"
 #include "stm32f1.h"
-#include "assert.h"
+#include "abov/assert.h"
 
 extern "C" {
 static IWDT_Type iwdt_reg;
 static DBGMCU_Type dbg_reg;
 IWDT_Type * const IWDT = &iwdt_reg;
 DBGMCU_Type * const DBGMCU = &dbg_reg;
-}
-
-void assert_override(void) {
-	mock().actualCall(__func__);
 }
 
 TEST_GROUP(IWDT) {
@@ -32,19 +28,19 @@ TEST_GROUP(IWDT) {
 };
 
 TEST(IWDT, set_prescaler_ShouldCauseAssert_WhenZeroValueGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	wdt_set_prescaler(0);
 }
 TEST(IWDT, set_prescaler_ShouldCauseAssert_WhenTooBigValueGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	wdt_set_prescaler(512);
 }
 TEST(IWDT, set_prescaler_ShouldCauseAssert_WhenTooSmallValueGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	wdt_set_prescaler(2);
 }
 TEST(IWDT, set_prescaler_ShouldCauseAssert_WhenNotPowerOfTwoGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	wdt_set_prescaler(10);
 }
 TEST(IWDT, set_prescaler_ShouldSetPR) {

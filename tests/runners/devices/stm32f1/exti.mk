@@ -7,10 +7,13 @@ TEST_SRC_FILES = \
 	src/devices/st/stm32f1/exti_test.cpp \
 	src/test_all.cpp \
 
+MOCKS_SRC = \
+	mocks/assert_mock.cpp \
+
 INCLUDE_DIRS = \
-	../include \
 	stubs/overrides \
 	$(CPPUTEST_HOME)/include \
+	../include \
 
 CPPUTEST_CPPFLAGS = \
 	-DIRQ_DEFINES=\"../devices/st/stm32f1/irq.def\" \

@@ -1,15 +1,12 @@
-#include <assert.h>
+#include "abov/assert.h"
 #include "abov/compiler.h"
 
 ABOV_WEAK
 ABOV_NORETURN
-void __assert_func(const char * const file,
-		const int line, const char * const func, const char * const exp)
+void abov_assertion_failed(const uintptr_t *pc, const uintptr_t *lr)
 {
-	unused(file);
-	unused(line);
-	unused(func);
-	unused(exp);
-
+	unused(pc);
+	unused(lr);
+	abov_raise_trap(0);
 	while (1) { /* hang */ }
 }

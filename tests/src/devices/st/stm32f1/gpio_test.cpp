@@ -6,7 +6,7 @@
 
 #include "abov/ll/gpio.h"
 #include "stm32f1.h"
-#include "assert.h"
+#include "abov/assert.h"
 
 extern "C" {
 static RCC_Type rcc_reg;
@@ -19,10 +19,6 @@ GPIO_Type * const GPIOD = &regd;
 GPIO_Type * const GPIOE = &rege;
 GPIO_Type * const GPIOF = &regf;
 GPIO_Type * const GPIOG = &regg;
-}
-
-void assert_override(void) {
-	mock().actualCall(__func__);
 }
 
 TEST_GROUP(GPIO) {
@@ -45,7 +41,7 @@ TEST_GROUP(GPIO) {
 };
 
 TEST(GPIO, reset_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_reset(PERIPH_USART1);
 }
 
@@ -67,16 +63,16 @@ TEST(GPIO, disable_port_ShouldClearRccENR) {
 	LONGS_EQUAL(0xfef3, RCC->APB2ENR);
 }
 TEST(GPIO, enable_port_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_enable_port(PERIPH_USART1);
 }
 TEST(GPIO, disable_port_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_disable_port(PERIPH_USART1);
 }
 
 TEST(GPIO, read_port_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_read_port(PERIPH_USART1);
 }
 TEST(GPIO, read_port_ShouldReturnIDR) {
@@ -87,7 +83,7 @@ TEST(GPIO, read_port_ShouldReturnIDR) {
 }
 
 TEST(GPIO, write_port_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_write_port(PERIPH_USART1, 0xabcd);
 }
 TEST(GPIO, write_port_ShouldSetODR) {
@@ -98,11 +94,11 @@ TEST(GPIO, write_port_ShouldSetODR) {
 }
 
 TEST(GPIO, read_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_read(PERIPH_USART1, 0);
 }
 TEST(GPIO, read_ShouldCauseAssert_WhenInvalidPinGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_read(PERIPH_GPIOA, 16);
 }
 TEST(GPIO, read_ShouldReturnIDRBit) {
@@ -119,11 +115,11 @@ TEST(GPIO, read_ShouldReturnIDRBit) {
 }
 
 TEST(GPIO, write_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_write(PERIPH_USART1, 0, 0);
 }
 TEST(GPIO, write_ShouldCauseAssert_WhenInvalidPinGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_write(PERIPH_GPIOA, 16, 0);
 }
 TEST(GPIO, write_ShouldSetBSRRBit) {
@@ -138,11 +134,11 @@ TEST(GPIO, write_ShouldSetBSRRBit) {
 }
 
 TEST(GPIO, enable_irq_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_enable_irq(PERIPH_USART1, 0, GPIO_IRQ_EDGE_ANY);
 }
 TEST(GPIO, enable_irq_ShouldCauseAssert_WhenInvalidPinGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_enable_irq(PERIPH_GPIOA, 20, GPIO_IRQ_EDGE_ANY);
 }
 TEST(GPIO, enable_irq_ShouldResetExtiEdgeFirst) {
@@ -177,11 +173,11 @@ TEST(GPIO, enable_irq_ShouldSetBothEdges_WhenAnyOptionGiven) {
 }
 
 TEST(GPIO, disable_irq_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_disable_irq(PERIPH_USART1, 0);
 }
 TEST(GPIO, disable_irq_ShouldCauseAssert_WhenInvalidPinGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_disable_irq(PERIPH_GPIOA, 20);
 }
 TEST(GPIO, disable_irq_ShouldCallExtiDisableIrq) {
@@ -190,11 +186,11 @@ TEST(GPIO, disable_irq_ShouldCallExtiDisableIrq) {
 }
 
 TEST(GPIO, clear_event_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_clear_event(PERIPH_USART1, 0);
 }
 TEST(GPIO, clear_event_ShouldCauseAssert_WhenInvalidPinGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_clear_event(PERIPH_GPIOA, 20);
 }
 TEST(GPIO, clear_event_ShouldCallExtiClearEvent) {
@@ -203,11 +199,11 @@ TEST(GPIO, clear_event_ShouldCallExtiClearEvent) {
 }
 
 TEST(GPIO, set_mode_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_set_mode(PERIPH_USART1, 0, GPIO_MODE_PUSHPULL);
 }
 TEST(GPIO, set_mode_ShouldCauseAssert_WhenInvalidPinGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_set_mode(PERIPH_GPIOA, 16, GPIO_MODE_PUSHPULL);
 }
 TEST(GPIO, set_mode_ShouldSetCRL_WhenPin0To7Given) {
@@ -230,11 +226,11 @@ TEST(GPIO, set_mode_ShouldSetCRH_WhenPin8To15Given) {
 }
 
 TEST(GPIO, set_altfunc_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_set_altfunc(PERIPH_USART1, 0, 0);
 }
 TEST(GPIO, set_altfunc_ShouldCauseAssert_WhenInvalidPinGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_set_altfunc(PERIPH_GPIOA, 20, 0);
 }
 TEST(GPIO, set_altfunc_ShouldSetCRL_WhenPin0To7AndPushpullGiven) {
@@ -274,11 +270,11 @@ TEST(GPIO, set_altfunc_ShouldSetModeAltOpendrain_WhenOpendrainModeGiven) {
 }
 
 TEST(GPIO, set_speed_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_set_speed(PERIPH_USART1, 0, GPIO_SPEED_LOW);
 }
 TEST(GPIO, set_speed_ShouldCauseAssert_WhenInvalidPinGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	gpio_set_speed(PERIPH_GPIOA, 16, GPIO_SPEED_LOW);
 }
 TEST(GPIO, set_speed_ShouldSetSpeed) {

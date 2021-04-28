@@ -1,11 +1,11 @@
 #include "abov/ll/uart.h"
 
-#include <assert.h>
 #include <stddef.h>
 #include <stdbool.h>
 
 #include "abov/bitop.h"
 #include "abov/compiler.h"
+#include "abov/assert.h"
 
 #include "abov/asm/arm/cmsis.h"
 #include "a33g.h"

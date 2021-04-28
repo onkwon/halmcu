@@ -1,5 +1,6 @@
 #include "abov/ll/clk.h"
-#include <assert.h>
+
+#include "abov/assert.h"
 #include "abov/bitop.h"
 #include "abov/compiler.h"
 #include "abov/asm/arm/cmsis.h"

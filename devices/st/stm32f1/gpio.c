@@ -1,8 +1,8 @@
 #include "abov/ll/gpio.h"
 
 #include <stddef.h>
-#include <assert.h>
 
+#include "abov/assert.h"
 #include "abov/bitop.h"
 #include "abov/compiler.h"
 #include "stm32f1.h"

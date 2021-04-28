@@ -1,7 +1,6 @@
 #include "exti.h"
 
-#include <assert.h>
-
+#include "abov/assert.h"
 #include "abov/bitop.h"
 #include "stm32f1.h"
 
