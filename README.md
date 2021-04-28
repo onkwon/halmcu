@@ -87,7 +87,7 @@ Please refer to a [custom build example](examples/custom-build).
 * ❌ Unavailable in device
 * <code>&nbsp;</code> Planned
 
-|            |        | ABOV |      |      | STM32 |    |    |
+|            | ABOV   |      |      |      | STM32 |    |    |
 | ---------- | ----   | ---- | ---- | ---- | --    | -- | -- |
 | Peripheral | A31G1x | A33G | A33M | A34M | F1    | F4 | F7 |
 | ADC        |        | ✅   |      |      |       |    |    |

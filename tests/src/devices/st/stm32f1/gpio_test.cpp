@@ -6,7 +6,7 @@
 
 #include "abov/ll/gpio.h"
 #include "stm32f1.h"
-#include "assert.h"
+#include "abov/assert.h"
 
 extern "C" {
 static RCC_Type rcc_reg;

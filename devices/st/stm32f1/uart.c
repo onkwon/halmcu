@@ -1,10 +1,10 @@
 #include "abov/ll/uart.h"
 
 #include <stddef.h>
-#include <assert.h>
 
 #include "abov/bitop.h"
 #include "abov/compiler.h"
+#include "abov/assert.h"
 #include "stm32f1.h"
 #include "exti.h"
 

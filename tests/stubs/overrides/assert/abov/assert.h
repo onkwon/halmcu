@@ -8,7 +8,7 @@ extern "C" {
 #undef assert
 #define assert(exp)		if (!(exp)) assert_override()
 
-extern void assert_override(void);
+void assert_override(void);
 
 #if defined(__cplusplus)
 }

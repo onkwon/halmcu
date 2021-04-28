@@ -1,9 +1,8 @@
 #include "abov/ll/wdt.h"
 
-#include <assert.h>
-
 #include "abov/bitop.h"
 #include "abov/compiler.h"
+#include "abov/assert.h"
 #include "stm32f1.h"
 
 #define MAX_RELOAD				(0x1000 - 1)

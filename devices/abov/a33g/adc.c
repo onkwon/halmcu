@@ -1,7 +1,6 @@
 #include "abov/ll/adc.h"
 
-#include <assert.h>
-
+#include "abov/assert.h"
 #include "abov/compiler.h"
 #include "abov/bitop.h"
 #include "abov/asm/arm/cmsis.h"

@@ -11,10 +11,10 @@ MOCKS_SRC_DIRS = \
 	mocks/ll \
 
 INCLUDE_DIRS = \
-	../include \
 	stubs/overrides \
 	stubs/overrides/assert \
 	$(CPPUTEST_HOME)/include \
+	../include \
 
 CPPUTEST_CPPFLAGS = \
 	-DIRQ_DEFINES=\"../devices/st/stm32f1/irq.def\" \

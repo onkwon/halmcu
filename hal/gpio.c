@@ -1,6 +1,5 @@
 #include "abov/hal/gpio.h"
 
-#include <assert.h>
 #include <stddef.h>
 
 #include "abov/ll/pwr.h"

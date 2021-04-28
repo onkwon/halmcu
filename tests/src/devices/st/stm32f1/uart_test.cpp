@@ -6,7 +6,7 @@
 
 #include "abov/ll/uart.h"
 #include "stm32f1.h"
-#include "assert.h"
+#include "abov/assert.h"
 
 extern "C" {
 static USART_Type reg1, reg2, reg3, reg4, reg5;

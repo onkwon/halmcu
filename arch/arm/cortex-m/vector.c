@@ -1,7 +1,7 @@
 #include "abov/irq.h"
 #include <stdint.h>
-#include <assert.h>
 #include "abov/compiler.h"
+#include "abov/assert.h"
 
 typedef void (*nvic_vector_t)(void);
 
