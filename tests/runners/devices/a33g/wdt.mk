@@ -9,11 +9,12 @@ TEST_SRC_FILES = \
 
 MOCKS_SRC = \
 	mocks/ll/clk_mock.cpp \
+	mocks/assert_mock.cpp \
 
 INCLUDE_DIRS = \
-	../include \
 	stubs/overrides \
 	$(CPPUTEST_HOME)/include \
+	../include \
 
 CPPUTEST_CPPFLAGS = \
 	-DIRQ_DEFINES=\"../devices/abov/a33g/irq.def\" \

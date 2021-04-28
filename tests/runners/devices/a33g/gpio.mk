@@ -7,9 +7,11 @@ TEST_SRC_FILES = \
 	src/devices/abov/a33g/gpio_test.cpp \
 	src/test_all.cpp \
 
+MOCKS_SRC = \
+	mocks/assert_mock.cpp \
+
 INCLUDE_DIRS = \
 	stubs/overrides \
-	stubs/overrides/assert \
 	$(CPPUTEST_HOME)/include \
 	../include \
 

@@ -7,9 +7,6 @@ extern "C" {
 
 #include "abov/asm/core.h"
 
-#if defined(UNITTEST)
-#define assert(exp)
-#else
 #define assert(exp) \
 	do { \
 		if (!(exp)) { \
@@ -18,7 +15,6 @@ extern "C" {
 			abov_assertion_failed(pc, lr); \
 		} \
 	} while (0)
-#endif
 
 void abov_assertion_failed(const uintptr_t *pc, const uintptr_t *lr);
 

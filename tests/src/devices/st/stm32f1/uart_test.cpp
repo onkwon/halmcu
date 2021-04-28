@@ -19,10 +19,6 @@ static RCC_Type rcc_reg;
 RCC_Type * const RCC = &rcc_reg;
 }
 
-void assert_override(void) {
-	mock().actualCall(__func__);
-}
-
 TEST_GROUP(UART) {
 	void setup(void) {
 		mock().ignoreOtherCalls();
@@ -41,12 +37,12 @@ TEST_GROUP(UART) {
 };
 
 TEST(UART, reset_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	uart_reset(PERIPH_GPIOA);
 }
 
 TEST(UART, has_rx_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	uart_has_rx(PERIPH_GPIOA);
 }
 TEST(UART, has_rx_ShouldReturnFalse_WhenNothingReceived) {
@@ -58,7 +54,7 @@ TEST(UART, has_rx_ShouldReturnTrue_WhenDataReceived) {
 }
 
 TEST(UART, is_tx_ready_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	uart_is_tx_ready(PERIPH_GPIOA);
 }
 TEST(UART, is_tx_ready_ShouldReturnTrue_WhenReadyToTransmit) {
@@ -70,7 +66,7 @@ TEST(UART, is_tx_ready_ShouldReturnTrue_WhenBusy) {
 }
 
 TEST(UART, get_rxd_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	uart_get_rxd(PERIPH_GPIOA);
 }
 TEST(UART, get_rxd_ShouldReturnReceivedData) {
@@ -80,7 +76,7 @@ TEST(UART, get_rxd_ShouldReturnReceivedData) {
 }
 
 TEST(UART, set_txd_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	uart_set_txd(PERIPH_GPIOA, 0);
 }
 TEST(UART, set_txd_ShouldSetDR) {
@@ -91,7 +87,7 @@ TEST(UART, set_txd_ShouldSetDR) {
 }
 
 TEST(UART, set_baudrate_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	uart_set_baudrate(PERIPH_GPIOA, 115200, 1000000);
 }
 TEST(UART, set_baudrate_ShouldSetBRR_WhenPlckIs72MHz) {

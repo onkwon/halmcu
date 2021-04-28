@@ -7,9 +7,11 @@ TEST_SRC_FILES = \
 	src/devices/st/stm32f1/uart_test.cpp \
 	src/test_all.cpp \
 
+MOCKS_SRC_DIRS = \
+	mocks \
+
 INCLUDE_DIRS = \
 	stubs/overrides \
-	stubs/overrides/assert \
 	$(CPPUTEST_HOME)/include \
 	../include \
 

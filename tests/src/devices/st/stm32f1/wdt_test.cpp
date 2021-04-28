@@ -15,10 +15,6 @@ IWDT_Type * const IWDT = &iwdt_reg;
 DBGMCU_Type * const DBGMCU = &dbg_reg;
 }
 
-void assert_override(void) {
-	mock().actualCall(__func__);
-}
-
 TEST_GROUP(IWDT) {
 	void setup(void) {
 		mock().ignoreOtherCalls();
@@ -32,19 +28,19 @@ TEST_GROUP(IWDT) {
 };
 
 TEST(IWDT, set_prescaler_ShouldCauseAssert_WhenZeroValueGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	wdt_set_prescaler(0);
 }
 TEST(IWDT, set_prescaler_ShouldCauseAssert_WhenTooBigValueGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	wdt_set_prescaler(512);
 }
 TEST(IWDT, set_prescaler_ShouldCauseAssert_WhenTooSmallValueGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	wdt_set_prescaler(2);
 }
 TEST(IWDT, set_prescaler_ShouldCauseAssert_WhenNotPowerOfTwoGiven) {
-	mock().expectOneCall("assert_override");
+	mock().expectOneCall("abov_assertion_failed");
 	wdt_set_prescaler(10);
 }
 TEST(IWDT, set_prescaler_ShouldSetPR) {

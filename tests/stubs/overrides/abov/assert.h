@@ -5,10 +5,12 @@
 extern "C" {
 #endif
 
-#undef assert
-#define assert(exp)		if (!(exp)) assert_override()
+#include <stdint.h>
 
-void assert_override(void);
+#undef assert
+#define assert(exp)		if (!(exp)) abov_assertion_failed(0, 0)
+
+void abov_assertion_failed(const uintptr_t *pc, const uintptr_t *lr);
 
 #if defined(__cplusplus)
 }
