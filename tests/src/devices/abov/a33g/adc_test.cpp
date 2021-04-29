@@ -29,18 +29,18 @@ TEST(ADC, reset_ShouldSetRegistersResetState) {
 }
 
 TEST(ADC, enable_ShouldSetAdcen) {
-	adc_enable(PERIPH_ADC);
+	adc_activate(PERIPH_ADC);
 	LONGS_EQUAL(0xc0ff, ADC->MR);
 }
 
 TEST(ADC, disable_ShouldClearAdcen) {
-	adc_enable(PERIPH_ADC);
-	adc_disable(PERIPH_ADC);
+	adc_activate(PERIPH_ADC);
+	adc_deactivate(PERIPH_ADC);
 	LONGS_EQUAL(0x40ff, ADC->MR);
 }
 
 TEST(ADC, set_mode_ShouldSetADSTBY) {
-	adc_set_mode(PERIPH_ADC, ADC_MODE_NORMAL);
+	adc_set_mode(PERIPH_ADC, ADC_MODE_SINGLE_CHANNEL);
 	LONGS_EQUAL(0x00ff, ADC->MR);
 	adc_set_mode(PERIPH_ADC, ADC_MODE_IDLE);
 	LONGS_EQUAL(0x40ff, ADC->MR);
@@ -122,4 +122,9 @@ TEST(ADC, set_clock_frequency_ShouldSetAdcs) {
 	LONGS_EQUAL(0, ADC->MR & 0xff);
 	adc_set_clock_frequency(PERIPH_ADC, 250000, 1000000);
 	LONGS_EQUAL(3, ADC->MR & 0xff);
+}
+
+TEST(ADC, get_measurement_ShouldReturnDR) {
+	ADC->DR = 1234U << 4;
+	LONGS_EQUAL(1234, adc_get_measurement(PERIPH_ADC));
 }

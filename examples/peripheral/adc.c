@@ -1,8 +1,6 @@
 #include "abov/system.h"
 #include "abov/hal/gpio.h"
-#include "abov/ll/pwr.h"
-#include "abov/ll/clk.h"
-#include "abov/ll/adc.h"
+#include "abov/hal/adc.h"
 
 static void myadc_gpio_init(void)
 {
@@ -18,13 +16,12 @@ static void myadc_init(void)
 {
 	myadc_gpio_init();
 
-	pwr_enable_peripheral(PERIPH_ADC);
-	clk_enable_peripheral(PERIPH_ADC);
-
 	adc_enable(PERIPH_ADC);
-	adc_set_mode(PERIPH_ADC, ADC_MODE_NORMAL);
+#if defined(DEFAULT_CONFIGURATION)
+	adc_set_mode(PERIPH_ADC, ADC_MODE_SINGLE_CHANNEL);
 	adc_set_clock_frequency(PERIPH_ADC, 1000000, clk_get_pclk_frequency());
 	adc_set_trigger(PERIPH_ADC, ADC_TRIGGER_MANUAL);
+#endif
 	adc_select_channel(PERIPH_ADC, ADC_CHANNEL_1);
 }
 
@@ -38,7 +35,7 @@ int main(void)
 		/* waiting */
 	}
 
-	uint32_t adc_result = adc_read(PERIPH_ADC);
+	uint32_t adc_result = adc_get_measurement(PERIPH_ADC);
 
 	adc_clear_event(PERIPH_ADC, ADC_EVENT_COMPLETE);
 
