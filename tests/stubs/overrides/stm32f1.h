@@ -71,6 +71,29 @@ typedef struct {
 	volatile uint32_t SR;
 } IWDT_Type;
 
+typedef struct {
+	volatile uint32_t SR;
+	volatile uint32_t CR1;
+	volatile uint32_t CR2;
+	volatile uint32_t SMPR1;
+	volatile uint32_t SMPR2;
+	volatile uint32_t JOFR1;
+	volatile uint32_t JOFR2;
+	volatile uint32_t JOFR3;
+	volatile uint32_t JOFR4;
+	volatile uint32_t HTR;
+	volatile uint32_t LTR;
+	volatile uint32_t SQR1;
+	volatile uint32_t SQR2;
+	volatile uint32_t SQR3;
+	volatile uint32_t JSQR;
+	volatile uint32_t JDR1;
+	volatile uint32_t JDR2;
+	volatile uint32_t JDR3;
+	volatile uint32_t JDR4;
+	volatile uint32_t DR;
+} ADC_Type;
+
 extern DBGMCU_Type * const DBGMCU;
 
 extern SYSCFG_Type * const SYSCFG;
@@ -92,6 +115,10 @@ extern USART_Type * const UART4;
 extern USART_Type * const UART5;
 
 extern IWDT_Type * const IWDT;
+
+extern ADC_Type * const ADC1;
+extern ADC_Type * const ADC2;
+extern ADC_Type * const ADC3;
 
 #if defined(__cplusplus)
 }

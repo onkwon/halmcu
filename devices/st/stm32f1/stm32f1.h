@@ -35,6 +35,10 @@ extern "C" {
 #define IWDT_BASE			(APB1_BASE + 0x3000U)
 #define WWDT_BASE			(APB1_BASE + 0x2C00U)
 
+#define ADC1_BASE			(APB2_BASE + 0x2400U)
+#define ADC2_BASE			(APB2_BASE + 0x2800U)
+#define ADC3_BASE			(APB2_BASE + 0x3C00U)
+
 typedef struct {
 	volatile uint32_t IDCODE;
 	volatile uint32_t CR;
@@ -99,6 +103,29 @@ typedef struct {
 	volatile uint32_t SR;
 } IWDT_Type;
 
+typedef struct {
+	volatile uint32_t SR;
+	volatile uint32_t CR1;
+	volatile uint32_t CR2;
+	volatile uint32_t SMPR1;
+	volatile uint32_t SMPR2;
+	volatile uint32_t JOFR1;
+	volatile uint32_t JOFR2;
+	volatile uint32_t JOFR3;
+	volatile uint32_t JOFR4;
+	volatile uint32_t HTR;
+	volatile uint32_t LTR;
+	volatile uint32_t SQR1;
+	volatile uint32_t SQR2;
+	volatile uint32_t SQR3;
+	volatile uint32_t JSQR;
+	volatile uint32_t JDR1;
+	volatile uint32_t JDR2;
+	volatile uint32_t JDR3;
+	volatile uint32_t JDR4;
+	volatile uint32_t DR;
+} ADC_Type;
+
 #define DBGMCU				((DBGMCU_Type *)DBGMCU_BASE)
 
 #define SYSCFG				((SYSCFG_Type *)SYSCFG_BASE)
@@ -120,6 +147,10 @@ typedef struct {
 #define UART5				((USART_Type *)UART5_BASE)
 
 #define IWDT				((IWDT_Type *)IWDT_BASE)
+
+#define ADC1				((ADC_Type *)ADC1_BASE)
+#define ADC2				((ADC_Type *)ADC2_BASE)
+#define ADC3				((ADC_Type *)ADC3_BASE)
 
 #if defined(__cplusplus)
 }

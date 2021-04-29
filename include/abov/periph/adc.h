@@ -100,6 +100,7 @@ void adc_clear_event(periph_t adc, adc_event_t events);
 bool adc_is_busy(periph_t adc);
 bool adc_is_completed(periph_t adc);
 void adc_set_clock_frequency(periph_t adc, uint32_t hz, uint32_t pclk);
+void adc_calibrate(periph_t adc);
 
 #if defined(__cplusplus)
 }
