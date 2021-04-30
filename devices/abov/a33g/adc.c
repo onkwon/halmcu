@@ -18,13 +18,13 @@ void adc_reset(periph_t adc)
 	ADC->TEST = 0;
 }
 
-void adc_enable(periph_t adc)
+void adc_activate(periph_t adc)
 {
 	unused(adc);
 	bitop_set(&ADC->MR, 15);
 }
 
-void adc_disable(periph_t adc)
+void adc_deactivate(periph_t adc)
 {
 	unused(adc);
 	bitop_clear(&ADC->MR, 15);
@@ -35,13 +35,14 @@ void adc_set_mode(periph_t adc, adc_mode_t mode)
 	unused(adc);
 
 	switch (mode) {
-	case ADC_MODE_NORMAL:
+	case ADC_MODE_SINGLE_CONVERSION:
 		bitop_clear(&ADC->MR, 14); /* ADSTBY */
 		break;
 	case ADC_MODE_IDLE:
 		bitop_set(&ADC->MR, 14);
 		break;
 	default:
+		assert(0);
 		break;
 	}
 }
@@ -59,22 +60,19 @@ void adc_stop(periph_t adc)
 	bitop_clear(&ADC->CR, 7); /* ADST */
 }
 
+ABOV_STATIC_ASSERT(__builtin_ffs(1) == 1, "");
 void adc_select_channel(periph_t adc, adc_channel_t channel)
 {
 	unused(adc);
-	if (channel > ADC_CHANNEL_15) {
-		return;
-	}
-
-	bitop_clean_set_with_mask(&ADC->CR, 0, 0xf, channel);
+	assert(channel & ((ADC_CHANNEL_15 << 1) - 1));
+	bitop_clean_set_with_mask(&ADC->CR, 0, 0xf,
+			(uint32_t)__builtin_ffs((int)channel) - 1);
 }
 
 void adc_set_trigger(periph_t adc, adc_trigger_t trigger)
 {
 	unused(adc);
-	if (trigger > ADC_TRIGGER_TIMER7_CC_0) {
-		return;
-	}
+	assert(trigger <= ADC_TRIGGER_TIMER7_CC0);
 
 	if (trigger == ADC_TRIGGER_MANUAL) {
 		bitop_clear(&ADC->MR, 11); /* EXTRG */
@@ -96,10 +94,10 @@ void adc_disable_irq(periph_t adc)
 	bitop_clear(&ADC->MR, 12); /* ADIE */
 }
 
-uint32_t adc_read(periph_t adc)
+uint32_t adc_get_measurement(periph_t adc)
 {
 	unused(adc);
-	return ADC->DR >> 3;
+	return ADC->DR >> 4;
 }
 
 bool adc_is_busy(periph_t adc)

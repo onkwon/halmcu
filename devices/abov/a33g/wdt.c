@@ -1,6 +1,7 @@
 #include "abov/ll/wdt.h"
 #include "abov/assert.h"
 #include "abov/bitop.h"
+#include "abov/compiler.h"
 
 #include "abov/asm/arm/cmsis.h"
 #include "a33g.h"
@@ -19,6 +20,8 @@
 #define WIE					(1U << WIE_POS)
 #define WDH					(1U << WDH_POS)
 
+ABOV_STATIC_ASSERT(__builtin_ffs(1) == 1, "");
+
 static void set_reload(uint32_t timeout)
 {
 	WDT->LR = timeout;
@@ -26,12 +29,7 @@ static void set_reload(uint32_t timeout)
 
 static uint32_t get_prescaler_value_from_divisor(uint32_t divisor)
 {
-	uint32_t i = 0;
-
-	while (divisor != 0) {
-		divisor >>= 1;
-		i++;
-	}
+	uint32_t i = (uint32_t)__builtin_ffs((int)divisor);
 
 	if (i >= 3) {
 		return i - 2;

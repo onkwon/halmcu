@@ -90,8 +90,8 @@ Please refer to a [custom build example](examples/custom-build).
 |            | ABOV   |      |      |      | STM32 |    |    |
 | ---------- | ----   | ---- | ---- | ---- | --    | -- | -- |
 | Peripheral | A31G1x | A33G | A33M | A34M | F1    | F4 | F7 |
-| ADC        |        | ✅   |      |      |       |    |    |
-| CAN        |        | ❌   |      |      |       |    |    |
+| ADC        |        | ✅   |      |      | ✅    |    |    |
+| CAN        |        | ❌   |      |      | ➖    |    |    |
 | CLK        |        | ✅   |      |      | ✅    |    |    |
 | CRC        |        | ❌   |      |      |       |    |    |
 | DAC        |        | ❌   |      |      |       |    |    |

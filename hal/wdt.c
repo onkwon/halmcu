@@ -20,6 +20,6 @@ void wdt_enable(void)
 
 void wdt_disable(void)
 {
-	pwr_disable_peripheral(PERIPH_WDT);
 	clk_disable_peripheral(PERIPH_WDT);
+	pwr_disable_peripheral(PERIPH_WDT);
 }

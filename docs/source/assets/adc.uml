@@ -1,0 +1,37 @@
+@startuml
+interface adc {
+	reset()
+	activate()
+	deactivate()
+	start()
+	stop()
+	set_mode()
+	select_channel()
+	set_trigger()
+	get_measurement()
+	enable_irq()
+	disable_irq()
+	get_event()
+	clear_event()
+	is_busy()
+	is_completed()
+	set_clock_frequency()
+	set_sample_time()
+	calibrate()
+}
+
+class LL_adc {
+}
+
+class HAL_adc {
+	enable()
+	disable()
+	init()
+}
+
+adc <|.. LL_adc
+HAL_adc --> LL_adc
+HAL_adc ..> LL_power
+HAL_adc ..> LL_clock
+HAL_adc ..> IRQ
+@enduml

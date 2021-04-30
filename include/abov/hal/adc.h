@@ -7,6 +7,9 @@ extern "C" {
 
 #include "abov/ll/adc.h"
 
+void adc_enable(periph_t adc);
+void adc_disable(periph_t adc);
+
 #if defined(__cplusplus)
 }
 #endif

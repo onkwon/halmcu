@@ -1,6 +1,8 @@
 ADC
 ===
 
+.. image:: ../assets/images/adc.svg
+
 Examples
 --------
 .. literalinclude:: ../../../examples/peripheral/adc.c
@@ -8,8 +10,12 @@ Examples
 
 HAL
 ---
-.. c:autodoc:: ../../include/abov/hal/adc.h
+.. doxygenfile:: abov/hal/adc.h
 
 LL
 --
-.. c:autodoc:: ../../include/abov/ll/adc.h
+.. doxygenfile:: abov/periph/adc.h
+
+Extra
+-----
+.. doxygenfile:: abov/ll/adc.h
