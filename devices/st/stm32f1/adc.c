@@ -177,13 +177,13 @@ void adc_select_channel(periph_t adc, adc_channel_t channel)
 
 bool adc_is_busy(periph_t adc)
 {
-	ADC_Type *reg = get_interface_from_periph(adc);
+	const ADC_Type *reg = get_interface_from_periph(adc);
 	return reg->SR & 0x10; /* STRT */
 }
 
 uint32_t adc_get_measurement(periph_t adc)
 {
-	ADC_Type *reg = get_interface_from_periph(adc);
+	const ADC_Type *reg = get_interface_from_periph(adc);
 	return reg->DR;
 }
 
@@ -231,7 +231,7 @@ void adc_disable_irq(periph_t adc)
 
 adc_event_t adc_get_event(periph_t adc)
 {
-	ADC_Type *reg = get_interface_from_periph(adc);
+	const ADC_Type *reg = get_interface_from_periph(adc);
 	uint32_t sr = reg->SR;
 
 	if (sr & 2) {
