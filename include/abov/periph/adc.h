@@ -10,51 +10,59 @@ extern "C" {
 #include "abov/periph/periph.h"
 
 typedef enum {
-	ADC_MODE_SINGLE_CHANNEL			= 0,
-	ADC_MODE_MULTI_CHANNEL,
-	ADC_MODE_FREERUN_SINGLE_CHANNEL,
-	ADC_MODE_FREERUN_MULTI_CHANNEL,
+	ADC_MODE_SINGLE_CONVERSION			= 0,
+	ADC_MODE_SINGLE_CONVERSION_MULTI_CHANNEL,
+	ADC_MODE_CONTINUOUS_CONVERSION,
+	ADC_MODE_CONTINUOUS_CONVERSION_MULTI_CHANNEL,
 	ADC_MODE_IDLE,
 } adc_mode_t;
 
 typedef enum {
-	ADC_CHANNEL_0				= 0,
-	ADC_CHANNEL_1,
-	ADC_CHANNEL_2,
-	ADC_CHANNEL_3,
-	ADC_CHANNEL_4,
-	ADC_CHANNEL_5,
-	ADC_CHANNEL_6,
-	ADC_CHANNEL_7,
-	ADC_CHANNEL_8,
-	ADC_CHANNEL_9,
-	ADC_CHANNEL_10,
-	ADC_CHANNEL_11,
-	ADC_CHANNEL_12,
-	ADC_CHANNEL_13,
-	ADC_CHANNEL_14,
-	ADC_CHANNEL_15,
-	ADC_CHANNEL_MAX,
+	ADC_CHANNEL_0					= (1U << 0),
+	ADC_CHANNEL_1					= (1U << 1),
+	ADC_CHANNEL_2					= (1U << 2),
+	ADC_CHANNEL_3					= (1U << 3),
+	ADC_CHANNEL_4					= (1U << 4),
+	ADC_CHANNEL_5					= (1U << 5),
+	ADC_CHANNEL_6					= (1U << 6),
+	ADC_CHANNEL_7					= (1U << 7),
+	ADC_CHANNEL_8					= (1U << 8),
+	ADC_CHANNEL_9					= (1U << 9),
+	ADC_CHANNEL_10					= (1U << 10),
+	ADC_CHANNEL_11					= (1U << 11),
+	ADC_CHANNEL_12					= (1U << 12),
+	ADC_CHANNEL_13					= (1U << 13),
+	ADC_CHANNEL_14					= (1U << 14),
+	ADC_CHANNEL_15					= (1U << 15),
+	ADC_CHANNEL_MAX					= (1U << 16),
+	ADC_CHANNEL_MASK				= (ADC_CHANNEL_MAX - 1),
 } adc_channel_t;
 
 typedef enum {
-	ADC_TRIGGER_MANUAL			= 0,
-	ADC_TRIGGER_TIMER0_CC_0,
-	ADC_TRIGGER_TIMER1_CC_0,
-	ADC_TRIGGER_TIMER2_CC_0,
-	ADC_TRIGGER_TIMER3_CC_0,
-	ADC_TRIGGER_TIMER4_CC_0,
-	ADC_TRIGGER_TIMER5_CC_0,
-	ADC_TRIGGER_TIMER6_CC_0,
-	ADC_TRIGGER_TIMER7_CC_0,
+	ADC_TRIGGER_MANUAL				= 0,
+	ADC_TRIGGER_TIMER0_CC0,
+	ADC_TRIGGER_TIMER1_CC0,
+	ADC_TRIGGER_TIMER2_CC0,
+	ADC_TRIGGER_TIMER3_CC0,
+	ADC_TRIGGER_TIMER4_CC0,
+	ADC_TRIGGER_TIMER5_CC0,
+	ADC_TRIGGER_TIMER6_CC0,
+	ADC_TRIGGER_TIMER7_CC0,
+	ADC_TRIGGER_TIMER1_CC1,
+	ADC_TRIGGER_TIMER1_CC2,
+	ADC_TRIGGER_TIMER1_CC3,
+	ADC_TRIGGER_TIMER2_CC2,
+	ADC_TRIGGER_TIMER3_CC1,
+	ADC_TRIGGER_TIMER3_TRGO,
+	ADC_TRIGGER_EXTI11,
 	ADC_TRIGGER_MAX,
 } adc_trigger_t;
 
 typedef enum {
-	ADC_EVENT_NONE				= 0,
-	ADC_EVENT_BUSY				= (1U << 0),
-	ADC_EVENT_COMPLETE			= (1U << 1),
-	ADC_EVENT_MASK				= (3U),
+	ADC_EVENT_NONE					= 0,
+	ADC_EVENT_BUSY					= (1U << 0),
+	ADC_EVENT_COMPLETE				= (1U << 1),
+	ADC_EVENT_MASK					= (3U),
 } adc_event_t;
 
 /**
@@ -100,6 +108,7 @@ void adc_clear_event(periph_t adc, adc_event_t events);
 bool adc_is_busy(periph_t adc);
 bool adc_is_completed(periph_t adc);
 void adc_set_clock_frequency(periph_t adc, uint32_t hz, uint32_t pclk);
+void adc_set_sample_time(periph_t adc, adc_channel_t channel, uint32_t cycle);
 void adc_calibrate(periph_t adc);
 
 #if defined(__cplusplus)

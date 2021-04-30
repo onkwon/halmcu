@@ -35,7 +35,7 @@ void adc_set_mode(periph_t adc, adc_mode_t mode)
 	unused(adc);
 
 	switch (mode) {
-	case ADC_MODE_SINGLE_CHANNEL:
+	case ADC_MODE_SINGLE_CONVERSION:
 		bitop_clear(&ADC->MR, 14); /* ADSTBY */
 		break;
 	case ADC_MODE_IDLE:
@@ -60,17 +60,19 @@ void adc_stop(periph_t adc)
 	bitop_clear(&ADC->CR, 7); /* ADST */
 }
 
+ABOV_STATIC_ASSERT(__builtin_ffs(1) == 1, "");
 void adc_select_channel(periph_t adc, adc_channel_t channel)
 {
 	unused(adc);
-	assert(channel <= ADC_CHANNEL_15);
-	bitop_clean_set_with_mask(&ADC->CR, 0, 0xf, channel);
+	assert(channel & ((ADC_CHANNEL_15 << 1) - 1));
+	bitop_clean_set_with_mask(&ADC->CR, 0, 0xf,
+			(uint32_t)__builtin_ffs((int)channel) - 1);
 }
 
 void adc_set_trigger(periph_t adc, adc_trigger_t trigger)
 {
 	unused(adc);
-	assert(trigger <= ADC_TRIGGER_TIMER7_CC_0);
+	assert(trigger <= ADC_TRIGGER_TIMER7_CC0);
 
 	if (trigger == ADC_TRIGGER_MANUAL) {
 		bitop_clear(&ADC->MR, 11); /* EXTRG */

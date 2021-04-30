@@ -16,7 +16,8 @@ interface adc {
 	is_busy()
 	is_completed()
 	set_clock_frequency()
-	set_sample_rate()
+	set_sample_time()
+	calibrate()
 }
 
 class LL_adc {

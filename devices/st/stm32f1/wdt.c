@@ -17,16 +17,10 @@ static bool is_reload_busy(void)
 	return (IWDT->SR >> 1) & 1U; /* RVU */
 }
 
+ABOV_STATIC_ASSERT(__builtin_ffs(1) == 1, "");
 static uint32_t get_prescaler_value_from_divisor(uint32_t divisor)
 {
-	uint32_t i = 0;
-
-	while (divisor != 0) {
-		divisor >>= 1;
-		i++;
-	}
-
-	return i - 3;
+	return (uint32_t)(__builtin_ffs((int)divisor) - 3);
 }
 
 static void set_reload(uint32_t timeout)
