@@ -196,6 +196,29 @@ static uint32_t get_frequency(clk_source_t clk)
 	}
 }
 
+static uint32_t get_pclk1_frequency(void)
+{
+	uint32_t hclk = get_hclk();
+	uint32_t pre = (RCC->CFGR >> 8) & 0x7; /* PPRE1 */
+	uint32_t shift_factor = (pre == 0)? 0 : pre - 3;
+	return hclk >> shift_factor;
+}
+
+static void set_pclk1_frequency(uint32_t hz)
+{
+	if (hz <= 36*MHZ) {
+		bitop_clean_set_with_mask(&RCC->CFGR, 8, 7, 0);
+		return;
+	}
+
+	for (uint32_t i = 0; i < 4; i++) { // 2, 4, 8, 16
+		if ((hz >> (i+1)) <= 36*MHZ) {
+			bitop_clean_set_with_mask(&RCC->CFGR, 8, 7, i | 4);
+			break;
+		}
+	}
+}
+
 void clk_enable_peripheral(periph_t peri)
 {
 	volatile uint32_t *reg = NULL;
@@ -223,10 +246,7 @@ uint32_t clk_get_hclk_frequency(void)
 
 uint32_t clk_get_pclk_frequency(void)
 {
-	uint32_t hclk = get_hclk();
-	uint32_t pre = (RCC->CFGR >> 8) & 0x7; /* PPRE1 */
-	uint32_t shift_factor = (pre == 0)? 0 : pre - 3;
-	return hclk >> shift_factor;
+	return get_pclk1_frequency();
 }
 
 uint32_t clk_get_frequency(clk_source_t clk)
@@ -308,8 +328,8 @@ static bool get_pllmul_and_hpre(uint32_t *pllmul, uint32_t *hpre,
 		uint32_t target_hz, uint32_t source_hz)
 {
 	uint32_t div[] = { 1, 2, 4, 8, 16, 64, 128, 256, 512 };
-	uint32_t mul;
-	for (mul = 16; mul >= 2; mul--) {
+
+	for (uint32_t mul = 16; mul >= 2; mul--) {
 		uint32_t hz = source_hz * mul;
 		for (int i = 0; i < 9; i++) {
 			if (hz / div[i] != target_hz) {
@@ -317,7 +337,8 @@ static bool get_pllmul_and_hpre(uint32_t *pllmul, uint32_t *hpre,
 			}
 
 			*pllmul = mul - 2;
-			*hpre = (i != 0)? (uint32_t)(8 | i) : (uint32_t)i;
+			*hpre = (i != 0)? (uint32_t)(8 | i - 1) : (uint32_t)i;
+
 			return true;
 		}
 	}
@@ -360,6 +381,8 @@ bool clk_set_pll_frequency(clk_source_t clk, clk_source_t clkin, uint32_t hz)
 
 	bitop_clean_set_with_mask(&RCC->CFGR, 18, 0xf, pllmul);
 	bitop_clean_set_with_mask(&RCC->CFGR, 4, 0xf, hpre);
+
+	set_pclk1_frequency(hz);
 
 	return true;
 }

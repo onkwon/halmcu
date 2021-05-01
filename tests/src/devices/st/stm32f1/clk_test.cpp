@@ -222,3 +222,11 @@ TEST(CLK, set_pll_frequency_ShouldReturnTrue_When72MHzWithHSEAsSourceGiven) {
 	clk_set_source(CLK_PLL);
 	LONGS_EQUAL(72000000, clk_get_hclk_frequency());
 }
+TEST(CLK, set_pll_frequency_ShouldSetPclk1EqualOrLessThen36MHz) {
+	RCC->CFGR = 0xA;
+	clk_set_pll_frequency(CLK_PLL, CLK_HSE, 72000000);
+	clk_set_source(CLK_PLL);
+	LONGS_EQUAL(36000000, clk_get_pclk_frequency());
+	clk_set_pll_frequency(CLK_PLL, CLK_HSE, 64000000);
+	LONGS_EQUAL(32000000, clk_get_pclk_frequency());
+}
