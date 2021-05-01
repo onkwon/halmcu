@@ -337,7 +337,7 @@ static bool get_pllmul_and_hpre(uint32_t *pllmul, uint32_t *hpre,
 			}
 
 			*pllmul = mul - 2;
-			*hpre = (i != 0)? (uint32_t)(8 | i - 1) : (uint32_t)i;
+			*hpre = (i != 0)? (uint32_t)(8 | (i - 1)) : (uint32_t)i;
 
 			return true;
 		}
