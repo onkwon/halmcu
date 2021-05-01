@@ -125,3 +125,96 @@ TEST(CLK, get_frequency_ShouldReturnClockFrequency) {
 	LONGS_EQUAL(8000000, clk_get_frequency(CLK_HSE));
 	LONGS_EQUAL(8000000, clk_get_frequency(CLK_PLL));
 }
+
+TEST(CLK, enable_source_ShouldEnableLSI_WhenLSIGiven) {
+	RCC->CSR = 2;
+	clk_enable_source(CLK_LSI);
+	LONGS_EQUAL(3, RCC->CSR);
+}
+TEST(CLK, enable_source_ShouldEnableLSE_WhenLSEGiven) {
+	RCC->BDCR = 2;
+	clk_enable_source(CLK_LSE);
+	LONGS_EQUAL(3, RCC->BDCR);
+}
+TEST(CLK, enable_source_ShouldEnableHSI_WhenHSIGiven) {
+	RCC->CR = 2;
+	clk_enable_source(CLK_HSI);
+	LONGS_EQUAL(3, RCC->CR);
+}
+TEST(CLK, enable_source_ShouldEnableHSE_WhenHSEGiven) {
+	RCC->CR = 0x20000;
+	clk_enable_source(CLK_HSE);
+	LONGS_EQUAL(0x30000, RCC->CR);
+}
+
+TEST(CLK, disable_source_ShouldDisableLSI_WhenLSIGiven) {
+	RCC->CSR = 1;
+	clk_disable_source(CLK_LSI);
+	LONGS_EQUAL(0, RCC->CSR);
+}
+TEST(CLK, disable_source_ShouldDisableHSI_WhenLSIGiven) {
+	RCC->CR = 1;
+	clk_disable_source(CLK_HSI);
+	LONGS_EQUAL(0, RCC->CR);
+}
+TEST(CLK, disable_source_ShouldDisableLSE_WhenLSEGiven) {
+	RCC->BDCR = 1;
+	clk_disable_source(CLK_LSE);
+	LONGS_EQUAL(0, RCC->BDCR);
+}
+TEST(CLK, disable_source_ShouldDisableHSE_WhenHSEGiven) {
+	RCC->CR = 0x10000;
+	clk_disable_source(CLK_HSE);
+	LONGS_EQUAL(0, RCC->CR);
+}
+
+TEST(CLK, start_pll_ShouldSetPllOn) {
+	clk_start_pll();
+	LONGS_EQUAL(0x1000000, RCC->CR);
+}
+
+TEST(CLK, stop_pll_ShouldClearPllOn) {
+	RCC->CR = 0x1000000;
+	clk_stop_pll();
+	LONGS_EQUAL(0, RCC->CR);
+}
+
+TEST(CLK, is_pll_locked_ShouldReturnItsState) {
+	LONGS_EQUAL(false, clk_is_pll_locked());
+	RCC->CR = 0x2000000;
+	LONGS_EQUAL(true, clk_is_pll_locked());
+}
+
+TEST(CLK, set_source_ShouldSetSystemClockSource_WhenHSEGiven) {
+	RCC->CFGR = 4;
+	clk_set_source(CLK_HSE);
+	LONGS_EQUAL(5, RCC->CFGR);
+}
+TEST(CLK, set_source_ShouldSetSystemClockSource_WhenHSIGiven) {
+	clk_set_source(CLK_HSI);
+	LONGS_EQUAL(0, RCC->CFGR);
+}
+TEST(CLK, set_source_ShouldSetSystemClockSource_WhenPLLGiven) {
+	RCC->CFGR = 8;
+	clk_set_source(CLK_PLL);
+	LONGS_EQUAL(0xA, RCC->CFGR);
+}
+
+TEST(CLK, set_pll_frequency_ShouldReturnFalse_WhenInvalidClockSourceGiven) {
+	LONGS_EQUAL(false, clk_set_pll_frequency(CLK_PLL, CLK_LSI, 1000000));
+}
+TEST(CLK, set_pll_frequency_ShouldReturnFalse_WhenTargetFreqIsTooLow) {
+	LONGS_EQUAL(false, clk_set_pll_frequency(CLK_PLL, CLK_HSI, 100000));
+}
+TEST(CLK, set_pll_frequency_ShouldReturnTrue_When72MHzWithHSIAsSourceGiven) {
+	RCC->CFGR = 0xA;
+	LONGS_EQUAL(true, clk_set_pll_frequency(CLK_PLL, CLK_HSI, 64000000));
+	clk_set_source(CLK_PLL);
+	LONGS_EQUAL(64000000, clk_get_hclk_frequency());
+}
+TEST(CLK, set_pll_frequency_ShouldReturnTrue_When72MHzWithHSEAsSourceGiven) {
+	RCC->CFGR = 0xA;
+	LONGS_EQUAL(true, clk_set_pll_frequency(CLK_PLL, CLK_HSE, 72000000));
+	clk_set_source(CLK_PLL);
+	LONGS_EQUAL(72000000, clk_get_hclk_frequency());
+}
