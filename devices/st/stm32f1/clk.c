@@ -333,10 +333,13 @@ static bool get_pllmul_and_hpre(uint32_t *pllmul, uint32_t *hpre,
  * USB = 48MHz */
 bool clk_set_pll_frequency(clk_source_t clk, clk_source_t clkin, uint32_t hz)
 {
+	if (clk != CLK_PLL) {
+		return false;
+	}
 	if (clkin != CLK_HSI && clkin != CLK_HSE) {
 		return false;
 	}
-	if (hz < 1000000U) {
+	if (hz < 1*MHZ) {
 		return false;
 	}
 

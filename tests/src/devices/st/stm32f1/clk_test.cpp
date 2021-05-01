@@ -200,6 +200,10 @@ TEST(CLK, set_source_ShouldSetSystemClockSource_WhenPLLGiven) {
 	LONGS_EQUAL(0xA, RCC->CFGR);
 }
 
+TEST(CLK, set_pll_frequency_ShouldReturnFalse_WhenTargetClkIsNotPLL) {
+	// It supports pll only.
+	LONGS_EQUAL(false, clk_set_pll_frequency(CLK_HSI, CLK_HSI, 100000));
+}
 TEST(CLK, set_pll_frequency_ShouldReturnFalse_WhenInvalidClockSourceGiven) {
 	LONGS_EQUAL(false, clk_set_pll_frequency(CLK_PLL, CLK_LSI, 1000000));
 }
