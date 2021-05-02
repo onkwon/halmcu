@@ -533,3 +533,9 @@ void clk_reset(void)
 	PMU->IOSC16TRIM = 0x228B;
 	PMU->EOSCCON = 1;
 }
+
+uint32_t clk_get_peripheral_clock_source_frequency(periph_t peri)
+{
+	unused(peri);
+	return clk_get_pclk_frequency();
+}

@@ -20,12 +20,14 @@ interface clk {
 	disable_output()
 	set_output_prescaler()
 	set_output_source()
+	clk_get_peripheral_clock_source_frequency()
 }
 
 class LL_clk {
 }
 
 class HAL_clk {
+	clk_init()
 }
 
 clk <|.. LL_clk

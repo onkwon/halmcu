@@ -38,7 +38,9 @@ TEST(uart_driver, init_ShouldReturnTrue_WhenAllGivenParamVaild) {
 	mock().expectOneCall("pwr_enable_peripheral").withParameter("peri", PERIPH_UART0);
 	mock().expectOneCall("clk_enable_peripheral").withParameter("peri", PERIPH_UART0);
 	mock().expectOneCall("uart_reset").withParameter("port", PERIPH_UART0);
-	mock().expectOneCall("clk_get_pclk_frequency").andReturnValue(16000000);
+	mock().expectOneCall("clk_get_peripheral_clock_source_frequency")
+		.withParameter("peri", PERIPH_UART0)
+		.andReturnValue(16000000);
 	mock().expectOneCall("uart_set_baudrate")
 		.withParameter("port", PERIPH_UART0)
 		.withParameter("baudrate", 115200)

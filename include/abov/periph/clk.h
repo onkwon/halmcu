@@ -75,6 +75,7 @@ uint32_t clk_get_frequency(clk_source_t clk);
 clk_source_t clk_get_peripheral_clock_source(periph_t peri);
 /***/
 void clk_set_peripheral_clock_source(periph_t peri, clk_source_t clk);
+uint32_t clk_get_peripheral_clock_source_frequency(periph_t peri);
 
 /***/
 void clk_enable_output(void);

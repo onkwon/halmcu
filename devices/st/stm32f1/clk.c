@@ -196,6 +196,14 @@ static uint32_t get_frequency(clk_source_t clk)
 	}
 }
 
+static uint32_t get_pclk2_frequency(void)
+{
+	uint32_t hclk = get_hclk();
+	uint32_t pre = (RCC->CFGR >> 11) & 0x7; /* PPRE2 */
+	uint32_t shift_factor = (pre == 0)? 0 : pre - 3;
+	return hclk >> shift_factor;
+}
+
 static uint32_t get_pclk1_frequency(void)
 {
 	uint32_t hclk = get_hclk();
@@ -257,7 +265,7 @@ uint32_t clk_get_frequency(clk_source_t clk)
 void clk_enable_source(clk_source_t clk)
 {
 	volatile uint32_t *reg = &RCC->CR;
-	uint32_t bit = 0;
+	uint32_t bit = 0; /* HSI for the default */
 
 	if (clk == CLK_LSI) {
 		reg = &RCC->CSR;
@@ -318,8 +326,8 @@ void clk_set_source(clk_source_t clk)
 		assert(0);
 	}
 
-	bitop_clean_set_with_mask(&RCC->CFGR, 0, 3, val);
-	while (!(((RCC->CFGR >> 2) & 0x3) == val)) {
+	bitop_clean_set_with_mask(&RCC->CFGR, 0, 3, val); /* SW */
+	while (((RCC->CFGR >> 2) & 0x3) != val) {
 		/* wait until ready */
 	}
 }
@@ -385,4 +393,23 @@ bool clk_set_pll_frequency(clk_source_t clk, clk_source_t clkin, uint32_t hz)
 	set_pclk1_frequency(hz);
 
 	return true;
+}
+
+uint32_t clk_get_peripheral_clock_source_frequency(periph_t peri)
+{
+	switch (peri) {
+	case PERIPH_ADC1: /* fall through */
+	case PERIPH_ADC2: /* fall through */
+	case PERIPH_ADC3: /* fall through */
+	case PERIPH_USART1:
+		return get_pclk2_frequency();
+	case PERIPH_USART2: /* fall through */
+	case PERIPH_USART3: /* fall through */
+	case PERIPH_UART4: /* fall through */
+	case PERIPH_UART5:
+		return get_pclk1_frequency();
+	default:
+		assert(0);
+		return get_pclk1_frequency();
+	}
 }
