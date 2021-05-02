@@ -3,6 +3,11 @@ Clock
 
 .. image:: ../assets/images/clk.svg
 
+Examples
+--------
+.. literalinclude:: ../../../examples/peripheral/clk.c
+   :language: C
+
 HAL
 ---
 .. doxygenfile:: abov/hal/clk.h

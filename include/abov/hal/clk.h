@@ -7,6 +7,8 @@ extern "C" {
 
 #include "abov/ll/clk.h"
 
+bool clk_init(clk_source_t clock_source, uint32_t target_hz);
+
 #if defined(__cplusplus)
 }
 #endif

@@ -4,6 +4,7 @@
 
 #include "abov/bitop.h"
 #include "abov/compiler.h"
+#include "abov/assert.h"
 #include "stm32f1.h"
 
 #define MHZ					1000000U
@@ -177,6 +178,55 @@ static uint32_t get_hclk(void)
 	return pllclk >> shift_factor;
 }
 
+static uint32_t get_frequency(clk_source_t clk)
+{
+	switch (clk) {
+	case CLK_PLL:
+		return get_hclk();
+	case CLK_LSI:
+		return 40*KHZ;
+	case CLK_HSI:
+		return F_HSI;
+	case CLK_HSE:
+		return F_HSE;
+	case CLK_LSE:
+		return 32768U;
+	default:
+		return 0;
+	}
+}
+
+static uint32_t get_pclk2_frequency(void)
+{
+	uint32_t hclk = get_hclk();
+	uint32_t pre = (RCC->CFGR >> 11) & 0x7; /* PPRE2 */
+	uint32_t shift_factor = (pre == 0)? 0 : pre - 3;
+	return hclk >> shift_factor;
+}
+
+static uint32_t get_pclk1_frequency(void)
+{
+	uint32_t hclk = get_hclk();
+	uint32_t pre = (RCC->CFGR >> 8) & 0x7; /* PPRE1 */
+	uint32_t shift_factor = (pre == 0)? 0 : pre - 3;
+	return hclk >> shift_factor;
+}
+
+static void set_pclk1_frequency(uint32_t hz)
+{
+	if (hz <= 36*MHZ) {
+		bitop_clean_set_with_mask(&RCC->CFGR, 8, 7, 0);
+		return;
+	}
+
+	for (uint32_t i = 0; i < 4; i++) { // 2, 4, 8, 16
+		if ((hz >> (i+1)) <= 36*MHZ) {
+			bitop_clean_set_with_mask(&RCC->CFGR, 8, 7, i | 4);
+			break;
+		}
+	}
+}
+
 void clk_enable_peripheral(periph_t peri)
 {
 	volatile uint32_t *reg = NULL;
@@ -204,36 +254,162 @@ uint32_t clk_get_hclk_frequency(void)
 
 uint32_t clk_get_pclk_frequency(void)
 {
-	uint32_t hclk = get_hclk();
-	uint32_t pre = (RCC->CFGR >> 8) & 0x7; /* PPRE1 */
-	uint32_t shift_factor = (pre == 0)? 0 : pre - 3;
-	return hclk >> shift_factor;
+	return get_pclk1_frequency();
 }
 
 uint32_t clk_get_frequency(clk_source_t clk)
 {
-	switch (clk) {
-	case CLK_PLL:
-		return get_hclk();
-	case CLK_LSI:
-		return 40*KHZ;
-	case CLK_HSI:
-		return 8*MHZ;
-	case CLK_HSE:
-		return F_HSE;
-	case CLK_LSE:
-		return 32768U;
-	default:
-		return 0;
+	return get_frequency(clk);
+}
+
+void clk_enable_source(clk_source_t clk)
+{
+	volatile uint32_t *reg = &RCC->CR;
+	uint32_t bit = 0; /* HSI for the default */
+
+	if (clk == CLK_LSI) {
+		reg = &RCC->CSR;
+	} else if (clk == CLK_LSE) {
+		reg = &RCC->BDCR;
+	} else if (clk == CLK_HSE) {
+		bit = 16;
+	}
+
+	bitop_set(reg, bit);
+	while (!(*reg & (1U << (bit + 1)))) {
+		/* wait until ready */
 	}
 }
 
-#if 0
-uint32_t clk_get_pclk2_frequency(void)
+void clk_disable_source(clk_source_t clk)
 {
-	uint32_t hclk = get_hclk();
-	uint32_t pre = (RCC->CFGR >> 11) & 0x7; /* PPRE2 */
-	uint32_t shift_factor = (pre == 0)? 0 : pre - 3;
-	return hclk >> shift_factor;
+	volatile uint32_t *reg = &RCC->CR;
+	uint32_t bit = 0;
+
+	if (clk == CLK_LSI) {
+		reg = &RCC->CSR;
+	} else if (clk == CLK_LSE) {
+		reg = &RCC->BDCR;
+	} else if (clk == CLK_HSE) {
+		bit = 16;
+	}
+
+	bitop_clear(reg, bit);
 }
-#endif
+
+void clk_start_pll(void)
+{
+	bitop_set(&RCC->CR, 24); /* PLLON */
+}
+
+void clk_stop_pll(void)
+{
+	bitop_clear(&RCC->CR, 24); /* PLLON */
+}
+
+bool clk_is_pll_locked(void)
+{
+	return !!(RCC->CR & (1U << 25)); /* PLLRDY */
+}
+
+void clk_set_source(clk_source_t clk)
+{
+	uint8_t val = 0;
+
+	if (clk == CLK_HSI) {
+		val = 0;
+	} else if (clk == CLK_HSE) {
+		val = 1;
+	} else if (clk == CLK_PLL) {
+		val = 2;
+	} else {
+		assert(0);
+	}
+
+	bitop_clean_set_with_mask(&RCC->CFGR, 0, 3, val); /* SW */
+	while (((RCC->CFGR >> 2) & 0x3) != val) {
+		/* wait until ready */
+	}
+}
+
+static bool get_pllmul_and_hpre(uint32_t *pllmul, uint32_t *hpre,
+		uint32_t target_hz, uint32_t source_hz)
+{
+	uint32_t div[] = { 1, 2, 4, 8, 16, 64, 128, 256, 512 };
+
+	for (uint32_t mul = 16; mul >= 2; mul--) {
+		uint32_t hz = source_hz * mul;
+		for (int i = 0; i < 9; i++) {
+			if (hz / div[i] != target_hz) {
+				continue;
+			}
+
+			*pllmul = mul - 2;
+			*hpre = (i != 0)? (uint32_t)(8 | (i - 1)) : (uint32_t)i;
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/* APB1 <= APB2 <= AHB
+ * APB1 <= 36MHz
+ * APB2 <= 72MHz
+ * AHB <= 72MHz
+ * ADC <= 14MHz
+ * USB = 48MHz */
+bool clk_set_pll_frequency(clk_source_t clk, clk_source_t clkin, uint32_t hz)
+{
+	if (clk != CLK_PLL) {
+		return false;
+	}
+	if (clkin != CLK_HSI && clkin != CLK_HSE) {
+		return false;
+	}
+	if (hz < 1*MHZ) {
+		return false;
+	}
+
+	uint32_t src_hz = get_frequency(clkin);
+
+	if (clkin == CLK_HSE) {
+		bitop_set(&RCC->CFGR, 16); /* PLLSRC */
+	} else { /* CLK_HSI */
+		bitop_clear(&RCC->CFGR, 16); /* PLLSRC */
+		src_hz >>= 1;
+	}
+
+	uint32_t pllmul, hpre;
+
+	if (!get_pllmul_and_hpre(&pllmul, &hpre, hz, src_hz)) {
+		return false;
+	}
+
+	bitop_clean_set_with_mask(&RCC->CFGR, 18, 0xf, pllmul);
+	bitop_clean_set_with_mask(&RCC->CFGR, 4, 0xf, hpre);
+
+	set_pclk1_frequency(hz);
+
+	return true;
+}
+
+uint32_t clk_get_peripheral_clock_source_frequency(periph_t peri)
+{
+	switch (peri) {
+	case PERIPH_ADC1: /* fall through */
+	case PERIPH_ADC2: /* fall through */
+	case PERIPH_ADC3: /* fall through */
+	case PERIPH_USART1:
+		return get_pclk2_frequency();
+	case PERIPH_USART2: /* fall through */
+	case PERIPH_USART3: /* fall through */
+	case PERIPH_UART4: /* fall through */
+	case PERIPH_UART5:
+		return get_pclk1_frequency();
+	default:
+		assert(0);
+		return get_pclk1_frequency();
+	}
+}
