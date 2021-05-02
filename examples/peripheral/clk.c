@@ -11,7 +11,7 @@ int main(void)
 	unused(pclk);
 
 	while (1) {
-		/* waiting for watchdog event */
+		/* hang */
 	}
 
 	return 0;
