@@ -52,7 +52,9 @@ static void capture_timer_init(void)
 
 	timer_init(PERIPH_TIMER1, &(struct timer_cfg) {
 			.mode = TIMER_MODE_CAPTURE,
-			.irq = (timer_event_t)(TIMER_EVENT_CC_0 | TIMER_EVENT_CC_1 | TIMER_EVENT_OVERFLOW),
+			.irq = (timer_event_t)(TIMER_EVENT_CC_0 |
+					TIMER_EVENT_CC_1 |
+					TIMER_EVENT_OVERFLOW),
 			.irq_priority = 3, });
 	timer_set_edge(PERIPH_TIMER1, TIMER_RISING_EDGE);
 
@@ -83,9 +85,11 @@ void ISR_TIMER1(void)
 		ovf++;
 	}
 	if (event & TIMER_EVENT_CC_0) {
-		uint32_t captured1 = TIMER_COUNTER_WIDTH - timer_get_cc(PERIPH_TIMER1, 0);
+		uint32_t captured1 =
+			TIMER_COUNTER_WIDTH - timer_get_cc(PERIPH_TIMER1, 0);
 		uint32_t captured2 = timer_get_cc(PERIPH_TIMER1, 1) + 1;
-		uint32_t ticks = ovf * TIMER_COUNTER_WIDTH + captured1 + captured2;
+		uint32_t ticks =
+			ovf * TIMER_COUNTER_WIDTH + captured1 + captured2;
 		uint32_t hz = ticks / TIMER_SOURCE_CLOCK_MHZ;
 
 		measured_hz = hz;
@@ -95,5 +99,7 @@ void ISR_TIMER1(void)
 	}
 
 	timer_clear_event(PERIPH_TIMER1, (timer_event_t)
-			(TIMER_EVENT_OVERFLOW | TIMER_EVENT_CC_0 | TIMER_EVENT_CC_1));
+			(TIMER_EVENT_OVERFLOW |
+			 TIMER_EVENT_CC_0 |
+			 TIMER_EVENT_CC_1));
 }

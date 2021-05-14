@@ -39,6 +39,22 @@ extern "C" {
 #define ADC2_BASE			(APB2_BASE + 0x2800U)
 #define ADC3_BASE			(APB2_BASE + 0x3C00U)
 
+#define TIM1_BASE			(APB2_BASE + 0x2C00U)
+#define TIM8_BASE			(APB2_BASE + 0x3400U)
+#define TIM9_BASE			(APB2_BASE + 0x4C00U)
+#define TIM10_BASE			(APB2_BASE + 0x5000U)
+#define TIM11_BASE			(APB2_BASE + 0x5400U)
+
+#define TIM2_BASE			(APB1_BASE + 0x0000U)
+#define TIM3_BASE			(APB1_BASE + 0x0400U)
+#define TIM4_BASE			(APB1_BASE + 0x0800U)
+#define TIM5_BASE			(APB1_BASE + 0x0C00U)
+#define TIM6_BASE			(APB1_BASE + 0x1000U)
+#define TIM7_BASE			(APB1_BASE + 0x1400U)
+#define TIM12_BASE			(APB1_BASE + 0x1800U)
+#define TIM13_BASE			(APB1_BASE + 0x1C00U)
+#define TIM14_BASE			(APB1_BASE + 0x2000U)
+
 typedef struct {
 	volatile uint32_t IDCODE;
 	volatile uint32_t CR;
@@ -126,6 +142,29 @@ typedef struct {
 	volatile uint32_t DR;
 } ADC_Type;
 
+typedef struct {
+	volatile uint32_t CR1;
+	volatile uint32_t CR2;
+	volatile uint32_t SMCR;
+	volatile uint32_t DIER;
+	volatile uint32_t SR;
+	volatile uint32_t EGR;
+	volatile uint32_t CCMR1;
+	volatile uint32_t CCMR2;
+	volatile uint32_t CCER;
+	volatile uint32_t CNT;
+	volatile uint32_t PSC;
+	volatile uint32_t ARR;
+	volatile uint32_t RCR;
+	volatile uint32_t CCR1;
+	volatile uint32_t CCR2;
+	volatile uint32_t CCR3;
+	volatile uint32_t CCR4;
+	volatile uint32_t BDTR;
+	volatile uint32_t DCR;
+	volatile uint32_t DMAR;
+} TIM_Type;
+
 #define DBGMCU				((DBGMCU_Type *)DBGMCU_BASE)
 
 #define SYSCFG				((SYSCFG_Type *)SYSCFG_BASE)
@@ -151,6 +190,21 @@ typedef struct {
 #define ADC1				((ADC_Type *)ADC1_BASE)
 #define ADC2				((ADC_Type *)ADC2_BASE)
 #define ADC3				((ADC_Type *)ADC3_BASE)
+
+#define TIM1				((TIM_Type *)TIM1_BASE)
+#define TIM2				((TIM_Type *)TIM2_BASE)
+#define TIM3				((TIM_Type *)TIM3_BASE)
+#define TIM4				((TIM_Type *)TIM4_BASE)
+#define TIM5				((TIM_Type *)TIM5_BASE)
+#define TIM6				((TIM_Type *)TIM6_BASE)
+#define TIM7				((TIM_Type *)TIM7_BASE)
+#define TIM8				((TIM_Type *)TIM8_BASE)
+#define TIM9				((TIM_Type *)TIM9_BASE)
+#define TIM10				((TIM_Type *)TIM10_BASE)
+#define TIM11				((TIM_Type *)TIM11_BASE)
+#define TIM12				((TIM_Type *)TIM12_BASE)
+#define TIM13				((TIM_Type *)TIM13_BASE)
+#define TIM14				((TIM_Type *)TIM14_BASE)
 
 #if defined(__cplusplus)
 }
