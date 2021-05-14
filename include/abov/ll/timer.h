@@ -5,165 +5,76 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
-#include "abov/periph/periph.h"
-
-/** Timer mode enumeration */
-typedef enum {
-	/***/
-	TIMER_MODE_NORMAL,
-	/***/
-	TIMER_MODE_PWM,
-	/***/
-	TIMER_MODE_ONESHOT,
-	/***/
-	TIMER_MODE_CAPTURE,
-} timer_mode_t;
-
-/** Timer IRQ enumeration */
-typedef enum {
-	/***/
-	TIMER_EVENT_NONE			= 0,
-	/***/
-	TIMER_EVENT_OVERFLOW			= (1U << 0),
-	/***/
-	TIMER_EVENT_UNDERFLOW			= (1U << 1),
-	/** Capture/Compare Channel 0 interrupt */
-	TIMER_EVENT_CC_0			= (1U << 2),
-	/** Capture/Compare Channel 1 interrupt */
-	TIMER_EVENT_CC_1			= (1U << 3),
-	/** Capture/Compare Channel 2 interrupt */
-	TIMER_EVENT_CC_2			= (1U << 4),
-	/** Capture/Compare Channel 3 interrupt */
-	TIMER_EVENT_CC_3			= (1U << 5),
-} timer_event_t;
-
-/** Timer edge enumeration */
-typedef enum {
-	/***/
-	TIMER_RISING_EDGE,
-	/***/
-	TIMER_FALLING_EDGE,
-} timer_edge_t;
+#include "abov/periph/timer.h"
 
 /**
- * Reset the timer interface
+ * @brief Reset the timer interface
  *
  * This function makes the given timer in the reset default state.
  *
- * :param peri: a peripheral enumerated in :c:type:`periph_t`
+ * @param[in] peri a peripheral enumerated in @ref periph_t
  */
-void timer_reset(periph_t peri);
+void timer_ll_reset(periph_t peri);
 /**
- * Set the timer mode
+ * @brief Set the timer mode
  *
- * :param peri: a peripheral enumerated in :c:type:`periph_t`
- * :param mode: :c:type:`timer_mode_t`
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @param[in] mode one of @ref timer_mode_t
  */
-void timer_set_mode(periph_t peri, timer_mode_t mode);
+void timer_ll_set_mode(periph_t peri, timer_mode_t mode);
 /**
- * Start the timer
+ * @brief Set the timer prescaler
  *
- * :param peri: a peripheral enumerated in :c:type:`periph_t`
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @param[in] div_factor prescaler values
  */
-void timer_start(periph_t peri);
+void timer_ll_set_prescaler(periph_t peri, uint32_t div_factor);
 /**
- * Stop the timer
+ * @brief Enable interrupts on events for a timer
  *
- * :param peri: a peripheral enumerated in :c:type:`periph_t`
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @param[in] events to be enabled
  */
-void timer_stop(periph_t peri);
+void timer_ll_enable_irq(periph_t peri, timer_event_t events);
 /**
- * Set the timer prescaler
+ * @brief Disable interrupts on events for a timer
  *
- * :param peri: a peripheral enumerated in :c:type:`periph_t`
- * :param div_factor: prescaler values
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @param[in] events to be disabled
  */
-void timer_set_prescaler(periph_t peri, uint32_t div_factor);
+void timer_ll_disable_irq(periph_t peri, timer_event_t events);
 /**
- * Set the timer clock divider
+ * @brief Set the timer clock divider
  *
- * :param peri: a peripheral enumerated in :c:type:`periph_t`
- * :param div_factor: clock divider
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @param[in] div_factor clock divider
  */
-void timer_set_clock_divider(periph_t peri, uint32_t div_factor);
+void timer_ll_set_clock_divider(periph_t peri, uint32_t div_factor);
 /**
- * Enable interrupts on events for a timer
+ * @brief Set the timer counter
  *
- * :param peri: a peripheral enumerated in :c:type:`periph_t`
- * :param events: events to be enabled
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @param[in] value to be written
  */
-void timer_enable_irq(periph_t peri, timer_event_t events);
+void timer_ll_set_counter(periph_t peri, uint32_t value);
 /**
- * Disable interrupts on events for a timer
+ * @brief Get the timer counter
  *
- * :param peri: a peripheral enumerated in :c:type:`periph_t`
- * :param events: events to be disabled
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @return timer counter
  */
-void timer_disable_irq(periph_t peri, timer_event_t events);
-/**
- * Clear event flags
- *
- * :param peri: a peripheral enumerated in :c:type:`periph_t`
- * :param events: events to be cleared
- */
-void timer_clear_event(periph_t peri, timer_event_t events);
-/**
- * Read event flags
- *
- * :param peri: a peripheral enumerated in :c:type:`periph_t`
- */
-timer_event_t timer_get_event(periph_t peri);
-/**
- * Set Capture/Compare register
- *
- * :param peri: a peripheral enumerated in :c:type:`periph_t`
- * :param cc: a number of capture/compare channel
- * :param value: to be written to the capture/compare register
- */
-void timer_set_cc(periph_t peri, uint32_t cc, uint32_t value);
-/**
- * Get Capture/Compare register
- *
- * :param peri: a peripheral enumerated in :c:type:`periph_t`
- * :param cc: a number of capture/compare channel
- * :return: capture/compare value
- */
-uint32_t timer_get_cc(periph_t peri, uint32_t cc);
-/**
- * Set the timer counter
- *
- * :param peri: a peripheral enumerated in :c:type:`periph_t`
- * :param value: to be written
- */
-void timer_set_counter(periph_t peri, uint32_t value);
-/**
- * Get the timer counter
- *
- * :param peri: a peripheral enumerated in :c:type:`periph_t`
- * :return: timer counter
- */
-uint32_t timer_get_counter(periph_t peri);
-/**
- * Set the timer period
- *
- * :param peri: a peripheral enumerated in :c:type:`periph_t`
- * :param value: to be written
- */
-void timer_set_reload(periph_t peri, uint32_t value);
-/**
- * Get the timer period
- *
- * :param peri: a peripheral enumerated in :c:type:`periph_t`
- * :return: timer period
- */
-uint32_t timer_get_reload(periph_t peri);
-/***/
-void timer_set_polarity(periph_t peri, uint32_t level);
-/***/
-void timer_set_edge(periph_t peri, timer_edge_t edge);
-/***/
-uint32_t timer_get_frequency(periph_t peri, uint32_t tclk);
+uint32_t timer_ll_get_counter(periph_t peri);
+void timer_ll_set_reload(periph_t peri, uint32_t value);
+uint32_t timer_ll_get_reload(periph_t peri);
+void timer_ll_clear_event(periph_t peri, timer_event_t events);
+timer_event_t timer_ll_get_event(periph_t peri);
+void timer_ll_start(periph_t peri);
+void timer_ll_stop(periph_t peri);
+void timer_ll_set_cc(periph_t peri, uint32_t cc, uint32_t value);
+uint32_t timer_ll_get_cc(periph_t peri, uint32_t cc);
+uint32_t timer_ll_get_frequency(periph_t peri, uint32_t tclk);
+void timer_ll_set_edge(periph_t peri, timer_edge_t edge);
+void timer_ll_set_polarity(periph_t peri, uint32_t level);
 
 #if defined(__cplusplus)
 }

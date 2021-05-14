@@ -1,7 +1,7 @@
 # Architecture & Design
 
 ## API
-![api diagram](assets/images/api.png)
+![api diagram](assets/images/api.svg)
 
 ## Directory Structure
 

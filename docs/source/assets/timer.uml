@@ -1,33 +1,54 @@
 @startuml
-class HAL_timer {
-	init()
-	deinit()
+interface Timer {
+	mode_t
+	event_t
+	edge_t
+
 	start()
 	stop()
+	clear_event()
+	get_event()
 	set_cc()
 	get_cc()
+	set_reload()
+	get_reload()
+	set_edge()
+	set_polarity()
 }
 
-class LL_timer {
+class LL {
 	reset()
 	set_mode()
 	set_prescaler()
-	set_clock_divider()
 	enable_irq()
 	disable_irq()
+	set_clock_divider()
 	set_counter()
 	get_counter()
 	set_reload()
 	get_reload()
-	set_polarity()
-	set_edge()
-	get_frequency()
-	get_event()
 	clear_event()
+	get_event()
+	start()
+	stop()
+	set_cc()
+	get_cc()
+	get_frequency()
+	set_edge()
+	set_polarity()
 }
 
-HAL_timer --> LL_timer
-HAL_timer ..> LL_power
-HAL_timer ..> LL_clock
-HAL_timer ..> IRQ
+class HAL {
+	timer_cfg
+
+	init()
+	deinit()
+}
+
+HAL ..|> Timer
+HAL --> LL
+HAL ..> LL_power
+HAL ..> LL_clock
+HAL ..> IRQ
+LL --> Timer
 @enduml

@@ -1,26 +1,11 @@
 @startuml
-package Interface <<Rectangle>> {
-	interface GPIO
-	interface TIMER
-}
+interface Periph
+class LL
+class HAL
+abstract periph_t
 
-package LL <<Rectangle>> {
-	ABOV ..|> GPIO
-	STM32 ..|> GPIO
-	nRF52 ..|> GPIO
-	ABOV ..|> TIMER
-	STM32 ..|> TIMER
-	nRF52 ..|> TIMER
-}
-
-package HAL <<Rectangle>> {
-}
-
-package AbstactDataType <<Rectangle>> {
-	abstract periph_t
-	periph_t <-- GPIO
-	periph_t <-- TIMER
-}
-
-HAL --> LL
+Periph --> periph_t
+LL --> Periph
+HAL ..|> Periph
+HAL ..> LL
 @enduml

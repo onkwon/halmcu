@@ -7,9 +7,12 @@ TEST_SRC_FILES = \
 	src/devices/abov/a33g/timer_test.cpp \
 	src/test_all.cpp \
 
+MOCKS_SRC_DIRS = \
+	mocks \
+
 INCLUDE_DIRS = \
-	../include \
 	stubs/overrides \
+	../include \
 	$(CPPUTEST_HOME)/include \
 
 CPPUTEST_CPPFLAGS = \

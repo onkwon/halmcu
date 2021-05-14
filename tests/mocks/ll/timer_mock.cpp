@@ -2,19 +2,19 @@
 
 #include "abov/ll/timer.h"
 
-void timer_reset(periph_t peri)
+void timer_ll_reset(periph_t peri)
 {
 	mock().actualCall(__func__).withParameter("peri", peri);
 }
 
-void timer_set_mode(periph_t peri, timer_mode_t mode)
+void timer_ll_set_mode(periph_t peri, timer_mode_t mode)
 {
 	mock().actualCall(__func__)
 		.withParameter("peri", peri)
 		.withParameter("mode", mode);
 }
 
-uint32_t timer_get_frequency(periph_t peri, uint32_t tclk)
+uint32_t timer_ll_get_frequency(periph_t peri, uint32_t tclk)
 {
 	return mock().actualCall(__func__)
 		.withParameter("peri", peri)
@@ -22,16 +22,91 @@ uint32_t timer_get_frequency(periph_t peri, uint32_t tclk)
 		.returnUnsignedIntValueOrDefault(0);
 }
 
-void timer_set_prescaler(periph_t peri, uint32_t div_factor)
+void timer_ll_set_prescaler(periph_t peri, uint32_t div_factor)
 {
 	mock().actualCall(__func__)
 		.withParameter("peri", peri)
 		.withParameter("div_factor", div_factor);
 }
 
-void timer_enable_irq(periph_t peri, timer_event_t events)
+void timer_ll_enable_irq(periph_t peri, timer_event_t events)
 {
 	mock().actualCall(__func__)
 		.withParameter("peri", peri)
 		.withParameter("events", events);
+}
+
+void timer_ll_start(periph_t peri)
+{
+	mock().actualCall(__func__).withParameter("peri", peri);
+}
+
+void timer_ll_stop(periph_t peri)
+{
+	mock().actualCall(__func__).withParameter("peri", peri);
+}
+
+void timer_ll_set_reload(periph_t peri, uint32_t value)
+{
+	mock().actualCall(__func__)
+		.withParameter("peri", peri)
+		.withParameter("value", value);
+}
+
+uint32_t timer_ll_get_reload(periph_t peri)
+{
+	return mock().actualCall(__func__)
+		.withParameter("peri", peri)
+		.returnUnsignedIntValueOrDefault(0);
+}
+
+void timer_ll_set_polarity(periph_t peri, uint32_t level)
+{
+	mock().actualCall(__func__)
+		.withParameter("peri", peri)
+		.withParameter("level", level);
+}
+
+void timer_ll_set_edge(periph_t peri, timer_edge_t edge)
+{
+	mock().actualCall(__func__)
+		.withParameter("peri", peri)
+		.withParameter("edge", edge);
+}
+
+void timer_ll_set_clock_divider(periph_t peri, uint32_t div_factor)
+{
+	mock().actualCall(__func__)
+		.withParameter("peri", peri)
+		.withParameter("div_factor", div_factor);
+}
+
+void timer_ll_set_cc(periph_t peri, uint32_t cc, uint32_t value)
+{
+	mock().actualCall(__func__)
+		.withParameter("peri", peri)
+		.withParameter("cc", cc)
+		.withParameter("value", value);
+}
+
+uint32_t timer_ll_get_cc(periph_t peri, uint32_t cc)
+{
+	return mock().actualCall(__func__)
+		.withParameter("peri", peri)
+		.withParameter("cc", cc)
+		.returnUnsignedIntValueOrDefault(0);
+}
+
+void timer_ll_clear_event(periph_t peri, timer_event_t events)
+{
+	mock().actualCall(__func__)
+		.withParameter("peri", peri)
+		.withParameter("events", events);
+}
+
+timer_event_t timer_ll_get_event(periph_t peri)
+{
+	return (timer_event_t)mock().actualCall(__func__)
+		.withParameter("peri", peri)
+		.returnUnsignedIntValueOrDefault(0);
 }
