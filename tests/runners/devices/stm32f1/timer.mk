@@ -9,7 +9,6 @@ TEST_SRC_FILES = \
 
 MOCKS_SRC_DIRS = \
 	mocks \
-	mocks/ll \
 
 INCLUDE_DIRS = \
 	stubs/overrides \
