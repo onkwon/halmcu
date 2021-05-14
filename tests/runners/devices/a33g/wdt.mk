@@ -7,9 +7,11 @@ TEST_SRC_FILES = \
 	src/devices/abov/a33g/wdt_test.cpp \
 	src/test_all.cpp \
 
+MOCKS_SRC_DIRS = \
+	mocks \
+
 MOCKS_SRC = \
 	mocks/ll/clk_mock.cpp \
-	mocks/assert_mock.cpp \
 
 INCLUDE_DIRS = \
 	stubs/overrides \
