@@ -75,6 +75,34 @@ TEST(Timer, set_prescaler_ShouldSetPSC) {
 	LONGS_EQUAL(0x1234, TIM7->PSC);
 }
 
+TEST(Timer, enable_irq_ShouldSetDIER) {
+	timer_ll_enable_irq(PERIPH_TIM5, TIMER_EVENT_CC_1);
+	LONGS_EQUAL(2, TIM5->DIER);
+	timer_ll_enable_irq(PERIPH_TIM5, TIMER_EVENT_CC_2);
+	LONGS_EQUAL(6, TIM5->DIER);
+	timer_ll_enable_irq(PERIPH_TIM5, TIMER_EVENT_UPDATE);
+	LONGS_EQUAL(7, TIM5->DIER);
+}
+
+TEST(Timer, disable_irq_ShouldClearDIER) {
+	TIM1->DIER = 0xFu;
+	timer_ll_disable_irq(PERIPH_TIM1, TIMER_EVENT_CC_1);
+	LONGS_EQUAL(0xd, TIM1->DIER);
+	timer_ll_disable_irq(PERIPH_TIM1, TIMER_EVENT_CC_2);
+	LONGS_EQUAL(9, TIM1->DIER);
+	timer_ll_disable_irq(PERIPH_TIM1, TIMER_EVENT_UPDATE);
+	LONGS_EQUAL(8, TIM1->DIER);
+}
+
+TEST(Timer, set_counter_ShouldSetCNT) {
+	timer_ll_set_counter(PERIPH_TIM1, 0x1234);
+	LONGS_EQUAL(0x1234, TIM1->CNT);
+}
+TEST(Timer, get_counter_ShouldReturnCNT) {
+	TIM1->CNT = 0xfeed;
+	LONGS_EQUAL(0xfeed, timer_ll_get_counter(PERIPH_TIM1));
+}
+
 TEST(Timer, set_reload_ShouldSetARR) {
 	timer_ll_set_reload(PERIPH_TIM3, 0x1234);
 	LONGS_EQUAL(0x1234, TIM3->ARR);
@@ -96,4 +124,31 @@ TEST(Timer, stop_ShouldClearCEN) {
 		.withParameter("pos", 0)
 		.ignoreOtherParameters();
 	timer_ll_stop(PERIPH_TIM2);
+}
+
+TEST(Timer, set_cc_ShouldSetCCR) {
+	timer_ll_set_cc(PERIPH_TIM1, 1, 0xc0de);
+	timer_ll_set_cc(PERIPH_TIM1, 2, 0xc1de);
+	timer_ll_set_cc(PERIPH_TIM1, 3, 0xc2de);
+	timer_ll_set_cc(PERIPH_TIM1, 4, 0xc3de);
+
+	LONGS_EQUAL(0xc0de, TIM1->CCR1);
+	LONGS_EQUAL(0xc1de, TIM1->CCR2);
+	LONGS_EQUAL(0xc2de, TIM1->CCR3);
+	LONGS_EQUAL(0xc3de, TIM1->CCR4);
+}
+TEST(Timer, get_cc_ShouldReturnCCR) {
+	TIM1->CCR1 = 0xc1de;
+	TIM1->CCR2 = 0xc2de;
+	TIM1->CCR3 = 0xc3de;
+	TIM1->CCR4 = 0xc4de;
+
+	LONGS_EQUAL(0xc1de, timer_ll_get_cc(PERIPH_TIM1, 1));
+	LONGS_EQUAL(0xc2de, timer_ll_get_cc(PERIPH_TIM1, 2));
+	LONGS_EQUAL(0xc3de, timer_ll_get_cc(PERIPH_TIM1, 3));
+	LONGS_EQUAL(0xc4de, timer_ll_get_cc(PERIPH_TIM1, 4));
+}
+TEST(Timer, get_cc_ShouldReturnZero_WhenInvalidParamGiven) {
+	LONGS_EQUAL(0, timer_ll_get_cc(PERIPH_TIM1, 0));
+	LONGS_EQUAL(0, timer_ll_get_cc(PERIPH_TIM1, 5));
 }

@@ -26,6 +26,8 @@ typedef enum {
 	TIMER_EVENT_CC_1			= (1U << 3),
 	TIMER_EVENT_CC_2			= (1U << 4),
 	TIMER_EVENT_CC_3			= (1U << 5),
+	TIMER_EVENT_CC_4			= (1U << 6),
+	TIMER_EVENT_UPDATE			= (1U << 7),
 } timer_event_t;
 
 /** Timer edge type */

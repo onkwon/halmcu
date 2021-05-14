@@ -91,13 +91,64 @@ void timer_ll_set_prescaler(periph_t peri, uint32_t div_factor)
 	get_instance(peri)->PSC = div_factor;
 }
 
-#if 0
-void timer_ll_enable_irq(periph_t peri, timer_event_t events);
-void timer_ll_disable_irq(periph_t peri, timer_event_t events);
-void timer_ll_set_clock_divider(periph_t peri, uint32_t div_factor);
-void timer_ll_set_counter(periph_t peri, uint32_t value);
-uint32_t timer_ll_get_counter(periph_t peri);
-#endif
+void timer_ll_enable_irq(periph_t peri, timer_event_t events)
+{
+	TIM_Type *instance = get_instance(peri);
+	uint32_t bits = instance->DIER;
+
+	if (events & TIMER_EVENT_UPDATE) {
+		bits |= 1u << 0; /* UIE */
+	}
+	if (events & TIMER_EVENT_CC_1) {
+		bits |= 1u << 1; /* CC1IE */
+	}
+	if (events & TIMER_EVENT_CC_2) {
+		bits |= 1u << 2; /* CC2IE */
+	}
+	if (events & TIMER_EVENT_CC_3) {
+		bits |= 1u << 3; /* CC3IE */
+	}
+	if (events & TIMER_EVENT_CC_4) {
+		bits |= 1u << 4; /* CC4IE */
+	}
+
+	instance->DIER = bits;
+}
+
+void timer_ll_disable_irq(periph_t peri, timer_event_t events)
+{
+	TIM_Type *instance = get_instance(peri);
+	uint32_t bits = instance->DIER;
+
+	if (events & TIMER_EVENT_UPDATE) {
+		bits &= ~(1u << 0); /* UIE */
+	}
+	if (events & TIMER_EVENT_CC_1) {
+		bits &= ~(1u << 1); /* CC1IE */
+	}
+	if (events & TIMER_EVENT_CC_2) {
+		bits &= ~(1u << 2); /* CC2IE */
+	}
+	if (events & TIMER_EVENT_CC_3) {
+		bits &= ~(1u << 3); /* CC3IE */
+	}
+	if (events & TIMER_EVENT_CC_4) {
+		bits &= ~(1u << 4); /* CC4IE */
+	}
+
+	instance->DIER = bits;
+}
+
+void timer_ll_set_counter(periph_t peri, uint32_t value)
+{
+	assert(value < 0x10000u); /* 16-bit counter */
+	get_instance(peri)->CNT = value;
+}
+
+uint32_t timer_ll_get_counter(periph_t peri)
+{
+	return get_instance(peri)->CNT;
+}
 
 void timer_ll_set_reload(periph_t peri, uint32_t value)
 {
@@ -109,11 +160,6 @@ uint32_t timer_ll_get_reload(periph_t peri)
 {
 	return get_instance(peri)->ARR;
 }
-
-#if 0
-void timer_ll_clear_event(periph_t peri, timer_event_t events);
-timer_event_t timer_ll_get_event(periph_t peri);
-#endif
 
 void timer_ll_start(periph_t peri)
 {
@@ -127,9 +173,39 @@ void timer_ll_stop(periph_t peri)
 	bitop_clear(&instance->CR1, 0); /* CEN */
 }
 
+void timer_ll_set_cc(periph_t peri, uint32_t cc, uint32_t value)
+{
+	TIM_Type *instance = get_instance(peri);
+	if (cc == 1) {
+		instance->CCR1 = value;
+	} else if (cc == 2) {
+		instance->CCR2 = value;
+	} else if (cc == 3) {
+		instance->CCR3 = value;
+	} else if (cc == 4) {
+		instance->CCR4 = value;
+	}
+}
+
+uint32_t timer_ll_get_cc(periph_t peri, uint32_t cc)
+{
+	if (cc == 1) {
+		return get_instance(peri)->CCR1;
+	} else if (cc == 2) {
+		return get_instance(peri)->CCR2;
+	} else if (cc == 3) {
+		return get_instance(peri)->CCR3;
+	} else if (cc == 4) {
+		return get_instance(peri)->CCR4;
+	}
+
+	return 0;
+}
+
 #if 0
-void timer_ll_set_cc(periph_t peri, uint32_t cc, uint32_t value);
-uint32_t timer_ll_get_cc(periph_t peri, uint32_t cc);
+void timer_ll_clear_event(periph_t peri, timer_event_t events);
+timer_event_t timer_ll_get_event(periph_t peri);
+void timer_ll_set_clock_divider(periph_t peri, uint32_t div_factor);
 uint32_t timer_ll_get_frequency(periph_t peri, uint32_t tclk);
 void timer_ll_set_edge(periph_t peri, timer_edge_t edge);
 void timer_ll_set_polarity(periph_t peri, uint32_t level);
