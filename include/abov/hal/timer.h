@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
+#include "abov/periph/timer.h"
 #include "abov/ll/timer.h"
 
 /** Timer configuration */
@@ -18,17 +19,17 @@ struct timer_cfg {
 };
 
 /**
- * Initialize the timer
+ * @brief Initialize the timer
  *
- * :param timer: a peripheral enumerated in :c:type:`periph_t`
- * :param cfg: pointer to the structure with the initial configuration
- * :return: true on success
+ * @param[in] timer a peripheral enumerated in @ref periph_t
+ * @param[in] cfg pointer to the structure with the initial configuration
+ * @return true on success
  */
 bool timer_init(periph_t timer, const struct timer_cfg *cfg);
 /**
- * Deinitialize the timer
+ * @brief Deinitialize the timer
  *
- * :param timer: a peripheral enumerated in :c:type:`periph_t`
+ * @param[in] timer a peripheral enumerated in @ref periph_t
  */
 void timer_deinit(periph_t timer);
 

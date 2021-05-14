@@ -39,30 +39,30 @@ TEST(Timer, init_ShouldEnablePowerAndClock) {
 	LONGS_EQUAL(1, timer_init(PERIPH_TIMER0, &default_cfg));
 }
 TEST(Timer, init_ShouldSetTimerMode) {
-	mock().expectOneCall("timer_set_mode")
+	mock().expectOneCall("timer_ll_set_mode")
 		.withParameter("peri", PERIPH_TIMER0)
 		.withParameter("mode", TIMER_MODE_CAPTURE);
 	default_cfg.mode = TIMER_MODE_CAPTURE;
 	LONGS_EQUAL(1, timer_init(PERIPH_TIMER0, &default_cfg));
 }
 TEST(Timer, init_ShouldNotSetTimerPrescaler_WhenCaptureMode) {
-	mock().expectNoCall("timer_set_prescaler");
+	mock().expectNoCall("timer_ll_set_prescaler");
 	default_cfg.mode = TIMER_MODE_CAPTURE;
 	LONGS_EQUAL(1, timer_init(PERIPH_TIMER0, &default_cfg));
 }
 TEST(Timer, init_ShouldSetTimerPrescaler_WhenNotCaptureMode) {
-	mock().expectOneCall("timer_get_frequency")
+	mock().expectOneCall("timer_ll_get_frequency")
 		.withParameter("peri", PERIPH_TIMER0)
 		.withParameter("tclk", 1000000)
 		.andReturnValue(1000);
-	mock().expectOneCall("timer_set_prescaler")
+	mock().expectOneCall("timer_ll_set_prescaler")
 		.withParameter("peri", PERIPH_TIMER0)
 		.withParameter("div_factor", 1000 - 1);
 	default_cfg.frequency = 1;//hz
 	timer_init(PERIPH_TIMER0, &default_cfg);
 }
 TEST(Timer, init_ShouldEnableTimerIRQ_WhenIRQOptionGiven) {
-	mock().expectOneCall("timer_enable_irq")
+	mock().expectOneCall("timer_ll_enable_irq")
 		.withParameter("peri", PERIPH_TIMER0)
 		.withParameter("events", TIMER_EVENT_OVERFLOW | TIMER_EVENT_CC_1);
 	mock().expectOneCall("irq_enable").withParameter("irq", IRQ_TIMER0);
@@ -78,7 +78,7 @@ TEST(Timer, init_ShouldSetIRQPriority_WhenIRQOptionGiven) {
 	timer_init(PERIPH_TIMER0, &default_cfg);
 }
 TEST(Timer, init_ShouldNotCallIrqRelated_WhenNoEventGiven) {
-	mock().expectNoCall("timer_enable_irq");
+	mock().expectNoCall("timer_ll_enable_irq");
 	mock().expectNoCall("irq_set_priority");
 	mock().expectNoCall("irq_enable");
 	default_cfg.irq = TIMER_EVENT_NONE;

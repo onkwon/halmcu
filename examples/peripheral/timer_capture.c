@@ -30,7 +30,7 @@ static void capture_timer_gpio_init(void)
 
 static void set_target_timer_clock_source(void)
 {
-	timer_set_clock_divider(PERIPH_TIMER0, 3); // 16MHz/64 = 250KHz
+	timer_ll_set_clock_divider(PERIPH_TIMER0, 3); // 16MHz/64 = 250KHz
 }
 
 static void target_timer_init(void)

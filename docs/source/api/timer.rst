@@ -8,10 +8,17 @@ Examples
 .. literalinclude:: ../../../examples/peripheral/timer_capture.c
    :language: C
 
+Interface
+---------
+.. doxygenfile:: abov/periph/timer.h
+   :project: libabov
+
 HAL
----
-.. c:autodoc:: ../../include/abov/hal/timer.h
+^^^
+.. doxygenfile:: abov/hal/timer.h
+   :project: libabov
 
 LL
---
-.. c:autodoc:: ../../include/abov/ll/timer.h
+^^
+.. doxygenfile:: abov/ll/timer.h
+   :project: libabov
