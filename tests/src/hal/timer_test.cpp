@@ -95,3 +95,64 @@ TEST(Timer, deinit_ShouldDisablePowerAndClock) {
 	mock().expectOneCall("clk_disable_peripheral").withParameter("peri", PERIPH_TIMER0);
 	timer_deinit(PERIPH_TIMER0);
 }
+
+TEST(Timer, start_ShouldCallLowLevelFunc) {
+	mock().expectOneCall("timer_ll_start")
+		.withParameter("peri", PERIPH_TIMER0);
+	timer_start(PERIPH_TIMER0);
+}
+TEST(Timer, stop_ShouldCallLowLevelFunc) {
+	mock().expectOneCall("timer_ll_stop")
+		.withParameter("peri", PERIPH_TIMER0);
+	timer_stop(PERIPH_TIMER0);
+}
+TEST(Timer, set_reload_ShouldSetReloadRegister) {
+	mock().expectOneCall("timer_ll_set_reload")
+		.withParameter("peri", PERIPH_TIMER0)
+		.withParameter("value", 1000);
+	timer_set_reload(PERIPH_TIMER0, 1000);
+}
+TEST(Timer, get_reload_ShouldReturnReloadRegisterValue) {
+	mock().expectOneCall("timer_ll_get_reload")
+		.withParameter("peri", PERIPH_TIMER0)
+		.andReturnValue(1000);
+	LONGS_EQUAL(1000, timer_get_reload(PERIPH_TIMER0));
+}
+TEST(Timer, set_cc_ShouldSetCCRegister) {
+	mock().expectOneCall("timer_ll_set_cc")
+		.withParameter("peri", PERIPH_TIMER0)
+		.withParameter("cc", 0)
+		.withParameter("value", 2000);
+	timer_set_cc(PERIPH_TIMER0, 0, 2000);
+}
+TEST(Timer, get_cc_ShouldReturnCCRegisterValue) {
+	mock().expectOneCall("timer_ll_get_cc")
+		.withParameter("peri", PERIPH_TIMER0)
+		.withParameter("cc", 1)
+		.andReturnValue(1234);
+	LONGS_EQUAL(1234, timer_get_cc(PERIPH_TIMER0, 1));
+}
+TEST(Timer, clear_event_ShouldCallLowLevelFunc) {
+	mock().expectOneCall("timer_ll_clear_event")
+		.withParameter("peri", PERIPH_TIMER0)
+		.withParameter("events", TIMER_EVENT_OVERFLOW);
+	timer_clear_event(PERIPH_TIMER0, TIMER_EVENT_OVERFLOW);
+}
+TEST(Timer, get_event_ShouldReturnEvents) {
+	mock().expectOneCall("timer_ll_get_event")
+		.withParameter("peri", PERIPH_TIMER0)
+		.andReturnValue(TIMER_EVENT_CC_0);
+	LONGS_EQUAL(TIMER_EVENT_CC_0, timer_get_event(PERIPH_TIMER0));
+}
+TEST(Timer, set_edge_ShouldSetEdgeRegister) {
+	mock().expectOneCall("timer_ll_set_edge")
+		.withParameter("peri", PERIPH_TIMER0)
+		.withParameter("edge", TIMER_RISING_EDGE);
+	timer_set_edge(PERIPH_TIMER0, TIMER_RISING_EDGE);
+}
+TEST(Timer, set_polarity_ShouldSetPolarityRegister) {
+	mock().expectOneCall("timer_ll_set_polarity")
+		.withParameter("peri", PERIPH_TIMER0)
+		.withParameter("level", 1);
+	timer_set_polarity(PERIPH_TIMER0, 1);
+}
