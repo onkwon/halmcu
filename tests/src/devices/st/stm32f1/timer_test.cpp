@@ -152,3 +152,61 @@ TEST(Timer, get_cc_ShouldReturnZero_WhenInvalidParamGiven) {
 	LONGS_EQUAL(0, timer_ll_get_cc(PERIPH_TIM1, 0));
 	LONGS_EQUAL(0, timer_ll_get_cc(PERIPH_TIM1, 5));
 }
+
+TEST(Timer, clear_event_ShouldClearSR) {
+	TIM1->SR = 0x1f;
+	timer_ll_clear_event(PERIPH_TIM1, TIMER_EVENT_CC_1);
+	LONGS_EQUAL(0x1d, TIM1->SR);
+	timer_ll_clear_event(PERIPH_TIM1, TIMER_EVENT_CC_2);
+	LONGS_EQUAL(0x19, TIM1->SR);
+	timer_ll_clear_event(PERIPH_TIM1, TIMER_EVENT_CC_3);
+	LONGS_EQUAL(0x11, TIM1->SR);
+	timer_ll_clear_event(PERIPH_TIM1, TIMER_EVENT_CC_4);
+	LONGS_EQUAL(0x1, TIM1->SR);
+	timer_ll_clear_event(PERIPH_TIM1, TIMER_EVENT_UPDATE);
+	LONGS_EQUAL(0, TIM1->SR);
+}
+
+TEST(Timer, get_event_ShouldReturnSR) {
+	TIM1->SR = 0x3;
+	LONGS_EQUAL(TIMER_EVENT_CC_1 | TIMER_EVENT_UPDATE,
+			timer_ll_get_event(PERIPH_TIM1));
+	TIM1->SR = 0x4;
+	LONGS_EQUAL(TIMER_EVENT_CC_2, timer_ll_get_event(PERIPH_TIM1));
+	TIM1->SR = 0x18;
+	LONGS_EQUAL(TIMER_EVENT_CC_4 | TIMER_EVENT_CC_3,
+			timer_ll_get_event(PERIPH_TIM1));
+}
+
+TEST(Timer, get_frequency_ShouldReturnSourceClockFrequencyDividedByTwo) {
+	RCC->CFGR = (1U << 13) | (1 << 10);
+	LONGS_EQUAL(1000000, timer_ll_get_frequency(PERIPH_TIM1, 2000000));
+}
+TEST(Timer, get_frequency_ShouldReturnSourceClockFrequency) {
+	LONGS_EQUAL(1000000, timer_ll_get_frequency(PERIPH_TIM1, 1000000));
+}
+
+TEST(Timer, set_clock_divider_ShouldSetCR1) {
+	timer_ll_set_clock_divider(PERIPH_TIM1, 5);
+	LONGS_EQUAL(0, TIM1->CR1);
+	timer_ll_set_clock_divider(PERIPH_TIM1, 4);
+	LONGS_EQUAL(0x200, TIM1->CR1);
+	timer_ll_set_clock_divider(PERIPH_TIM1, 2);
+	LONGS_EQUAL(0x100, TIM1->CR1);
+	timer_ll_set_clock_divider(PERIPH_TIM1, 1);
+	LONGS_EQUAL(0, TIM1->CR1);
+}
+
+TEST(Timer, set_counter_direction_ShouldSetCR1) {
+	timer_ll_set_counter_direction(PERIPH_TIM1, TIMER_DIRECTION_DOWN);
+	LONGS_EQUAL(0x10, TIM1->CR1);
+	timer_ll_set_counter_direction(PERIPH_TIM1, TIMER_DIRECTION_UP);
+	LONGS_EQUAL(0, TIM1->CR1);
+}
+
+TEST(Timer, set_counter_alignment_mode_ShouldSetCR1) {
+	timer_ll_set_counter_alignment_mode(PERIPH_TIM1, 1);
+	LONGS_EQUAL(0x20, TIM1->CR1);
+	timer_ll_set_counter_alignment_mode(PERIPH_TIM1, 2);
+	LONGS_EQUAL(0x40, TIM1->CR1);
+}

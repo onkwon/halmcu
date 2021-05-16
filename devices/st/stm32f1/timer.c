@@ -202,15 +202,97 @@ uint32_t timer_ll_get_cc(periph_t peri, uint32_t cc)
 	return 0;
 }
 
+void timer_ll_clear_event(periph_t peri, timer_event_t events)
+{
+	uint32_t value = get_instance(peri)->SR;
+
+	if (events & TIMER_EVENT_UPDATE) {
+		value &= ~(1U << 0);
+	}
+	if (events & TIMER_EVENT_CC_1) {
+		value &= ~(1U << 1);
+	}
+	if (events & TIMER_EVENT_CC_2) {
+		value &= ~(1U << 2);
+	}
+	if (events & TIMER_EVENT_CC_3) {
+		value &= ~(1U << 3);
+	}
+	if (events & TIMER_EVENT_CC_4) {
+		value &= ~(1U << 4);
+	}
+
+	get_instance(peri)->SR = value;
+}
+
+timer_event_t timer_ll_get_event(periph_t peri)
+{
+	uint32_t value = get_instance(peri)->SR;
+	timer_event_t events = TIMER_EVENT_NONE;
+
+	if (value & (1U << 0)) {
+		events = (timer_event_t)(events | TIMER_EVENT_UPDATE);
+	}
+	if (value & (1U << 1)) {
+		events = (timer_event_t)(events | TIMER_EVENT_CC_1);
+	}
+	if (value & (1U << 2)) {
+		events = (timer_event_t)(events | TIMER_EVENT_CC_2);
+	}
+	if (value & (1U << 3)) {
+		events = (timer_event_t)(events | TIMER_EVENT_CC_3);
+	}
+	if (value & (1U << 4)) {
+		events = (timer_event_t)(events | TIMER_EVENT_CC_4);
+	}
+
+	return events;
+}
+
+void timer_ll_set_clock_divider(periph_t peri, uint32_t div_factor)
+{
+	uint32_t val = 0;
+
+	if (div_factor == 2) {
+		val = 1;
+	} else if (div_factor == 4) {
+		val = 2;
+	}
+
+	bitop_clean_set_with_mask(&get_instance(peri)->CR1, 8, 3, val);
+}
+
+uint32_t timer_ll_get_frequency(periph_t peri, uint32_t tclk)
+{
+	TIM_Type *instance = get_instance(peri);
+	bool prescaled;
+
+	if (((uint32_t)instance & APB2_BASE) == APB2_BASE) {
+		prescaled = (RCC->CFGR >> 13) & 1;
+	} else { /* APB1 */
+		prescaled = (RCC->CFGR >> 10) & 1;
+	}
+
+	if (prescaled) {
+		return tclk / 2;
+	}
+
+	return tclk;
+}
+
+void timer_ll_set_counter_direction(periph_t peri, timer_direction_t dir)
+{
+	bitop_clean_set_with_mask(&get_instance(peri)->CR1, 4, 1, dir);
+}
+
+void timer_ll_set_counter_alignment_mode(periph_t peri, uint32_t align)
+{
+	bitop_clean_set_with_mask(&get_instance(peri)->CR1, 5, 3, align);
+}
+
 #if 0
-void timer_ll_clear_event(periph_t peri, timer_event_t events);
-timer_event_t timer_ll_get_event(periph_t peri);
-void timer_ll_set_clock_divider(periph_t peri, uint32_t div_factor);
-uint32_t timer_ll_get_frequency(periph_t peri, uint32_t tclk);
 void timer_ll_set_edge(periph_t peri, timer_edge_t edge);
 void timer_ll_set_polarity(periph_t peri, uint32_t level);
+set_pwm_mode() / cc_mode
+enable_cc_output(cc, mode)
 #endif
-
-// set_counter_direction()
-// set_counter_mode()
-// set_pwm_mode()

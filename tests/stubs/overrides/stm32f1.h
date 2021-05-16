@@ -7,6 +7,11 @@ extern "C" {
 
 #include <stdint.h>
 
+#define PERIPHERAL_BASE			(0x40000000U)
+#define APB1_BASE			(PERIPHERAL_BASE + 0)
+#define APB2_BASE			(PERIPHERAL_BASE + 0x10000U)
+#define AHB_BASE			(PERIPHERAL_BASE + 0x20000U)
+
 typedef struct {
 	volatile uint32_t IDCODE;
 	volatile uint32_t CR;

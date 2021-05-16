@@ -36,6 +36,11 @@ typedef enum {
 	TIMER_FALLING_EDGE,
 } timer_edge_t;
 
+typedef enum {
+	TIMER_DIRECTION_UP,
+	TIMER_DIRECTION_DOWN,
+} timer_direction_t;
+
 /**
  * @brief Start the timer
  *

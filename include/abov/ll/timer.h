@@ -75,6 +75,8 @@ uint32_t timer_ll_get_cc(periph_t peri, uint32_t cc);
 uint32_t timer_ll_get_frequency(periph_t peri, uint32_t tclk);
 void timer_ll_set_edge(periph_t peri, timer_edge_t edge);
 void timer_ll_set_polarity(periph_t peri, uint32_t level);
+void timer_ll_set_counter_direction(periph_t peri, timer_direction_t dir);
+void timer_ll_set_counter_alignment_mode(periph_t peri, uint32_t align);
 
 #if defined(__cplusplus)
 }

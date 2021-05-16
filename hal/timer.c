@@ -8,7 +8,7 @@
 
 static void set_frequency(periph_t timer, const struct timer_cfg *cfg)
 {
-	uint32_t tclk = clk_get_frequency(clk_get_peripheral_clock_source(timer));
+	uint32_t tclk = clk_get_peripheral_clock_source_frequency(timer);
 	uint32_t fclk = timer_ll_get_frequency(timer, tclk);
 	uint32_t tick = fclk / cfg->frequency;
 
