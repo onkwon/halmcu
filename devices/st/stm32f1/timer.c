@@ -272,7 +272,7 @@ uint32_t timer_ll_get_frequency(periph_t peri, uint32_t tclk)
 	TIM_Type *instance = get_instance(peri);
 	bool prescaled;
 
-	if (((uint32_t)instance & APB2_BASE) == APB2_BASE) {
+	if (((uintptr_t)instance & APB2_BASE) == APB2_BASE) {
 		prescaled = (RCC->CFGR >> 13) & 1;
 	} else { /* APB1 */
 		prescaled = (RCC->CFGR >> 10) & 1;
