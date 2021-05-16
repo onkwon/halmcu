@@ -109,20 +109,20 @@ void timer_ll_stop(periph_t peri)
 	bitop_clear(&get_instance(peri)->CMD, 0); /* TEN */
 }
 
-void timer_ll_set_cc(periph_t peri, uint32_t cc, uint32_t value)
+void timer_ll_set_cc(periph_t peri, timer_cc_t cc, uint32_t value)
 {
-	if (cc == 0) {
+	if (cc == TIMER_CC_0) {
 		get_instance(peri)->GRA = value;
-	} else if (cc == 1) {
+	} else if (cc == TIMER_CC_1) {
 		get_instance(peri)->GRB = value;
 	}
 }
 
-uint32_t timer_ll_get_cc(periph_t peri, uint32_t cc)
+uint32_t timer_ll_get_cc(periph_t peri, timer_cc_t cc)
 {
-	if (cc == 0) {
+	if (cc == TIMER_CC_0) {
 		return get_instance(peri)->GRA;
-	} else if (cc == 1) {
+	} else if (cc == TIMER_CC_1) {
 		return get_instance(peri)->GRB;
 	}
 	return 0;
@@ -159,18 +159,6 @@ void timer_ll_reset(periph_t peri)
 	tim->CNT = 0;
 }
 
-void timer_ll_set_polarity(periph_t peri, uint32_t level)
-{
-	bitop_clean_set_with_mask(&get_instance(peri)->CON,
-			7, 1U, level); /* TSTRT */
-}
-
-void timer_ll_set_edge(periph_t peri, timer_edge_t edge)
-{
-	bitop_clean_set_with_mask(&get_instance(peri)->CON,
-			3, 1U, edge); /* CAPM */
-}
-
 uint32_t timer_ll_get_frequency(periph_t peri, uint32_t tclk)
 {
 	const TIMER_Type *tim = get_instance(peri);
@@ -195,3 +183,18 @@ uint32_t timer_ll_get_frequency(periph_t peri, uint32_t tclk)
 
 	return tclk;
 }
+
+void timer_ll_set_cc_polarity(periph_t peri, timer_cc_t cc, bool active_high)
+{
+	unused(cc);
+	bitop_clean_set_with_mask(&get_instance(peri)->CON,
+			7, 1U, active_high); /* TSTRT */
+}
+
+#if 0
+void timer_ll_set_clock_edge(periph_t peri, timer_edge_t edge)
+{
+	bitop_clean_set_with_mask(&get_instance(peri)->CON,
+			3, 1U, edge); /* CAPM */
+}
+#endif

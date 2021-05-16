@@ -71,12 +71,12 @@ uint32_t timer_get_reload(periph_t peri)
 	return timer_ll_get_reload(peri);
 }
 
-void timer_set_cc(periph_t peri, uint32_t cc, uint32_t value)
+void timer_set_cc(periph_t peri, timer_cc_t cc, uint32_t value)
 {
 	timer_ll_set_cc(peri, cc, value);
 }
 
-uint32_t timer_get_cc(periph_t peri, uint32_t cc)
+uint32_t timer_get_cc(periph_t peri, timer_cc_t cc)
 {
 	return timer_ll_get_cc(peri, cc);
 }
@@ -91,12 +91,7 @@ timer_event_t timer_get_event(periph_t peri)
 	return timer_ll_get_event(peri);
 }
 
-void timer_set_edge(periph_t peri, timer_edge_t edge)
+void timer_set_cc_polarity(periph_t peri, timer_cc_t cc, bool active_high)
 {
-	timer_ll_set_edge(peri, edge);
-}
-
-void timer_set_polarity(periph_t peri, uint32_t level)
-{
-	timer_ll_set_polarity(peri, level);
+	timer_ll_set_cc_polarity(peri, cc, active_high);
 }

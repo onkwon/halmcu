@@ -127,10 +127,10 @@ TEST(Timer, stop_ShouldClearCEN) {
 }
 
 TEST(Timer, set_cc_ShouldSetCCR) {
-	timer_ll_set_cc(PERIPH_TIM1, 1, 0xc0de);
-	timer_ll_set_cc(PERIPH_TIM1, 2, 0xc1de);
-	timer_ll_set_cc(PERIPH_TIM1, 3, 0xc2de);
-	timer_ll_set_cc(PERIPH_TIM1, 4, 0xc3de);
+	timer_ll_set_cc(PERIPH_TIM1, TIMER_CC_1, 0xc0de);
+	timer_ll_set_cc(PERIPH_TIM1, TIMER_CC_2, 0xc1de);
+	timer_ll_set_cc(PERIPH_TIM1, TIMER_CC_3, 0xc2de);
+	timer_ll_set_cc(PERIPH_TIM1, TIMER_CC_4, 0xc3de);
 
 	LONGS_EQUAL(0xc0de, TIM1->CCR1);
 	LONGS_EQUAL(0xc1de, TIM1->CCR2);
@@ -143,14 +143,14 @@ TEST(Timer, get_cc_ShouldReturnCCR) {
 	TIM1->CCR3 = 0xc3de;
 	TIM1->CCR4 = 0xc4de;
 
-	LONGS_EQUAL(0xc1de, timer_ll_get_cc(PERIPH_TIM1, 1));
-	LONGS_EQUAL(0xc2de, timer_ll_get_cc(PERIPH_TIM1, 2));
-	LONGS_EQUAL(0xc3de, timer_ll_get_cc(PERIPH_TIM1, 3));
-	LONGS_EQUAL(0xc4de, timer_ll_get_cc(PERIPH_TIM1, 4));
+	LONGS_EQUAL(0xc1de, timer_ll_get_cc(PERIPH_TIM1, TIMER_CC_1));
+	LONGS_EQUAL(0xc2de, timer_ll_get_cc(PERIPH_TIM1, TIMER_CC_2));
+	LONGS_EQUAL(0xc3de, timer_ll_get_cc(PERIPH_TIM1, TIMER_CC_3));
+	LONGS_EQUAL(0xc4de, timer_ll_get_cc(PERIPH_TIM1, TIMER_CC_4));
 }
 TEST(Timer, get_cc_ShouldReturnZero_WhenInvalidParamGiven) {
-	LONGS_EQUAL(0, timer_ll_get_cc(PERIPH_TIM1, 0));
-	LONGS_EQUAL(0, timer_ll_get_cc(PERIPH_TIM1, 5));
+	LONGS_EQUAL(0, timer_ll_get_cc(PERIPH_TIM1, TIMER_CC_0));
+	LONGS_EQUAL(0, timer_ll_get_cc(PERIPH_TIM1, TIMER_CC_1N));
 }
 
 TEST(Timer, clear_event_ShouldClearSR) {
@@ -209,4 +209,83 @@ TEST(Timer, set_counter_alignment_mode_ShouldSetCR1) {
 	LONGS_EQUAL(0x20, TIM1->CR1);
 	timer_ll_set_counter_alignment_mode(PERIPH_TIM1, 2);
 	LONGS_EQUAL(0x40, TIM1->CR1);
+}
+
+TEST(Timer, set_cc_mode_ShouldSetCCMR_WhenToggleGiven) {
+	timer_ll_set_cc_mode(PERIPH_TIM1, TIMER_CC_1, TIMER_CC_MODE_TOGGLE);
+	LONGS_EQUAL(0x30, TIM1->CCMR1);
+	timer_ll_set_cc_mode(PERIPH_TIM1, TIMER_CC_2, TIMER_CC_MODE_TOGGLE);
+	LONGS_EQUAL(0x3030, TIM1->CCMR1);
+	timer_ll_set_cc_mode(PERIPH_TIM1, TIMER_CC_3, TIMER_CC_MODE_TOGGLE);
+	LONGS_EQUAL(0x30, TIM1->CCMR2);
+	timer_ll_set_cc_mode(PERIPH_TIM1, TIMER_CC_4, TIMER_CC_MODE_TOGGLE);
+	LONGS_EQUAL(0x3030, TIM1->CCMR2);
+}
+TEST(Timer, set_cc_mode_ShouldSetCCMR_WhenPwmActiveHighGiven) {
+	timer_ll_set_cc_mode(PERIPH_TIM1, TIMER_CC_1,
+			TIMER_CC_MODE_PWM_ACTIVE_HIGH);
+	LONGS_EQUAL(0x60, TIM1->CCMR1);
+	timer_ll_set_cc_mode(PERIPH_TIM1, TIMER_CC_2,
+			TIMER_CC_MODE_PWM_ACTIVE_HIGH);
+	LONGS_EQUAL(0x6060, TIM1->CCMR1);
+	timer_ll_set_cc_mode(PERIPH_TIM1, TIMER_CC_3,
+			TIMER_CC_MODE_PWM_ACTIVE_HIGH);
+	LONGS_EQUAL(0x60, TIM1->CCMR2);
+	timer_ll_set_cc_mode(PERIPH_TIM1, TIMER_CC_4,
+			TIMER_CC_MODE_PWM_ACTIVE_HIGH);
+	LONGS_EQUAL(0x6060, TIM1->CCMR2);
+}
+
+TEST(Timer, set_cc_pin_ShouldSetCCMR) {
+	timer_ll_set_cc_pin(PERIPH_TIM1, TIMER_CC_1, 1);
+	LONGS_EQUAL(1, TIM1->CCMR1);
+	timer_ll_set_cc_pin(PERIPH_TIM1, TIMER_CC_2, 2);
+	LONGS_EQUAL(0x201, TIM1->CCMR1);
+	timer_ll_set_cc_pin(PERIPH_TIM1, TIMER_CC_3, 3);
+	LONGS_EQUAL(3, TIM1->CCMR2);
+	timer_ll_set_cc_pin(PERIPH_TIM1, TIMER_CC_4, 0);
+	LONGS_EQUAL(3, TIM1->CCMR2);
+}
+
+TEST(Timer, enable_cc_pin_ShouldSetCCER) {
+	timer_ll_enable_cc_pin(PERIPH_TIM1, TIMER_CC_1);
+	LONGS_EQUAL(1, TIM1->CCER);
+	timer_ll_enable_cc_pin(PERIPH_TIM1, TIMER_CC_1N);
+	LONGS_EQUAL(5, TIM1->CCER);
+	timer_ll_enable_cc_pin(PERIPH_TIM1, TIMER_CC_3);
+	LONGS_EQUAL(0x105, TIM1->CCER);
+}
+TEST(Timer, disable_cc_pin_ShouldClearCCER) {
+	timer_ll_enable_cc_pin(PERIPH_TIM1, TIMER_CC_3);
+	timer_ll_disable_cc_pin(PERIPH_TIM1, TIMER_CC_3);
+	LONGS_EQUAL(0, TIM1->CCER);
+}
+
+TEST(Timer, set_cc_polarity_ShouldSetCCER) {
+	timer_ll_set_cc_polarity(PERIPH_TIM1, TIMER_CC_1, 0);
+	LONGS_EQUAL(2, TIM1->CCER);
+	timer_ll_set_cc_polarity(PERIPH_TIM1, TIMER_CC_1, 1);
+	LONGS_EQUAL(0, TIM1->CCER);
+	timer_ll_set_cc_polarity(PERIPH_TIM1, TIMER_CC_2N, 0);
+	LONGS_EQUAL(0x80, TIM1->CCER);
+	timer_ll_set_cc_polarity(PERIPH_TIM1, TIMER_CC_3, 0);
+	LONGS_EQUAL(0x280, TIM1->CCER);
+}
+
+TEST(Timer, enable_cc_preload_ShouldSetCCMR) {
+	timer_ll_enable_cc_preload(PERIPH_TIM1, TIMER_CC_1);
+	LONGS_EQUAL(8, TIM1->CCMR1);
+	timer_ll_enable_cc_preload(PERIPH_TIM1, TIMER_CC_2);
+	LONGS_EQUAL(0x808, TIM1->CCMR1);
+	timer_ll_enable_cc_preload(PERIPH_TIM1, TIMER_CC_3);
+	LONGS_EQUAL(8, TIM1->CCMR2);
+}
+TEST(Timer, disable_cc_preload_ShouldClearCCMR) {
+	TIM1->CCMR1 = TIM1->CCMR2 = 0xfff;
+	timer_ll_disable_cc_preload(PERIPH_TIM1, TIMER_CC_1);
+	LONGS_EQUAL(0xff7, TIM1->CCMR1);
+	timer_ll_disable_cc_preload(PERIPH_TIM1, TIMER_CC_2);
+	LONGS_EQUAL(0x7f7, TIM1->CCMR1);
+	timer_ll_disable_cc_preload(PERIPH_TIM1, TIMER_CC_3);
+	LONGS_EQUAL(0xff7, TIM1->CCMR2);
 }

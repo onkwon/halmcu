@@ -173,29 +173,29 @@ void timer_ll_stop(periph_t peri)
 	bitop_clear(&instance->CR1, 0); /* CEN */
 }
 
-void timer_ll_set_cc(periph_t peri, uint32_t cc, uint32_t value)
+void timer_ll_set_cc(periph_t peri, timer_cc_t cc, uint32_t value)
 {
 	TIM_Type *instance = get_instance(peri);
-	if (cc == 1) {
+	if (cc == TIMER_CC_1) {
 		instance->CCR1 = value;
-	} else if (cc == 2) {
+	} else if (cc == TIMER_CC_2) {
 		instance->CCR2 = value;
-	} else if (cc == 3) {
+	} else if (cc == TIMER_CC_3) {
 		instance->CCR3 = value;
-	} else if (cc == 4) {
+	} else if (cc == TIMER_CC_4) {
 		instance->CCR4 = value;
 	}
 }
 
-uint32_t timer_ll_get_cc(periph_t peri, uint32_t cc)
+uint32_t timer_ll_get_cc(periph_t peri, timer_cc_t cc)
 {
-	if (cc == 1) {
+	if (cc == TIMER_CC_1) {
 		return get_instance(peri)->CCR1;
-	} else if (cc == 2) {
+	} else if (cc == TIMER_CC_2) {
 		return get_instance(peri)->CCR2;
-	} else if (cc == 3) {
+	} else if (cc == TIMER_CC_3) {
 		return get_instance(peri)->CCR3;
-	} else if (cc == 4) {
+	} else if (cc == TIMER_CC_4) {
 		return get_instance(peri)->CCR4;
 	}
 
@@ -290,9 +290,116 @@ void timer_ll_set_counter_alignment_mode(periph_t peri, uint32_t align)
 	bitop_clean_set_with_mask(&get_instance(peri)->CR1, 5, 3, align);
 }
 
+void timer_ll_set_cc_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode)
+{
+	assert(cc >= TIMER_CC_1 && cc <= TIMER_CC_4);
+
+	uint32_t pos = ((uint32_t)cc - 1) * 8 % 16 + 4; /* OCxM */
+	if (cc <= TIMER_CC_2) {
+		bitop_clean_set_with_mask(&get_instance(peri)->CCMR1,
+				pos, 7, mode);
+	} else {
+		bitop_clean_set_with_mask(&get_instance(peri)->CCMR2,
+				pos, 7, mode);
+	}
+}
+
+void timer_ll_set_cc_pin(periph_t peri, timer_cc_t cc, uint32_t value)
+{
+	assert(cc >= TIMER_CC_1 && cc <= TIMER_CC_4);
+
+	uint32_t pos = ((uint32_t)cc - 1) * 8 % 16; /* CCxS */
+	if (cc <= TIMER_CC_2) {
+		bitop_clean_set_with_mask(&get_instance(peri)->CCMR1,
+				pos, 3, value);
+	} else {
+		bitop_clean_set_with_mask(&get_instance(peri)->CCMR2,
+				pos, 3, value);
+	}
+}
+
+void timer_ll_enable_cc_pin(periph_t peri, timer_cc_t cc)
+{
+	assert(cc > TIMER_CC_0);
+
+	uint32_t pos;
+
+	if (cc > TIMER_CC_4) {
+		pos = (uint32_t)((uint32_t)cc - TIMER_CC_1N) * 4 + 2; /* CCxE */
+	} else {
+		pos = (uint32_t)((uint32_t)cc-1) * 4; /* CCxE */
+	}
+
+	bitop_set(&get_instance(peri)->CCER, pos);
+}
+
+void timer_ll_disable_cc_pin(periph_t peri, timer_cc_t cc)
+{
+	assert(cc > TIMER_CC_0);
+
+	uint32_t pos;
+
+	if (cc > TIMER_CC_4) {
+		pos = (uint32_t)((uint32_t)cc - TIMER_CC_1N) * 4 + 2; /* CCxE */
+	} else {
+		pos = (uint32_t)((uint32_t)cc-1) * 4; /* CCxE */
+	}
+
+	bitop_clear(&get_instance(peri)->CCER, pos);
+}
+
+void timer_ll_set_cc_polarity(periph_t peri, timer_cc_t cc, bool active_high)
+{
+	assert(cc > TIMER_CC_0);
+
+	uint32_t pos;
+
+	if (cc > TIMER_CC_4) {
+		pos = (uint32_t)((uint32_t)cc - TIMER_CC_1N) * 4 + 3; /* CCxP */
+	} else {
+		pos = (uint32_t)((uint32_t)cc-1) * 4 + 1; /* CCxP */
+	}
+
+	if (active_high) {
+		bitop_clear(&get_instance(peri)->CCER, pos);
+	} else {
+		bitop_set(&get_instance(peri)->CCER, pos);
+	}
+}
+
+void timer_ll_enable_cc_preload(periph_t peri, timer_cc_t cc)
+{
+	assert(cc > 0 && cc <= 4);
+
+	uint32_t pos = ((uint32_t)cc - 1) * 8 % 16 + 3; /* OCxPE */
+	if (cc <= TIMER_CC_2) {
+		bitop_set(&get_instance(peri)->CCMR1, pos);
+	} else {
+		bitop_set(&get_instance(peri)->CCMR2, pos);
+	}
+}
+
+void timer_ll_disable_cc_preload(periph_t peri, timer_cc_t cc)
+{
+	assert(cc > 0 && cc <= 4);
+
+	uint32_t pos = ((uint32_t)cc - 1) * 8 % 16 + 3; /* OCxPE */
+	if (cc <= TIMER_CC_2) {
+		bitop_clear(&get_instance(peri)->CCMR1, pos);
+	} else {
+		bitop_clear(&get_instance(peri)->CCMR2, pos);
+	}
+}
 #if 0
-void timer_ll_set_edge(periph_t peri, timer_edge_t edge);
-void timer_ll_set_polarity(periph_t peri, uint32_t level);
-set_pwm_mode() / cc_mode
-enable_cc_output(cc, mode)
+void timer_ll_enable_cc_fastmode(periph_t peri, timer_cc_t cc);
+void timer_ll_disable_cc_fastmode(periph_t peri, timer_cc_t cc);
+
+void timer_ll_set_ic_prescaler(periph_t peri, timer_cc_t cc, uint32_t value)
+void timer_ll_set_ic_filter(periph_t peri, timer_cc_t cc, uint32_t value)
+
+trigger
+dma
+encoder
+break & deadtime
+rcr
 #endif

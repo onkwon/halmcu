@@ -8,12 +8,15 @@ interface Timer {
 	stop()
 	clear_event()
 	get_event()
-	set_cc()
-	get_cc()
 	set_reload()
 	get_reload()
-	set_edge()
-	set_polarity()
+	set_cc()
+	get_cc()
+	set_cc_mode()
+	set_cc_pin()
+	enable_cc_pin()
+	disable_cc_pin()
+	set_cc_polarity()
 }
 
 class LL {
@@ -22,6 +25,7 @@ class LL {
 	set_prescaler()
 	enable_irq()
 	disable_irq()
+	get_frequency()
 	set_clock_divider()
 	set_counter()
 	get_counter()
@@ -33,9 +37,13 @@ class LL {
 	stop()
 	set_cc()
 	get_cc()
-	get_frequency()
-	set_edge()
-	set_polarity()
+	set_cc_mode()
+	set_cc_pin()
+	enable_cc_pin()
+	disable_cc_pin()
+	set_cc_polarity()
+	set_counter_direction()
+	set_counter_alignment_mode()
 }
 
 class HAL {

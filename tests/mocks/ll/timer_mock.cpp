@@ -60,18 +60,12 @@ uint32_t timer_ll_get_reload(periph_t peri)
 		.returnUnsignedIntValueOrDefault(0);
 }
 
-void timer_ll_set_polarity(periph_t peri, uint32_t level)
+void timer_ll_set_cc_polarity(periph_t peri, timer_cc_t cc, bool active_high)
 {
 	mock().actualCall(__func__)
 		.withParameter("peri", peri)
-		.withParameter("level", level);
-}
-
-void timer_ll_set_edge(periph_t peri, timer_edge_t edge)
-{
-	mock().actualCall(__func__)
-		.withParameter("peri", peri)
-		.withParameter("edge", edge);
+		.withParameter("cc", cc)
+		.withParameter("active_high", active_high);
 }
 
 void timer_ll_set_clock_divider(periph_t peri, uint32_t div_factor)
@@ -81,7 +75,7 @@ void timer_ll_set_clock_divider(periph_t peri, uint32_t div_factor)
 		.withParameter("div_factor", div_factor);
 }
 
-void timer_ll_set_cc(periph_t peri, uint32_t cc, uint32_t value)
+void timer_ll_set_cc(periph_t peri, timer_cc_t cc, uint32_t value)
 {
 	mock().actualCall(__func__)
 		.withParameter("peri", peri)
@@ -89,7 +83,7 @@ void timer_ll_set_cc(periph_t peri, uint32_t cc, uint32_t value)
 		.withParameter("value", value);
 }
 
-uint32_t timer_ll_get_cc(periph_t peri, uint32_t cc)
+uint32_t timer_ll_get_cc(periph_t peri, timer_cc_t cc)
 {
 	return mock().actualCall(__func__)
 		.withParameter("peri", peri)

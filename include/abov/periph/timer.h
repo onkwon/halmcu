@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "abov/periph/periph.h"
 
 /** Timer mode type */
@@ -15,6 +16,31 @@ typedef enum {
 	TIMER_MODE_ONESHOT,
 	TIMER_MODE_CAPTURE,
 } timer_mode_t;
+
+/** Timer pin type */
+typedef enum {
+	TIMER_CC_0,
+	TIMER_CC_1,
+	TIMER_CC_2,
+	TIMER_CC_3,
+	TIMER_CC_4,
+	TIMER_CC_1N,
+	TIMER_CC_2N,
+	TIMER_CC_3N,
+	TIMER_CC_4N,
+} timer_cc_t;
+
+/** Timer CC mode type */
+typedef enum {
+	TIMER_CC_MODE_NONE,
+	TIMER_CC_MODE_ACTIVE_HIGH,
+	TIMER_CC_MODE_ACTIVE_LOW,
+	TIMER_CC_MODE_TOGGLE,
+	TIMER_CC_MODE_LOW,
+	TIMER_CC_MODE_HIGH,
+	TIMER_CC_MODE_PWM_ACTIVE_HIGH,
+	TIMER_CC_MODE_PWM_ACTIVE_LOW,
+} timer_cc_mode_t;
 
 /** Timer event type */
 typedef enum {
@@ -29,12 +55,6 @@ typedef enum {
 	TIMER_EVENT_CC_4			= (1U << 6),
 	TIMER_EVENT_UPDATE			= (1U << 7),
 } timer_event_t;
-
-/** Timer edge type */
-typedef enum {
-	TIMER_RISING_EDGE,
-	TIMER_FALLING_EDGE,
-} timer_edge_t;
 
 typedef enum {
 	TIMER_DIRECTION_UP,
@@ -74,7 +94,7 @@ timer_event_t timer_get_event(periph_t peri);
  * @param[in] cc a number of capture/compare channel
  * @param[in] value to be written to the capture/compare register
  */
-void timer_set_cc(periph_t peri, uint32_t cc, uint32_t value);
+void timer_set_cc(periph_t peri, timer_cc_t cc, uint32_t value);
 /**
  * @brief Get Capture/Compare register
  *
@@ -82,7 +102,7 @@ void timer_set_cc(periph_t peri, uint32_t cc, uint32_t value);
  * @param[in] cc a number of capture/compare channel
  * @return capture/compare value
  */
-uint32_t timer_get_cc(periph_t peri, uint32_t cc);
+uint32_t timer_get_cc(periph_t peri, timer_cc_t cc);
 /**
  * @brief Set the timer period
  *
@@ -97,8 +117,8 @@ void timer_set_reload(periph_t peri, uint32_t value);
  * @return timer period
  */
 uint32_t timer_get_reload(periph_t peri);
-void timer_set_edge(periph_t peri, timer_edge_t edge);
-void timer_set_polarity(periph_t peri, uint32_t level);
+
+void timer_set_cc_polarity(periph_t peri, timer_cc_t cc, bool active_high);
 
 #if defined(__cplusplus)
 }

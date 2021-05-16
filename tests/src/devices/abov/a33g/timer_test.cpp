@@ -137,21 +137,21 @@ TEST(Timer, stop_ShouldClearTEN) {
 }
 
 TEST(Timer, set_cc_ShouldSetCompareRegister) {
-	timer_ll_set_cc(PERIPH_TIMER0, 0, 1234);
+	timer_ll_set_cc(PERIPH_TIMER0, TIMER_CC_0, 1234);
 	LONGS_EQUAL(1234, T0->GRA);
-	timer_ll_set_cc(PERIPH_TIMER1, 1, 5678);
+	timer_ll_set_cc(PERIPH_TIMER1, TIMER_CC_1, 5678);
 	LONGS_EQUAL(5678, T1->GRB);
 }
 
 TEST(Timer, get_cc_ShouldReturnCaptureRegister) {
 	T0->GRA = 0xa5a5;
 	T0->GRB = 0x5a5a;
-	LONGS_EQUAL(0xa5a5, timer_ll_get_cc(PERIPH_TIMER0, 0));
-	LONGS_EQUAL(0x5a5a, timer_ll_get_cc(PERIPH_TIMER0, 1));
+	LONGS_EQUAL(0xa5a5, timer_ll_get_cc(PERIPH_TIMER0, TIMER_CC_0));
+	LONGS_EQUAL(0x5a5a, timer_ll_get_cc(PERIPH_TIMER0, TIMER_CC_1));
 }
 
 TEST(Timer, get_cc_ShouldReturnZero_WhenUnsupportedChannelGiven) {
-	LONGS_EQUAL(0, timer_ll_get_cc(PERIPH_TIMER2, 0));
+	LONGS_EQUAL(0, timer_ll_get_cc(PERIPH_TIMER2, TIMER_CC_0));
 }
 
 TEST(Timer, set_counter_ShouldSetCnt) {
@@ -179,16 +179,9 @@ TEST(Timer, get_event_ShouldReturnCurrentFlags) {
 }
 
 TEST(Timer, set_polarity_ShouldSetTstrt) {
-	timer_ll_set_polarity(PERIPH_TIMER0, 1);
+	timer_ll_set_cc_polarity(PERIPH_TIMER0, TIMER_CC_0, 1);
 	LONGS_EQUAL(0x80, T0->CON);
-	timer_ll_set_polarity(PERIPH_TIMER0, 0);
-	LONGS_EQUAL(0, T0->CON);
-}
-
-TEST(Timer, set_edge_ShouldSetCapm) {
-	timer_ll_set_edge(PERIPH_TIMER0, TIMER_FALLING_EDGE);
-	LONGS_EQUAL(8, T0->CON);
-	timer_ll_set_edge(PERIPH_TIMER0, TIMER_RISING_EDGE);
+	timer_ll_set_cc_polarity(PERIPH_TIMER0, TIMER_CC_0, 0);
 	LONGS_EQUAL(0, T0->CON);
 }
 
@@ -207,3 +200,12 @@ TEST(Timer, get_frequency_ShouldReturnZero_WhenTCSIs6) {
 	T0->CON = 6U << 4;
 	LONGS_EQUAL(0, timer_ll_get_frequency(PERIPH_TIMER0, tclk));
 }
+
+#if 0
+IGNORE_TEST(Timer, set_edge_ShouldSetCapm) {
+	timer_ll_set_edge(PERIPH_TIMER0, TIMER_FALLING_EDGE);
+	LONGS_EQUAL(8, T0->CON);
+	timer_ll_set_edge(PERIPH_TIMER0, TIMER_RISING_EDGE);
+	LONGS_EQUAL(0, T0->CON);
+}
+#endif
