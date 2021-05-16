@@ -204,17 +204,3 @@ TEST(Timer, get_frequency_ShouldReturnZero_WhenTCSIs6) {
 	T0->CON = 6U << 4;
 	LONGS_EQUAL(0, timer_ll_get_frequency(PERIPH_TIMER0, tclk));
 }
-
-TEST(Timer, dummy_set_cc_mode) {}
-TEST(Timer, dummy_set_cc_pin) {}
-TEST(Timer, dummy_enable_cc_pin) {}
-TEST(Timer, dummy_disable_cc_pin) {}
-
-#if 0
-IGNORE_TEST(Timer, set_edge_ShouldSetCapm) {
-	timer_ll_set_edge(PERIPH_TIMER0, TIMER_FALLING_EDGE);
-	LONGS_EQUAL(8, T0->CON);
-	timer_ll_set_edge(PERIPH_TIMER0, TIMER_RISING_EDGE);
-	LONGS_EQUAL(0, T0->CON);
-}
-#endif
