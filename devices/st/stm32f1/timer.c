@@ -47,15 +47,20 @@ void timer_ll_reset(periph_t peri)
 		pos = 11;
 		break;
 	case PERIPH_TIM7:
-		pos++; /* fall through */
+		pos++;
+		/* fall through */
 	case PERIPH_TIM6:
-		pos++; /* fall through */
+		pos++;
+		/* fall through */
 	case PERIPH_TIM5:
-		pos++; /* fall through */
+		pos++;
+		/* fall through */
 	case PERIPH_TIM4:
-		pos++; /* fall through */
+		pos++;
+		/* fall through */
 	case PERIPH_TIM3:
-		pos++; /* fall through */
+		pos++;
+		/* fall through */
 	case PERIPH_TIM2:
 		break;
 	default:
@@ -74,9 +79,12 @@ void timer_ll_set_mode(periph_t peri, timer_mode_t mode)
 
 	switch (mode) {
 	case TIMER_MODE_ONESHOT:
-		bitop_set(&instance->CR1, 3/*OPM*/); /* fall through */
-	case TIMER_MODE_PWM: /* fall through */
-	case TIMER_MODE_CAPTURE: /* fall through */
+		bitop_set(&instance->CR1, 3); /* OPM */
+		/* fall through */
+	case TIMER_MODE_PWM:
+		/* fall through */
+	case TIMER_MODE_CAPTURE:
+		/* fall through */
 	case TIMER_MODE_NORMAL: /* edge aligned */
 		bitop_clean_set_with_mask(&instance->CR1, 5, 3, 0);
 		/* fall through */
