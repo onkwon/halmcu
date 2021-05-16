@@ -77,8 +77,8 @@ uint32_t timer_ll_get_cc(periph_t peri, timer_cc_t cc);
 
 void timer_ll_enable_cc_pin(periph_t peri, timer_cc_t cc);
 void timer_ll_disable_cc_pin(periph_t peri, timer_cc_t cc);
-void timer_ll_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode);
 void timer_ll_set_cc_pin(periph_t peri, timer_cc_t cc, uint32_t value);
+void timer_ll_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode);
 void timer_ll_set_cc_pin_polarity(periph_t peri, timer_cc_t cc, bool active_high);
 
 void timer_ll_enable_cc_preload(periph_t peri, timer_cc_t cc);
