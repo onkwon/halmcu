@@ -46,16 +46,16 @@ void timer_ll_reset(periph_t peri)
 		rstr = &RCC->APB2RSTR;
 		pos = 11;
 		break;
-	case PERIPH_TIM7:
-		pos++; /* fall through */
-	case PERIPH_TIM6:
-		pos++; /* fall through */
-	case PERIPH_TIM5:
-		pos++; /* fall through */
-	case PERIPH_TIM4:
-		pos++; /* fall through */
-	case PERIPH_TIM3:
-		pos++; /* fall through */
+	case PERIPH_TIM7: /* fall through */
+		pos++;
+	case PERIPH_TIM6: /* fall through */
+		pos++;
+	case PERIPH_TIM5: /* fall through */
+		pos++;
+	case PERIPH_TIM4: /* fall through */
+		pos++;
+	case PERIPH_TIM3: /* fall through */
+		pos++;
 	case PERIPH_TIM2:
 		break;
 	default:
