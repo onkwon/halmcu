@@ -289,3 +289,21 @@ TEST(Timer, disable_cc_preload_ShouldClearCCMR) {
 	timer_ll_disable_cc_preload(PERIPH_TIM1, TIMER_CC_3);
 	LONGS_EQUAL(0xff7, TIM1->CCMR2);
 }
+
+TEST(Timer, enable_cc_fastmode_ShouldSetCCMR) {
+	timer_ll_enable_cc_fastmode(PERIPH_TIM1, TIMER_CC_1);
+	LONGS_EQUAL(4, TIM1->CCMR1);
+	timer_ll_enable_cc_fastmode(PERIPH_TIM1, TIMER_CC_2);
+	LONGS_EQUAL(0x404, TIM1->CCMR1);
+	timer_ll_enable_cc_fastmode(PERIPH_TIM1, TIMER_CC_3);
+	LONGS_EQUAL(4, TIM1->CCMR2);
+}
+TEST(Timer, disable_cc_fastmode_ShouldClearCCMR) {
+	TIM1->CCMR1 = TIM1->CCMR2 = 0xfff;
+	timer_ll_disable_cc_fastmode(PERIPH_TIM1, TIMER_CC_1);
+	LONGS_EQUAL(0xffb, TIM1->CCMR1);
+	timer_ll_disable_cc_fastmode(PERIPH_TIM1, TIMER_CC_2);
+	LONGS_EQUAL(0xbfb, TIM1->CCMR1);
+	timer_ll_disable_cc_fastmode(PERIPH_TIM1, TIMER_CC_3);
+	LONGS_EQUAL(0xffb, TIM1->CCMR2);
+}

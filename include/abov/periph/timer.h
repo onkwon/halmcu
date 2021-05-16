@@ -132,14 +132,6 @@ void timer_enable_cc_pin(periph_t peri, timer_cc_t cc);
  */
 void timer_disable_cc_pin(periph_t peri, timer_cc_t cc);
 /**
- * @brief Set Capture/Compare pin mode
- *
- * @param[in] peri a peripheral enumerated in @ref periph_t
- * @param[in] cc a number of capture/compare channel @ref timer_cc_t
- * @param[in] mode capture/compare output mode in @ref timer_cc_mode_t
- */
-void timer_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode);
-/**
  * @brief Set Capture/Compare pin map
  *
  * @param[in] peri a peripheral enumerated in @ref periph_t
@@ -147,6 +139,14 @@ void timer_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode);
  * @param[in] value 0 for output, 1 for TI1, 2 for TI2, and 3 for TRC
  */
 void timer_set_cc_pin(periph_t peri, timer_cc_t cc, uint32_t value);
+/**
+ * @brief Set Capture/Compare pin mode
+ *
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @param[in] cc a number of capture/compare channel @ref timer_cc_t
+ * @param[in] mode capture/compare output mode in @ref timer_cc_mode_t
+ */
+void timer_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode);
 /**
  * @brief Set Capture/Compare polarity
  *

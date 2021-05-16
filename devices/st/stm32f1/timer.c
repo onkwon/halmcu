@@ -390,10 +390,32 @@ void timer_ll_disable_cc_preload(periph_t peri, timer_cc_t cc)
 		bitop_clear(&get_instance(peri)->CCMR2, pos);
 	}
 }
-#if 0
-void timer_ll_enable_cc_fastmode(periph_t peri, timer_cc_t cc);
-void timer_ll_disable_cc_fastmode(periph_t peri, timer_cc_t cc);
 
+void timer_ll_enable_cc_fastmode(periph_t peri, timer_cc_t cc)
+{
+	assert(cc > 0 && cc <= 4);
+
+	uint32_t pos = ((uint32_t)cc - 1) * 8 % 16 + 2; /* OCxFE */
+	if (cc <= TIMER_CC_2) {
+		bitop_set(&get_instance(peri)->CCMR1, pos);
+	} else {
+		bitop_set(&get_instance(peri)->CCMR2, pos);
+	}
+}
+
+void timer_ll_disable_cc_fastmode(periph_t peri, timer_cc_t cc)
+{
+	assert(cc > 0 && cc <= 4);
+
+	uint32_t pos = ((uint32_t)cc - 1) * 8 % 16 + 2; /* OCxFE */
+	if (cc <= TIMER_CC_2) {
+		bitop_clear(&get_instance(peri)->CCMR1, pos);
+	} else {
+		bitop_clear(&get_instance(peri)->CCMR2, pos);
+	}
+}
+
+#if 0
 void timer_ll_set_ic_prescaler(periph_t peri, timer_cc_t cc, uint32_t value)
 void timer_ll_set_ic_filter(periph_t peri, timer_cc_t cc, uint32_t value)
 
