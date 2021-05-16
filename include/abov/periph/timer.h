@@ -88,6 +88,20 @@ void timer_clear_event(periph_t peri, timer_event_t events);
  */
 timer_event_t timer_get_event(periph_t peri);
 /**
+ * @brief Set the timer period
+ *
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @param[in] value to be written
+ */
+void timer_set_reload(periph_t peri, uint32_t value);
+/**
+ * @brief Get the timer period
+ *
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @return timer period
+ */
+uint32_t timer_get_reload(periph_t peri);
+/**
  * @brief Set Capture/Compare register
  *
  * @param[in] peri a peripheral enumerated in @ref periph_t
@@ -104,21 +118,43 @@ void timer_set_cc(periph_t peri, timer_cc_t cc, uint32_t value);
  */
 uint32_t timer_get_cc(periph_t peri, timer_cc_t cc);
 /**
- * @brief Set the timer period
+ * @brief Enable Capture/Compare pin
  *
  * @param[in] peri a peripheral enumerated in @ref periph_t
- * @param[in] value to be written
+ * @param[in] cc a number of capture/compare channel @ref timer_cc_t
  */
-void timer_set_reload(periph_t peri, uint32_t value);
+void timer_enable_cc_pin(periph_t peri, timer_cc_t cc);
 /**
- * @brief Get the timer period
+ * @brief Disable Capture/Compare pin
  *
  * @param[in] peri a peripheral enumerated in @ref periph_t
- * @return timer period
+ * @param[in] cc a number of capture/compare channel @ref timer_cc_t
  */
-uint32_t timer_get_reload(periph_t peri);
-
-void timer_set_cc_polarity(periph_t peri, timer_cc_t cc, bool active_high);
+void timer_disable_cc_pin(periph_t peri, timer_cc_t cc);
+/**
+ * @brief Set Capture/Compare pin mode
+ *
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @param[in] cc a number of capture/compare channel @ref timer_cc_t
+ * @param[in] mode capture/compare output mode in @ref timer_cc_mode_t
+ */
+void timer_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode);
+/**
+ * @brief Set Capture/Compare pin map
+ *
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @param[in] cc a number of capture/compare channel @ref timer_cc_t
+ * @param[in] value 0 for output, 1 for TI1, 2 for TI2, and 3 for TRC
+ */
+void timer_set_cc_pin(periph_t peri, timer_cc_t cc, uint32_t value);
+/**
+ * @brief Set Capture/Compare polarity
+ *
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @param[in] cc a number of capture/compare channel @ref timer_cc_t
+ * @param[in] active_high active high on true
+ */
+void timer_set_cc_pin_polarity(periph_t peri, timer_cc_t cc, bool active_high);
 
 #if defined(__cplusplus)
 }

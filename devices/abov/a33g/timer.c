@@ -184,11 +184,37 @@ uint32_t timer_ll_get_frequency(periph_t peri, uint32_t tclk)
 	return tclk;
 }
 
-void timer_ll_set_cc_polarity(periph_t peri, timer_cc_t cc, bool active_high)
+void timer_ll_set_cc_pin_polarity(periph_t peri, timer_cc_t cc, bool active_high)
 {
 	unused(cc);
 	bitop_clean_set_with_mask(&get_instance(peri)->CON,
 			7, 1U, active_high); /* TSTRT */
+}
+
+void timer_ll_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode)
+{
+	unused(peri);
+	unused(cc);
+	unused(mode);
+}
+
+void timer_ll_set_cc_pin(periph_t peri, timer_cc_t cc, uint32_t value)
+{
+	unused(peri);
+	unused(cc);
+	unused(value);
+}
+
+void timer_ll_enable_cc_pin(periph_t peri, timer_cc_t cc)
+{
+	unused(peri);
+	unused(cc);
+}
+
+void timer_ll_disable_cc_pin(periph_t peri, timer_cc_t cc)
+{
+	unused(peri);
+	unused(cc);
 }
 
 #if 0

@@ -71,22 +71,23 @@ timer_event_t timer_ll_get_event(periph_t peri);
 void timer_ll_start(periph_t peri);
 void timer_ll_stop(periph_t peri);
 uint32_t timer_ll_get_frequency(periph_t peri, uint32_t tclk);
-void timer_ll_set_counter_direction(periph_t peri, timer_direction_t dir);
-void timer_ll_set_counter_alignment_mode(periph_t peri, uint32_t align);
 
-void timer_ll_set_cc_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode);
 void timer_ll_set_cc(periph_t peri, timer_cc_t cc, uint32_t value);
 uint32_t timer_ll_get_cc(periph_t peri, timer_cc_t cc);
 
-void timer_ll_set_cc_pin(periph_t peri, timer_cc_t cc, uint32_t value);
-void timer_ll_set_cc_polarity(periph_t peri, timer_cc_t cc, bool active_high);
 void timer_ll_enable_cc_pin(periph_t peri, timer_cc_t cc);
 void timer_ll_disable_cc_pin(periph_t peri, timer_cc_t cc);
+void timer_ll_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode);
+void timer_ll_set_cc_pin(periph_t peri, timer_cc_t cc, uint32_t value);
+void timer_ll_set_cc_pin_polarity(periph_t peri, timer_cc_t cc, bool active_high);
 
 void timer_ll_enable_cc_preload(periph_t peri, timer_cc_t cc);
 void timer_ll_disable_cc_preload(periph_t peri, timer_cc_t cc);
 void timer_ll_enable_cc_fastmode(periph_t peri, timer_cc_t cc);
 void timer_ll_disable_cc_fastmode(periph_t peri, timer_cc_t cc);
+
+void timer_ll_set_counter_direction(periph_t peri, timer_direction_t dir);
+void timer_ll_set_counter_alignment_mode(periph_t peri, uint32_t align);
 
 #if defined(__cplusplus)
 }

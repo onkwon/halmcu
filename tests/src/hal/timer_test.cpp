@@ -148,9 +148,36 @@ TEST(Timer, get_event_ShouldReturnEvents) {
 	LONGS_EQUAL(TIMER_EVENT_CC_0, timer_get_event(PERIPH_TIMER0));
 }
 TEST(Timer, set_polarity_ShouldSetPolarityRegister) {
-	mock().expectOneCall("timer_ll_set_cc_polarity")
+	mock().expectOneCall("timer_ll_set_cc_pin_polarity")
 		.withParameter("peri", PERIPH_TIMER0)
 		.withParameter("cc", TIMER_CC_1)
 		.withParameter("active_high", true);
-	timer_set_cc_polarity(PERIPH_TIMER0, TIMER_CC_1, 1);
+	timer_set_cc_pin_polarity(PERIPH_TIMER0, TIMER_CC_1, true);
+}
+
+TEST(Timer, set_cc_mode_ShouldCallLowLevelFunc) {
+	mock().expectOneCall("timer_ll_set_cc_pin_mode")
+		.withParameter("peri", PERIPH_TIMER0)
+		.withParameter("cc", TIMER_CC_0)
+		.withParameter("mode", TIMER_CC_MODE_ACTIVE_LOW);
+	timer_set_cc_pin_mode(PERIPH_TIMER0, TIMER_CC_0, TIMER_CC_MODE_ACTIVE_LOW);
+}
+TEST(Timer, enable_cc_pin_ShouldCallLowLevelFunc) {
+	mock().expectOneCall("timer_ll_enable_cc_pin")
+		.withParameter("peri", PERIPH_TIMER0)
+		.withParameter("cc", TIMER_CC_0);
+	timer_enable_cc_pin(PERIPH_TIMER0, TIMER_CC_0);
+}
+TEST(Timer, disable_cc_pin_ShouldCallLowLevelFunc) {
+	mock().expectOneCall("timer_ll_disable_cc_pin")
+		.withParameter("peri", PERIPH_TIMER0)
+		.withParameter("cc", TIMER_CC_0);
+	timer_disable_cc_pin(PERIPH_TIMER0, TIMER_CC_0);
+}
+TEST(Timer, set_cc_pin_ShouldCallLowLevelFunc) {
+	mock().expectOneCall("timer_ll_set_cc_pin")
+		.withParameter("peri", PERIPH_TIMER0)
+		.withParameter("cc", TIMER_CC_0)
+		.withParameter("value", 3);
+	timer_set_cc_pin(PERIPH_TIMER0, TIMER_CC_0, 3);
 }

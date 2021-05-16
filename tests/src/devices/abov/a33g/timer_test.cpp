@@ -179,9 +179,9 @@ TEST(Timer, get_event_ShouldReturnCurrentFlags) {
 }
 
 TEST(Timer, set_polarity_ShouldSetTstrt) {
-	timer_ll_set_cc_polarity(PERIPH_TIMER0, TIMER_CC_0, 1);
+	timer_ll_set_cc_pin_polarity(PERIPH_TIMER0, TIMER_CC_0, 1);
 	LONGS_EQUAL(0x80, T0->CON);
-	timer_ll_set_cc_polarity(PERIPH_TIMER0, TIMER_CC_0, 0);
+	timer_ll_set_cc_pin_polarity(PERIPH_TIMER0, TIMER_CC_0, 0);
 	LONGS_EQUAL(0, T0->CON);
 }
 
@@ -200,6 +200,11 @@ TEST(Timer, get_frequency_ShouldReturnZero_WhenTCSIs6) {
 	T0->CON = 6U << 4;
 	LONGS_EQUAL(0, timer_ll_get_frequency(PERIPH_TIMER0, tclk));
 }
+
+TEST(Timer, dummy_set_cc_mode) {}
+TEST(Timer, dummy_set_cc_pin) {}
+TEST(Timer, dummy_enable_cc_pin) {}
+TEST(Timer, dummy_disable_cc_pin) {}
 
 #if 0
 IGNORE_TEST(Timer, set_edge_ShouldSetCapm) {

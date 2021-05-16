@@ -60,7 +60,7 @@ uint32_t timer_ll_get_reload(periph_t peri)
 		.returnUnsignedIntValueOrDefault(0);
 }
 
-void timer_ll_set_cc_polarity(periph_t peri, timer_cc_t cc, bool active_high)
+void timer_ll_set_cc_pin_polarity(periph_t peri, timer_cc_t cc, bool active_high)
 {
 	mock().actualCall(__func__)
 		.withParameter("peri", peri)
@@ -103,4 +103,48 @@ timer_event_t timer_ll_get_event(periph_t peri)
 	return (timer_event_t)mock().actualCall(__func__)
 		.withParameter("peri", peri)
 		.returnUnsignedIntValueOrDefault(0);
+}
+
+void timer_ll_enable_cc_pin(periph_t peri, timer_cc_t cc)
+{
+	mock().actualCall(__func__)
+		.withParameter("peri", peri)
+		.withParameter("cc", cc);
+}
+
+void timer_ll_disable_cc_pin(periph_t peri, timer_cc_t cc)
+{
+	mock().actualCall(__func__)
+		.withParameter("peri", peri)
+		.withParameter("cc", cc);
+}
+
+void timer_ll_enable_cc_preload(periph_t peri, timer_cc_t cc)
+{
+	mock().actualCall(__func__)
+		.withParameter("peri", peri)
+		.withParameter("cc", cc);
+}
+
+void timer_ll_disable_cc_preload(periph_t peri, timer_cc_t cc)
+{
+	mock().actualCall(__func__)
+		.withParameter("peri", peri)
+		.withParameter("cc", cc);
+}
+
+void timer_ll_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode)
+{
+	mock().actualCall(__func__)
+		.withParameter("peri", peri)
+		.withParameter("cc", cc)
+		.withParameter("mode", mode);
+}
+
+void timer_ll_set_cc_pin(periph_t peri, timer_cc_t cc, uint32_t value)
+{
+	mock().actualCall(__func__)
+		.withParameter("peri", peri)
+		.withParameter("cc", cc)
+		.withParameter("value", value);
 }

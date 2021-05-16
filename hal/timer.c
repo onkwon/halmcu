@@ -71,16 +71,6 @@ uint32_t timer_get_reload(periph_t peri)
 	return timer_ll_get_reload(peri);
 }
 
-void timer_set_cc(periph_t peri, timer_cc_t cc, uint32_t value)
-{
-	timer_ll_set_cc(peri, cc, value);
-}
-
-uint32_t timer_get_cc(periph_t peri, timer_cc_t cc)
-{
-	return timer_ll_get_cc(peri, cc);
-}
-
 void timer_clear_event(periph_t peri, timer_event_t events)
 {
 	timer_ll_clear_event(peri, events);
@@ -91,7 +81,37 @@ timer_event_t timer_get_event(periph_t peri)
 	return timer_ll_get_event(peri);
 }
 
-void timer_set_cc_polarity(periph_t peri, timer_cc_t cc, bool active_high)
+void timer_set_cc(periph_t peri, timer_cc_t cc, uint32_t value)
 {
-	timer_ll_set_cc_polarity(peri, cc, active_high);
+	timer_ll_set_cc(peri, cc, value);
+}
+
+uint32_t timer_get_cc(periph_t peri, timer_cc_t cc)
+{
+	return timer_ll_get_cc(peri, cc);
+}
+
+void timer_enable_cc_pin(periph_t peri, timer_cc_t cc)
+{
+	timer_ll_enable_cc_pin(peri, cc);
+}
+
+void timer_disable_cc_pin(periph_t peri, timer_cc_t cc)
+{
+	timer_ll_disable_cc_pin(peri, cc);
+}
+
+void timer_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode)
+{
+	timer_ll_set_cc_pin_mode(peri, cc, mode);
+}
+
+void timer_set_cc_pin(periph_t peri, timer_cc_t cc, uint32_t value)
+{
+	timer_ll_set_cc_pin(peri, cc, value);
+}
+
+void timer_set_cc_pin_polarity(periph_t peri, timer_cc_t cc, bool active_high)
+{
+	timer_ll_set_cc_pin_polarity(peri, cc, active_high);
 }

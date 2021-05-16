@@ -290,7 +290,7 @@ void timer_ll_set_counter_alignment_mode(periph_t peri, uint32_t align)
 	bitop_clean_set_with_mask(&get_instance(peri)->CR1, 5, 3, align);
 }
 
-void timer_ll_set_cc_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode)
+void timer_ll_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode)
 {
 	assert(cc >= TIMER_CC_1 && cc <= TIMER_CC_4);
 
@@ -348,7 +348,7 @@ void timer_ll_disable_cc_pin(periph_t peri, timer_cc_t cc)
 	bitop_clear(&get_instance(peri)->CCER, pos);
 }
 
-void timer_ll_set_cc_polarity(periph_t peri, timer_cc_t cc, bool active_high)
+void timer_ll_set_cc_pin_polarity(periph_t peri, timer_cc_t cc, bool active_high)
 {
 	assert(cc > TIMER_CC_0);
 

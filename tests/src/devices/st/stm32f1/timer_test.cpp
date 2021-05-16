@@ -212,26 +212,26 @@ TEST(Timer, set_counter_alignment_mode_ShouldSetCR1) {
 }
 
 TEST(Timer, set_cc_mode_ShouldSetCCMR_WhenToggleGiven) {
-	timer_ll_set_cc_mode(PERIPH_TIM1, TIMER_CC_1, TIMER_CC_MODE_TOGGLE);
+	timer_ll_set_cc_pin_mode(PERIPH_TIM1, TIMER_CC_1, TIMER_CC_MODE_TOGGLE);
 	LONGS_EQUAL(0x30, TIM1->CCMR1);
-	timer_ll_set_cc_mode(PERIPH_TIM1, TIMER_CC_2, TIMER_CC_MODE_TOGGLE);
+	timer_ll_set_cc_pin_mode(PERIPH_TIM1, TIMER_CC_2, TIMER_CC_MODE_TOGGLE);
 	LONGS_EQUAL(0x3030, TIM1->CCMR1);
-	timer_ll_set_cc_mode(PERIPH_TIM1, TIMER_CC_3, TIMER_CC_MODE_TOGGLE);
+	timer_ll_set_cc_pin_mode(PERIPH_TIM1, TIMER_CC_3, TIMER_CC_MODE_TOGGLE);
 	LONGS_EQUAL(0x30, TIM1->CCMR2);
-	timer_ll_set_cc_mode(PERIPH_TIM1, TIMER_CC_4, TIMER_CC_MODE_TOGGLE);
+	timer_ll_set_cc_pin_mode(PERIPH_TIM1, TIMER_CC_4, TIMER_CC_MODE_TOGGLE);
 	LONGS_EQUAL(0x3030, TIM1->CCMR2);
 }
 TEST(Timer, set_cc_mode_ShouldSetCCMR_WhenPwmActiveHighGiven) {
-	timer_ll_set_cc_mode(PERIPH_TIM1, TIMER_CC_1,
+	timer_ll_set_cc_pin_mode(PERIPH_TIM1, TIMER_CC_1,
 			TIMER_CC_MODE_PWM_ACTIVE_HIGH);
 	LONGS_EQUAL(0x60, TIM1->CCMR1);
-	timer_ll_set_cc_mode(PERIPH_TIM1, TIMER_CC_2,
+	timer_ll_set_cc_pin_mode(PERIPH_TIM1, TIMER_CC_2,
 			TIMER_CC_MODE_PWM_ACTIVE_HIGH);
 	LONGS_EQUAL(0x6060, TIM1->CCMR1);
-	timer_ll_set_cc_mode(PERIPH_TIM1, TIMER_CC_3,
+	timer_ll_set_cc_pin_mode(PERIPH_TIM1, TIMER_CC_3,
 			TIMER_CC_MODE_PWM_ACTIVE_HIGH);
 	LONGS_EQUAL(0x60, TIM1->CCMR2);
-	timer_ll_set_cc_mode(PERIPH_TIM1, TIMER_CC_4,
+	timer_ll_set_cc_pin_mode(PERIPH_TIM1, TIMER_CC_4,
 			TIMER_CC_MODE_PWM_ACTIVE_HIGH);
 	LONGS_EQUAL(0x6060, TIM1->CCMR2);
 }
@@ -262,13 +262,13 @@ TEST(Timer, disable_cc_pin_ShouldClearCCER) {
 }
 
 TEST(Timer, set_cc_polarity_ShouldSetCCER) {
-	timer_ll_set_cc_polarity(PERIPH_TIM1, TIMER_CC_1, 0);
+	timer_ll_set_cc_pin_polarity(PERIPH_TIM1, TIMER_CC_1, 0);
 	LONGS_EQUAL(2, TIM1->CCER);
-	timer_ll_set_cc_polarity(PERIPH_TIM1, TIMER_CC_1, 1);
+	timer_ll_set_cc_pin_polarity(PERIPH_TIM1, TIMER_CC_1, 1);
 	LONGS_EQUAL(0, TIM1->CCER);
-	timer_ll_set_cc_polarity(PERIPH_TIM1, TIMER_CC_2N, 0);
+	timer_ll_set_cc_pin_polarity(PERIPH_TIM1, TIMER_CC_2N, 0);
 	LONGS_EQUAL(0x80, TIM1->CCER);
-	timer_ll_set_cc_polarity(PERIPH_TIM1, TIMER_CC_3, 0);
+	timer_ll_set_cc_pin_polarity(PERIPH_TIM1, TIMER_CC_3, 0);
 	LONGS_EQUAL(0x280, TIM1->CCER);
 }
 

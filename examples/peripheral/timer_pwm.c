@@ -70,9 +70,9 @@ static void pwm_timer_init(void)
 			.frequency = 100000,
 			.set_clock_source = set_target_timer_clock_source,
 			});
-	timer_set_polarity(PERIPH_TIMER0, 1); // set high when timer gets zero
-	timer_set_cc(PERIPH_TIMER0, 1, 2000 - 1); // GRB: period, 50hz
-	timer_set_cc(PERIPH_TIMER0, 0, 100 - 1); // GRA: duty, 1.5ms
+	timer_set_cc_pin_polarity(PERIPH_TIMER0, TIMER_CC_0, 1); // set high when timer gets zero
+	timer_set_cc(PERIPH_TIMER0, TIMER_CC_1, 2000 - 1); // GRB: period, 50hz
+	timer_set_cc(PERIPH_TIMER0, TIMER_CC_0, 100 - 1); // GRA: duty, 1.5ms
 
 	timer_start(PERIPH_TIMER0);
 }
@@ -88,7 +88,7 @@ int main(void)
 	while (1) {
 		/* hang */
 		for (uint32_t i = 60; i < 280; i++) {
-			timer_set_cc(PERIPH_TIMER0, 0, i); // GRA: duty, 1.5ms
+			timer_set_cc(PERIPH_TIMER0, TIMER_CC_0, i); // GRA: duty, 1.5ms
 			udelay(100000);
 		}
 		udelay(5000000);
