@@ -105,7 +105,7 @@ Please refer to a [custom build example](examples/custom-build).
 | RTC        |        | ❌   |      |      |       |    |    |
 | SDIO       |        | ❌   |      |      |       |    |    |
 | SPI        |        | ✅   |      |      |       |    |    |
-| Timer      |        | ✅   |      |      |       |    |    |
+| Timer      |        | ✅   |      |      | ✅    |    |    |
 | UART       |        | ✅   |      |      | ✅    |    |    |
 | USB        |        | ❌   |      |      |       |    |    |
 | WDT        |        | ✅   |      |      | ✅    |    |    |

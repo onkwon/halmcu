@@ -7,6 +7,11 @@ extern "C" {
 
 #include <stdint.h>
 
+#define PERIPHERAL_BASE			(0x40000000U)
+#define APB1_BASE			(PERIPHERAL_BASE + 0)
+#define APB2_BASE			(PERIPHERAL_BASE + 0x10000U)
+#define AHB_BASE			(PERIPHERAL_BASE + 0x20000U)
+
 typedef struct {
 	volatile uint32_t IDCODE;
 	volatile uint32_t CR;
@@ -94,6 +99,29 @@ typedef struct {
 	volatile uint32_t DR;
 } ADC_Type;
 
+typedef struct {
+	volatile uint32_t CR1;
+	volatile uint32_t CR2;
+	volatile uint32_t SMCR;
+	volatile uint32_t DIER;
+	volatile uint32_t SR;
+	volatile uint32_t EGR;
+	volatile uint32_t CCMR1;
+	volatile uint32_t CCMR2;
+	volatile uint32_t CCER;
+	volatile uint32_t CNT;
+	volatile uint32_t PSC;
+	volatile uint32_t ARR;
+	volatile uint32_t RCR;
+	volatile uint32_t CCR1;
+	volatile uint32_t CCR2;
+	volatile uint32_t CCR3;
+	volatile uint32_t CCR4;
+	volatile uint32_t BDTR;
+	volatile uint32_t DCR;
+	volatile uint32_t DMAR;
+} TIM_Type;
+
 extern DBGMCU_Type * const DBGMCU;
 
 extern SYSCFG_Type * const SYSCFG;
@@ -119,6 +147,21 @@ extern IWDT_Type * const IWDT;
 extern ADC_Type * const ADC1;
 extern ADC_Type * const ADC2;
 extern ADC_Type * const ADC3;
+
+extern TIM_Type * const TIM1;
+extern TIM_Type * const TIM2;
+extern TIM_Type * const TIM3;
+extern TIM_Type * const TIM4;
+extern TIM_Type * const TIM5;
+extern TIM_Type * const TIM6;
+extern TIM_Type * const TIM7;
+extern TIM_Type * const TIM8;
+extern TIM_Type * const TIM9;
+extern TIM_Type * const TIM10;
+extern TIM_Type * const TIM11;
+extern TIM_Type * const TIM12;
+extern TIM_Type * const TIM13;
+extern TIM_Type * const TIM14;
 
 #if defined(__cplusplus)
 }

@@ -14,9 +14,13 @@ struct pmu_stub * const PMU = &reg;
 
 TEST_GROUP(Clock) {
 	void setup(void) {
+		mock().ignoreOtherCalls();
+
 		clk_reset();
 	}
 	void teardown(void) {
+		mock().checkExpectations();
+		mock().clear();
 	}
 };
 

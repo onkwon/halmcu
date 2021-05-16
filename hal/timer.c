@@ -8,7 +8,7 @@
 
 static void set_frequency(periph_t timer, const struct timer_cfg *cfg)
 {
-	uint32_t tclk = clk_get_frequency(clk_get_peripheral_clock_source(timer));
+	uint32_t tclk = clk_get_peripheral_clock_source_frequency(timer);
 	uint32_t fclk = timer_ll_get_frequency(timer, tclk);
 	uint32_t tick = fclk / cfg->frequency;
 
@@ -61,6 +61,16 @@ void timer_stop(periph_t peri)
 	timer_ll_stop(peri);
 }
 
+void timer_set_prescaler(periph_t peri, uint32_t div_factor)
+{
+	timer_ll_set_prescaler(peri, div_factor);
+}
+
+uint32_t timer_get_prescaler(periph_t peri)
+{
+	return timer_ll_get_prescaler(peri);
+}
+
 void timer_set_reload(periph_t peri, uint32_t value)
 {
 	timer_ll_set_reload(peri, value);
@@ -69,16 +79,6 @@ void timer_set_reload(periph_t peri, uint32_t value)
 uint32_t timer_get_reload(periph_t peri)
 {
 	return timer_ll_get_reload(peri);
-}
-
-void timer_set_cc(periph_t peri, uint32_t cc, uint32_t value)
-{
-	timer_ll_set_cc(peri, cc, value);
-}
-
-uint32_t timer_get_cc(periph_t peri, uint32_t cc)
-{
-	return timer_ll_get_cc(peri, cc);
 }
 
 void timer_clear_event(periph_t peri, timer_event_t events)
@@ -91,12 +91,37 @@ timer_event_t timer_get_event(periph_t peri)
 	return timer_ll_get_event(peri);
 }
 
-void timer_set_edge(periph_t peri, timer_edge_t edge)
+void timer_set_cc(periph_t peri, timer_cc_t cc, uint32_t value)
 {
-	timer_ll_set_edge(peri, edge);
+	timer_ll_set_cc(peri, cc, value);
 }
 
-void timer_set_polarity(periph_t peri, uint32_t level)
+uint32_t timer_get_cc(periph_t peri, timer_cc_t cc)
 {
-	timer_ll_set_polarity(peri, level);
+	return timer_ll_get_cc(peri, cc);
+}
+
+void timer_enable_cc_pin(periph_t peri, timer_cc_t cc)
+{
+	timer_ll_enable_cc_pin(peri, cc);
+}
+
+void timer_disable_cc_pin(periph_t peri, timer_cc_t cc)
+{
+	timer_ll_disable_cc_pin(peri, cc);
+}
+
+void timer_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode)
+{
+	timer_ll_set_cc_pin_mode(peri, cc, mode);
+}
+
+void timer_set_cc_pin(periph_t peri, timer_cc_t cc, uint32_t value)
+{
+	timer_ll_set_cc_pin(peri, cc, value);
+}
+
+void timer_set_cc_pin_polarity(periph_t peri, timer_cc_t cc, bool active_high)
+{
+	timer_ll_set_cc_pin_polarity(peri, cc, active_high);
 }
