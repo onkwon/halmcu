@@ -330,9 +330,9 @@ void timer_ll_enable_cc_pin(periph_t peri, timer_cc_t cc)
 	uint32_t pos;
 
 	if (cc > TIMER_CC_4) {
-		pos = (uint32_t)((uint32_t)cc - TIMER_CC_1N) * 4 + 2; /* CCxE */
+		pos = ((uint32_t)cc - TIMER_CC_1N) * 4 + 2; /* CCxE */
 	} else {
-		pos = (uint32_t)((uint32_t)cc-1) * 4; /* CCxE */
+		pos = ((uint32_t)cc-1) * 4; /* CCxE */
 	}
 
 	bitop_set(&get_instance(peri)->CCER, pos);
@@ -345,9 +345,9 @@ void timer_ll_disable_cc_pin(periph_t peri, timer_cc_t cc)
 	uint32_t pos;
 
 	if (cc > TIMER_CC_4) {
-		pos = (uint32_t)((uint32_t)cc - TIMER_CC_1N) * 4 + 2; /* CCxE */
+		pos = ((uint32_t)cc - TIMER_CC_1N) * 4 + 2; /* CCxE */
 	} else {
-		pos = (uint32_t)((uint32_t)cc-1) * 4; /* CCxE */
+		pos = ((uint32_t)cc-1) * 4; /* CCxE */
 	}
 
 	bitop_clear(&get_instance(peri)->CCER, pos);
@@ -360,9 +360,9 @@ void timer_ll_set_cc_pin_polarity(periph_t peri, timer_cc_t cc, bool active_high
 	uint32_t pos;
 
 	if (cc > TIMER_CC_4) {
-		pos = (uint32_t)((uint32_t)cc - TIMER_CC_1N) * 4 + 3; /* CCxP */
+		pos = ((uint32_t)cc - TIMER_CC_1N) * 4 + 3; /* CCxP */
 	} else {
-		pos = (uint32_t)((uint32_t)cc-1) * 4 + 1; /* CCxP */
+		pos = ((uint32_t)cc-1) * 4 + 1; /* CCxP */
 	}
 
 	if (active_high) {
