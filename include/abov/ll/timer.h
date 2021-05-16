@@ -23,13 +23,6 @@ void timer_ll_reset(periph_t peri);
  */
 void timer_ll_set_mode(periph_t peri, timer_mode_t mode);
 /**
- * @brief Set the timer prescaler
- *
- * @param[in] peri a peripheral enumerated in @ref periph_t
- * @param[in] div_factor prescaler values
- */
-void timer_ll_set_prescaler(periph_t peri, uint32_t div_factor);
-/**
  * @brief Enable interrupts on events for a timer
  *
  * @param[in] peri a peripheral enumerated in @ref periph_t
@@ -64,6 +57,8 @@ void timer_ll_set_counter(periph_t peri, uint32_t value);
  * @return timer counter
  */
 uint32_t timer_ll_get_counter(periph_t peri);
+void timer_ll_set_prescaler(periph_t peri, uint32_t div_factor);
+uint32_t timer_ll_get_prescaler(periph_t peri);
 void timer_ll_set_reload(periph_t peri, uint32_t value);
 uint32_t timer_ll_get_reload(periph_t peri);
 void timer_ll_clear_event(periph_t peri, timer_event_t events);
@@ -85,9 +80,13 @@ void timer_ll_enable_cc_preload(periph_t peri, timer_cc_t cc);
 void timer_ll_disable_cc_preload(periph_t peri, timer_cc_t cc);
 void timer_ll_enable_cc_fastmode(periph_t peri, timer_cc_t cc);
 void timer_ll_disable_cc_fastmode(periph_t peri, timer_cc_t cc);
+void timer_ll_set_cc_prescaler(periph_t peri, timer_cc_t cc, uint32_t value);
+void timer_ll_set_cc_filter(periph_t peri, timer_cc_t cc, uint32_t value);
 
 void timer_ll_set_counter_direction(periph_t peri, timer_direction_t dir);
 void timer_ll_set_counter_alignment_mode(periph_t peri, uint32_t align);
+
+void timer_ll_set_slave_mode(periph_t peri, uint32_t value);
 
 #if defined(__cplusplus)
 }

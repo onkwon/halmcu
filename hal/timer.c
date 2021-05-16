@@ -61,6 +61,16 @@ void timer_stop(periph_t peri)
 	timer_ll_stop(peri);
 }
 
+void timer_set_prescaler(periph_t peri, uint32_t div_factor)
+{
+	timer_ll_set_prescaler(peri, div_factor);
+}
+
+uint32_t timer_get_prescaler(periph_t peri)
+{
+	return timer_ll_get_prescaler(peri);
+}
+
 void timer_set_reload(periph_t peri, uint32_t value)
 {
 	timer_ll_set_reload(peri, value);

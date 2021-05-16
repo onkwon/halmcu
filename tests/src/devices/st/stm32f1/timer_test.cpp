@@ -74,6 +74,10 @@ TEST(Timer, set_prescaler_ShouldSetPSC) {
 	timer_ll_set_prescaler(PERIPH_TIM7, 0x1234);
 	LONGS_EQUAL(0x1234, TIM7->PSC);
 }
+TEST(Timer, get_prescaler_ShouldReturnPSC) {
+	TIM1->PSC = 0xcafe;
+	LONGS_EQUAL(0xcafe, timer_ll_get_prescaler(PERIPH_TIM1));
+}
 
 TEST(Timer, enable_irq_ShouldSetDIER) {
 	timer_ll_enable_irq(PERIPH_TIM5, TIMER_EVENT_CC_1);
@@ -306,4 +310,29 @@ TEST(Timer, disable_cc_fastmode_ShouldClearCCMR) {
 	LONGS_EQUAL(0xbfb, TIM1->CCMR1);
 	timer_ll_disable_cc_fastmode(PERIPH_TIM1, TIMER_CC_3);
 	LONGS_EQUAL(0xffb, TIM1->CCMR2);
+}
+
+TEST(Timer, set_cc_prescaler_ShouldSetCCMR) {
+	timer_ll_set_cc_prescaler(PERIPH_TIM1, TIMER_CC_1, 3);
+	LONGS_EQUAL(0xc, TIM1->CCMR1);
+	timer_ll_set_cc_prescaler(PERIPH_TIM1, TIMER_CC_1, 2);
+	LONGS_EQUAL(8, TIM1->CCMR1);
+	timer_ll_set_cc_prescaler(PERIPH_TIM1, TIMER_CC_4, 2);
+	LONGS_EQUAL(0x800, TIM1->CCMR2);
+}
+
+TEST(Timer, set_cc_filter_ShouldSetCCMR) {
+	timer_ll_set_cc_filter(PERIPH_TIM1, TIMER_CC_1, 15);
+	LONGS_EQUAL(0xf0, TIM1->CCMR1);
+	timer_ll_set_cc_filter(PERIPH_TIM1, TIMER_CC_1, 2);
+	LONGS_EQUAL(0x20, TIM1->CCMR1);
+	timer_ll_set_cc_filter(PERIPH_TIM1, TIMER_CC_4, 2);
+	LONGS_EQUAL(0x2000, TIM1->CCMR2);
+}
+
+TEST(Timer, set_slave_mode_ShouldSetSMCR) {
+	timer_ll_set_slave_mode(PERIPH_TIM1, 7);
+	LONGS_EQUAL(7, TIM1->SMCR);
+	timer_ll_set_slave_mode(PERIPH_TIM1, 1);
+	LONGS_EQUAL(1, TIM1->SMCR);
 }

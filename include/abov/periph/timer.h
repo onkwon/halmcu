@@ -88,6 +88,19 @@ void timer_clear_event(periph_t peri, timer_event_t events);
  */
 timer_event_t timer_get_event(periph_t peri);
 /**
+ * @brief Set the timer prescaler
+ *
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @param[in] div_factor prescaler values
+ */
+void timer_set_prescaler(periph_t peri, uint32_t div_factor);
+/**
+ * @brief Get the timer prescaler
+ *
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ */
+uint32_t timer_get_prescaler(periph_t peri);
+/**
  * @brief Set the timer period
  *
  * @param[in] peri a peripheral enumerated in @ref periph_t

@@ -25,6 +25,11 @@ void timer_ll_set_prescaler(periph_t peri, uint32_t div_factor)
 			0, 0x3ffU, div_factor);
 }
 
+uint32_t timer_ll_get_prescaler(periph_t peri)
+{
+	return get_instance(peri)->PRS;
+}
+
 void timer_ll_set_clock_divider(periph_t peri, uint32_t div_factor)
 {
 	bitop_clean_set_with_mask(&get_instance(peri)->CON,

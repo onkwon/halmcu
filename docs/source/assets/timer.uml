@@ -10,6 +10,8 @@ interface Timer {
 	stop()
 	clear_event()
 	get_event()
+	set_prescaler()
+	get_prescaler()
 	set_reload()
 	get_reload()
 	set_cc()
@@ -25,6 +27,7 @@ class LL {
 	reset()
 	set_mode()
 	set_prescaler()
+	get_prescaler()
 	enable_irq()
 	disable_irq()
 	get_frequency()
@@ -48,8 +51,11 @@ class LL {
 	disable_cc_preload()
 	enable_cc_fastmode()
 	disable_cc_fastmode()
+	set_cc_prescaler()
+	set_cc_filter()
 	set_counter_direction()
 	set_counter_alignment_mode()
+	set_slave_mode()
 }
 
 class HAL {

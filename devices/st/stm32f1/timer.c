@@ -91,6 +91,11 @@ void timer_ll_set_prescaler(periph_t peri, uint32_t div_factor)
 	get_instance(peri)->PSC = div_factor;
 }
 
+uint32_t timer_ll_get_prescaler(periph_t peri)
+{
+	return get_instance(peri)->PSC;
+}
+
 void timer_ll_enable_irq(periph_t peri, timer_event_t events)
 {
 	TIM_Type *instance = get_instance(peri);
@@ -415,10 +420,41 @@ void timer_ll_disable_cc_fastmode(periph_t peri, timer_cc_t cc)
 	}
 }
 
-#if 0
-void timer_ll_set_ic_prescaler(periph_t peri, timer_cc_t cc, uint32_t value)
-void timer_ll_set_ic_filter(periph_t peri, timer_cc_t cc, uint32_t value)
+void timer_ll_set_cc_prescaler(periph_t peri, timer_cc_t cc, uint32_t value)
+{
+	assert(value <= 3);
 
+	uint32_t pos = ((uint32_t)cc - 1) * 8 % 16 + 2; /* ICxPSC */
+	if (cc <= TIMER_CC_2) {
+		bitop_clean_set_with_mask(&get_instance(peri)->CCMR1,
+				pos, 3, value);
+	} else {
+		bitop_clean_set_with_mask(&get_instance(peri)->CCMR2,
+				pos, 3, value);
+	}
+}
+
+void timer_ll_set_cc_filter(periph_t peri, timer_cc_t cc, uint32_t value)
+{
+	assert(value < 16);
+
+	uint32_t pos = ((uint32_t)cc - 1) * 8 % 16 + 4; /* ICxF */
+	if (cc <= TIMER_CC_2) {
+		bitop_clean_set_with_mask(&get_instance(peri)->CCMR1,
+				pos, 0xf, value);
+	} else {
+		bitop_clean_set_with_mask(&get_instance(peri)->CCMR2,
+				pos, 0xf, value);
+	}
+}
+
+void timer_ll_set_slave_mode(periph_t peri, uint32_t value)
+{
+	assert(value < 8);
+	bitop_clean_set_with_mask(&get_instance(peri)->SMCR, 0, 7, value);
+}
+
+#if 0
 trigger
 dma
 encoder

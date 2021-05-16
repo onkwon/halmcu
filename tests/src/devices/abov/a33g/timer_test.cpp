@@ -42,6 +42,10 @@ TEST(Timer, set_prescaler_ShouldSetPrs) {
 	timer_ll_set_prescaler(PERIPH_TIMER9, 16);
 	LONGS_EQUAL(16, T9->PRS);
 }
+TEST(Timer, get_prescaler_ShouldReturnPSC) {
+	T0->PRS = 0xcafe;
+	LONGS_EQUAL(0xcafe, timer_ll_get_prescaler(PERIPH_TIMER0));
+}
 
 TEST(Timer, set_clock_divider_ShouldSetTimerClockSource) {
 	timer_ll_set_clock_divider(PERIPH_TIMER0, 4);

@@ -22,13 +22,6 @@ uint32_t timer_ll_get_frequency(periph_t peri, uint32_t tclk)
 		.returnUnsignedIntValueOrDefault(0);
 }
 
-void timer_ll_set_prescaler(periph_t peri, uint32_t div_factor)
-{
-	mock().actualCall(__func__)
-		.withParameter("peri", peri)
-		.withParameter("div_factor", div_factor);
-}
-
 void timer_ll_enable_irq(periph_t peri, timer_event_t events)
 {
 	mock().actualCall(__func__)
@@ -44,6 +37,20 @@ void timer_ll_start(periph_t peri)
 void timer_ll_stop(periph_t peri)
 {
 	mock().actualCall(__func__).withParameter("peri", peri);
+}
+
+void timer_ll_set_prescaler(periph_t peri, uint32_t div_factor)
+{
+	mock().actualCall(__func__)
+		.withParameter("peri", peri)
+		.withParameter("div_factor", div_factor);
+}
+
+uint32_t timer_ll_get_prescaler(periph_t peri)
+{
+	return mock().actualCall(__func__)
+		.withParameter("peri", peri)
+		.returnUnsignedIntValueOrDefault(0);
 }
 
 void timer_ll_set_reload(periph_t peri, uint32_t value)
