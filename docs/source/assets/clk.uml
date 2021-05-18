@@ -1,5 +1,28 @@
 @startuml
-interface clk {
+interface Clock {
+	enable_peripheral()
+	disable_peripheral()
+	enable_source()
+	disable_source()
+	set_source()
+	get_source()
+	set_pll_frequency()
+	start_pll()
+	stop_pll()
+	is_pll_locked()
+	get_hclk_frequency()
+	get_pclk_frequency()
+	get_freqeuncy()
+	get_peripheral_clock_source()
+	set_peripheral_clock_source()
+	clk_get_peripheral_clock_source_frequency()
+	enable_output()
+	disable_output()
+	set_output_prescaler()
+	set_output_source()
+}
+
+class LL {
 	reset()
 	enable_peripheral()
 	disable_peripheral()
@@ -23,13 +46,11 @@ interface clk {
 	clk_get_peripheral_clock_source_frequency()
 }
 
-class LL_clk {
+class HAL {
+	init()
 }
 
-class HAL_clk {
-	clk_init()
-}
-
-clk <|.. LL_clk
-LL_clk <-- HAL_clk
+HAL ..|> Clock
+HAL --> LL
+LL --> Clock
 @enduml

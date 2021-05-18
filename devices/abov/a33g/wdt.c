@@ -170,7 +170,7 @@ clk_source_t wdt_get_clock_source(void)
 
 void wdt_set_reload_ms(uint32_t period_ms)
 {
-	uint32_t src_khz = clk_get_frequency(get_clock_source()) / 1000;
+	uint32_t src_khz = clk_ll_get_frequency(get_clock_source()) / 1000;
 	uint32_t prescaler = 7;
 	uint32_t ticks = 0;
 

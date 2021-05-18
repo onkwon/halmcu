@@ -8,17 +8,17 @@ Examples
 .. literalinclude:: ../../../examples/peripheral/clk.c
    :language: C
 
+Interface
+---------
+.. doxygenfile:: abov/periph/clk.h
+   :project: libabov
+
 HAL
----
+^^^
 .. doxygenfile:: abov/hal/clk.h
    :project: libabov
 
 LL
---
-.. doxygenfile:: abov/periph/clk.h
-   :project: libabov
-
-Extra
------
-.. doxygenfile:: abov/ll/gpio.h
+^^
+.. doxygenfile:: abov/ll/clk.h
    :project: libabov

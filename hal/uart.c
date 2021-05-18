@@ -38,11 +38,11 @@ bool uart_init(periph_t uart, const struct uart_cfg *cfg, uart_handle_t *handle)
 	}
 
 	pwr_enable_peripheral(uart);
-	clk_enable_peripheral(uart);
+	clk_ll_enable_peripheral(uart);
 
 	uart_reset(uart);
 	uart_set_baudrate(uart, cfg->baudrate,
-			clk_get_peripheral_clock_source_frequency(uart));
+			clk_ll_get_peripheral_clock_source_frequency(uart));
 	uart_set_wordsize(uart, cfg->wordsize);
 	uart_set_stopbits(uart, cfg->stopbit);
 	uart_set_parity(uart, cfg->parity);
@@ -76,7 +76,7 @@ void uart_deinit(periph_t uart)
 
 	irq_disable(PERIPH_TO_IRQ(uart));
 
-	clk_disable_peripheral(uart);
+	clk_ll_disable_peripheral(uart);
 	pwr_disable_peripheral(uart);
 }
 
