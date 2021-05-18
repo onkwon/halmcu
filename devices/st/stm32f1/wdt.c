@@ -47,50 +47,50 @@ static void set_prescaler(uint32_t value)
 	IWDT->PR = value;
 }
 
-void wdt_set_prescaler(uint32_t div_factor)
+void wdt_ll_set_prescaler(uint32_t div_factor)
 {
 	assert(is_pwr2(div_factor) && div_factor >= 4 && div_factor <= 256);
 	uint32_t val = get_prescaler_value_from_divisor(div_factor);
 	set_prescaler(val);
 }
 
-uint32_t wdt_get_prescaler(void)
+uint32_t wdt_ll_get_prescaler(void)
 {
 	uint32_t prescaler = IWDT->PR & 7;
 	return 1U << (prescaler + 2);
 }
 
-void wdt_set_reload(uint32_t timeout)
+void wdt_ll_set_reload(uint32_t timeout)
 {
 	set_reload(timeout);
 }
 
-uint32_t wdt_get_reload(void)
+uint32_t wdt_ll_get_reload(void)
 {
 	return IWDT->RLP;
 }
 
-void wdt_feed(void)
+void wdt_ll_feed(void)
 {
 	IWDT->KR = 0xAAAA;
 }
 
-void wdt_start(void)
+void wdt_ll_start(void)
 {
 	IWDT->KR = 0xCCCC;
 }
 
-void wdt_set_debug_stop_mode(bool enable)
+void wdt_ll_set_debug_stop_mode(bool enable)
 {
 	bitop_clean_set_with_mask(&DBGMCU->CR, 8/*DBG_IWDGSTOP*/, 1, enable);
 }
 
-clk_source_t wdt_get_clock_source(void)
+clk_source_t wdt_ll_get_clock_source(void)
 {
 	return CLK_LSI;
 }
 
-void wdt_set_reload_ms(uint32_t period_ms)
+void wdt_ll_set_reload_ms(uint32_t period_ms)
 {
 	uint32_t lsi = 40000;
 	uint32_t prescaler = 0;
