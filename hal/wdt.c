@@ -14,12 +14,12 @@ uint32_t wdt_get_clock_frequency(void)
 
 void wdt_enable(void)
 {
-	pwr_enable_peripheral(PERIPH_WDT);
+	pwr_ll_enable_peripheral(PERIPH_WDT);
 	clk_ll_enable_peripheral(PERIPH_WDT);
 }
 
 void wdt_disable(void)
 {
 	clk_ll_disable_peripheral(PERIPH_WDT);
-	pwr_disable_peripheral(PERIPH_WDT);
+	pwr_ll_disable_peripheral(PERIPH_WDT);
 }

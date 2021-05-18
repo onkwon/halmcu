@@ -1,5 +1,5 @@
 @startuml
-interface pwr {
+interface Power {
 	reset()
 	reboot()
 	get_reboot_source()
@@ -12,12 +12,23 @@ interface pwr {
 	get_wakeup_source()
 }
 
-class LL_pwr {
+class LL {
+	reset()
+	reboot()
+	get_reboot_source()
+	clear_reboot_source()
+	enable_peripheral()
+	disable_peripheral()
+	set_mode()
+	set_wakeup_source()
+	clear_wakeup_source()
+	get_wakeup_source()
 }
 
-class HAL_pwr {
+class HAL {
 }
 
-pwr <|.. LL_pwr
-LL_pwr <-- HAL_pwr
+HAL ..|> Power
+HAL --> LL
+LL --> Power
 @enduml
