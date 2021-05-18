@@ -63,227 +63,227 @@ TEST_GROUP(gpio) {
 };
 
 TEST(gpio, set_altfunc_ShouldSetMr_WhenAlt0Given) {
-	gpio_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_ANALOG);
-	gpio_set_altfunc(PERIPH_GPIOA, 0, 0);
+	gpio_ll_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_ANALOG);
+	gpio_ll_set_altfunc(PERIPH_GPIOA, 0, 0);
 	LONGS_EQUAL(0, PCA->MR);
 }
 
 TEST(gpio, set_altfunc_ShouldSetMr_WhenAlt1Given) {
-	gpio_set_mode(PERIPH_GPIOA, 1, GPIO_MODE_ANALOG);
-	gpio_set_altfunc(PERIPH_GPIOA, 1, 1);
+	gpio_ll_set_mode(PERIPH_GPIOA, 1, GPIO_MODE_ANALOG);
+	gpio_ll_set_altfunc(PERIPH_GPIOA, 1, 1);
 	LONGS_EQUAL(4, PCA->MR);
 }
 
 TEST(gpio, set_altfunc_ShouldSetMr_WhenAlt2Given) {
-	gpio_set_mode(PERIPH_GPIOA, 15, GPIO_MODE_ANALOG);
-	gpio_set_altfunc(PERIPH_GPIOA, 15, 2);
+	gpio_ll_set_mode(PERIPH_GPIOA, 15, GPIO_MODE_ANALOG);
+	gpio_ll_set_altfunc(PERIPH_GPIOA, 15, 2);
 	LONGS_EQUAL(0x80000000, PCA->MR);
 }
 
 TEST(gpio, set_altfunc_ShouldSetMr_WhenAlt3Given) {
-	gpio_set_mode(PERIPH_GPIOA, 8, GPIO_MODE_ANALOG);
-	gpio_set_altfunc(PERIPH_GPIOA, 8, 3);
+	gpio_ll_set_mode(PERIPH_GPIOA, 8, GPIO_MODE_ANALOG);
+	gpio_ll_set_altfunc(PERIPH_GPIOA, 8, 3);
 	LONGS_EQUAL(0x00030000, PCA->MR);
 }
 
 TEST(gpio, set_altfunc_ShouldCauseAssert_WhenUnsupportedAltFuncGiven) {
 	mock().expectOneCall("abov_assertion_failed");
-	gpio_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_ANALOG);
-	gpio_set_altfunc(PERIPH_GPIOA, 0, 4);
+	gpio_ll_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_ANALOG);
+	gpio_ll_set_altfunc(PERIPH_GPIOA, 0, 4);
 }
 
 TEST(gpio, clear_event_ShouldWriteValueOneInIsr) {
-	gpio_clear_event(PERIPH_GPIOA, 0);
+	gpio_ll_clear_event(PERIPH_GPIOA, 0);
 	LONGS_EQUAL(0x1, PCA->ISR);
-	gpio_clear_event(PERIPH_GPIOA, 15);
+	gpio_ll_clear_event(PERIPH_GPIOA, 15);
 	LONGS_EQUAL(0x40000001, PCA->ISR);
 }
 
 TEST(gpio, enable_irq_ShouldCauseAssert_WhenUnsupportedGpioGiven) {
 	mock().expectOneCall("abov_assertion_failed");
-	gpio_enable_irq(PERIPH_GPIOA, 16, GPIO_IRQ_EDGE_ANY);
+	gpio_ll_enable_irq(PERIPH_GPIOA, 16, GPIO_IRQ_EDGE_ANY);
 }
 TEST(gpio, enable_irq_ShouldSetIcrRegister) {
-	gpio_enable_irq(PERIPH_GPIOA, 0, GPIO_IRQ_EDGE_ANY);
+	gpio_ll_enable_irq(PERIPH_GPIOA, 0, GPIO_IRQ_EDGE_ANY);
 	LONGS_EQUAL(0x3, PCA->ICR);
-	gpio_enable_irq(PERIPH_GPIOA, 0, GPIO_IRQ_EDGE_RISING);
+	gpio_ll_enable_irq(PERIPH_GPIOA, 0, GPIO_IRQ_EDGE_RISING);
 	LONGS_EQUAL(0x2, PCA->ICR);
-	gpio_enable_irq(PERIPH_GPIOA, 0, GPIO_IRQ_EDGE_FALLING);
+	gpio_ll_enable_irq(PERIPH_GPIOA, 0, GPIO_IRQ_EDGE_FALLING);
 	LONGS_EQUAL(0x1, PCA->ICR);
-	gpio_enable_irq(PERIPH_GPIOA, 0, GPIO_IRQ_LEVEL_LOW);
+	gpio_ll_enable_irq(PERIPH_GPIOA, 0, GPIO_IRQ_LEVEL_LOW);
 	LONGS_EQUAL(0x1, PCA->ICR);
-	gpio_enable_irq(PERIPH_GPIOA, 0, GPIO_IRQ_LEVEL_HIGH);
+	gpio_ll_enable_irq(PERIPH_GPIOA, 0, GPIO_IRQ_LEVEL_HIGH);
 	LONGS_EQUAL(0x2, PCA->ICR);
 }
 
 TEST(gpio, disable_irq_ShouldClearIerRegister) {
-	gpio_enable_irq(PERIPH_GPIOA, 0, GPIO_IRQ_EDGE_ANY);
-	gpio_enable_irq(PERIPH_GPIOA, 1, GPIO_IRQ_EDGE_ANY);
-	gpio_enable_irq(PERIPH_GPIOA, 15, GPIO_IRQ_EDGE_ANY);
+	gpio_ll_enable_irq(PERIPH_GPIOA, 0, GPIO_IRQ_EDGE_ANY);
+	gpio_ll_enable_irq(PERIPH_GPIOA, 1, GPIO_IRQ_EDGE_ANY);
+	gpio_ll_enable_irq(PERIPH_GPIOA, 15, GPIO_IRQ_EDGE_ANY);
 	LONGS_EQUAL(0xC000000F, PCA->IER);
 
-	gpio_disable_irq(PERIPH_GPIOA, 0);
+	gpio_ll_disable_irq(PERIPH_GPIOA, 0);
 	LONGS_EQUAL(0xC000000C, PCA->IER);
-	gpio_disable_irq(PERIPH_GPIOA, 1);
+	gpio_ll_disable_irq(PERIPH_GPIOA, 1);
 	LONGS_EQUAL(0xC0000000, PCA->IER);
-	gpio_disable_irq(PERIPH_GPIOA, 15);
+	gpio_ll_disable_irq(PERIPH_GPIOA, 15);
 	LONGS_EQUAL(0x00000000, PCA->IER);
 }
 TEST(gpio, disable_irq_ShouldCauseAssert_WhenUnsupportedGpioGiven) {
 	mock().expectOneCall("abov_assertion_failed");
-	gpio_disable_irq(PERIPH_GPIOA, 16);
+	gpio_ll_disable_irq(PERIPH_GPIOA, 16);
 }
 
 TEST(gpio, write_ShouldSetSpecificPin) {
-	gpio_write(PERIPH_GPIOA, 0, 0);
+	gpio_ll_write(PERIPH_GPIOA, 0, 0);
 	LONGS_EQUAL(0x10000, PA->SRR);
-	gpio_write(PERIPH_GPIOA, 0, 1);
+	gpio_ll_write(PERIPH_GPIOA, 0, 1);
 	LONGS_EQUAL(0x1, PA->SRR);
-	gpio_write(PERIPH_GPIOB, 15, 0);
+	gpio_ll_write(PERIPH_GPIOB, 15, 0);
 	LONGS_EQUAL(0x80000000, PB->SRR);
-	gpio_write(PERIPH_GPIOB, 15, 1);
+	gpio_ll_write(PERIPH_GPIOB, 15, 1);
 	LONGS_EQUAL(0x8000, PB->SRR);
 }
 
 TEST(gpio, write_ShouldCauseAssert_WhenUnsupportedGpioGiven) {
 	mock().expectOneCall("abov_assertion_failed");
-	gpio_write(PERIPH_GPIOA, 16, 1);
+	gpio_ll_write(PERIPH_GPIOA, 16, 1);
 }
 
 TEST(gpio, read_ShouldReturnCurrentPinState) {
-	LONGS_EQUAL(0, gpio_read(PERIPH_GPIOA, 0));
+	LONGS_EQUAL(0, gpio_ll_read(PERIPH_GPIOA, 0));
 	PA->IDR = 1;
-	LONGS_EQUAL(1, gpio_read(PERIPH_GPIOA, 0));
+	LONGS_EQUAL(1, gpio_ll_read(PERIPH_GPIOA, 0));
 	PB->IDR = 0xA5;
-	LONGS_EQUAL(1, gpio_read(PERIPH_GPIOB, 0));
-	LONGS_EQUAL(0, gpio_read(PERIPH_GPIOB, 1));
-	LONGS_EQUAL(1, gpio_read(PERIPH_GPIOB, 2));
-	LONGS_EQUAL(0, gpio_read(PERIPH_GPIOB, 3));
-	LONGS_EQUAL(0, gpio_read(PERIPH_GPIOB, 4));
-	LONGS_EQUAL(1, gpio_read(PERIPH_GPIOB, 5));
-	LONGS_EQUAL(0, gpio_read(PERIPH_GPIOB, 6));
-	LONGS_EQUAL(1, gpio_read(PERIPH_GPIOB, 7));
+	LONGS_EQUAL(1, gpio_ll_read(PERIPH_GPIOB, 0));
+	LONGS_EQUAL(0, gpio_ll_read(PERIPH_GPIOB, 1));
+	LONGS_EQUAL(1, gpio_ll_read(PERIPH_GPIOB, 2));
+	LONGS_EQUAL(0, gpio_ll_read(PERIPH_GPIOB, 3));
+	LONGS_EQUAL(0, gpio_ll_read(PERIPH_GPIOB, 4));
+	LONGS_EQUAL(1, gpio_ll_read(PERIPH_GPIOB, 5));
+	LONGS_EQUAL(0, gpio_ll_read(PERIPH_GPIOB, 6));
+	LONGS_EQUAL(1, gpio_ll_read(PERIPH_GPIOB, 7));
 }
 
 TEST(gpio, read_ShouldCauseAssert_WhenUnsupportedGpioGiven) {
 	mock().expectOneCall("abov_assertion_failed");
-	gpio_read(PERIPH_GPIOA, 16);
+	gpio_ll_read(PERIPH_GPIOA, 16);
 }
 
 TEST(gpio, write_port_ShouldWriteValue) {
-	gpio_write_port(PERIPH_GPIOA, 0xaa55);
+	gpio_ll_write_port(PERIPH_GPIOA, 0xaa55);
 	LONGS_EQUAL(0xaa55, PA->ODR);
-	gpio_write_port(PERIPH_GPIOF, 0x1234);
+	gpio_ll_write_port(PERIPH_GPIOF, 0x1234);
 	LONGS_EQUAL(0x1234, PF->ODR);
 }
 
 TEST(gpio, read_port_ShouldReturnCurrentState) {
 	PA->IDR = 0xA5A5;
-	LONGS_EQUAL(0xA5A5, gpio_read_port(PERIPH_GPIOA));
+	LONGS_EQUAL(0xA5A5, gpio_ll_read_port(PERIPH_GPIOA));
 }
 
 TEST(gpio, enable_port_ShouldCauseAssert_WhenInvalidPortGiven) {
 	mock().expectOneCall("abov_assertion_failed");
-	gpio_disable_port(PERIPH_UART1);
+	gpio_ll_disable_port(PERIPH_UART1);
 }
 TEST(gpio, enable_port_ShouldSetPmuPer) {
-	gpio_enable_port(PERIPH_GPIOA);
+	gpio_ll_enable_port(PERIPH_GPIOA);
 	LONGS_EQUAL(0x100, PMU->PER);
-	gpio_enable_port(PERIPH_GPIOF);
+	gpio_ll_enable_port(PERIPH_GPIOF);
 	LONGS_EQUAL(0x2100, PMU->PER);
 }
 
 TEST(gpio, disable_port_ShouldCauseAssert_WhenInvalidPortGiven) {
 	mock().expectOneCall("abov_assertion_failed");
-	gpio_disable_port(PERIPH_UART1);
+	gpio_ll_disable_port(PERIPH_UART1);
 }
 TEST(gpio, disable_port_ShouldClearPmuPer) {
 	PMU->PER = 0x1200;
-	gpio_disable_port(PERIPH_GPIOB);
+	gpio_ll_disable_port(PERIPH_GPIOB);
 	LONGS_EQUAL(0x1000, PMU->PER);
-	gpio_disable_port(PERIPH_GPIOE);
+	gpio_ll_disable_port(PERIPH_GPIOE);
 	LONGS_EQUAL(0, PMU->PER);
 }
 
 TEST(gpio, set_mode_ShouldCauseAssert_WhenInvalidPortGiven) {
 	mock().expectOneCall("abov_assertion_failed");
-	gpio_set_mode(PERIPH_UART1, 0, GPIO_MODE_PUSHPULL);
+	gpio_ll_set_mode(PERIPH_UART1, 0, GPIO_MODE_PUSHPULL);
 }
 TEST(gpio, set_mode_ShouldCauseAssert_WhenUnsupportedGpioGiven) {
 	mock().expectOneCall("abov_assertion_failed");
-	gpio_set_mode(PERIPH_GPIOA, 16, GPIO_MODE_PUSHPULL);
+	gpio_ll_set_mode(PERIPH_GPIOA, 16, GPIO_MODE_PUSHPULL);
 }
 TEST(gpio, set_mode_ShouldSetCR_WhenPushpullModeGiven) {
-	gpio_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_PUSHPULL);
+	gpio_ll_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_PUSHPULL);
 	LONGS_EQUAL(0xFFFFFFFC, PCA->CR);
-	gpio_set_mode(PERIPH_GPIOA, 1, GPIO_MODE_PUSHPULL);
+	gpio_ll_set_mode(PERIPH_GPIOA, 1, GPIO_MODE_PUSHPULL);
 	LONGS_EQUAL(0xFFFFFFF0, PCA->CR);
-	gpio_set_mode(PERIPH_GPIOA, 2, GPIO_MODE_PUSHPULL);
+	gpio_ll_set_mode(PERIPH_GPIOA, 2, GPIO_MODE_PUSHPULL);
 	LONGS_EQUAL(0xFFFFFFC0, PCA->CR);
-	gpio_set_mode(PERIPH_GPIOA, 15, GPIO_MODE_PUSHPULL);
+	gpio_ll_set_mode(PERIPH_GPIOA, 15, GPIO_MODE_PUSHPULL);
 	LONGS_EQUAL(0x3FFFFFC0, PCA->CR);
-	gpio_set_mode(PERIPH_GPIOA, 8, GPIO_MODE_PUSHPULL);
+	gpio_ll_set_mode(PERIPH_GPIOA, 8, GPIO_MODE_PUSHPULL);
 	LONGS_EQUAL(0x3FFCFFC0, PCA->CR);
 }
 TEST(gpio, set_mode_ShouldSetCR_WhenOpendrainModeGiven) {
-	gpio_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_OPENDRAIN);
+	gpio_ll_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_OPENDRAIN);
 	LONGS_EQUAL(0xFFFFFFFD, PCA->CR);
 }
 TEST(gpio, set_mode_ShouldSetCR_WhenInputModeGiven) {
-	gpio_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_INPUT);
+	gpio_ll_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_INPUT);
 	LONGS_EQUAL(0xFFFFFFFE, PCA->CR);
-	gpio_set_mode(PERIPH_GPIOB, 0, GPIO_MODE_INPUT_PULLUP);
+	gpio_ll_set_mode(PERIPH_GPIOB, 0, GPIO_MODE_INPUT_PULLUP);
 	LONGS_EQUAL(0xFFFFFFFE, PCB->CR);
-	gpio_set_mode(PERIPH_GPIOC, 0, GPIO_MODE_INPUT_PULLDOWN);
+	gpio_ll_set_mode(PERIPH_GPIOC, 0, GPIO_MODE_INPUT_PULLDOWN);
 	LONGS_EQUAL(0xFFFFFFFE, PCC->CR);
 }
 TEST(gpio, set_mode_ShouldSetCR_WhenAnalogModeGiven) {
-	gpio_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_ANALOG);
+	gpio_ll_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_ANALOG);
 	LONGS_EQUAL(0xFFFFFFFF, PCA->CR);
 }
 TEST(gpio, set_mode_ShouldSetPullup_WhenInputModeWithPullupGiven) {
-	gpio_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_INPUT_PULLUP);
+	gpio_ll_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_INPUT_PULLUP);
 	LONGS_EQUAL(0x1, PCA->PCR);
 }
 TEST(gpio, set_mode_ShouldSetPulldown_WhenInputModeWithPulldownGiven) {
-	gpio_set_mode(PERIPH_GPIOA, 15, GPIO_MODE_INPUT_PULLDOWN);
+	gpio_ll_set_mode(PERIPH_GPIOA, 15, GPIO_MODE_INPUT_PULLDOWN);
 	LONGS_EQUAL(0x80008000, PCA->PCR);
 }
 
 TEST(gpio, set_debouncer_ShouldCauseAssert_WhenInvalidPortGiven) {
 	mock().expectOneCall("abov_assertion_failed");
-	gpio_set_debouncer(PERIPH_UART1, 0, 0);
+	gpio_ll_set_debouncer(PERIPH_UART1, 0, 0);
 }
 TEST(gpio, set_debouncer_ShouldCauseAssert_WhenInvalidPinGiven) {
 	mock().expectOneCall("abov_assertion_failed");
-	gpio_set_debouncer(PERIPH_GPIOA, 16, 0);
+	gpio_ll_set_debouncer(PERIPH_GPIOA, 16, 0);
 }
 TEST(gpio, set_debouncer_ShouldSetDER_WhenClockCycleGiven) {
-	gpio_set_debouncer(PERIPH_GPIOA, 0, 4);
+	gpio_ll_set_debouncer(PERIPH_GPIOA, 0, 4);
 	LONGS_EQUAL(1, PCA->DER);
-	gpio_set_debouncer(PERIPH_GPIOA, 1, 4);
+	gpio_ll_set_debouncer(PERIPH_GPIOA, 1, 4);
 	LONGS_EQUAL(3, PCA->DER);
-	gpio_set_debouncer(PERIPH_GPIOA, 15, 4);
+	gpio_ll_set_debouncer(PERIPH_GPIOA, 15, 4);
 	LONGS_EQUAL(0x8003, PCA->DER);
 }
 TEST(gpio, set_debouncer_ShouldClearDER_WhenZeroClockCycleGiven) {
-	gpio_set_debouncer(PERIPH_GPIOA, 0, 4);
-	gpio_set_debouncer(PERIPH_GPIOA, 1, 4);
+	gpio_ll_set_debouncer(PERIPH_GPIOA, 0, 4);
+	gpio_ll_set_debouncer(PERIPH_GPIOA, 1, 4);
 
-	gpio_set_debouncer(PERIPH_GPIOA, 0, 0);
+	gpio_ll_set_debouncer(PERIPH_GPIOA, 0, 0);
 	LONGS_EQUAL(2, PCA->DER);
-	gpio_set_debouncer(PERIPH_GPIOA, 1, 0);
+	gpio_ll_set_debouncer(PERIPH_GPIOA, 1, 0);
 	LONGS_EQUAL(0, PCA->DER);
 }
 TEST(gpio, set_debouncer_ShouldSetDPR) {
-	gpio_set_debouncer(PERIPH_GPIOA, 0, 4);
+	gpio_ll_set_debouncer(PERIPH_GPIOA, 0, 4);
 	LONGS_EQUAL(0, PCA->DPR);
-	gpio_set_debouncer(PERIPH_GPIOA, 0, 8);
+	gpio_ll_set_debouncer(PERIPH_GPIOA, 0, 8);
 	LONGS_EQUAL(1, PCA->DPR);
-	gpio_set_debouncer(PERIPH_GPIOA, 0, 16);
+	gpio_ll_set_debouncer(PERIPH_GPIOA, 0, 16);
 	LONGS_EQUAL(2, PCA->DPR);
-	gpio_set_debouncer(PERIPH_GPIOA, 0, 32);
+	gpio_ll_set_debouncer(PERIPH_GPIOA, 0, 32);
 	LONGS_EQUAL(3, PCA->DPR);
-	gpio_set_debouncer(PERIPH_GPIOA, 0, 1U << 16);
+	gpio_ll_set_debouncer(PERIPH_GPIOA, 0, 1U << 16);
 	LONGS_EQUAL(14, PCA->DPR);
 }
