@@ -8,7 +8,7 @@
 
 #define ADIF				(1U << 5)
 
-void adc_reset(periph_t adc)
+void adc_ll_reset(periph_t adc)
 {
 	unused(adc);
 
@@ -18,19 +18,19 @@ void adc_reset(periph_t adc)
 	ADC->TEST = 0;
 }
 
-void adc_activate(periph_t adc)
+void adc_ll_enable(periph_t adc)
 {
 	unused(adc);
 	bitop_set(&ADC->MR, 15);
 }
 
-void adc_deactivate(periph_t adc)
+void adc_ll_disable(periph_t adc)
 {
 	unused(adc);
 	bitop_clear(&ADC->MR, 15);
 }
 
-void adc_set_mode(periph_t adc, adc_mode_t mode)
+void adc_ll_set_mode(periph_t adc, adc_mode_t mode)
 {
 	unused(adc);
 
@@ -47,21 +47,21 @@ void adc_set_mode(periph_t adc, adc_mode_t mode)
 	}
 }
 
-void adc_start(periph_t adc)
+void adc_ll_start(periph_t adc)
 {
 	unused(adc);
 	bitop_clear(&ADC->CR, 8); /* ADEOC */
 	bitop_set(&ADC->CR, 7); /* ADST */
 }
 
-void adc_stop(periph_t adc)
+void adc_ll_stop(periph_t adc)
 {
 	unused(adc);
 	bitop_clear(&ADC->CR, 7); /* ADST */
 }
 
 ABOV_STATIC_ASSERT(__builtin_ffs(1) == 1, "");
-void adc_select_channel(periph_t adc, adc_channel_t channel)
+void adc_ll_select_channel(periph_t adc, adc_channel_t channel)
 {
 	unused(adc);
 	assert(channel & ((ADC_CHANNEL_15 << 1) - 1));
@@ -69,7 +69,7 @@ void adc_select_channel(periph_t adc, adc_channel_t channel)
 			(uint32_t)__builtin_ffs((int)channel) - 1);
 }
 
-void adc_set_trigger(periph_t adc, adc_trigger_t trigger)
+void adc_ll_set_trigger(periph_t adc, adc_trigger_t trigger)
 {
 	unused(adc);
 	assert(trigger <= ADC_TRIGGER_TIMER7_CC0);
@@ -82,37 +82,37 @@ void adc_set_trigger(periph_t adc, adc_trigger_t trigger)
 	}
 }
 
-void adc_enable_irq(periph_t adc)
+void adc_ll_enable_irq(periph_t adc)
 {
 	unused(adc);
 	bitop_set(&ADC->MR, 12); /* ADIE */
 }
 
-void adc_disable_irq(periph_t adc)
+void adc_ll_disable_irq(periph_t adc)
 {
 	unused(adc);
 	bitop_clear(&ADC->MR, 12); /* ADIE */
 }
 
-uint32_t adc_get_measurement(periph_t adc)
+uint32_t adc_ll_get_measurement(periph_t adc)
 {
 	unused(adc);
 	return ADC->DR >> 4;
 }
 
-bool adc_is_busy(periph_t adc)
+bool adc_ll_is_busy(periph_t adc)
 {
 	unused(adc);
 	return !(ADC->CR & 0x40); /* AFLAG */
 }
 
-bool adc_is_completed(periph_t adc)
+bool adc_ll_is_completed(periph_t adc)
 {
 	unused(adc);
 	return !!(ADC->CR & 0x100); /* ADEOC */
 }
 
-adc_event_t adc_get_event(periph_t adc)
+adc_event_t adc_ll_get_event(periph_t adc)
 {
 	unused(adc);
 	adc_event_t evt = ADC_EVENT_NONE;
@@ -128,7 +128,7 @@ adc_event_t adc_get_event(periph_t adc)
 	return evt;
 }
 
-void adc_clear_event(periph_t adc, adc_event_t events)
+void adc_ll_clear_event(periph_t adc, adc_event_t events)
 {
 	unused(adc);
 	unused(events);
@@ -144,7 +144,7 @@ void adc_clear_event(periph_t adc, adc_event_t events)
  * | 4.0  | 3.00       | 20                    |
  * | 5.0  | 4.00       | 15                    |
  */
-void adc_set_clock_frequency(periph_t adc, uint32_t hz, uint32_t pclk)
+void adc_ll_set_clock_frequency(periph_t adc, uint32_t hz, uint32_t pclk)
 {
 	unused(adc);
 	assert(hz <= pclk && hz != 0);
