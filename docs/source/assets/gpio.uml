@@ -1,5 +1,15 @@
 @startuml
-interface gpio {
+interface GPIO {
+	set_mode()
+	set_altfunc()
+	clear_event()
+	write_port()
+	read_port()
+	write()
+	read()
+}
+
+class LL {
 	reset()
 	enable_port()
 	disable_port()
@@ -16,19 +26,16 @@ interface gpio {
 	read()
 }
 
-class LL_gpio {
-}
-
-class HAL_gpio {
+class HAL {
 	open()
 	open_output()
 	close()
 }
 
-gpio <|.. LL_gpio
-LL_gpio <-- HAL_gpio
-
-HAL_gpio ..> LL_power
-HAL_gpio ..> LL_clock
-HAL_gpio ..> IRQ
+HAL ..|> GPIO
+HAL --> LL
+HAL ..> LL_power
+HAL ..> LL_clock
+HAL ..> IRQ
+LL --> GPIO
 @enduml
