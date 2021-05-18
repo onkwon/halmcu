@@ -10,7 +10,7 @@ interface wdt {
 	set_debug_stop_mode()
 }
 
-class LL_wdt {
+class LL {
 	reset()
 	get_count()
 	set_reload_ms()
@@ -20,16 +20,16 @@ class LL_wdt {
 	get_clock_source()
 }
 
-class HAL_wdt {
+class HAL {
 	enable()
 	disable()
 	get_clock_freqeuncy()
 }
 
-wdt <|.. LL_wdt
-LL_wdt ..> LL_clock
-HAL_wdt --> LL_wdt
-HAL_wdt ..> LL_power
-HAL_wdt ..> LL_clock
-HAL_wdt ..> IRQ
+HAL ..|> wdt
+HAL --> LL
+HAL ..> LL_power
+HAL ..> LL_clock
+HAL ..> IRQ
+LL --> wdt
 @enduml
