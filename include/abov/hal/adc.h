@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#include "abov/periph/adc.h"
 #include "abov/ll/adc.h"
 
 void adc_enable(periph_t adc);
