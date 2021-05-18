@@ -8,7 +8,7 @@
 
 static void set_frequency(periph_t timer, const struct timer_cfg *cfg)
 {
-	uint32_t tclk = clk_get_peripheral_clock_source_frequency(timer);
+	uint32_t tclk = clk_ll_get_peripheral_clock_source_frequency(timer);
 	uint32_t fclk = timer_ll_get_frequency(timer, tclk);
 	uint32_t tick = fclk / cfg->frequency;
 
@@ -22,7 +22,7 @@ bool timer_init(periph_t timer, const struct timer_cfg *cfg)
 	}
 
 	pwr_enable_peripheral(timer);
-	clk_enable_peripheral(timer);
+	clk_ll_enable_peripheral(timer);
 
 	timer_ll_reset(timer);
 
@@ -47,7 +47,7 @@ bool timer_init(periph_t timer, const struct timer_cfg *cfg)
 
 void timer_deinit(periph_t timer)
 {
-	clk_disable_peripheral(timer);
+	clk_ll_disable_peripheral(timer);
 	pwr_disable_peripheral(timer);
 }
 
