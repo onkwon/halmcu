@@ -2,19 +2,19 @@
 #include "abov/compiler.h"
 
 ABOV_WEAK
-void pwr_enable_peripheral(periph_t peri)
+void pwr_ll_enable_peripheral(periph_t peri)
 {
 	unused(peri);
 }
 
 ABOV_WEAK
-void pwr_disable_peripheral(periph_t peri)
+void pwr_ll_disable_peripheral(periph_t peri)
 {
 	unused(peri);
 }
 
 ABOV_WEAK
-void pwr_reset(void)
+void pwr_ll_reset(void)
 {
 	/* place holder */
 }

@@ -4,7 +4,7 @@
 
 void adc_enable(periph_t adc)
 {
-	pwr_enable_peripheral(adc);
+	pwr_ll_enable_peripheral(adc);
 	clk_ll_enable_peripheral(adc);
 
 	adc_ll_enable(adc);
@@ -15,7 +15,7 @@ void adc_disable(periph_t adc)
 	adc_ll_disable(adc);
 
 	clk_ll_disable_peripheral(adc);
-	pwr_disable_peripheral(adc);
+	pwr_ll_disable_peripheral(adc);
 }
 
 void adc_set_mode(periph_t adc, adc_mode_t mode)

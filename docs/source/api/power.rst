@@ -3,15 +3,22 @@ Power
 
 .. image:: ../assets/images/pwr.svg
 
-HAL
----
+Examples
+--------
+.. literalinclude:: ../../../examples/peripheral/pwr.c
+   :language: C
 
-LL
---
+Interface
+---------
 .. doxygenfile:: abov/periph/pwr.h
    :project: libabov
 
-Extra
------
+HAL
+^^^
+.. doxygenfile:: abov/hal/pwr.h
+   :project: libabov
+
+LL
+^^
 .. doxygenfile:: abov/ll/pwr.h
    :project: libabov
