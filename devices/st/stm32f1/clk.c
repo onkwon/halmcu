@@ -227,7 +227,7 @@ static void set_pclk1_frequency(uint32_t hz)
 	}
 }
 
-void clk_enable_peripheral(periph_t peri)
+void clk_ll_enable_peripheral(periph_t peri)
 {
 	volatile uint32_t *reg = NULL;
 	int bitpos = get_activation_bitpos_and_reg(peri, &reg);
@@ -237,7 +237,7 @@ void clk_enable_peripheral(periph_t peri)
 	}
 }
 
-void clk_disable_peripheral(periph_t peri)
+void clk_ll_disable_peripheral(periph_t peri)
 {
 	volatile uint32_t *reg = NULL;
 	int bitpos = get_activation_bitpos_and_reg(peri, &reg);
@@ -247,22 +247,22 @@ void clk_disable_peripheral(periph_t peri)
 	}
 }
 
-uint32_t clk_get_hclk_frequency(void)
+uint32_t clk_ll_get_hclk_frequency(void)
 {
 	return get_hclk();
 }
 
-uint32_t clk_get_pclk_frequency(void)
+uint32_t clk_ll_get_pclk_frequency(void)
 {
 	return get_pclk1_frequency();
 }
 
-uint32_t clk_get_frequency(clk_source_t clk)
+uint32_t clk_ll_get_frequency(clk_source_t clk)
 {
 	return get_frequency(clk);
 }
 
-void clk_enable_source(clk_source_t clk)
+void clk_ll_enable_source(clk_source_t clk)
 {
 	volatile uint32_t *reg = &RCC->CR;
 	uint32_t bit = 0; /* HSI for the default */
@@ -281,7 +281,7 @@ void clk_enable_source(clk_source_t clk)
 	}
 }
 
-void clk_disable_source(clk_source_t clk)
+void clk_ll_disable_source(clk_source_t clk)
 {
 	volatile uint32_t *reg = &RCC->CR;
 	uint32_t bit = 0;
@@ -297,22 +297,22 @@ void clk_disable_source(clk_source_t clk)
 	bitop_clear(reg, bit);
 }
 
-void clk_start_pll(void)
+void clk_ll_start_pll(void)
 {
 	bitop_set(&RCC->CR, 24); /* PLLON */
 }
 
-void clk_stop_pll(void)
+void clk_ll_stop_pll(void)
 {
 	bitop_clear(&RCC->CR, 24); /* PLLON */
 }
 
-bool clk_is_pll_locked(void)
+bool clk_ll_is_pll_locked(void)
 {
 	return !!(RCC->CR & (1U << 25)); /* PLLRDY */
 }
 
-void clk_set_source(clk_source_t clk)
+void clk_ll_set_source(clk_source_t clk)
 {
 	uint8_t val = 0;
 
@@ -360,7 +360,7 @@ static bool get_pllmul_and_hpre(uint32_t *pllmul, uint32_t *hpre,
  * AHB <= 72MHz
  * ADC <= 14MHz
  * USB = 48MHz */
-bool clk_set_pll_frequency(clk_source_t clk, clk_source_t clkin, uint32_t hz)
+bool clk_ll_set_pll_frequency(clk_source_t clk, clk_source_t clkin, uint32_t hz)
 {
 	if (clk != CLK_PLL) {
 		return false;
@@ -395,7 +395,7 @@ bool clk_set_pll_frequency(clk_source_t clk, clk_source_t clkin, uint32_t hz)
 	return true;
 }
 
-uint32_t clk_get_peripheral_clock_source_frequency(periph_t peri)
+uint32_t clk_ll_get_peripheral_clock_source_frequency(periph_t peri)
 {
 	switch (peri) {
 	case PERIPH_TIM1: /* fall through */

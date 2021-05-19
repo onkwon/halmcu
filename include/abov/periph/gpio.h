@@ -37,27 +37,6 @@ typedef enum {
 } gpio_speed_t;
 
 /**
- * @brief Reset GPIO port
- *
- * This function makes GPIO port the reset state.
- *
- * @param[in] port GPIO port enumerated in @ref periph_t
- */
-void gpio_reset(periph_t port);
-/**
- * @brief Enable the given port
- *
- * @param[in] port GPIO port enumerated in @ref periph_t
- */
-void gpio_enable_port(periph_t port);
-/**
- * @brief Disable the given port
- *
- * @param[in] port GPIO port enumerated in @ref periph_t
- */
-void gpio_disable_port(periph_t port);
-void gpio_set_mode(periph_t port, uint32_t pin, gpio_mode_t mode);
-/**
  * @brief Select GPIO alternate function
  *
  * Call this function after :c:func:`gpio_set_mode`
@@ -68,49 +47,12 @@ void gpio_set_mode(periph_t port, uint32_t pin, gpio_mode_t mode);
  */
 void gpio_set_altfunc(periph_t port, uint32_t pin, int altfunc);
 /**
- * @note Call this function after @ref gpio_set_altfunc
- */
-void gpio_set_speed(periph_t port, uint32_t pin, gpio_speed_t speed);
-/**
- * @param[in] pclk_clocks pass 0 clock cycle to disable
- */
-void gpio_set_debouncer(periph_t port, uint32_t pin, uint32_t pclk_clocks);
-/**
- * @brief Enable interrupt on the given GPIO pin
- *
- * @param[in] port GPIO port enumerated in @ref periph_t
- * @param[in] pin GPIO number starting from 0
- * @param[in] irq_type sets interrupt trigger type
- */
-void gpio_enable_irq(periph_t port, uint32_t pin, gpio_irq_t irq_type);
-/**
- * @brief Disable interrupt on the given GPIO pin
- *
- * @param[in] port GPIO port enumerated in @ref periph_t
- * @param[in] pin GPIO number starting from 0
- */
-void gpio_disable_irq(periph_t port, uint32_t pin);
-/**
  * @brief Clear interrupt flag on the given GPIO pin
  *
  * @param[in] port GPIO port enumerated in @ref periph_t
  * @param pin GPIO number starting from 0
  */
 void gpio_clear_event(periph_t port, uint32_t pin);
-/**
- * @brief Write a value to the given GPIO port
- *
- * @param[in] port GPIO port enumerated in @ref periph_t
- * @param value to be written to the GPIO port
- */
-void gpio_write_port(periph_t port, int value);
-/**
- * @brief Read the current value of the given GPIO port
- *
- * @param[in] port GPIO port enumerated in @ref periph_t
- * @return the value read from the specified GPIO port
- */
-int gpio_read_port(periph_t port);
 /**
  * @brief Write output level to the given GPIO pin
  *
