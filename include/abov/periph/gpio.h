@@ -98,20 +98,6 @@ void gpio_disable_irq(periph_t port, uint32_t pin);
  */
 void gpio_clear_event(periph_t port, uint32_t pin);
 /**
- * @brief Write a value to the given GPIO port
- *
- * @param[in] port GPIO port enumerated in @ref periph_t
- * @param value to be written to the GPIO port
- */
-void gpio_write_port(periph_t port, int value);
-/**
- * @brief Read the current value of the given GPIO port
- *
- * @param[in] port GPIO port enumerated in @ref periph_t
- * @return the value read from the specified GPIO port
- */
-int gpio_read_port(periph_t port);
-/**
  * @brief Write output level to the given GPIO pin
  *
  * @param[in] port GPIO port enumerated in @ref periph_t
