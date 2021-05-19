@@ -51,22 +51,6 @@ typedef enum {
 } uart_event_t;
 
 /**
- * @brief Reset UART interface
- *
- * This function makes the given UART the reset default state.
- *
- * @param[in] port a peripheral enumerated in @ref periph_t
- */
-void uart_reset(periph_t port);
-/***/
-bool uart_has_rx(periph_t port);
-/***/
-bool uart_is_tx_ready(periph_t port);
-/***/
-int uart_get_rxd(periph_t port);
-/***/
-void uart_set_txd(periph_t port, uint32_t value);
-/**
  * @brief Set UART baudrate
  *
  * @param[in] port a peripheral enumerated in @ref periph_t
@@ -74,20 +58,6 @@ void uart_set_txd(periph_t port, uint32_t value);
  * @param[in] pclk pclk
  */
 void uart_set_baudrate(periph_t port, uint32_t baudrate, uint32_t pclk);
-/**
- * @brief Enable UART interrupts
- *
- * @param[in] port a peripheral enumerated in @ref periph_t
- * @param[in] irqs a mix enum of @ref uart_event_t
- */
-void uart_enable_irq(periph_t port, uart_irq_t irqs);
-/**
- * @brief Disable UART interrupts
- *
- * @param[in] port a peripheral enumerated in @ref periph_t
- * @param[in] irqs a mix enum of @ref uart_event_t
- */
-void uart_disable_irq(periph_t port, uart_irq_t irqs);
 /**
  * @brief Read UART event flag
  *
@@ -123,10 +93,6 @@ void uart_set_stopbits(periph_t port, uart_stopbit_t stopbit);
  * @param[in] wordsize a enum of @ref uart_wordsize_t
  */
 void uart_set_wordsize(periph_t port, uart_wordsize_t wordsize);
-/***/
-void uart_start(periph_t port);
-/***/
-void uart_stop(periph_t port);
 
 #if defined(__cplusplus)
 }
