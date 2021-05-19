@@ -9,6 +9,7 @@ CM_SRCS := \
 	$(LIBABOV_ROOT)/arch/arm/cortex-m/vector.c \
 	$(LIBABOV_ROOT)/arch/arm/cortex-m/delay.c \
 	$(LIBABOV_ROOT)/arch/arm/cortex-m/systick.c \
+	$(LIBABOV_ROOT)/arch/arm/cortex-m/mutex.c \
 
 CM_INCS := $(LIBABOV_ROOT)/arch/arm/include/CMSIS_5/CMSIS/Core/Include
 

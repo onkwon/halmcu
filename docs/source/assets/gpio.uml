@@ -1,10 +1,7 @@
 @startuml
 interface GPIO {
-	set_mode()
 	set_altfunc()
 	clear_event()
-	write_port()
-	read_port()
 	write()
 	read()
 }
