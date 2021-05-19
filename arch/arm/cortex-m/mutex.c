@@ -9,10 +9,9 @@ void abov_mutex_lock(abov_mutex_t *l)
 
 	do {
 		val = atomic_ll(l);
-		if (val != ABOV_MUTEX_LOCKED) {
-			if (atomic_sc(ABOV_MUTEX_LOCKED, l) == 0) {
-				break;
-			}
+		if (val != ABOV_MUTEX_LOCKED &&
+				atomic_sc(ABOV_MUTEX_LOCKED, l) == 0) {
+			break;
 		}
 	} while (val == ABOV_MUTEX_LOCKED);
 }

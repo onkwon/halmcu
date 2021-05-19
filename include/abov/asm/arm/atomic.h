@@ -27,7 +27,7 @@ extern "C" {
 })
 
 /** Load linked */
-static inline uintptr_t atomic_ll(void *p)
+static inline uintptr_t atomic_ll(const void *p)
 {
 	return ldrex(p);
 }
