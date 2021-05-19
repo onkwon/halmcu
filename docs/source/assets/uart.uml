@@ -1,5 +1,14 @@
 @startuml
-interface uart {
+interface UART {
+	set_baudrate()
+	get_event()
+	clear_event()
+	set_parity()
+	set_stopbits()
+	set_wordsize()
+}
+
+class LL {
 	reset()
 	has_rx()
 	is_tx_ready()
@@ -17,10 +26,7 @@ interface uart {
 	stop()
 }
 
-class LL_uart {
-}
-
-class HAL_uart {
+class HAL {
 	init()
 	deinit()
 	read()
@@ -33,10 +39,10 @@ class HAL_uart {
 	register_error_handler()
 }
 
-uart <|.. LL_uart
-LL_uart <-- HAL_uart
-
-HAL_uart ..> LL_power
-HAL_uart ..> LL_clock
-HAL_uart ..> IRQ
+HAL ..|> UART
+HAL --> LL
+HAL ..> LL_power
+HAL ..> LL_clock
+HAL ..> IRQ
+LL --> UART
 @enduml

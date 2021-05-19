@@ -21,7 +21,7 @@
 #define DRIE				1U
 #define THREIE				(1U << 1)
 
-static UART_Type *get_uart_from_port(periph_t port)
+static UART_Type *get_instance(periph_t port)
 {
 	switch (port) {
 	case PERIPH_UART0:
@@ -38,9 +38,9 @@ static UART_Type *get_uart_from_port(periph_t port)
 	}
 }
 
-void uart_reset(periph_t port)
+void uart_ll_reset(periph_t port)
 {
-	UART_Type *uart = get_uart_from_port(port);
+	UART_Type *uart = get_instance(port);
 
 	uart->IER = 0;
 	unused(uart->IIR);
@@ -55,29 +55,29 @@ void uart_reset(periph_t port)
 	uart->LCR = 0;
 }
 
-bool uart_has_rx(periph_t port)
+bool uart_ll_has_rx(periph_t port)
 {
-	return !!(get_uart_from_port(port)->LSR & RDR);
+	return !!(get_instance(port)->LSR & RDR);
 }
 
-bool uart_is_tx_ready(periph_t port)
+bool uart_ll_is_tx_ready(periph_t port)
 {
-	return (get_uart_from_port(port)->LSR & (THRE | TEMT)) == (THRE | TEMT);
+	return (get_instance(port)->LSR & (THRE | TEMT)) == (THRE | TEMT);
 }
 
-int uart_get_rxd(periph_t port)
+int uart_ll_get_rxd(periph_t port)
 {
-	return (int)get_uart_from_port(port)->RBR;
+	return (int)get_instance(port)->RBR;
 }
 
-void uart_set_txd(periph_t port, uint32_t value)
+void uart_ll_set_txd(periph_t port, uint32_t value)
 {
-	get_uart_from_port(port)->THR = value;
+	get_instance(port)->THR = value;
 }
 
-void uart_set_baudrate(periph_t port, uint32_t baudrate, uint32_t pclk)
+void uart_ll_set_baudrate(periph_t port, uint32_t baudrate, uint32_t pclk)
 {
-	UART_Type *uart = get_uart_from_port(port);
+	UART_Type *uart = get_instance(port);
 
 	uint32_t n = pclk / 2;
 	uint32_t d = 16 * baudrate;
@@ -96,9 +96,9 @@ void uart_set_baudrate(periph_t port, uint32_t baudrate, uint32_t pclk)
 	uart->LCR = lcr;
 }
 
-void uart_enable_irq(periph_t port, uart_irq_t events)
+void uart_ll_enable_irq(periph_t port, uart_irq_t events)
 {
-	UART_Type *uart = get_uart_from_port(port);
+	UART_Type *uart = get_instance(port);
 
 	if (events & UART_IRQ_RX) {
 		uart->IER |= DRIE;
@@ -108,9 +108,9 @@ void uart_enable_irq(periph_t port, uart_irq_t events)
 	}
 }
 
-void uart_disable_irq(periph_t port, uart_irq_t events)
+void uart_ll_disable_irq(periph_t port, uart_irq_t events)
 {
-	UART_Type *uart = get_uart_from_port(port);
+	UART_Type *uart = get_instance(port);
 
 	if (events & UART_IRQ_RX) {
 		uart->IER &= ~DRIE;
@@ -120,9 +120,9 @@ void uart_disable_irq(periph_t port, uart_irq_t events)
 	}
 }
 
-uart_event_t uart_get_event(periph_t port)
+uart_event_t uart_ll_get_event(periph_t port)
 {
-	const UART_Type *uart = get_uart_from_port(port);
+	const UART_Type *uart = get_instance(port);
 
 	uint32_t iir = uart->IIR;
 	uint32_t lsr = uart->LSR;
@@ -145,15 +145,15 @@ uart_event_t uart_get_event(periph_t port)
 	return (uart_event_t)(flags | (lsr << 8) | iir);
 }
 
-void uart_clear_event(periph_t port, uart_event_t events)
+void uart_ll_clear_event(periph_t port, uart_event_t events)
 {
 	unused(port);
 	unused(events);
 }
 
-void uart_set_parity(periph_t port, uart_parity_t parity)
+void uart_ll_set_parity(periph_t port, uart_parity_t parity)
 {
-	UART_Type *uart = get_uart_from_port(port);
+	UART_Type *uart = get_instance(port);
 
 	bitop_clear(&uart->LCR, PARITY_EN_POS);
 
@@ -164,31 +164,31 @@ void uart_set_parity(periph_t port, uart_parity_t parity)
 	}
 }
 
-void uart_set_stopbits(periph_t port, uart_stopbit_t stopbit)
+void uart_ll_set_stopbits(periph_t port, uart_stopbit_t stopbit)
 {
-	UART_Type *uart = get_uart_from_port(port);
+	UART_Type *uart = get_instance(port);
 
 	uint32_t val = (stopbit == UART_STOPBIT_1)? 0 : 1;
 	bitop_clean_set_with_mask(&uart->LCR,
 			STOPBIT_POS, 1U, val);
 }
 
-void uart_set_wordsize(periph_t port, uart_wordsize_t wordsize)
+void uart_ll_set_wordsize(periph_t port, uart_wordsize_t wordsize)
 {
 	assert(wordsize < UART_WORDSIZE_9);
 
-	UART_Type *uart = get_uart_from_port(port);
+	UART_Type *uart = get_instance(port);
 
 	bitop_clean_set_with_mask(&uart->LCR,
 			WORDSIZE_POS, 3U, (uint32_t)wordsize-5);
 }
 
-void uart_start(periph_t port)
+void uart_ll_start(periph_t port)
 {
 	unused(port);
 }
 
-void uart_stop(periph_t port)
+void uart_ll_stop(periph_t port)
 {
 	unused(port);
 }
