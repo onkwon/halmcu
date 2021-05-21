@@ -6,9 +6,6 @@
 
 #define FLASH_KEY1				0x45670123ul
 #define FLASH_KEY2				0xCDEF89ABul
-#define FLASH_READ_PROTECT_KEY			0x00A5ul
-
-#define FLASH_MASS_ERASE			0xFFFFFFFFul
 
 enum flash_control_bits {
 	BIT_FLASH_PROGRAM			= 0,
@@ -35,11 +32,6 @@ enum flash_status_bits {
 static void clear_flags(void)
 {
 	bitop_set(&FLASH->SR, FLASH_STATUS_MASK);
-}
-
-static void clear_error_flags(void)
-{
-	bitop_set(&FLASH->SR, FLASH_STATUS_ERROR_MASK);
 }
 
 static uint32_t get_error_flags(void)
@@ -75,12 +67,6 @@ static void unlock_flash(void)
 static void lock_flash(void)
 {
 	bitop_set(&FLASH->CR, BIT_FLASH_LOCK);
-}
-
-static void unlock_option_byte(void)
-{
-	FLASH->OPTKEYR = FLASH_KEY1;
-	FLASH->OPTKEYR = FLASH_KEY2;
 }
 
 static void program_half_word(uint32_t addr, uint16_t data)
