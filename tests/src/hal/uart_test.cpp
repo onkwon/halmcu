@@ -7,11 +7,9 @@
 
 #include <string.h>
 
-#if 0
 static void intr_handler(uint32_t flags) {
 	mock().actualCall(__func__).withParameter("flags", flags);
 }
-#endif
 
 TEST_GROUP(uart_driver) {
 	uart_handle_t default_handle;
