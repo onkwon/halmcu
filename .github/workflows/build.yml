@@ -21,7 +21,7 @@ jobs:
       - name: Install test framework
         run: make -C tests install
       - name: Test
-        run: make -C tests clean all
+        run: make -C tests
       - name: Build coverage results
         run: |
           make -C tests gcov
