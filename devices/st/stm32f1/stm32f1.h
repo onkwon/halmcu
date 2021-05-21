@@ -15,6 +15,7 @@ extern "C" {
 #define DBGMCU_BASE			(0xE0042000U)
 
 #define RCC_BASE			(AHB_BASE + 0x1000U)
+#define FLASH_BASE			(AHB_BASE + 0x2000U)
 
 #define SYSCFG_BASE			(APB2_BASE + 0)
 #define EXTI_BASE			(APB2_BASE + 0x400U)
@@ -91,6 +92,18 @@ typedef struct {
 	volatile uint32_t BDCR;
 	volatile uint32_t CSR;
 } RCC_Type;
+
+typedef struct {
+	volatile uint32_t ACR;
+	volatile uint32_t KEYR;
+	volatile uint32_t OPTKEYR;
+	volatile uint32_t SR;
+	volatile uint32_t CR;
+	volatile uint32_t AR;
+	volatile uint32_t reserved;
+	volatile uint32_t OBR;
+	volatile uint32_t WRPR;
+} FLASH_Type;
 
 typedef struct {
 	volatile uint32_t CRL;
@@ -170,6 +183,7 @@ typedef struct {
 #define SYSCFG				((SYSCFG_Type *)SYSCFG_BASE)
 #define EXTI				((EXTI_Type *)EXTI_BASE)
 #define RCC				((RCC_Type *)RCC_BASE)
+#define FLASH				((FLASH_Type *)FLASH_BASE)
 
 #define GPIOA				((GPIO_Type *)GPIOA_BASE)
 #define GPIOB				((GPIO_Type *)GPIOB_BASE)

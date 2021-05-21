@@ -87,25 +87,27 @@ Please refer to a [custom build example](examples/custom-build).
 * ❌ Unavailable in device
 * <code>&nbsp;</code> Planned
 
-|            | ABOV   |      |      |      | STM32 |    |    |
-| ---------- | ----   | ---- | ---- | ---- | --    | -- | -- |
-| Peripheral | A31G1x | A33G | A33M | A34M | F1    | F4 | F7 |
-| ADC        |        | ✅   |      |      | ✅    |    |    |
-| CAN        |        | ❌   |      |      |       |    |    |
-| CLK        |        | ✅   |      |      | ✅    |    |    |
-| CRC        |        | ❌   |      |      |       |    |    |
-| DAC        |        | ❌   |      |      |       |    |    |
-| DMA        |        | ❌   |      |      |       |    |    |
-| ETH        |        | ❌   |      |      |       |    |    |
-| FLASH      |        |      |      |      |       |    |    |
-| FSMC       |        | ❌   |      |      |       |    |    |
-| GPIO       |        | ✅   |      |      | ✅    |    |    |
-| I2C        |        | ✅   |      |      |       |    |    |
-| PWR        |        | ✅   |      |      |       |    |    |
-| RTC        |        | ❌   |      |      |       |    |    |
-| SDIO       |        | ❌   |      |      |       |    |    |
-| SPI        |        | ✅   |      |      |       |    |    |
-| Timer      |        | ✅   |      |      | ✅    |    |    |
-| UART       |        | ✅   |      |      | ✅    |    |    |
-| USB        |        | ❌   |      |      |       |    |    |
-| WDT        |        | ✅   |      |      | ✅    |    |    |
+[^1]: Only high-density devices are supported at the moment.
+
+|            | ABOV   |      |      |      | STM32  |    |    |
+| ---------- | ----   | ---- | ---- | ---- | --     | -- | -- |
+| Peripheral | A31G1x | A33G | A33M | A34M | F1[^1] | F4 | F7 |
+| ADC        |        | ✅   |      |      | ✅     |    |    |
+| CAN        |        | ❌   |      |      |        |    |    |
+| CLK        |        | ✅   |      |      | ✅     |    |    |
+| CRC        |        | ❌   |      |      |        |    |    |
+| DAC        |        | ❌   |      |      |        |    |    |
+| DMA        |        | ❌   |      |      |        |    |    |
+| ETH        |        | ❌   |      |      |        |    |    |
+| FLASH      |        |      |      |      | ✅     |    |    |
+| FSMC       |        | ❌   |      |      |        |    |    |
+| GPIO       |        | ✅   |      |      | ✅     |    |    |
+| I2C        |        | ✅   |      |      |        |    |    |
+| PWR        |        | ✅   |      |      |        |    |    |
+| RTC        |        | ❌   |      |      |        |    |    |
+| SDIO       |        | ❌   |      |      |        |    |    |
+| SPI        |        | ✅   |      |      |        |    |    |
+| Timer      |        | ✅   |      |      | ✅     |    |    |
+| UART       |        | ✅   |      |      | ✅     |    |    |
+| USB        |        | ❌   |      |      |        |    |    |
+| WDT        |        | ✅   |      |      | ✅     |    |    |
