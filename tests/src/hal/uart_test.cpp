@@ -34,7 +34,6 @@ TEST_GROUP(uart_driver) {
 TEST(uart_driver, init_ShouldReturnFalse_WhenNullObjGiven) {
 	LONGS_EQUAL(0, uart_init(PERIPH_UART0, NULL, NULL));
 }
-#if 0
 TEST(uart_driver, init_ShouldReturnTrue_WhenAllGivenParamVaild) {
 	mock().expectOneCall("pwr_ll_enable_peripheral")
 		.withParameter("peri", PERIPH_UART0);
@@ -190,4 +189,3 @@ TEST(uart_driver, wrte_ShouldWrite) {
 		.withParameter("port", PERIPH_UART0);
 	LONGS_EQUAL(datalen, uart_write(PERIPH_UART0, data, datalen));
 }
-#endif
