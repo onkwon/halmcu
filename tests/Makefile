@@ -50,7 +50,10 @@ clean:
 	$(Q)rm -rf $(BUILDIR)
 
 .PHONY: install reinstall
-install:
+install: | $(CPPUTEST_HOME)
 	@cd $(CPPUTEST_HOME) && autoreconf -i && ./configure && make
 reinstall:
 	@cd $(CPPUTEST_HOME) && make
+$(CPPUTEST_HOME):
+	@git clone -b hack/malloc --single-branch \
+		https://github.com/onkwon/cpputest.git $@
