@@ -50,6 +50,18 @@ typedef struct {
 } RCC_Type;
 
 typedef struct {
+	volatile uint32_t ACR;
+	volatile uint32_t KEYR;
+	volatile uint32_t OPTKEYR;
+	volatile uint32_t SR;
+	volatile uint32_t CR;
+	volatile uint32_t AR;
+	volatile uint32_t reserved;
+	volatile uint32_t OBR;
+	volatile uint32_t WRPR;
+} FLASH_Type;
+
+typedef struct {
 	volatile uint32_t CRL;
 	volatile uint32_t CRH;
 	volatile uint32_t IDR;
@@ -127,6 +139,7 @@ extern DBGMCU_Type * const DBGMCU;
 extern SYSCFG_Type * const SYSCFG;
 extern EXTI_Type * const EXTI;
 extern RCC_Type * const RCC;
+extern FLASH_Type * const FLASH;
 
 extern GPIO_Type * const GPIOA;
 extern GPIO_Type * const GPIOB;
