@@ -39,6 +39,14 @@ TEST(systick, clear_ShouldClearCounter) {
 	systick_clear();
 	LONGS_EQUAL(0, SysTick->VAL);
 }
+TEST(systick, get_counter_ShouldReturnVAL) {
+	SysTick->VAL = SysTick_LOAD_RELOAD_Msk;
+	LONGS_EQUAL(SysTick_LOAD_RELOAD_Msk, systick_get_counter());
+}
+TEST(systick, set_counter_ShouldSetVAL) {
+	systick_set_counter(0x1234);
+	LONGS_EQUAL(0x1234, SysTick->VAL);
+}
 TEST(systick, get_frequency_ShouldReturnSysTickFrequency) {
 	mock().expectOneCall("clk_ll_get_hclk_frequency").andReturnValue(1000000);
 	SysTick->LOAD = 20000 - 1;

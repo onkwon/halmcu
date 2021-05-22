@@ -32,6 +32,16 @@ void systick_clear(void)
 	SysTick->VAL = 0;
 }
 
+uint32_t systick_get_counter(void)
+{
+	return SysTick->VAL;
+}
+
+void systick_set_counter(uint32_t value)
+{
+	SysTick->VAL = value;
+}
+
 void systick_start(void)
 {
 	SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk;

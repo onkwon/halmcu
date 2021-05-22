@@ -17,6 +17,8 @@ void systick_clear(void);
 uint32_t systick_set_frequency(uint32_t hz);
 /** Get SysTick clock frequency */
 uint32_t systick_get_frequency(void);
+uint32_t systick_get_counter(void);
+void systick_set_counter(uint32_t value);
 
 #if defined(__cplusplus)
 }
