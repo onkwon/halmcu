@@ -249,10 +249,30 @@ void adc_ll_clear_event(periph_t adc, adc_event_t events)
 	}
 }
 
-ABOV_WEAK
+static uint32_t get_prescaler(void)
+{
+	return (RCC->CFGR >> 14/*ADCPRE*/) * 2 + 2;
+}
+
+static void set_prescaler(uint32_t val)
+{
+	bitop_clean_set_with_mask(&RCC->CFGR, 14/*ADCPRE*/, 3, val);
+}
+
+uint32_t adc_ll_get_frequency(periph_t adc, uint32_t pclk)
+{
+	unused(adc);
+	return pclk / get_prescaler();
+}
+
 void adc_ll_set_clock_frequency(periph_t adc, uint32_t hz, uint32_t pclk)
 {
 	unused(adc);
-	unused(hz);
-	unused(pclk);
+	assert(hz <= 14000000); /* NOTE: must not exceed 14MHz on STM32F1 */
+	for (uint32_t div = 2; div <= 8; div += 2) {
+		if (pclk / div <= hz) {
+			set_prescaler(div / 2 - 1);
+			break;
+		}
+	}
 }

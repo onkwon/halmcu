@@ -140,3 +140,23 @@ TEST(adc, clear_event_ShouldClearEvent) {
 	adc_ll_clear_event(PERIPH_ADC1, ADC_EVENT_COMPLETE);
 	LONGS_EQUAL(0, ADC1->SR);
 }
+
+TEST(adc, get_frequency_ShouldReturnADCPrescaledClockFrequency) {
+	RCC->CFGR = 3U << 14; // 8
+	LONGS_EQUAL(125000, adc_ll_get_frequency(PERIPH_ADC1, 1000000));
+	RCC->CFGR = 2U << 14; // 6
+	LONGS_EQUAL(166666, adc_ll_get_frequency(PERIPH_ADC1, 1000000));
+	RCC->CFGR = 1U << 14; // 4
+	LONGS_EQUAL(250000, adc_ll_get_frequency(PERIPH_ADC1, 1000000));
+	RCC->CFGR = 0; // 2
+	LONGS_EQUAL(500000, adc_ll_get_frequency(PERIPH_ADC1, 1000000));
+}
+
+TEST(adc, set_clock_frequency_ShouldSetADCFrequency) {
+	adc_ll_set_clock_frequency(PERIPH_ADC1, 125000, 1000000);
+	LONGS_EQUAL(125000, adc_ll_get_frequency(PERIPH_ADC1, 1000000));
+	adc_ll_set_clock_frequency(PERIPH_ADC1, 250000, 1000000);
+	LONGS_EQUAL(250000, adc_ll_get_frequency(PERIPH_ADC1, 1000000));
+	adc_ll_set_clock_frequency(PERIPH_ADC1, 2000000, 1000000);
+	LONGS_EQUAL(500000, adc_ll_get_frequency(PERIPH_ADC1, 1000000));
+}
