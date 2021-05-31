@@ -134,6 +134,18 @@ typedef struct {
 	volatile uint32_t DMAR;
 } TIM_Type;
 
+typedef struct {
+	volatile uint32_t CR1;
+	volatile uint32_t CR2;
+	volatile uint32_t SR;
+	volatile uint32_t DR;
+	volatile uint32_t CRCPR;
+	volatile uint32_t RXCRCR;
+	volatile uint32_t TXCRCR;
+	volatile uint32_t I2SCFGR;
+	volatile uint32_t I2SPR;
+} SPI_Type;
+
 extern DBGMCU_Type * const DBGMCU;
 
 extern SYSCFG_Type * const SYSCFG;
@@ -175,6 +187,10 @@ extern TIM_Type * const TIM11;
 extern TIM_Type * const TIM12;
 extern TIM_Type * const TIM13;
 extern TIM_Type * const TIM14;
+
+extern SPI_Type * const SPI1;
+extern SPI_Type * const SPI2;
+extern SPI_Type * const SPI3;
 
 #if defined(__cplusplus)
 }
