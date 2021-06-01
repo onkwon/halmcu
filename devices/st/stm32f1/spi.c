@@ -221,9 +221,40 @@ void spi_ll_stop(periph_t spi)
 	bitop_clear(&get_instance(spi)->CR1, 6); /* SPE */
 }
 
-#if 0
 spi_event_t spi_ll_get_event(periph_t spi)
+{
+	uint32_t flags = get_instance(spi)->SR;
+	spi_event_t events = SPI_EVENT_NONE;
+
+	if (flags & (1U << 6)) { /* OVR */
+		events = (spi_event_t)(events | SPI_EVENT_OVERRUN);
+	}
+	if (flags & (1U << 5)) { /* MODF */
+		events = (spi_event_t)(events | SPI_EVENT_MODE_FAULT);
+	}
+	if (flags & (1U << 4)) { /* CRCERR */
+		events = (spi_event_t)(events | SPI_EVENT_CRC_ERROR);
+	}
+	if (flags & (1U << 3)) { /* UDR */
+		events = (spi_event_t)(events | SPI_EVENT_UNDERRUN);
+	}
+	if (flags & (1U << 1)) { /* TXE */
+		events = (spi_event_t)(events | SPI_EVENT_TX_COMPLETE);
+	}
+	if (flags & (1U << 0)) { /* RXNE */
+		events = (spi_event_t)(events | SPI_EVENT_RX);
+	}
+
+	return events;
+}
+
 void spi_ll_clear_event(periph_t spi, spi_event_t events)
+{
+	if (events & SPI_EVENT_CRC_ERROR) {
+		bitop_clear(&get_instance(spi)->SR, 4); /* CRCERR */
+	}
+}
+#if 0
 void spi_ll_enable_crc(periph_t spi)
 void spi_ll_disable_crc(periph_t spi)
 #endif

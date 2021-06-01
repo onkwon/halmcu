@@ -226,3 +226,17 @@ TEST(SPI, stop_ShouldClearSPE) {
 		.ignoreOtherParameters();
 	spi_ll_stop(PERIPH_SPI1);
 }
+
+TEST(SPI, get_event_ShouldReturnEvents) {
+	SPI1->SR = 0xff;
+	LONGS_EQUAL(SPI_EVENT_OVERRUN | SPI_EVENT_MODE_FAULT |
+			SPI_EVENT_CRC_ERROR | SPI_EVENT_UNDERRUN |
+			SPI_EVENT_TX_COMPLETE | SPI_EVENT_RX,
+			spi_ll_get_event(PERIPH_SPI1));
+}
+
+TEST(SPI, clear_event_ShouldClearCrcErr) {
+	SPI1->SR = 0x10; // CRCERR
+	spi_ll_clear_event(PERIPH_SPI1, SPI_EVENT_CRC_ERROR);
+	LONGS_EQUAL(0, SPI1->SR);
+}

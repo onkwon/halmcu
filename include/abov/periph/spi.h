@@ -34,7 +34,9 @@ typedef enum {
 	SPI_EVENT_UNDERRUN			= (1U << 4),
 	SPI_EVENT_CHIP_SELECTED			= (1U << 5),
 	SPI_EVENT_CHIP_DESELECTED		= (1U << 6),
-	SPI_EVENT_MASK				= 0x7F,
+	SPI_EVENT_MODE_FAULT			= (1U << 7),
+	SPI_EVENT_CRC_ERROR			= (1U << 8),
+	SPI_EVENT_MASK				= 0x1FF,
 } spi_event_t;
 
 void spi_set_mode(periph_t spi, spi_mode_t mode);
