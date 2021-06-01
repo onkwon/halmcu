@@ -160,7 +160,7 @@ TEST(SPI, stop_ShouldClearEN) {
 
 TEST(SPI, get_event_ShouldReturnSR) {
 	SPI0->SR = 0x7f;
-	LONGS_EQUAL(SPI_EVENT_MASK, spi_ll_get_event(PERIPH_SPI0));
+	LONGS_EQUAL(0x7f, spi_ll_get_event(PERIPH_SPI0));
 }
 
 TEST(SPI, clear_event_ShouldClearSR) {
