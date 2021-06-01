@@ -183,10 +183,14 @@ TEST(SPI, disable_chip_select_ShouldClearSSOE) {
 	spi_ll_disable_chip_select(PERIPH_SPI1);
 }
 
-TEST(SPI, set_chip_select_mode_ShouldSetSSM) {
+TEST(SPI, set_chip_select_mode_ShouldSetSSMAndSSI) {
 	mock().expectOneCall("bitop_clean_set_with_mask")
 		.withParameter("pos", 9)
-		.withParameter("val", 0)
+		.withParameter("val", 1)
+		.ignoreOtherParameters();
+	mock().expectOneCall("bitop_clean_set_with_mask")
+		.withParameter("pos", 8)
+		.withParameter("val", 1)
 		.ignoreOtherParameters();
 	spi_ll_set_chip_select_mode(PERIPH_SPI1, true);
 }

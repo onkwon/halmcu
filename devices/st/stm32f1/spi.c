@@ -195,7 +195,9 @@ void spi_ll_disable_chip_select(periph_t spi)
 void spi_ll_set_chip_select_mode(periph_t spi, bool manual)
 {
 	bitop_clean_set_with_mask(&get_instance(spi)->CR1,
-			9/*SSM*/, 1, !manual);
+			9/*SSM*/, 1, manual);
+	bitop_clean_set_with_mask(&get_instance(spi)->CR1,
+			8/*SSI*/, 1, manual);
 }
 
 void spi_ll_set_chip_select_level(periph_t spi, int level)
