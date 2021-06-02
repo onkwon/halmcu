@@ -68,3 +68,26 @@ uint32_t spi_ll_read(periph_t spi) {
 		.withParameter("spi", spi)
 		.returnUnsignedIntValueOrDefault(0);
 }
+
+void spi_ll_clear_event(periph_t spi, spi_event_t events) {
+	mock().actualCall(__func__)
+		.withParameter("spi", spi)
+		.withParameter("events", events);
+}
+spi_event_t spi_ll_get_event(periph_t spi) {
+	return (spi_event_t)mock().actualCall(__func__)
+		.withParameter("spi", spi)
+		.returnUnsignedIntValueOrDefault(0);
+}
+
+void spi_ll_enable_chip_select(periph_t spi) {
+	mock().actualCall(__func__).withParameter("spi", spi);
+}
+void spi_ll_disable_chip_select(periph_t spi) {
+	mock().actualCall(__func__).withParameter("spi", spi);
+}
+void spi_ll_set_chip_select_mode(periph_t spi, bool manual) {
+	mock().actualCall(__func__)
+		.withParameter("spi", spi)
+		.withParameter("manual", manual);
+}

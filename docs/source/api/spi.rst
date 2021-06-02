@@ -1,6 +1,8 @@
 SPI
 ===
 
+.. image:: ../assets/images/spi.svg
+
 Examples
 --------
 .. literalinclude:: ../../../examples/peripheral/spi.c
@@ -8,8 +10,12 @@ Examples
 
 HAL
 ---
-.. c:autodoc:: ../../include/abov/hal/spi.h
+.. doxygenfile:: abov/hal/spi.h
 
 LL
 --
-.. c:autodoc:: ../../include/abov/ll/spi.h
+.. doxygenfile:: abov/periph/spi.h
+
+Extra
+-----
+.. doxygenfile:: abov/ll/spi.h

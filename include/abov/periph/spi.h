@@ -39,13 +39,10 @@ typedef enum {
 	SPI_EVENT_MASK				= 0x1FF,
 } spi_event_t;
 
-void spi_set_mode(periph_t spi, spi_mode_t mode);
 void spi_start(periph_t spi);
 void spi_stop(periph_t spi);
-void spi_set_loopback(periph_t spi, bool enable);
 spi_event_t spi_get_event(periph_t spi);
 void spi_clear_event(periph_t spi, spi_event_t events);
-void spi_set_frequency(periph_t spi, uint32_t hz, uint32_t pclk);
 
 #if defined(__cplusplus)
 }
