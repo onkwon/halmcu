@@ -40,6 +40,8 @@ export CPPUTEST_WARNINGFLAGS = \
 	-Wstrict-overflow=5 \
 	-Werror \
 	\
+	-Wno-missing-field-initializers \
+	\
 	-Wswitch-default \
 
 ifeq ($(shell uname), Darwin)
