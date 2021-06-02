@@ -403,6 +403,7 @@ uint32_t clk_ll_get_peripheral_clock_source_frequency(periph_t peri)
 	case PERIPH_ADC1: /* fall through */
 	case PERIPH_ADC2: /* fall through */
 	case PERIPH_ADC3: /* fall through */
+	case PERIPH_SPI1: /* fall through */
 	case PERIPH_USART1:
 		return get_pclk2_frequency();
 	case PERIPH_TIM2: /* fall through */
@@ -411,6 +412,8 @@ uint32_t clk_ll_get_peripheral_clock_source_frequency(periph_t peri)
 	case PERIPH_TIM5: /* fall through */
 	case PERIPH_TIM6: /* fall through */
 	case PERIPH_TIM7: /* fall through */
+	case PERIPH_SPI2: /* fall through */
+	case PERIPH_SPI3: /* fall through */
 	case PERIPH_USART2: /* fall through */
 	case PERIPH_USART3: /* fall through */
 	case PERIPH_UART4: /* fall through */

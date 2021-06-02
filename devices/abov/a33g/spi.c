@@ -28,7 +28,7 @@ static SPI_Type *get_interface_from_type(periph_t peri)
 	return spi;
 }
 
-void spi_reset(periph_t spi)
+void spi_ll_reset(periph_t spi)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 
@@ -41,43 +41,43 @@ void spi_reset(periph_t spi)
 	self->LR = 0x1866;
 }
 
-uint32_t spi_get_rxd(periph_t spi)
+uint32_t spi_ll_get_rxd(periph_t spi)
 {
 	const SPI_Type *self = get_interface_from_type(spi);
 	return self->RDR;
 }
 
-void spi_set_txd(periph_t spi, uint32_t value)
+void spi_ll_set_txd(periph_t spi, uint32_t value)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 	self->TDR = value;
 }
 
-void spi_clear_rx_buffer(periph_t spi)
+void spi_ll_clear_rx_buffer(periph_t spi)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 	bitop_set(&self->CR, 19); /* RXBC */
 }
 
-void spi_clear_tx_buffer(periph_t spi)
+void spi_ll_clear_tx_buffer(periph_t spi)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 	bitop_set(&self->CR, 20); /* TXBC */
 }
 
-void spi_enable_chip_select(periph_t spi)
+void spi_ll_enable_chip_select(periph_t spi)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 	bitop_set(&self->CR, 8); /* SSMO */
 }
 
-void spi_disable_chip_select(periph_t spi)
+void spi_ll_disable_chip_select(periph_t spi)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 	bitop_clear(&self->CR, 8); /* SSMO */
 }
 
-void spi_set_chip_select_mode(periph_t spi, bool manual)
+void spi_ll_set_chip_select_mode(periph_t spi, bool manual)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 
@@ -88,7 +88,7 @@ void spi_set_chip_select_mode(periph_t spi, bool manual)
 	}
 }
 
-void spi_set_chip_select_level(periph_t spi, int level)
+void spi_ll_set_chip_select_level(periph_t spi, int level)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 
@@ -99,7 +99,7 @@ void spi_set_chip_select_level(periph_t spi, int level)
 	}
 }
 
-void spi_set_chip_select_polarity(periph_t spi, int level)
+void spi_ll_set_chip_select_polarity(periph_t spi, int level)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 
@@ -110,7 +110,7 @@ void spi_set_chip_select_polarity(periph_t spi, int level)
 	}
 }
 
-void spi_set_loopback(periph_t spi, bool enable)
+void spi_ll_set_loopback(periph_t spi, bool enable)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 
@@ -121,7 +121,7 @@ void spi_set_loopback(periph_t spi, bool enable)
 	}
 }
 
-void spi_set_mode(periph_t spi, spi_mode_t mode)
+void spi_ll_set_mode(periph_t spi, spi_mode_t mode)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 
@@ -132,7 +132,7 @@ void spi_set_mode(periph_t spi, spi_mode_t mode)
 	}
 }
 
-void spi_set_clock_phase(periph_t spi, int cpha)
+void spi_ll_set_clock_phase(periph_t spi, int cpha)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 
@@ -143,7 +143,7 @@ void spi_set_clock_phase(periph_t spi, int cpha)
 	}
 }
 
-void spi_set_clock_polarity(periph_t spi, int cpol)
+void spi_ll_set_clock_polarity(periph_t spi, int cpol)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 
@@ -154,7 +154,7 @@ void spi_set_clock_polarity(periph_t spi, int cpol)
 	}
 }
 
-void spi_set_data_width(periph_t spi, uint32_t data_width)
+void spi_ll_set_data_width(periph_t spi, uint32_t data_width)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 
@@ -179,13 +179,13 @@ void spi_set_data_width(periph_t spi, uint32_t data_width)
 	bitop_clean_set_with_mask(&self->CR, 0, 0x3, val);
 }
 
-void spi_set_bitorder(periph_t spi, bool lsb_first)
+void spi_ll_set_bitorder(periph_t spi, bool lsb_first)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 	bitop_clean_set_with_mask(&self->CR, 4, 1U, !lsb_first); /* MSBF */
 }
 
-void spi_enable_irq(periph_t spi, spi_irq_t irqs)
+void spi_ll_enable_irq(periph_t spi, spi_irq_t irqs)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 
@@ -200,7 +200,7 @@ void spi_enable_irq(periph_t spi, spi_irq_t irqs)
 	}
 }
 
-void spi_disable_irq(periph_t spi, spi_irq_t irqs)
+void spi_ll_disable_irq(periph_t spi, spi_irq_t irqs)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 
@@ -215,7 +215,7 @@ void spi_disable_irq(periph_t spi, spi_irq_t irqs)
 	}
 }
 
-void spi_set_frequency(periph_t spi, uint32_t hz, uint32_t pclk)
+void spi_ll_set_frequency(periph_t spi, uint32_t hz, uint32_t pclk)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 	assert(pclk > hz);
@@ -224,19 +224,19 @@ void spi_set_frequency(periph_t spi, uint32_t hz, uint32_t pclk)
 	self->BR = brr;
 }
 
-void spi_start(periph_t spi)
+void spi_ll_start(periph_t spi)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 	bitop_set(&self->EN, 0);
 }
 
-void spi_stop(periph_t spi)
+void spi_ll_stop(periph_t spi)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 	bitop_clear(&self->EN, 0);
 }
 
-spi_event_t spi_get_event(periph_t spi)
+spi_event_t spi_ll_get_event(periph_t spi)
 {
 	const SPI_Type *self = get_interface_from_type(spi);
 	spi_event_t events = SPI_EVENT_NONE;
@@ -267,7 +267,7 @@ spi_event_t spi_get_event(periph_t spi)
 	return events;
 }
 
-void spi_clear_event(periph_t spi, spi_event_t events)
+void spi_ll_clear_event(periph_t spi, spi_event_t events)
 {
 	SPI_Type *self = get_interface_from_type(spi);
 

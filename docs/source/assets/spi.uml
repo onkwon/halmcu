@@ -1,0 +1,63 @@
+@startuml
+interface SPI {
+	spi_mode_t
+	spi_irq_t
+	spi_event_t
+
+	start()
+	stop()
+	get_event()
+	clear_event()
+}
+
+class LL {
+	reset()
+	get_rxd()
+	set_txd()
+	write()
+	read()
+	is_busy()
+	clear_rx_buffer()
+	clear_tx_buffer()
+	enable_irq()
+	disable_irq()
+	enable_chip_select()
+	disable_chip_select()
+	set_chip_select_mode()
+	set_chip_select_level()
+	set_chip_select_polarity()
+	set_loopback()
+	set_mode()
+	start()
+	stop()
+	get_event()
+	clear_event()
+	set_clock_phase()
+	set_clock_polarity()
+	set_data_width()
+	set_bitorder()
+	set_frequency()
+	set_start_delay()
+	set_stop_delay()
+	set_burst_delay()
+	enable_crc()
+	disable_crc()
+}
+
+class HAL {
+	enable()
+	disable()
+	init()
+	deinit()
+	write()
+	read()
+	write_read()
+}
+
+HAL ..|> SPI
+HAL --> LL
+HAL ..> LL_power
+HAL ..> LL_clock
+HAL ..> IRQ
+LL --> SPI
+@enduml

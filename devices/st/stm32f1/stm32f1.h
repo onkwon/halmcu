@@ -56,6 +56,10 @@ extern "C" {
 #define TIM13_BASE			(APB1_BASE + 0x1C00U)
 #define TIM14_BASE			(APB1_BASE + 0x2000U)
 
+#define SPI1_BASE			(APB2_BASE + 0x3000U)
+#define SPI2_BASE			(APB1_BASE + 0x3800U)
+#define SPI3_BASE			(APB1_BASE + 0x3C00U)
+
 typedef struct {
 	volatile uint32_t IDCODE;
 	volatile uint32_t CR;
@@ -178,6 +182,18 @@ typedef struct {
 	volatile uint32_t DMAR;
 } TIM_Type;
 
+typedef struct {
+	volatile uint32_t CR1;
+	volatile uint32_t CR2;
+	volatile uint32_t SR;
+	volatile uint32_t DR;
+	volatile uint32_t CRCPR;
+	volatile uint32_t RXCRCR;
+	volatile uint32_t TXCRCR;
+	volatile uint32_t I2SCFGR;
+	volatile uint32_t I2SPR;
+} SPI_Type;
+
 #define DBGMCU				((DBGMCU_Type *)DBGMCU_BASE)
 
 #define SYSCFG				((SYSCFG_Type *)SYSCFG_BASE)
@@ -219,6 +235,10 @@ typedef struct {
 #define TIM12				((TIM_Type *)TIM12_BASE)
 #define TIM13				((TIM_Type *)TIM13_BASE)
 #define TIM14				((TIM_Type *)TIM14_BASE)
+
+#define SPI1				((SPI_Type *)SPI1_BASE)
+#define SPI2				((SPI_Type *)SPI2_BASE)
+#define SPI3				((SPI_Type *)SPI3_BASE)
 
 #if defined(__cplusplus)
 }
