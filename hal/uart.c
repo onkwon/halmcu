@@ -2,7 +2,7 @@
 
 #include <string.h>
 
-#include "halmcu/ll/pwr.h"
+#include "halmcu/periph/pwr.h"
 #include "halmcu/periph/clk.h"
 #include "halmcu/irq.h"
 #include "halmcu/compiler.h"
@@ -37,7 +37,7 @@ bool uart_init(periph_t uart, const struct uart_cfg *cfg, uart_handle_t *handle)
 		return false;
 	}
 
-	pwr_ll_enable_peripheral(uart);
+	pwr_enable_peripheral(uart);
 	clk_enable_peripheral(uart);
 
 	uart_ll_reset(uart);
@@ -77,7 +77,7 @@ void uart_deinit(periph_t uart)
 	irq_disable(PERIPH_TO_IRQ(uart));
 
 	clk_disable_peripheral(uart);
-	pwr_ll_disable_peripheral(uart);
+	pwr_disable_peripheral(uart);
 }
 
 int uart_read_byte_nonblock(periph_t port)

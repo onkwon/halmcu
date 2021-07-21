@@ -15,7 +15,7 @@ TEST_GROUP(SPI) {
 };
 
 TEST(SPI, enable_ShouldEnablePeripheralAndClock) {
-	mock().expectOneCall("pwr_ll_enable_peripheral")
+	mock().expectOneCall("pwr_enable_peripheral")
 		.withParameter("peri", PERIPH_SPI1);
 	mock().expectOneCall("clk_enable_peripheral")
 		.withParameter("peri", PERIPH_SPI1);
@@ -23,7 +23,7 @@ TEST(SPI, enable_ShouldEnablePeripheralAndClock) {
 }
 
 TEST(SPI, disable_ShouldDisablePeripheralAndClock) {
-	mock().expectOneCall("pwr_ll_disable_peripheral")
+	mock().expectOneCall("pwr_disable_peripheral")
 		.withParameter("peri", PERIPH_SPI1);
 	mock().expectOneCall("clk_disable_peripheral")
 		.withParameter("peri", PERIPH_SPI1);
@@ -81,7 +81,7 @@ TEST(SPI, init_ShouldEnableInterrupt) {
 TEST(SPI, deinit_ShouldDisableSPI) {
 	mock().expectOneCall("irq_disable")
 		.ignoreOtherParameters();
-	mock().expectOneCall("pwr_ll_disable_peripheral")
+	mock().expectOneCall("pwr_disable_peripheral")
 		.ignoreOtherParameters();
 	mock().expectOneCall("clk_disable_peripheral")
 		.ignoreOtherParameters();

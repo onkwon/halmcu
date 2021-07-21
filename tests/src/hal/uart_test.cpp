@@ -35,7 +35,7 @@ TEST(uart_driver, init_ShouldReturnFalse_WhenNullObjGiven) {
 	LONGS_EQUAL(0, uart_init(PERIPH_UART0, NULL, NULL));
 }
 TEST(uart_driver, init_ShouldReturnTrue_WhenAllGivenParamVaild) {
-	mock().expectOneCall("pwr_ll_enable_peripheral")
+	mock().expectOneCall("pwr_enable_peripheral")
 		.withParameter("peri", PERIPH_UART0);
 	mock().expectOneCall("clk_enable_peripheral")
 		.withParameter("peri", PERIPH_UART0);
@@ -80,7 +80,7 @@ TEST(uart_driver, deinit) {
 	mock().expectOneCall("irq_disable").withParameter("irq", 3 + IRQ_FIXED);
 	mock().expectOneCall("clk_disable_peripheral")
 		.withParameter("peri", PERIPH_UART0);
-	mock().expectOneCall("pwr_ll_disable_peripheral")
+	mock().expectOneCall("pwr_disable_peripheral")
 		.withParameter("peri", PERIPH_UART0);
 	uart_deinit(PERIPH_UART0);
 }

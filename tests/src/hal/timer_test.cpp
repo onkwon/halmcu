@@ -34,7 +34,7 @@ TEST(Timer, init_ShouldReturnFalse_WhenNullConfigGiven) {
 	LONGS_EQUAL(0, timer_init(PERIPH_TIMER0, NULL));
 }
 TEST(Timer, init_ShouldEnablePowerAndClock) {
-	mock().expectOneCall("pwr_ll_enable_peripheral").withParameter("peri", PERIPH_TIMER0);
+	mock().expectOneCall("pwr_enable_peripheral").withParameter("peri", PERIPH_TIMER0);
 	mock().expectOneCall("clk_enable_peripheral").withParameter("peri", PERIPH_TIMER0);
 	LONGS_EQUAL(1, timer_init(PERIPH_TIMER0, &default_cfg));
 }
@@ -94,7 +94,7 @@ TEST(Timer, init_ShouldRunCallback_WhenGiven) {
 }
 
 TEST(Timer, deinit_ShouldDisablePowerAndClock) {
-	mock().expectOneCall("pwr_ll_disable_peripheral").withParameter("peri", PERIPH_TIMER0);
+	mock().expectOneCall("pwr_disable_peripheral").withParameter("peri", PERIPH_TIMER0);
 	mock().expectOneCall("clk_disable_peripheral").withParameter("peri", PERIPH_TIMER0);
 	timer_deinit(PERIPH_TIMER0);
 }

@@ -3,7 +3,7 @@
 #include <stddef.h>
 
 #include "halmcu/irq.h"
-#include "halmcu/ll/pwr.h"
+#include "halmcu/periph/pwr.h"
 #include "halmcu/periph/clk.h"
 
 static void set_frequency(periph_t timer, const struct timer_cfg *cfg)
@@ -21,7 +21,7 @@ bool timer_init(periph_t timer, const struct timer_cfg *cfg)
 		return false;
 	}
 
-	pwr_ll_enable_peripheral(timer);
+	pwr_enable_peripheral(timer);
 	clk_enable_peripheral(timer);
 
 	timer_ll_reset(timer);
@@ -48,7 +48,7 @@ bool timer_init(periph_t timer, const struct timer_cfg *cfg)
 void timer_deinit(periph_t timer)
 {
 	clk_disable_peripheral(timer);
-	pwr_ll_disable_peripheral(timer);
+	pwr_disable_peripheral(timer);
 }
 
 void timer_start(periph_t peri)

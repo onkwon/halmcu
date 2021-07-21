@@ -15,7 +15,7 @@ TEST_GROUP(Watchdog) {
 };
 
 TEST(Watchdog, enable_ShouldEnablePeripheralAndClock) {
-	mock().expectOneCall("pwr_ll_enable_peripheral")
+	mock().expectOneCall("pwr_enable_peripheral")
 		.withParameter("peri", PERIPH_WDT);
 	mock().expectOneCall("clk_enable_peripheral")
 		.withParameter("peri", PERIPH_WDT);
@@ -23,7 +23,7 @@ TEST(Watchdog, enable_ShouldEnablePeripheralAndClock) {
 }
 
 TEST(Watchdog, disable_ShouldDisablePeripheralAndClock) {
-	mock().expectOneCall("pwr_ll_disable_peripheral")
+	mock().expectOneCall("pwr_disable_peripheral")
 		.withParameter("peri", PERIPH_WDT);
 	mock().expectOneCall("clk_disable_peripheral")
 		.withParameter("peri", PERIPH_WDT);

@@ -2,8 +2,8 @@
 
 #include <stddef.h>
 
-#include "halmcu/ll/pwr.h"
-#include "halmcu/ll/clk.h"
+#include "halmcu/periph/pwr.h"
+#include "halmcu/periph/clk.h"
 #include "halmcu/irq.h"
 
 void gpio_open(periph_t port, uint32_t pin, const struct gpio_cfg *cfg)
@@ -12,8 +12,8 @@ void gpio_open(periph_t port, uint32_t pin, const struct gpio_cfg *cfg)
 		return;
 	}
 
-	pwr_ll_enable_peripheral(port);
-	clk_ll_enable_peripheral(port);
+	pwr_enable_peripheral(port);
+	clk_enable_peripheral(port);
 
 	gpio_ll_enable_port(port);
 	gpio_ll_set_mode(port, pin, cfg->mode);
@@ -34,8 +34,8 @@ void gpio_open(periph_t port, uint32_t pin, const struct gpio_cfg *cfg)
 
 void gpio_open_output(periph_t port, uint32_t pin, gpio_mode_t mode)
 {
-	pwr_ll_enable_peripheral(port);
-	clk_ll_enable_peripheral(port);
+	pwr_enable_peripheral(port);
+	clk_enable_peripheral(port);
 
 	gpio_ll_enable_port(port);
 	gpio_ll_set_mode(port, pin, mode);
@@ -55,8 +55,8 @@ void gpio_close(periph_t port, uint32_t pin)
 	}
 #endif
 
-	clk_ll_disable_peripheral(port);
-	pwr_ll_disable_peripheral(port);
+	clk_disable_peripheral(port);
+	pwr_disable_peripheral(port);
 }
 
 void gpio_write(periph_t port, uint32_t pin, int value)

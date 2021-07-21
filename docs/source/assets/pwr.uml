@@ -1,3 +1,20 @@
+
+,---------------------.
+|Power                |
+|---------------------|
+|---------------------|
+|reset()              |
+|reboot()             |
+|get_reboot_source()  |
+|clear_reboot_source()|
+|enable_peripheral()  |
+|disable_peripheral() |
+|set_mode()           |
+|set_wakeup_source()  |
+|clear_wakeup_source()|
+|get_wakeup_source()  |
+`---------------------'
+
 @startuml
 interface Power {
 	reset()
@@ -11,24 +28,4 @@ interface Power {
 	clear_wakeup_source()
 	get_wakeup_source()
 }
-
-class LL {
-	reset()
-	reboot()
-	get_reboot_source()
-	clear_reboot_source()
-	enable_peripheral()
-	disable_peripheral()
-	set_mode()
-	set_wakeup_source()
-	clear_wakeup_source()
-	get_wakeup_source()
-}
-
-class HAL {
-}
-
-HAL ..|> Power
-HAL --> LL
-LL --> Power
 @enduml

@@ -1,4 +1,4 @@
-#include "halmcu/ll/pwr.h"
+#include "halmcu/periph/pwr.h"
 #include "halmcu/asm/arm/cmsis.h"
 #include "a33g.h"
 
@@ -91,23 +91,23 @@ static uint32_t get_activation_bitmask_from_enum(uint32_t x)
 	}
 }
 
-void pwr_ll_reboot(void)
+void pwr_reboot(void)
 {
 	PMU->CFG |= SWRST;
 }
 
-uint32_t pwr_ll_get_reboot_source(void)
+uint32_t pwr_get_reboot_source(void)
 {
 	return PMU->RSSR;
 }
 
-void pwr_ll_clear_reboot_source(uint32_t bitmask)
+void pwr_clear_reboot_source(uint32_t bitmask)
 {
 	PMU->RSSR &= ~bitmask;
 }
 
 // TODO: main clock should be changed first via MCLKSEL in PMU->BCCR
-void pwr_ll_set_mode(pwr_mode_t sleep_mode)
+void pwr_set_mode(pwr_mode_t sleep_mode)
 {
 	uint32_t bit = 0;
 	PMU->MR &= ~(PMUMODE_MASK | VDCLP_MASK);
@@ -132,32 +132,32 @@ void pwr_ll_set_mode(pwr_mode_t sleep_mode)
 	PMU->MR |= bit;
 }
 
-void pwr_ll_set_wakeup_source(periph_t peri)
+void pwr_set_wakeup_source(periph_t peri)
 {
 	PMU->WSER |= get_wakeup_bitmask_from_enum(peri);
 }
 
-void pwr_ll_clear_wakeup_source(periph_t peri)
+void pwr_clear_wakeup_source(periph_t peri)
 {
 	PMU->WSER &= ~get_wakeup_bitmask_from_enum(peri);
 }
 
-uint32_t pwr_ll_get_wakeup_source(void)
+uint32_t pwr_get_wakeup_source(void)
 {
 	return PMU->WSSR;
 }
 
-void pwr_ll_enable_peripheral(periph_t peri)
+void pwr_enable_peripheral(periph_t peri)
 {
 	PMU->PER |= get_activation_bitmask_from_enum(peri);
 }
 
-void pwr_ll_disable_peripheral(periph_t peri)
+void pwr_disable_peripheral(periph_t peri)
 {
 	PMU->PER &= ~get_activation_bitmask_from_enum(peri);
 }
 
-void pwr_ll_reset(void)
+void pwr_reset(void)
 {
 	PMU->MR = 0;
 	PMU->CFG = 0;

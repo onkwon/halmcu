@@ -2,20 +2,20 @@
 
 #include <stddef.h>
 
-#include "halmcu/ll/pwr.h"
+#include "halmcu/periph/pwr.h"
 #include "halmcu/periph/clk.h"
 #include "halmcu/irq.h"
 
 void spi_enable(periph_t spi)
 {
-	pwr_ll_enable_peripheral(spi);
+	pwr_enable_peripheral(spi);
 	clk_enable_peripheral(spi);
 }
 
 void spi_disable(periph_t spi)
 {
 	clk_disable_peripheral(spi);
-	pwr_ll_disable_peripheral(spi);
+	pwr_disable_peripheral(spi);
 }
 
 void spi_start(periph_t spi)
