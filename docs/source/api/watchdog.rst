@@ -15,7 +15,3 @@ HAL
 LL
 --
 .. doxygenfile:: halmcu/periph/wdt.h
-
-Extra
------
-.. doxygenfile:: halmcu/ll/wdt.h

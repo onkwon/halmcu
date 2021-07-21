@@ -12,4 +12,4 @@ HAL
 
 LL
 --
-.. c:autodoc:: ../../include/halmcu/ll/i2c.h
+.. c:autodoc:: ../../include/halmcu/periph/i2c.h

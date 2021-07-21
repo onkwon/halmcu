@@ -15,7 +15,3 @@ HAL
 LL
 --
 .. doxygenfile:: halmcu/periph/spi.h
-
-Extra
------
-.. doxygenfile:: halmcu/ll/spi.h
