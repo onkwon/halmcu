@@ -20,6 +20,12 @@ typedef enum {
 } clk_source_t;
 
 /**
+ * @brief Reset CLK unit
+ *
+ * This function makes CLK unit the reset state.
+ */
+void clk_reset(void);
+/**
  * @brief Enable peripheral clock.
  *
  * @param[in] peri enumerated in @ref periph_t

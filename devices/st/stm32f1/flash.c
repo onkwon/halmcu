@@ -1,4 +1,4 @@
-#include "halmcu/ll/flash.h"
+#include "halmcu/periph/flash.h"
 
 #include "halmcu/bitop.h"
 #include "halmcu/assert.h"
@@ -81,12 +81,12 @@ static void program_half_word(uintptr_t addr, uint16_t data)
 	bitop_clear(&FLASH->CR, BIT_FLASH_PROGRAM);
 }
 
-void flash_ll_lock(void)
+void flash_lock(void)
 {
 	lock_flash();
 }
 
-void flash_ll_unlock(void)
+void flash_unlock(void)
 {
 	unlock_flash();
 }
@@ -96,13 +96,13 @@ void flash_ll_unlock(void)
  * 1 wait : 24MHz < SYSCLK <= 48MHz
  * 2 wait : 48MHz < SYSCLK <= 72MHz
  */
-void flash_ll_set_latency(uint32_t clk)
+void flash_set_latency(uint32_t clk)
 {
 	assert(clk < 3);
 	bitop_clean_set_with_mask(&FLASH->ACR, 0, 7, clk);
 }
 
-bool flash_ll_erase_page(uint32_t page_address)
+bool flash_erase_page(uint32_t page_address)
 {
 	clear_flags();
 
@@ -117,7 +117,7 @@ bool flash_ll_erase_page(uint32_t page_address)
 	return get_error_flags() == 0;
 }
 
-bool flash_ll_erase_all_pages(void)
+bool flash_erase_all_pages(void)
 {
 	clear_flags();
 
@@ -131,7 +131,7 @@ bool flash_ll_erase_all_pages(void)
 	return get_error_flags() == 0;
 }
 
-bool flash_ll_program_word(uintptr_t addr, uint32_t data)
+bool flash_program_word(uintptr_t addr, uint32_t data)
 {
 	clear_flags();
 

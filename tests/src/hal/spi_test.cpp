@@ -15,32 +15,32 @@ TEST_GROUP(SPI) {
 };
 
 TEST(SPI, enable_ShouldEnablePeripheralAndClock) {
-	mock().expectOneCall("pwr_ll_enable_peripheral")
+	mock().expectOneCall("pwr_enable_peripheral")
 		.withParameter("peri", PERIPH_SPI1);
-	mock().expectOneCall("clk_ll_enable_peripheral")
+	mock().expectOneCall("clk_enable_peripheral")
 		.withParameter("peri", PERIPH_SPI1);
 	spi_enable(PERIPH_SPI1);
 }
 
 TEST(SPI, disable_ShouldDisablePeripheralAndClock) {
-	mock().expectOneCall("pwr_ll_disable_peripheral")
+	mock().expectOneCall("pwr_disable_peripheral")
 		.withParameter("peri", PERIPH_SPI1);
-	mock().expectOneCall("clk_ll_disable_peripheral")
+	mock().expectOneCall("clk_disable_peripheral")
 		.withParameter("peri", PERIPH_SPI1);
 	spi_disable(PERIPH_SPI1);
 }
 
 TEST(SPI, start_ShouldStartSPI) {
-	mock().expectOneCall("spi_ll_start")
+	mock().expectOneCall("spi_enable_clock")
 		.withParameter("spi", PERIPH_SPI1);
 	spi_start(PERIPH_SPI1);
 }
 
 TEST(SPI, stop_ShouldStopSPI) {
-	mock().expectOneCall("spi_ll_is_busy")
+	mock().expectOneCall("spi_is_busy")
 		.withParameter("spi", PERIPH_SPI1)
 		.andReturnValue(false);
-	mock().expectOneCall("spi_ll_stop")
+	mock().expectOneCall("spi_disable_clock")
 		.withParameter("spi", PERIPH_SPI1);
 	spi_stop(PERIPH_SPI1);
 }
@@ -59,7 +59,7 @@ TEST(SPI, init_ShouldEnableAutoChipSelect) {
 		.frequency = 100000,
 		.auto_chip_select = true,
 	};
-	mock().expectOneCall("spi_ll_enable_chip_select")
+	mock().expectOneCall("spi_enable_chip_select")
 		.withParameter("spi", PERIPH_SPI1);
 
 	spi_init(PERIPH_SPI1, &cfg);
@@ -69,7 +69,7 @@ TEST(SPI, init_ShouldEnableInterrupt) {
 		.frequency = 100000,
 		.interrupt = true,
 	};
-	mock().expectOneCall("spi_ll_enable_irq")
+	mock().expectOneCall("spi_enable_irq")
 		.withParameter("spi", PERIPH_SPI1)
 		.ignoreOtherParameters();
 	mock().expectOneCall("irq_enable")
@@ -81,41 +81,53 @@ TEST(SPI, init_ShouldEnableInterrupt) {
 TEST(SPI, deinit_ShouldDisableSPI) {
 	mock().expectOneCall("irq_disable")
 		.ignoreOtherParameters();
-	mock().expectOneCall("pwr_ll_disable_peripheral")
+	mock().expectOneCall("pwr_disable_peripheral")
 		.ignoreOtherParameters();
-	mock().expectOneCall("clk_ll_disable_peripheral")
+	mock().expectOneCall("clk_disable_peripheral")
 		.ignoreOtherParameters();
 
 	spi_deinit(PERIPH_SPI1);
 }
 
 TEST(SPI, write_ShouldCallLowLevelWrite) {
-	mock().expectOneCall("spi_ll_write")
+	mock().expectOneCall("spi_is_tx_completed")
+		.withParameter("spi", PERIPH_SPI1)
+		.andReturnValue(true);
+	mock().expectOneCall("spi_set_txd")
 		.withParameter("spi", PERIPH_SPI1)
 		.withParameter("value", 0xa5);
 	spi_write(PERIPH_SPI1, 0xa5);
 }
 TEST(SPI, read_ShouldCallLowLevelRead) {
-	mock().expectOneCall("spi_ll_read")
+	mock().expectOneCall("spi_has_rx")
+		.withParameter("spi", PERIPH_SPI1)
+		.andReturnValue(true);
+	mock().expectOneCall("spi_get_rxd")
 		.withParameter("spi", PERIPH_SPI1);
 	spi_read(PERIPH_SPI1);
 }
 TEST(SPI, write_read_ShouldCallLowLevelWriteAndRead) {
-	mock().expectOneCall("spi_ll_write")
+	mock().expectOneCall("spi_is_tx_completed")
+		.withParameter("spi", PERIPH_SPI1)
+		.andReturnValue(true);
+	mock().expectOneCall("spi_set_txd")
 		.withParameter("spi", PERIPH_SPI1)
 		.withParameter("value", 0xa5);
-	mock().expectOneCall("spi_ll_read")
+	mock().expectOneCall("spi_has_rx")
+		.withParameter("spi", PERIPH_SPI1)
+		.andReturnValue(true);
+	mock().expectOneCall("spi_get_rxd")
 		.withParameter("spi", PERIPH_SPI1);
 	spi_write_read(PERIPH_SPI1, 0xa5);
 }
 
 TEST(SPI, get_event_ShouldCallLowLevelDriver) {
-	mock().expectOneCall("spi_ll_get_event")
+	mock().expectOneCall("spi_get_event")
 		.withParameter("spi", PERIPH_SPI1);
 	spi_get_event(PERIPH_SPI1);
 }
 TEST(SPI, clear_event_ShouldCallLowLevelDriver) {
-	mock().expectOneCall("spi_ll_clear_event")
+	mock().expectOneCall("spi_clear_event")
 		.withParameter("spi", PERIPH_SPI1)
 		.withParameter("events", SPI_EVENT_RX | SPI_EVENT_OVERRUN);
 	spi_clear_event(PERIPH_SPI1, (spi_event_t)

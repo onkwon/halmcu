@@ -17,8 +17,3 @@ LL
 --
 .. doxygenfile:: halmcu/periph/gpio.h
    :project: halmcu
-
-Extra
------
-.. doxygenfile:: halmcu/ll/gpio.h
-   :project: halmcu

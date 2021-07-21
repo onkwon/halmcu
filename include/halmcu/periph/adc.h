@@ -65,6 +65,29 @@ typedef enum {
 	ADC_EVENT_MASK					= (3U),
 } adc_event_t;
 
+/**
+ * @brief Reset ADC
+ *
+ * This function makes the given ADC the reset default state.
+ *
+ * @param[in] adc a peripheral enumerated in @ref periph_t
+ */
+void adc_reset(periph_t adc);
+/**
+ * @brief Activate the ADC
+ *
+ * @param[in] adc a peripheral enumerated in @ref periph_t
+ */
+void adc_enable_clock(periph_t adc);
+/**
+ * @brief Deactivate the ADC
+ *
+ * @param[in] adc a peripheral enumerated in @ref periph_t
+ */
+void adc_disable_clock(periph_t adc);
+void adc_set_clock_frequency(periph_t adc, uint32_t hz, uint32_t pclk);
+uint32_t adc_get_frequency(periph_t adc, uint32_t pclk);
+
 void adc_set_mode(periph_t adc, adc_mode_t mode);
 /**
  * @brief Start the ADC conversion

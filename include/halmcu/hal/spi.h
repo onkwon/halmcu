@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "halmcu/ll/spi.h"
+#include "halmcu/periph/spi.h"
 
 struct spi_cfg {
 	spi_mode_t mode;
@@ -22,6 +22,8 @@ void spi_enable(periph_t spi);
 void spi_disable(periph_t spi);
 bool spi_init(periph_t spi, const struct spi_cfg *cfg);
 void spi_deinit(periph_t spi);
+void spi_start(periph_t spi);
+void spi_stop(periph_t spi);
 void spi_write(periph_t spi, uint32_t value);
 uint32_t spi_read(periph_t spi);
 uint32_t spi_write_read(periph_t spi, uint32_t value);

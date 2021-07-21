@@ -1,4 +1,4 @@
-#include "halmcu/ll/adc.h"
+#include "halmcu/periph/adc.h"
 
 #include <stddef.h>
 
@@ -22,7 +22,7 @@ static ADC_Type *get_instance(periph_t adc)
 	}
 }
 
-void adc_ll_reset(periph_t adc)
+void adc_reset(periph_t adc)
 {
 	uint32_t pos = 9;
 
@@ -40,20 +40,20 @@ void adc_ll_reset(periph_t adc)
 	bitop_clear(&RCC->APB2RSTR, pos);
 }
 
-bool adc_ll_is_completed(periph_t adc)
+bool adc_is_completed(periph_t adc)
 {
 	const ADC_Type *reg = get_instance(adc);
 	return !!(reg->SR & 2); /* EOC */
 }
 
-void adc_ll_enable(periph_t adc)
+void adc_enable_clock(periph_t adc)
 {
 	ADC_Type *reg = get_instance(adc);
 	bitop_set(&reg->CR2, 0/*ADON*/);
 	/* NOTE: tSTAB delay needed between power up and start of conversion */
 }
 
-void adc_ll_disable(periph_t adc)
+void adc_disable_clock(periph_t adc)
 {
 	ADC_Type *reg = get_instance(adc);
 	bitop_clear(&reg->CR2, 0/*ADON*/);
@@ -62,7 +62,7 @@ void adc_ll_disable(periph_t adc)
 /* NOTE: calibration recommended after each power up */
 /* NOTE: at least two clock cycle should be given after power-up before
  * starting calibration. */
-void adc_ll_calibrate(periph_t adc)
+void adc_calibrate(periph_t adc)
 {
 	ADC_Type *reg = get_instance(adc);
 	bitop_set(&reg->CR2, 2/*CAL*/);
@@ -72,7 +72,7 @@ void adc_ll_calibrate(periph_t adc)
 	/* calibration code stored in DR register */
 }
 
-void adc_ll_set_mode(periph_t adc, adc_mode_t mode)
+void adc_set_mode(periph_t adc, adc_mode_t mode)
 {
 	ADC_Type *reg = get_instance(adc);
 	bool continuous = false;
@@ -129,27 +129,27 @@ static uint32_t get_trigger_value(const ADC_Type *reg, adc_trigger_t trigger)
 	return get_adc1_2_trigger_value(trigger);
 }
 
-void adc_ll_set_trigger(periph_t adc, adc_trigger_t trigger)
+void adc_set_trigger(periph_t adc, adc_trigger_t trigger)
 {
 	ADC_Type *reg = get_instance(adc);
 	uint32_t val = get_trigger_value(reg, trigger);
 	bitop_clean_set_with_mask(&reg->CR2, 17, 7, val);
 }
 
-void adc_ll_start(periph_t adc)
+void adc_start(periph_t adc)
 {
 	ADC_Type *reg = get_instance(adc);
 	bitop_set(&reg->CR2, 20); /* EXTTRIG */
 	bitop_set(&reg->CR2, 22); /* SWSTART */
 }
 
-void adc_ll_stop(periph_t adc)
+void adc_stop(periph_t adc)
 {
 	ADC_Type *reg = get_instance(adc);
 	bitop_clear(&reg->CR2, 1); /* CONT */
 }
 
-void adc_ll_select_channel(periph_t adc, adc_channel_t channel)
+void adc_select_channel(periph_t adc, adc_channel_t channel)
 {
 	ADC_Type *reg = get_instance(adc);
 	uint32_t nch = 0;
@@ -175,19 +175,19 @@ void adc_ll_select_channel(periph_t adc, adc_channel_t channel)
 	bitop_clean_set_with_mask(&reg->SQR1, 20, 0xf, nch);
 }
 
-bool adc_ll_is_busy(periph_t adc)
+bool adc_is_busy(periph_t adc)
 {
 	const ADC_Type *reg = get_instance(adc);
 	return reg->SR & 0x10; /* STRT */
 }
 
-uint32_t adc_ll_get_measurement(periph_t adc)
+uint32_t adc_get_measurement(periph_t adc)
 {
 	const ADC_Type *reg = get_instance(adc);
 	return reg->DR;
 }
 
-void adc_ll_set_sample_time(periph_t adc, adc_channel_t channel, uint32_t cycle)
+void adc_set_sample_time(periph_t adc, adc_channel_t channel, uint32_t cycle)
 {
 	ADC_Type *reg = get_instance(adc);
 	volatile uint32_t *smpr = &reg->SMPR2;
@@ -217,19 +217,19 @@ void adc_ll_set_sample_time(periph_t adc, adc_channel_t channel, uint32_t cycle)
 	bitop_clean_set_with_mask(smpr, ch * 3 % 30, 7, val);
 }
 
-void adc_ll_enable_irq(periph_t adc)
+void adc_enable_irq(periph_t adc)
 {
 	ADC_Type *reg = get_instance(adc);
 	bitop_set(&reg->CR1, 5);
 }
 
-void adc_ll_disable_irq(periph_t adc)
+void adc_disable_irq(periph_t adc)
 {
 	ADC_Type *reg = get_instance(adc);
 	bitop_clear(&reg->CR1, 5);
 }
 
-adc_event_t adc_ll_get_event(periph_t adc)
+adc_event_t adc_get_event(periph_t adc)
 {
 	const ADC_Type *reg = get_instance(adc);
 	uint32_t sr = reg->SR;
@@ -241,7 +241,7 @@ adc_event_t adc_ll_get_event(periph_t adc)
 	return ADC_EVENT_NONE;
 }
 
-void adc_ll_clear_event(periph_t adc, adc_event_t events)
+void adc_clear_event(periph_t adc, adc_event_t events)
 {
 	ADC_Type *reg = get_instance(adc);
 	if (events & ADC_EVENT_COMPLETE) {
@@ -259,13 +259,13 @@ static void set_prescaler(uint32_t val)
 	bitop_clean_set_with_mask(&RCC->CFGR, 14/*ADCPRE*/, 3, val);
 }
 
-uint32_t adc_ll_get_frequency(periph_t adc, uint32_t pclk)
+uint32_t adc_get_frequency(periph_t adc, uint32_t pclk)
 {
 	unused(adc);
 	return pclk / get_prescaler();
 }
 
-void adc_ll_set_clock_frequency(periph_t adc, uint32_t hz, uint32_t pclk)
+void adc_set_clock_frequency(periph_t adc, uint32_t hz, uint32_t pclk)
 {
 	unused(adc);
 	assert(hz <= 14000000); /* NOTE: must not exceed 14MHz on STM32F1 */

@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "halmcu/ll/gpio.h"
+#include "halmcu/periph/gpio.h"
 #include <stdbool.h>
 
 /** GPIO configuration */

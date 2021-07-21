@@ -1,4 +1,4 @@
-#include "halmcu/ll/timer.h"
+#include "halmcu/periph/timer.h"
 #include "halmcu/bitop.h"
 
 #include "halmcu/asm/arm/cmsis.h"
@@ -19,49 +19,49 @@ static TIMER_Type *get_instance(periph_t peri)
 	return (TIMER_Type *)(T0_BASE + (timer_index * 2 << 4));
 }
 
-void timer_ll_set_prescaler(periph_t peri, uint32_t div_factor)
+void timer_set_prescaler(periph_t peri, uint32_t div_factor)
 {
 	bitop_clean_set_with_mask(&get_instance(peri)->PRS,
 			0, 0x3ffU, div_factor);
 }
 
-uint32_t timer_ll_get_prescaler(periph_t peri)
+uint32_t timer_get_prescaler(periph_t peri)
 {
 	return get_instance(peri)->PRS;
 }
 
-void timer_ll_set_clock_divider(periph_t peri, uint32_t div_factor)
+void timer_set_clock_divider(periph_t peri, uint32_t div_factor)
 {
 	bitop_clean_set_with_mask(&get_instance(peri)->CON,
 			4, 7U, div_factor); /* TCS */
 }
 
-void timer_ll_set_counter(periph_t peri, uint32_t value)
+void timer_set_counter(periph_t peri, uint32_t value)
 {
 	get_instance(peri)->CNT = value;
 }
 
-uint32_t timer_ll_get_counter(periph_t peri)
+uint32_t timer_get_counter(periph_t peri)
 {
 	return get_instance(peri)->CNT;
 }
 
-void timer_ll_set_reload(periph_t peri, uint32_t value)
+void timer_set_reload(periph_t peri, uint32_t value)
 {
 	get_instance(peri)->GRA = value;
 }
 
-uint32_t timer_ll_get_reload(periph_t peri)
+uint32_t timer_get_reload(periph_t peri)
 {
 	return get_instance(peri)->GRA;
 }
 
-void timer_ll_set_mode(periph_t peri, timer_mode_t mode)
+void timer_set_mode(periph_t peri, timer_mode_t mode)
 {
 	bitop_clean_set_with_mask(&get_instance(peri)->CON, 0, 3, mode);
 }
 
-void timer_ll_enable_irq(periph_t peri, timer_event_t events)
+void timer_enable_irq(periph_t peri, timer_event_t events)
 {
 	if (events & TIMER_EVENT_OVERFLOW) {
 		bitop_clean_set_with_mask(&get_instance(peri)->CON,
@@ -77,7 +77,7 @@ void timer_ll_enable_irq(periph_t peri, timer_event_t events)
 	}
 }
 
-void timer_ll_disable_irq(periph_t peri, timer_event_t events)
+void timer_disable_irq(periph_t peri, timer_event_t events)
 {
 	if (events & TIMER_EVENT_OVERFLOW) {
 		bitop_clear(&get_instance(peri)->CON, 10); /* TOVE */
@@ -90,7 +90,7 @@ void timer_ll_disable_irq(periph_t peri, timer_event_t events)
 	}
 }
 
-void timer_ll_clear_event(periph_t peri, timer_event_t events)
+void timer_clear_event(periph_t peri, timer_event_t events)
 {
 	if (events & TIMER_EVENT_OVERFLOW) {
 		bitop_set(&get_instance(peri)->CON, 14); /* IOVF */
@@ -103,18 +103,18 @@ void timer_ll_clear_event(periph_t peri, timer_event_t events)
 	}
 }
 
-void timer_ll_start(periph_t peri)
+void timer_start(periph_t peri)
 {
 	bitop_set(&get_instance(peri)->CMD, 1); /* TCLR */
 	bitop_set(&get_instance(peri)->CMD, 0); /* TEN */
 }
 
-void timer_ll_stop(periph_t peri)
+void timer_stop(periph_t peri)
 {
 	bitop_clear(&get_instance(peri)->CMD, 0); /* TEN */
 }
 
-void timer_ll_set_cc(periph_t peri, timer_cc_t cc, uint32_t value)
+void timer_set_cc(periph_t peri, timer_cc_t cc, uint32_t value)
 {
 	if (cc == TIMER_CC_0) {
 		get_instance(peri)->GRA = value;
@@ -123,7 +123,7 @@ void timer_ll_set_cc(periph_t peri, timer_cc_t cc, uint32_t value)
 	}
 }
 
-uint32_t timer_ll_get_cc(periph_t peri, timer_cc_t cc)
+uint32_t timer_get_cc(periph_t peri, timer_cc_t cc)
 {
 	if (cc == TIMER_CC_0) {
 		return get_instance(peri)->GRA;
@@ -133,7 +133,7 @@ uint32_t timer_ll_get_cc(periph_t peri, timer_cc_t cc)
 	return 0;
 }
 
-timer_event_t timer_ll_get_event(periph_t peri)
+timer_event_t timer_get_event(periph_t peri)
 {
 	uint32_t flags = get_instance(peri)->CON >> 12;
 	uint32_t rc = 0;
@@ -151,7 +151,7 @@ timer_event_t timer_ll_get_event(periph_t peri)
 	return (timer_event_t)rc;
 }
 
-void timer_ll_reset(periph_t peri)
+void timer_reset(periph_t peri)
 {
 	TIMER_Type *tim = get_instance(peri);
 	bitop_set(&tim->CMD, 1); /* TCLR */
@@ -164,7 +164,7 @@ void timer_ll_reset(periph_t peri)
 	tim->CNT = 0;
 }
 
-uint32_t timer_ll_get_frequency(periph_t peri, uint32_t tclk)
+uint32_t timer_get_frequency(periph_t peri, uint32_t tclk)
 {
 	const TIMER_Type *tim = get_instance(peri);
 	uint32_t tcs = (tim->CON >> 4) & 0x7;
@@ -189,41 +189,41 @@ uint32_t timer_ll_get_frequency(periph_t peri, uint32_t tclk)
 	return tclk;
 }
 
-void timer_ll_set_cc_pin_polarity(periph_t peri, timer_cc_t cc, bool active_high)
+void timer_set_cc_pin_polarity(periph_t peri, timer_cc_t cc, bool active_high)
 {
 	unused(cc);
 	bitop_clean_set_with_mask(&get_instance(peri)->CON,
 			7, 1U, active_high); /* TSTRT */
 }
 
-void timer_ll_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode)
+void timer_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode)
 {
 	unused(peri);
 	unused(cc);
 	unused(mode);
 }
 
-void timer_ll_set_cc_pin(periph_t peri, timer_cc_t cc, uint32_t value)
+void timer_set_cc_pin(periph_t peri, timer_cc_t cc, uint32_t value)
 {
 	unused(peri);
 	unused(cc);
 	unused(value);
 }
 
-void timer_ll_enable_cc_pin(periph_t peri, timer_cc_t cc)
+void timer_enable_cc_pin(periph_t peri, timer_cc_t cc)
 {
 	unused(peri);
 	unused(cc);
 }
 
-void timer_ll_disable_cc_pin(periph_t peri, timer_cc_t cc)
+void timer_disable_cc_pin(periph_t peri, timer_cc_t cc)
 {
 	unused(peri);
 	unused(cc);
 }
 
 #if 0
-void timer_ll_set_clock_edge(periph_t peri, timer_edge_t edge)
+void timer_set_clock_edge(periph_t peri, timer_edge_t edge)
 {
 	bitop_clean_set_with_mask(&get_instance(peri)->CON,
 			3, 1U, edge); /* CAPM */

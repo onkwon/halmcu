@@ -1,4 +1,4 @@
-#include "halmcu/ll/wdt.h"
+#include "halmcu/periph/wdt.h"
 #include "halmcu/assert.h"
 #include "halmcu/bitop.h"
 #include "halmcu/compiler.h"
@@ -45,14 +45,14 @@ static void set_prescaler(uint32_t value)
 	WDT->CON = reg;
 }
 
-void wdt_ll_set_prescaler(uint32_t div_factor)
+void wdt_set_prescaler(uint32_t div_factor)
 {
 	assert(is_pwr2(div_factor) && div_factor <= 256 && div_factor != 2);
 	uint32_t val = get_prescaler_value_from_divisor(div_factor);
 	set_prescaler(val);
 }
 
-uint32_t wdt_ll_get_prescaler(void)
+uint32_t wdt_get_prescaler(void)
 {
 	uint32_t prescaler = (WDT->CON & WPRS_MASK) >> WPRS_POS;
 	if (prescaler == 0) {
@@ -61,7 +61,7 @@ uint32_t wdt_ll_get_prescaler(void)
 	return 1U << (prescaler + 1);
 }
 
-void wdt_ll_set_reload(uint32_t timeout)
+void wdt_set_reload(uint32_t timeout)
 {
 	if ((WDT->CON & WIE) && timeout > 0) {
 		timeout -= 1;
@@ -70,17 +70,17 @@ void wdt_ll_set_reload(uint32_t timeout)
 	set_reload(timeout);
 }
 
-uint32_t wdt_ll_get_reload(void)
+uint32_t wdt_get_reload(void)
 {
 	return WDT->LR;
 }
 
-void wdt_ll_feed(void)
+void wdt_feed(void)
 {
 	set_reload(WDT->LR);
 }
 
-void wdt_ll_start(void)
+void wdt_start(void)
 {
 	uint32_t val = WDT->CON;
 	if (!(val & (1U << WIE_POS))) {
@@ -92,24 +92,24 @@ void wdt_ll_start(void)
 	WDT->CON = val;
 }
 
-void wdt_ll_stop(void)
+void wdt_stop(void)
 {
 	WDT->CON &= ~WEN;
 }
 
-void wdt_ll_set_debug_stop_mode(bool enable)
+void wdt_set_debug_stop_mode(bool enable)
 {
 	uint32_t val = WDT->CON & ~WDH;
 	val |= (uint32_t)enable << WDH_POS;
 	WDT->CON = val;
 }
 
-bool wdt_ll_is_event_raised(void)
+bool wdt_is_event_raised(void)
 {
 	return !!((WDT->CON >> WOF_POS) & 1);
 }
 
-void wdt_ll_set_interrupt(bool enable)
+void wdt_set_interrupt(bool enable)
 {
 	uint32_t val = WDT->CON & ~(WIE | WRE);
 	val |= ((uint32_t)enable << WIE_POS) | ((uint32_t)!enable << WRE_POS);
@@ -118,12 +118,12 @@ void wdt_ll_set_interrupt(bool enable)
 	PMU->RSER |= 1U << 3;
 }
 
-uint32_t wdt_ll_get_count(void)
+uint32_t wdt_get_count(void)
 {
 	return WDT->CVR;
 }
 
-void wdt_ll_set_clock_source(clk_source_t clk)
+void wdt_set_clock_source(clk_source_t clk)
 {
 	uint32_t val = 0;
 
@@ -163,14 +163,14 @@ static clk_source_t get_clock_source(void)
 	}
 }
 
-clk_source_t wdt_ll_get_clock_source(void)
+clk_source_t wdt_get_clock_source(void)
 {
 	return get_clock_source();
 }
 
-void wdt_ll_set_reload_ms(uint32_t period_ms)
+void wdt_set_reload_ms(uint32_t period_ms)
 {
-	uint32_t src_khz = clk_ll_get_frequency(get_clock_source()) / 1000;
+	uint32_t src_khz = clk_get_frequency(get_clock_source()) / 1000;
 	uint32_t prescaler = 7;
 	uint32_t ticks = 0;
 

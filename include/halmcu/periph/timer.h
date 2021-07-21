@@ -62,6 +62,57 @@ typedef enum {
 } timer_direction_t;
 
 /**
+ * @brief Reset the timer interface
+ *
+ * This function makes the given timer in the reset default state.
+ *
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ */
+void timer_reset(periph_t peri);
+/**
+ * @brief Set the timer mode
+ *
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @param[in] mode one of @ref timer_mode_t
+ */
+void timer_set_mode(periph_t peri, timer_mode_t mode);
+/**
+ * @brief Enable interrupts on events for a timer
+ *
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @param[in] events to be enabled
+ */
+void timer_enable_irq(periph_t peri, timer_event_t events);
+/**
+ * @brief Disable interrupts on events for a timer
+ *
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @param[in] events to be disabled
+ */
+void timer_disable_irq(periph_t peri, timer_event_t events);
+/**
+ * @brief Set the timer clock divider
+ *
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @param[in] div_factor clock divider
+ */
+void timer_set_clock_divider(periph_t peri, uint32_t div_factor);
+/**
+ * @brief Set the timer counter
+ *
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @param[in] value to be written
+ */
+void timer_set_counter(periph_t peri, uint32_t value);
+/**
+ * @brief Get the timer counter
+ *
+ * @param[in] peri a peripheral enumerated in @ref periph_t
+ * @return timer counter
+ */
+uint32_t timer_get_counter(periph_t peri);
+uint32_t timer_get_frequency(periph_t peri, uint32_t tclk);
+/**
  * @brief Start the timer
  *
  * @param[in] peri a peripheral enumerated in @ref periph_t
@@ -168,6 +219,18 @@ void timer_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode);
  * @param[in] active_high active high on true
  */
 void timer_set_cc_pin_polarity(periph_t peri, timer_cc_t cc, bool active_high);
+
+void timer_enable_cc_preload(periph_t peri, timer_cc_t cc);
+void timer_disable_cc_preload(periph_t peri, timer_cc_t cc);
+void timer_enable_cc_fastmode(periph_t peri, timer_cc_t cc);
+void timer_disable_cc_fastmode(periph_t peri, timer_cc_t cc);
+void timer_set_cc_prescaler(periph_t peri, timer_cc_t cc, uint32_t value);
+void timer_set_cc_filter(periph_t peri, timer_cc_t cc, uint32_t value);
+
+void timer_set_counter_direction(periph_t peri, timer_direction_t dir);
+void timer_set_counter_alignment_mode(periph_t peri, uint32_t align);
+
+void timer_set_slave_mode(periph_t peri, uint32_t value);
 
 #if defined(__cplusplus)
 }

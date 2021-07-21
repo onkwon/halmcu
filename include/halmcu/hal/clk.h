@@ -6,7 +6,6 @@ extern "C" {
 #endif
 
 #include "halmcu/periph/clk.h"
-#include "halmcu/ll/clk.h"
 
 bool clk_init(clk_source_t clock_source, uint32_t target_hz);
 

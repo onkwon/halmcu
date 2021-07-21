@@ -1,7 +1,14 @@
 @startuml
 interface wdt {
+	reset()
+	get_count()
+	set_interrupt()
+	is_event_raised()
+	set_clock_source()
+	get_clock_source()
 	set_prescaler()
 	get_prescaler()
+	set_reload_ms()
 	set_reload()
 	get_reload()
 	feed()
@@ -10,26 +17,15 @@ interface wdt {
 	set_debug_stop_mode()
 }
 
-class LL {
-	reset()
-	get_count()
-	set_reload_ms()
-	set_interrupt()
-	is_event_raised()
-	set_clock_source()
-	get_clock_source()
-}
-
 class HAL {
 	enable()
 	disable()
 	get_clock_freqeuncy()
 }
 
-HAL ..|> wdt
-HAL --> LL
-HAL ..> LL_power
-HAL ..> LL_clock
-HAL ..> IRQ
-LL --> wdt
+LL ..|> wdt
+HAL --> wdt
+HAL --> LL_power
+HAL --> LL_clock
+HAL --> IRQ
 @enduml

@@ -15,7 +15,3 @@ HAL
 LL
 --
 .. doxygenfile:: halmcu/periph/uart.h
-
-Extra
------
-.. doxygenfile:: halmcu/ll/uart.h

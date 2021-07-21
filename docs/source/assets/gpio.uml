@@ -1,12 +1,5 @@
 @startuml
 interface GPIO {
-	set_altfunc()
-	clear_event()
-	write()
-	read()
-}
-
-class LL {
 	reset()
 	enable_port()
 	disable_port()
@@ -19,8 +12,8 @@ class LL {
 	clear_event()
 	write_port()
 	read_port()
-	write()
-	read()
+	write_pin()
+	read_pin()
 }
 
 class HAL {
@@ -29,10 +22,9 @@ class HAL {
 	close()
 }
 
-HAL ..|> GPIO
-HAL --> LL
-HAL ..> LL_power
-HAL ..> LL_clock
-HAL ..> IRQ
-LL --> GPIO
+LL ..|> GPIO
+HAL --> GPIO
+HAL --> LL_power
+HAL --> LL_clock
+HAL --> IRQ
 @enduml
