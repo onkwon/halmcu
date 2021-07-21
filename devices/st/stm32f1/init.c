@@ -1,5 +1,5 @@
 #include "halmcu/system.h"
-#include "halmcu/ll/clk.h"
+#include "halmcu/periph/clk.h"
 
 void pre_main(void)
 {

@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "halmcu/ll/wdt.h"
+#include "halmcu/periph/wdt.h"
 
 void wdt_enable(void);
 void wdt_disable(void);
