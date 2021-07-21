@@ -10,4 +10,4 @@ Examples
 
 API
 ---
-.. c:autodoc:: ../../include/halmcu/asm/arm/systick.h
+.. doxygenfile:: halmcu/asm/arm/systick.h

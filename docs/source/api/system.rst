@@ -1,4 +1,4 @@
 System
 ======
 
-.. c:autodoc:: ../../include/halmcu/system.h
+.. doxygenfile:: halmcu/system.h

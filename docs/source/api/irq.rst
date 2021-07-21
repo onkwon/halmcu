@@ -3,4 +3,5 @@ IRQ
 
 `IRQ_FIXED`
 
-.. c:autodoc:: ../../include/halmcu/irq.h
+.. doxygenfile:: halmcu/irq.h
+   :project: halmcu

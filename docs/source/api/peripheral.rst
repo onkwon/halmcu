@@ -1,4 +1,5 @@
 Peripheral
 ==========
 
-.. c:autodoc:: ../../include/halmcu/periph/periph.h
+.. doxygenfile:: halmcu/periph/periph.h
+   :project: halmcu

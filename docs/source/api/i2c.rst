@@ -8,8 +8,10 @@ Examples
 
 HAL
 ---
-.. c:autodoc:: ../../include/halmcu/hal/i2c.h
+.. doxygenfile:: halmcu/hal/i2c.h
+   :project: halmcu
 
 LL
 --
-.. c:autodoc:: ../../include/halmcu/periph/i2c.h
+.. doxygenfile:: halmcu/periph/i2c.h
+   :project: halmcu
