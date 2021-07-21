@@ -1,10 +1,10 @@
-#include "abov/hal/timer.h"
+#include "halmcu/hal/timer.h"
 
 #include <stddef.h>
 
-#include "abov/irq.h"
-#include "abov/ll/pwr.h"
-#include "abov/ll/clk.h"
+#include "halmcu/irq.h"
+#include "halmcu/ll/pwr.h"
+#include "halmcu/ll/clk.h"
 
 static void set_frequency(periph_t timer, const struct timer_cfg *cfg)
 {

@@ -4,9 +4,9 @@
 
 #include <string.h>
 
-#include "abov/ll/gpio.h"
+#include "halmcu/ll/gpio.h"
 #include "a33g.h"
-#include "abov/assert.h"
+#include "halmcu/assert.h"
 
 extern "C" {
 static struct pcu_stub regPA, regPB, regPC, regPD, regPE, regPF;
@@ -87,7 +87,7 @@ TEST(gpio, set_altfunc_ShouldSetMr_WhenAlt3Given) {
 }
 
 TEST(gpio, set_altfunc_ShouldCauseAssert_WhenUnsupportedAltFuncGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	gpio_ll_set_mode(PERIPH_GPIOA, 0, GPIO_MODE_ANALOG);
 	gpio_ll_set_altfunc(PERIPH_GPIOA, 0, 4);
 }
@@ -100,7 +100,7 @@ TEST(gpio, clear_event_ShouldWriteValueOneInIsr) {
 }
 
 TEST(gpio, enable_irq_ShouldCauseAssert_WhenUnsupportedGpioGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	gpio_ll_enable_irq(PERIPH_GPIOA, 16, GPIO_IRQ_EDGE_ANY);
 }
 TEST(gpio, enable_irq_ShouldSetIcrRegister) {
@@ -130,7 +130,7 @@ TEST(gpio, disable_irq_ShouldClearIerRegister) {
 	LONGS_EQUAL(0x00000000, PCA->IER);
 }
 TEST(gpio, disable_irq_ShouldCauseAssert_WhenUnsupportedGpioGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	gpio_ll_disable_irq(PERIPH_GPIOA, 16);
 }
 
@@ -146,7 +146,7 @@ TEST(gpio, write_ShouldSetSpecificPin) {
 }
 
 TEST(gpio, write_ShouldCauseAssert_WhenUnsupportedGpioGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	gpio_ll_write(PERIPH_GPIOA, 16, 1);
 }
 
@@ -166,7 +166,7 @@ TEST(gpio, read_ShouldReturnCurrentPinState) {
 }
 
 TEST(gpio, read_ShouldCauseAssert_WhenUnsupportedGpioGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	gpio_ll_read(PERIPH_GPIOA, 16);
 }
 
@@ -183,7 +183,7 @@ TEST(gpio, read_port_ShouldReturnCurrentState) {
 }
 
 TEST(gpio, enable_port_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	gpio_ll_disable_port(PERIPH_UART1);
 }
 TEST(gpio, enable_port_ShouldSetPmuPer) {
@@ -194,7 +194,7 @@ TEST(gpio, enable_port_ShouldSetPmuPer) {
 }
 
 TEST(gpio, disable_port_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	gpio_ll_disable_port(PERIPH_UART1);
 }
 TEST(gpio, disable_port_ShouldClearPmuPer) {
@@ -206,11 +206,11 @@ TEST(gpio, disable_port_ShouldClearPmuPer) {
 }
 
 TEST(gpio, set_mode_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	gpio_ll_set_mode(PERIPH_UART1, 0, GPIO_MODE_PUSHPULL);
 }
 TEST(gpio, set_mode_ShouldCauseAssert_WhenUnsupportedGpioGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	gpio_ll_set_mode(PERIPH_GPIOA, 16, GPIO_MODE_PUSHPULL);
 }
 TEST(gpio, set_mode_ShouldSetCR_WhenPushpullModeGiven) {
@@ -251,11 +251,11 @@ TEST(gpio, set_mode_ShouldSetPulldown_WhenInputModeWithPulldownGiven) {
 }
 
 TEST(gpio, set_debouncer_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	gpio_ll_set_debouncer(PERIPH_UART1, 0, 0);
 }
 TEST(gpio, set_debouncer_ShouldCauseAssert_WhenInvalidPinGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	gpio_ll_set_debouncer(PERIPH_GPIOA, 16, 0);
 }
 TEST(gpio, set_debouncer_ShouldSetDER_WhenClockCycleGiven) {

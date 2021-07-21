@@ -1,8 +1,8 @@
-#include "abov/irq.h"
-#include "abov/asm/arm/cmsis.h"
-#include "abov/compiler.h"
+#include "halmcu/irq.h"
+#include "halmcu/asm/arm/cmsis.h"
+#include "halmcu/compiler.h"
 
-ABOV_STATIC_ASSERT(IRQ_FIXED == 16, "");
+HALMCU_STATIC_ASSERT(IRQ_FIXED == 16, "");
 
 void irq_enable(irq_t irq)
 {

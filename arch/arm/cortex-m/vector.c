@@ -1,32 +1,32 @@
-#include "abov/irq.h"
+#include "halmcu/irq.h"
 #include <stdint.h>
-#include "abov/compiler.h"
-#include "abov/assert.h"
+#include "halmcu/compiler.h"
+#include "halmcu/assert.h"
 
 typedef void (*nvic_vector_t)(void);
 
 extern uintptr_t _estack;
 
-ABOV_WEAK ABOV_ALIAS("irq_default_handler") void ISR_nmi(void);
-ABOV_WEAK ABOV_ALIAS("irq_default_handler") void ISR_hardfault(void);
-ABOV_WEAK ABOV_ALIAS("irq_default_handler") void ISR_memmanage(void);
-ABOV_WEAK ABOV_ALIAS("irq_default_handler") void ISR_busfault(void);
-ABOV_WEAK ABOV_ALIAS("irq_default_handler") void ISR_usagefault(void);
-ABOV_WEAK ABOV_ALIAS("irq_default_handler") void ISR_svc(void);
-ABOV_WEAK ABOV_ALIAS("irq_default_handler") void ISR_debugmonitor(void);
-ABOV_WEAK ABOV_ALIAS("irq_default_handler") void ISR_pendsv(void);
-ABOV_WEAK ABOV_ALIAS("irq_default_handler") void ISR_systick(void);
+HALMCU_WEAK HALMCU_ALIAS("irq_default_handler") void ISR_nmi(void);
+HALMCU_WEAK HALMCU_ALIAS("irq_default_handler") void ISR_hardfault(void);
+HALMCU_WEAK HALMCU_ALIAS("irq_default_handler") void ISR_memmanage(void);
+HALMCU_WEAK HALMCU_ALIAS("irq_default_handler") void ISR_busfault(void);
+HALMCU_WEAK HALMCU_ALIAS("irq_default_handler") void ISR_usagefault(void);
+HALMCU_WEAK HALMCU_ALIAS("irq_default_handler") void ISR_svc(void);
+HALMCU_WEAK HALMCU_ALIAS("irq_default_handler") void ISR_debugmonitor(void);
+HALMCU_WEAK HALMCU_ALIAS("irq_default_handler") void ISR_pendsv(void);
+HALMCU_WEAK HALMCU_ALIAS("irq_default_handler") void ISR_systick(void);
 
 #define DEFINE_IRQ(n, name) \
-	ABOV_WEAK ABOV_ALIAS("irq_default_handler") void ISR_ ## name(void);
+	HALMCU_WEAK HALMCU_ALIAS("irq_default_handler") void ISR_ ## name(void);
 #define RESERVE_IRQ(n)
 #include IRQ_DEFINES
 #undef RESERVE_IRQ
 #undef DEFINE_IRQ
 
-ABOV_WEAK
-ABOV_USED
-ABOV_SECTION(".isr_vectors")
+HALMCU_WEAK
+HALMCU_USED
+HALMCU_SECTION(".isr_vectors")
 const nvic_vector_t isr_vectors[] = {
 	(nvic_vector_t)&_estack,
 	ISR_reset,
@@ -51,7 +51,7 @@ const nvic_vector_t isr_vectors[] = {
 #undef DEFINE_IRQ
 };
 
-ABOV_WEAK ABOV_USED void irq_default_handler(void)
+HALMCU_WEAK HALMCU_USED void irq_default_handler(void)
 {
 	assert(0);
 }

@@ -10,15 +10,15 @@ Examples
 
 HAL
 ---
-.. doxygenfile:: abov/hal/gpio.h
-   :project: libabov
+.. doxygenfile:: halmcu/hal/gpio.h
+   :project: halmcu
 
 LL
 --
-.. doxygenfile:: abov/periph/gpio.h
-   :project: libabov
+.. doxygenfile:: halmcu/periph/gpio.h
+   :project: halmcu
 
 Extra
 -----
-.. doxygenfile:: abov/ll/gpio.h
-   :project: libabov
+.. doxygenfile:: halmcu/ll/gpio.h
+   :project: halmcu

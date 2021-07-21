@@ -1,6 +1,6 @@
-#include "abov/hal/adc.h"
-#include "abov/ll/pwr.h"
-#include "abov/ll/clk.h"
+#include "halmcu/hal/adc.h"
+#include "halmcu/ll/pwr.h"
+#include "halmcu/ll/clk.h"
 
 void adc_enable(periph_t adc)
 {

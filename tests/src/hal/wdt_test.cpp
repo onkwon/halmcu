@@ -2,7 +2,7 @@
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTestExt/MockSupport.h"
 
-#include "abov/hal/wdt.h"
+#include "halmcu/hal/wdt.h"
 
 TEST_GROUP(Watchdog) {
 	void setup(void) {

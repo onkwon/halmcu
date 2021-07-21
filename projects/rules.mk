@@ -2,12 +2,12 @@ OUTDIR := $(BUILDIR)/$(DEVICE)
 
 $(info building    $(DEVICE))
 
-include $(LIBABOV_ROOT)/projects/sources.mk
+include $(HALMCU_ROOT)/projects/sources.mk
 
 OBJS += $(addprefix $(OUTDIR)/, $(SRCS:.c=.o))
-DEPS += $(LIBABOV_OBJS:.o=.d) $(OBJS:.o=.d)
-DEFS += $(LIBABOV_DEFS)
-INCS += $(LIBABOV_INCS)
+DEPS += $(HALMCU_OBJS:.o=.d) $(OBJS:.o=.d)
+DEFS += $(HALMCU_DEFS)
+INCS += $(HALMCU_INCS)
 
 OUTCOM := $(OUTDIR)/$(PROJECT)
 OUTLIB := $(OUTCOM).a
@@ -23,7 +23,7 @@ OUTPUT := $(OUTBIN) $(OUTHEX) $(OUTSHA) $(OUTSRC) $(OUTINC) $(OUTDEF) \
 	$(OUTCOM).size $(OUTCOM).sym $(OUTCOM).lst $(OUTCOM).dump
 
 all: $(OUTPUT)
-	$(Q)$(SZ) -t --common $(sort $(LIBABOV_OBJS) $(OBJS))
+	$(Q)$(SZ) -t --common $(sort $(HALMCU_OBJS) $(OBJS))
 	$(Q)$(SZ) $(OUTELF)
 
 $(OUTCOM).size: $(OUTELF)
@@ -41,7 +41,7 @@ $(OUTCOM).dump: $(OUTELF)
 
 $(OUTSRC): $(OUTELF)
 	$(info generating  $@)
-	$(Q)echo $(sort $(LIBABOV_SRCS) $(SRCS)) | tr ' ' '\n' > $@
+	$(Q)echo $(sort $(HALMCU_SRCS) $(SRCS)) | tr ' ' '\n' > $@
 $(OUTINC): $(OUTELF)
 	$(info generating  $@)
 	$(Q)echo $(subst -I,,$(sort $(INCS))) | tr ' ' '\n' > $@
@@ -57,9 +57,9 @@ $(OUTHEX): $(OUTELF)
 $(OUTBIN): $(OUTELF)
 	$(info generating  $@)
 	$(Q)$(OC) -O binary $< $@
-$(OUTELF): $(LIBABOV_OBJS) $(OBJS) $(LD_SCRIPT)
+$(OUTELF): $(HALMCU_OBJS) $(OBJS) $(LD_SCRIPT)
 	$(info linking     $@)
-	$(Q)$(CC) -o $@ $(LIBABOV_OBJS) $(OBJS) \
+	$(Q)$(CC) -o $@ $(HALMCU_OBJS) $(OBJS) \
 		-Wl,-Map,$(OUTCOM).map \
 		$(addprefix -T, $(LD_SCRIPT)) \
 		$(CFLAGS) \
@@ -69,13 +69,13 @@ $(OUTELF): $(LIBABOV_OBJS) $(OBJS) $(LD_SCRIPT)
 
 .PHONY: lib
 lib: $(OUTLIB)
-$(OUTLIB): $(LIBABOV_OBJS)
+$(OUTLIB): $(HALMCU_OBJS)
 	$(info archiving   $@)
 	$(Q)rm -f $@
 	$(Q)$(AR) $(ARFLAGS) $@ $^ 1> /dev/null 2>&1
 	$(Q)$(SZ) -t --common $(sort $^)
-$(LIBABOV_OBJS): $(OUTDIR)/%.o: $(LIBABOV_ROOT)/%.c $(MAKEFILE_LIST)
-	$(info compiling   $(<:$(LIBABOV_ROOT)/%=%))
+$(HALMCU_OBJS): $(OUTDIR)/%.o: $(HALMCU_ROOT)/%.c $(MAKEFILE_LIST)
+	$(info compiling   $(<:$(HALMCU_ROOT)/%=%))
 	@mkdir -p $(@D)
 	$(Q)$(CC) -o $@ -c $< -MMD \
 		$(addprefix -D, $(DEFS)) \

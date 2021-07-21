@@ -2,7 +2,7 @@
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTestExt/MockSupport.h"
 
-#include "abov/hal/spi.h"
+#include "halmcu/hal/spi.h"
 
 TEST_GROUP(SPI) {
 	void setup(void) {

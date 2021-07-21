@@ -2,8 +2,8 @@
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTestExt/MockSupport.h"
 
-#include "abov/hal/uart.h"
-#include "abov/irq.h"
+#include "halmcu/hal/uart.h"
+#include "halmcu/irq.h"
 
 #include <string.h>
 

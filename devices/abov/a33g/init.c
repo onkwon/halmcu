@@ -1,7 +1,7 @@
-#include "abov/system.h"
-#include "abov/errata.h"
-#include "abov/ll/clk.h"
-#include "abov/ll/wdt.h"
+#include "halmcu/system.h"
+#include "halmcu/ll/clk.h"
+#include "halmcu/ll/wdt.h"
+#include "errata.h"
 
 void pre_main(void)
 {

@@ -10,12 +10,12 @@ Examples
 
 HAL
 ---
-.. doxygenfile:: abov/hal/spi.h
+.. doxygenfile:: halmcu/hal/spi.h
 
 LL
 --
-.. doxygenfile:: abov/periph/spi.h
+.. doxygenfile:: halmcu/periph/spi.h
 
 Extra
 -----
-.. doxygenfile:: abov/ll/spi.h
+.. doxygenfile:: halmcu/ll/spi.h

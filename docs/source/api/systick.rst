@@ -10,4 +10,4 @@ Examples
 
 API
 ---
-.. c:autodoc:: ../../include/abov/asm/arm/systick.h
+.. c:autodoc:: ../../include/halmcu/asm/arm/systick.h

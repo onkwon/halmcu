@@ -1,5 +1,5 @@
-#include "abov/ll/pwr.h"
-#include "abov/asm/arm/cmsis.h"
+#include "halmcu/ll/pwr.h"
+#include "halmcu/asm/arm/cmsis.h"
 #include "a33g.h"
 
 #define PMUMODE_POS				0

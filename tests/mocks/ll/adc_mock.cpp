@@ -1,6 +1,6 @@
 #include "CppUTestExt/MockSupport.h"
 
-#include "abov/ll/adc.h"
+#include "halmcu/ll/adc.h"
 
 void adc_ll_reset(periph_t adc) {
 	mock().actualCall(__func__).withParameter("adc", adc);

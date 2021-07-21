@@ -2,10 +2,10 @@ include projects/runner.mk
 
 .PHONY: test
 test:
-	$(Q)$(MAKE) -C $(LIBABOV_ROOT)/tests
+	$(Q)$(MAKE) -C $(HALMCU_ROOT)/tests
 .PHONY: coverage
 coverage:
-	$(Q)$(MAKE) -C $(LIBABOV_ROOT)/tests $@
+	$(Q)$(MAKE) -C $(HALMCU_ROOT)/tests $@
 
 .PHONY: docs
 docs:

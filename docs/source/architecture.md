@@ -31,7 +31,7 @@
 │   └── uart/
 ├── examples/
 ├── include
-│   └── abov
+│   └── halmcu
 │       ├── asm/
 │       ├── hal/
 │       ├── ll/
@@ -66,8 +66,8 @@ increase complexity.
 4. Then it decides what cpu architecture is of the device
 5. And build based on the architecture with its Makefile, `arch/arm/cortex-m/m3/m3.mk`
 
-* `ABOV_CFLAGS`
-* `ABOV_WARNING_CFLAGS`
+* `HALMCU_CFLAGS`
+* `HALMCU_WARNING_CFLAGS`
 * `CROSS_COMPILE`
 * `DEVICE`
 * `HSE`
@@ -80,4 +80,4 @@ increase complexity.
 ### Driver Layer
 
 ## Porting
-* `ABOV_PREFIX`
+* `HALMCU_PREFIX`

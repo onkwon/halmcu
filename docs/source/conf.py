@@ -21,12 +21,12 @@ import subprocess
 subprocess.call('cd ../../ ; doxygen docs/Doxyfile', shell=True)
 #html_extra_path = ['../build/doxygen/html']
 
-breathe_projects = { "libabov": "../build/doxygen/xml" }
-breathe_default_project = "libabov"
+breathe_projects = { "halmcu": "../build/doxygen/xml" }
+breathe_default_project = "halmcu"
 
 # -- Project information -----------------------------------------------------
 
-project = 'libabov'
+project = 'halmcu'
 copyright = '2021, Kyunghwan Kwon'
 author = 'Kyunghwan Kwon'
 

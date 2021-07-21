@@ -10,15 +10,15 @@ Examples
 
 Interface
 ---------
-.. doxygenfile:: abov/periph/adc.h
-   :project: libabov
+.. doxygenfile:: halmcu/periph/adc.h
+   :project: halmcu
 
 HAL
 ^^^
-.. doxygenfile:: abov/hal/adc.h
-   :project: libabov
+.. doxygenfile:: halmcu/hal/adc.h
+   :project: halmcu
 
 LL
 ^^
-.. doxygenfile:: abov/ll/adc.h
-   :project: libabov
+.. doxygenfile:: halmcu/ll/adc.h
+   :project: halmcu

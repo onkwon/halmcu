@@ -1,15 +1,15 @@
-#include "abov/ll/timer.h"
-#include "abov/bitop.h"
+#include "halmcu/ll/timer.h"
+#include "halmcu/bitop.h"
 
-#include "abov/asm/arm/cmsis.h"
+#include "halmcu/asm/arm/cmsis.h"
 #include "a33g.h"
-#include "abov/compiler.h"
-#include "abov/assert.h"
+#include "halmcu/compiler.h"
+#include "halmcu/assert.h"
 
-ABOV_STATIC_ASSERT(TIMER_MODE_NORMAL == 0, "");
-ABOV_STATIC_ASSERT(TIMER_MODE_PWM == 1, "");
-ABOV_STATIC_ASSERT(TIMER_MODE_ONESHOT == 2, "");
-ABOV_STATIC_ASSERT(TIMER_MODE_CAPTURE == 3, "");
+HALMCU_STATIC_ASSERT(TIMER_MODE_NORMAL == 0, "");
+HALMCU_STATIC_ASSERT(TIMER_MODE_PWM == 1, "");
+HALMCU_STATIC_ASSERT(TIMER_MODE_ONESHOT == 2, "");
+HALMCU_STATIC_ASSERT(TIMER_MODE_CAPTURE == 3, "");
 
 static TIMER_Type *get_instance(periph_t peri)
 {

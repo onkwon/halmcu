@@ -8,8 +8,8 @@ Examples
 
 HAL
 ---
-.. c:autodoc:: ../../include/abov/hal/i2c.h
+.. c:autodoc:: ../../include/halmcu/hal/i2c.h
 
 LL
 --
-.. c:autodoc:: ../../include/abov/ll/i2c.h
+.. c:autodoc:: ../../include/halmcu/ll/i2c.h

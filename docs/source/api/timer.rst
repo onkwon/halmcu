@@ -10,15 +10,15 @@ Examples
 
 Interface
 ---------
-.. doxygenfile:: abov/periph/timer.h
-   :project: libabov
+.. doxygenfile:: halmcu/periph/timer.h
+   :project: halmcu
 
 HAL
 ^^^
-.. doxygenfile:: abov/hal/timer.h
-   :project: libabov
+.. doxygenfile:: halmcu/hal/timer.h
+   :project: halmcu
 
 LL
 ^^
-.. doxygenfile:: abov/ll/timer.h
-   :project: libabov
+.. doxygenfile:: halmcu/ll/timer.h
+   :project: halmcu

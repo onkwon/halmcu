@@ -1,12 +1,12 @@
-![Build Status](https://github.com/onkwon/libabov/workflows/build/badge.svg)
+![Build Status](https://github.com/onkwon/halmcu/workflows/build/badge.svg)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=onkwon_libabov&metric=security_rating)](https://sonarcloud.io/dashboard?id=onkwon_libabov)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=onkwon_libabov&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=onkwon_libabov)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=onkwon_libabov&metric=coverage)](https://sonarcloud.io/dashboard?id=onkwon_libabov)
 
-*libabov* provides a developing environment for ABOV devices by including low
+*halmcu* provides a developing environment for microcontrollers by including low
 level hardware drivers, libraries, and examples for peripherals.
 
-See online documentation at [libabov.readthedocs.io](https://libabov.readthedocs.io/)
+See online documentation at [halmcu.readthedocs.io](https://halmcu.readthedocs.io/)
 
 # Getting Started
 ## Installing prerequisites
@@ -48,32 +48,29 @@ Alternatively you can do it with package manager:
 ### IAR
 ### Keil
 ### Other
-*libabov* is a self-contained C library that you will need to include into your
-project.
-
-#### 1. Get *libabov* into your project
+#### 1. Get *halmcu* into your project
 
 ```bash
 $ cd ${YOUR_PROJECT_DIR}
-$ git submodule add https://github.com/onkwon/libabov.git ${YOUR_THIRD_PARTY_DIR}/libabov
+$ git submodule add https://github.com/onkwon/halmcu.git ${YOUR_THIRD_PARTY_DIR}/halmcu
 ```
 
-#### 2. Add *libabov* to your existing build system
+#### 2. Add *halmcu* to your existing build system
 ##### Make
 Please refer to a [build template](examples/build-template/Makefile).
 ##### Other
 Please refer to a [custom build example](examples/custom-build).
 
-1. Add the sources under `${YOUR_THIRD_PARTY_DIR}/libabov/drivers/*.c` to your
+1. Add the sources under `${YOUR_THIRD_PARTY_DIR}/halmcu/drivers/*.c` to your
    project
-2. Add the sources under `${YOUR_THIRD_PARTY_DIR}/libabov/devices/common/*.c` to
+2. Add the sources under `${YOUR_THIRD_PARTY_DIR}/halmcu/devices/common/*.c` to
    your project
 3. Add the sources under
-   `${YOUR_THIRD_PARTY_DIR}/libabov/devices/${VENDOR}/${DEVICE}/*.c` to your
+   `${YOUR_THIRD_PARTY_DIR}/halmcu/devices/${VENDOR}/${DEVICE}/*.c` to your
    project
 4. Add cpu architecture specific sources under
-   `${YOUR_THIRD_PARTY_DIR}/libabov/arch/${YOUR_ARCH}` to your project
-5. Add `${YOUR_THIRD_PARTY_DIR}/libabov/include` to the include paths for your
+   `${YOUR_THIRD_PARTY_DIR}/halmcu/arch/${YOUR_ARCH}` to your project
+5. Add `${YOUR_THIRD_PARTY_DIR}/halmcu/include` to the include paths for your
    project
 6. Add CMSIS include path to the include paths for your project
 7. Pass `DEVICE`, `ARCH`, and `HSE` definitions to your compiler

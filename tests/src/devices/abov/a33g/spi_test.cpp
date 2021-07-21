@@ -2,7 +2,7 @@
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTestExt/MockSupport.h"
 
-#include "abov/ll/spi.h"
+#include "halmcu/ll/spi.h"
 #include "a33g.h"
 
 extern "C" {

@@ -1,4 +1,4 @@
 Errata
 ======
 
-.. c:autodoc:: ../../include/abov/errata.h
+.. c:autodoc:: ../../include/halmcu/errata.h

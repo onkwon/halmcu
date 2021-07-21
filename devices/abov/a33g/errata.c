@@ -1,7 +1,7 @@
-#include "abov/errata.h"
-#include "abov/asm/arm/cmsis.h"
+#include "errata.h"
+#include "halmcu/asm/arm/cmsis.h"
 #include "a33g.h"
-#include "abov/system.h"
+#include "halmcu/system.h"
 
 #define PMU_LEGACY_MODE					(0x0001UL << 31)
 #define PMU_LEGACY_MODE_NORMAL				(0x0000UL << 31)

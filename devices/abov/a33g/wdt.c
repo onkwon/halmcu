@@ -1,9 +1,9 @@
-#include "abov/ll/wdt.h"
-#include "abov/assert.h"
-#include "abov/bitop.h"
-#include "abov/compiler.h"
+#include "halmcu/ll/wdt.h"
+#include "halmcu/assert.h"
+#include "halmcu/bitop.h"
+#include "halmcu/compiler.h"
 
-#include "abov/asm/arm/cmsis.h"
+#include "halmcu/asm/arm/cmsis.h"
 #include "a33g.h"
 
 #define WPRS_POS				(0)
@@ -20,7 +20,7 @@
 #define WIE					(1U << WIE_POS)
 #define WDH					(1U << WDH_POS)
 
-ABOV_STATIC_ASSERT(__builtin_ffs(1) == 1, "");
+HALMCU_STATIC_ASSERT(__builtin_ffs(1) == 1, "");
 
 static void set_reload(uint32_t timeout)
 {

@@ -1,9 +1,9 @@
-#include "abov/ll/clk.h"
+#include "halmcu/ll/clk.h"
 
-#include "abov/assert.h"
-#include "abov/bitop.h"
-#include "abov/compiler.h"
-#include "abov/asm/arm/cmsis.h"
+#include "halmcu/assert.h"
+#include "halmcu/bitop.h"
+#include "halmcu/compiler.h"
+#include "halmcu/asm/arm/cmsis.h"
 #include "a33g.h"
 
 #define PLLCON_UNLOCK_KEY			0x80750000U

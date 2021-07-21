@@ -1,11 +1,11 @@
-#include "abov/hal/uart.h"
+#include "halmcu/hal/uart.h"
 
 #include <string.h>
 
-#include "abov/ll/pwr.h"
-#include "abov/ll/clk.h"
-#include "abov/irq.h"
-#include "abov/compiler.h"
+#include "halmcu/ll/pwr.h"
+#include "halmcu/ll/clk.h"
+#include "halmcu/irq.h"
+#include "halmcu/compiler.h"
 
 struct uart {
 	struct uart_cfg cfg;
@@ -13,7 +13,7 @@ struct uart {
 	uart_irq_callback_t tx_handler;
 	uart_irq_callback_t error_handler;
 };
-ABOV_STATIC_ASSERT(sizeof(struct uart) == sizeof(uart_handle_t), "");
+HALMCU_STATIC_ASSERT(sizeof(struct uart) == sizeof(uart_handle_t), "");
 
 static int read_byte_nonblock(periph_t port)
 {
