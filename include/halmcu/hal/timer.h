@@ -7,7 +7,6 @@ extern "C" {
 
 #include <stdbool.h>
 #include "halmcu/periph/timer.h"
-#include "halmcu/ll/timer.h"
 
 /** Timer configuration */
 struct timer_cfg {

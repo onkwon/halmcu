@@ -1,4 +1,4 @@
-#include "halmcu/ll/uart.h"
+#include "halmcu/periph/uart.h"
 
 #include <stddef.h>
 
@@ -38,7 +38,7 @@ static uint32_t brr2reg(uint32_t baudrate, uint32_t pclk)
 	return (mantissa << 4) | (fraction & 0xf);
 }
 
-void uart_ll_reset(periph_t port)
+void uart_reset(periph_t port)
 {
 	volatile uint32_t *reg = &RCC->APB1RSTR;
 	uint32_t pos = 17;
@@ -69,34 +69,34 @@ void uart_ll_reset(periph_t port)
 	bitop_clear(reg, pos);
 }
 
-bool uart_ll_has_rx(periph_t port)
+bool uart_has_rx(periph_t port)
 {
 	return !!(get_instance(port)->SR & (1U << 5)/*RXNE*/);
 }
 
-bool uart_ll_is_tx_ready(periph_t port)
+bool uart_is_tx_ready(periph_t port)
 {
 	return !!(get_instance(port)->SR & (1U << 7)/*TXE*/);
 }
 
-int uart_ll_get_rxd(periph_t port)
+int uart_get_rxd(periph_t port)
 {
 	return (int)get_instance(port)->DR;
 }
 
-void uart_ll_set_txd(periph_t port, uint32_t value)
+void uart_set_txd(periph_t port, uint32_t value)
 {
 	get_instance(port)->DR = value;
 }
 
-void uart_ll_set_baudrate(periph_t port, uint32_t baudrate, uint32_t pclk)
+void uart_set_baudrate(periph_t port, uint32_t baudrate, uint32_t pclk)
 {
 	assert(baudrate != 0);
 	assert(baudrate <= pclk);
 	get_instance(port)->BRR = brr2reg(baudrate, pclk);
 }
 
-void uart_ll_enable_irq(periph_t port, uart_irq_t irqs)
+void uart_enable_irq(periph_t port, uart_irq_t irqs)
 {
 	if (irqs & UART_IRQ_RX) {
 		bitop_set(&get_instance(port)->CR1, 5/*RXNEIE*/);
@@ -106,7 +106,7 @@ void uart_ll_enable_irq(periph_t port, uart_irq_t irqs)
 	}
 }
 
-void uart_ll_disable_irq(periph_t port, uart_irq_t irqs)
+void uart_disable_irq(periph_t port, uart_irq_t irqs)
 {
 	if (irqs & UART_IRQ_RX) {
 		bitop_clear(&get_instance(port)->CR1, 5/*RXNEIE*/);
@@ -116,7 +116,7 @@ void uart_ll_disable_irq(periph_t port, uart_irq_t irqs)
 	}
 }
 
-uart_event_t uart_ll_get_event(periph_t port)
+uart_event_t uart_get_event(periph_t port)
 {
 	uint32_t flags = get_instance(port)->SR;
 	uint32_t events = 0;
@@ -134,13 +134,13 @@ uart_event_t uart_ll_get_event(periph_t port)
 	return (uart_event_t)events;
 }
 
-void uart_ll_clear_event(periph_t port, uart_event_t events)
+void uart_clear_event(periph_t port, uart_event_t events)
 {
 	unused(port);
 	unused(events);
 }
 
-void uart_ll_set_parity(periph_t port, uart_parity_t parity)
+void uart_set_parity(periph_t port, uart_parity_t parity)
 {
 	if (parity == UART_PARITY_NONE) {
 		bitop_clear(&get_instance(port)->CR1, 10/*PCE*/);
@@ -154,7 +154,7 @@ void uart_ll_set_parity(periph_t port, uart_parity_t parity)
 	bitop_clean_set_with_mask(&get_instance(port)->CR1, 9, 3, val);
 }
 
-void uart_ll_set_stopbits(periph_t port, uart_stopbit_t stopbit)
+void uart_set_stopbits(periph_t port, uart_stopbit_t stopbit)
 {
 	uint32_t val = 0;
 
@@ -167,21 +167,21 @@ void uart_ll_set_stopbits(periph_t port, uart_stopbit_t stopbit)
 	bitop_clean_set_with_mask(&get_instance(port)->CR2, 12, 3, val);
 }
 
-void uart_ll_set_wordsize(periph_t port, uart_wordsize_t wordsize)
+void uart_set_wordsize(periph_t port, uart_wordsize_t wordsize)
 {
 	assert(wordsize >= UART_WORDSIZE_8 && wordsize <= UART_WORDSIZE_9);
 	bitop_clean_set_with_mask(&get_instance(port)->CR1,
 			12, 1, wordsize & 1);
 }
 
-void uart_ll_start(periph_t port)
+void uart_start(periph_t port)
 {
 	bitop_set(&get_instance(port)->CR1, 2/*RE*/);
 	bitop_set(&get_instance(port)->CR1, 3/*TE*/);
 	bitop_set(&get_instance(port)->CR1, 13/*UE*/);
 }
 
-void uart_ll_stop(periph_t port)
+void uart_stop(periph_t port)
 {
 	bitop_clear(&get_instance(port)->CR1, 2/*RE*/);
 	bitop_clear(&get_instance(port)->CR1, 3/*TE*/);

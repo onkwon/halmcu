@@ -9,7 +9,7 @@ extern "C" {
 #include <stdbool.h>
 #include <limits.h>
 
-#include "halmcu/ll/uart.h"
+#include "halmcu/periph/uart.h"
 
 /** UART handler type */
 typedef void (*uart_irq_callback_t)(uint32_t flags);
