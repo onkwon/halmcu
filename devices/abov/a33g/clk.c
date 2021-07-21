@@ -1,4 +1,4 @@
-#include "halmcu/ll/clk.h"
+#include "halmcu/periph/clk.h"
 
 #include "halmcu/assert.h"
 #include "halmcu/bitop.h"
@@ -235,7 +235,7 @@ static bool configure_pll(clk_source_t clkin)
 		return false;
 	}
 
-	clk_ll_enable_source(clkin);
+	clk_enable_source(clkin);
 
 	clk_set_hclk_prescaler(0);
 	clk_set_pclk_prescaler(0);
@@ -371,17 +371,17 @@ static clk_source_t clk_get_timer_source(periph_t timer)
 	}
 }
 
-void clk_ll_enable_peripheral(periph_t peri)
+void clk_enable_peripheral(periph_t peri)
 {
 	PMU->PCCR |= get_activation_bitmask_from_peripheral(peri);
 }
 
-void clk_ll_disable_peripheral(periph_t peri)
+void clk_disable_peripheral(periph_t peri)
 {
 	PMU->PCCR &= ~get_activation_bitmask_from_peripheral(peri);
 }
 
-void clk_ll_enable_source(clk_source_t clk)
+void clk_enable_source(clk_source_t clk)
 {
 	uint32_t val = PMU->CCR;
 	uint32_t mask = get_bitmask_from_clksrc(clk);
@@ -398,7 +398,7 @@ void clk_ll_enable_source(clk_source_t clk)
 	}
 }
 
-void clk_ll_disable_source(clk_source_t clk)
+void clk_disable_source(clk_source_t clk)
 {
 	uint32_t val = PMU->CCR;
 	uint32_t mask = get_bitmask_from_clksrc(clk);
@@ -406,7 +406,7 @@ void clk_ll_disable_source(clk_source_t clk)
 	PMU->CCR = val;
 }
 
-void clk_ll_set_source(clk_source_t clk)
+void clk_set_source(clk_source_t clk)
 {
 	uint32_t mask = 3U;
 	uint32_t val = PMU->BCCR;
@@ -431,23 +431,23 @@ void clk_ll_set_source(clk_source_t clk)
 	PMU->BCCR = val;
 }
 
-clk_source_t clk_ll_get_source(void)
+clk_source_t clk_get_source(void)
 {
 	return clk_get_source_internal();
 }
 
-void clk_ll_start_pll(void)
+void clk_start_pll(void)
 {
 	PMU->PLLCON |= PLLEN | PLLRST | nBYPASS;
 	PMU->MCMR |= MCKMNT;
 }
 
-void clk_ll_stop_pll(void)
+void clk_stop_pll(void)
 {
 	PMU->PLLCON &= ~(PLLEN | PLLRST | nBYPASS);
 }
 
-bool clk_ll_set_pll_frequency(clk_source_t clk, clk_source_t clkin, uint32_t hz)
+bool clk_set_pll_frequency(clk_source_t clk, clk_source_t clkin, uint32_t hz)
 {
 	uint32_t src_hz = 16*MHZ; // CLK_HSI
 
@@ -477,7 +477,7 @@ bool clk_ll_set_pll_frequency(clk_source_t clk, clk_source_t clkin, uint32_t hz)
 	return true;
 }
 
-uint32_t clk_ll_get_hclk_frequency(void)
+uint32_t clk_get_hclk_frequency(void)
 {
 	uint32_t div = clk_get_hclk_prescaler();
 	if (div & 0x2) {
@@ -488,16 +488,16 @@ uint32_t clk_ll_get_hclk_frequency(void)
 	return clk_get_pll_frequency() / div;
 }
 
-uint32_t clk_ll_get_pclk_frequency(void)
+uint32_t clk_get_pclk_frequency(void)
 {
 	return clk_get_pll_frequency() / (clk_get_pclk_prescaler() + 1);
 }
 
-uint32_t clk_ll_get_frequency(clk_source_t clk)
+uint32_t clk_get_frequency(clk_source_t clk)
 {
 	switch (clk) {
 	case CLK_PLL:
-		return clk_ll_get_hclk_frequency();
+		return clk_get_hclk_frequency();
 	case CLK_LSI:
 		return 1*MHZ;
 	case CLK_HSI:
@@ -510,17 +510,17 @@ uint32_t clk_ll_get_frequency(clk_source_t clk)
 	}
 }
 
-clk_source_t clk_ll_get_peripheral_clock_source(periph_t peri)
+clk_source_t clk_get_peripheral_clock_source(periph_t peri)
 {
 	return clk_get_timer_source(peri);
 }
 
-bool clk_ll_is_pll_locked(void)
+bool clk_is_pll_locked(void)
 {
 	return !!(PMU->PLLCON & PLLLOCKSTS);
 }
 
-void clk_ll_reset(void)
+void clk_reset(void)
 {
 	PMU->PCCR = 0x118;
 	PMU->CCR = 0x80;
@@ -534,8 +534,8 @@ void clk_ll_reset(void)
 	PMU->EOSCCON = 1;
 }
 
-uint32_t clk_ll_get_peripheral_clock_source_frequency(periph_t peri)
+uint32_t clk_get_peripheral_clock_source_frequency(periph_t peri)
 {
 	unused(peri);
-	return clk_ll_get_pclk_frequency();
+	return clk_get_pclk_frequency();
 }

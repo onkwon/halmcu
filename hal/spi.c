@@ -3,18 +3,18 @@
 #include <stddef.h>
 
 #include "halmcu/ll/pwr.h"
-#include "halmcu/ll/clk.h"
+#include "halmcu/periph/clk.h"
 #include "halmcu/irq.h"
 
 void spi_enable(periph_t spi)
 {
 	pwr_ll_enable_peripheral(spi);
-	clk_ll_enable_peripheral(spi);
+	clk_enable_peripheral(spi);
 }
 
 void spi_disable(periph_t spi)
 {
-	clk_ll_disable_peripheral(spi);
+	clk_disable_peripheral(spi);
 	pwr_ll_disable_peripheral(spi);
 }
 
@@ -42,7 +42,7 @@ bool spi_init(periph_t spi, const struct spi_cfg *cfg)
 	spi_ll_reset(spi);
 	spi_ll_set_mode(spi, cfg->mode);
 	spi_ll_set_frequency(spi, cfg->frequency,
-			clk_ll_get_peripheral_clock_source_frequency(spi));
+			clk_get_peripheral_clock_source_frequency(spi));
 	spi_ll_set_clock_polarity(spi, cfg->cpol);
 	spi_ll_set_clock_phase(spi, cfg->cpha);
 	spi_ll_set_data_width(spi, cfg->data_width);

@@ -1,6 +1,6 @@
 #include "halmcu/asm/arm/systick.h"
 #include "halmcu/asm/arm/cmsis.h"
-#include "halmcu/ll/clk.h"
+#include "halmcu/periph/clk.h"
 
 #if !defined(SYSTICK_PRESCALER)
 #define SYSTICK_PRESCALER			8
@@ -55,7 +55,7 @@ void systick_stop(void)
 uint32_t systick_set_frequency(uint32_t hz)
 {
 	uint32_t div = get_prescaler();
-	uint32_t clk = clk_ll_get_hclk_frequency() / div;
+	uint32_t clk = clk_get_hclk_frequency() / div;
 	uint32_t period = clk / hz;
 
 	if (period <= 0 || period > SYSTICK_RESOLUTION) {
@@ -69,5 +69,5 @@ uint32_t systick_set_frequency(uint32_t hz)
 
 uint32_t systick_get_frequency(void)
 {
-	return clk_ll_get_hclk_frequency() / (get_reload() + 1);
+	return clk_get_hclk_frequency() / (get_reload() + 1);
 }

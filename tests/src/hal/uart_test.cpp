@@ -37,10 +37,10 @@ TEST(uart_driver, init_ShouldReturnFalse_WhenNullObjGiven) {
 TEST(uart_driver, init_ShouldReturnTrue_WhenAllGivenParamVaild) {
 	mock().expectOneCall("pwr_ll_enable_peripheral")
 		.withParameter("peri", PERIPH_UART0);
-	mock().expectOneCall("clk_ll_enable_peripheral")
+	mock().expectOneCall("clk_enable_peripheral")
 		.withParameter("peri", PERIPH_UART0);
 	mock().expectOneCall("uart_ll_reset").withParameter("port", PERIPH_UART0);
-	mock().expectOneCall("clk_ll_get_peripheral_clock_source_frequency")
+	mock().expectOneCall("clk_get_peripheral_clock_source_frequency")
 		.withParameter("peri", PERIPH_UART0)
 		.andReturnValue(16000000);
 	mock().expectOneCall("uart_ll_set_baudrate")
@@ -78,7 +78,7 @@ TEST(uart_driver, init_ShouldEnableTxInterrupt_WhenTxInterruptGiven) {
 TEST(uart_driver, deinit) {
 	LONGS_EQUAL(1, uart_init(PERIPH_UART0, &default_cfg, &default_handle));
 	mock().expectOneCall("irq_disable").withParameter("irq", 3 + IRQ_FIXED);
-	mock().expectOneCall("clk_ll_disable_peripheral")
+	mock().expectOneCall("clk_disable_peripheral")
 		.withParameter("peri", PERIPH_UART0);
 	mock().expectOneCall("pwr_ll_disable_peripheral")
 		.withParameter("peri", PERIPH_UART0);

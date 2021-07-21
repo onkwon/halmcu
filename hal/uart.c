@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "halmcu/ll/pwr.h"
-#include "halmcu/ll/clk.h"
+#include "halmcu/periph/clk.h"
 #include "halmcu/irq.h"
 #include "halmcu/compiler.h"
 
@@ -38,11 +38,11 @@ bool uart_init(periph_t uart, const struct uart_cfg *cfg, uart_handle_t *handle)
 	}
 
 	pwr_ll_enable_peripheral(uart);
-	clk_ll_enable_peripheral(uart);
+	clk_enable_peripheral(uart);
 
 	uart_ll_reset(uart);
 	uart_ll_set_baudrate(uart, cfg->baudrate,
-			clk_ll_get_peripheral_clock_source_frequency(uart));
+			clk_get_peripheral_clock_source_frequency(uart));
 	uart_ll_set_wordsize(uart, cfg->wordsize);
 	uart_ll_set_stopbits(uart, cfg->stopbit);
 	uart_ll_set_parity(uart, cfg->parity);
@@ -76,7 +76,7 @@ void uart_deinit(periph_t uart)
 
 	irq_disable(PERIPH_TO_IRQ(uart));
 
-	clk_ll_disable_peripheral(uart);
+	clk_disable_peripheral(uart);
 	pwr_ll_disable_peripheral(uart);
 }
 

@@ -39,7 +39,7 @@ void wdt_ll_start(void);
 void wdt_ll_stop(void);
 void wdt_ll_set_debug_stop_mode(bool enable);
 
-#include "halmcu/ll/clk.h"
+#include "halmcu/periph/clk.h"
 
 void wdt_ll_set_clock_source(clk_source_t clk);
 clk_source_t wdt_ll_get_clock_source(void);

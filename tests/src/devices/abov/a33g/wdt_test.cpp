@@ -115,7 +115,7 @@ TEST(Watchdog, get_count_ShouldReturnCVR) {
 }
 
 #include "halmcu/hal/wdt.h"
-#include "halmcu/ll/clk.h"
+#include "halmcu/periph/clk.h"
 
 TEST(Watchdog, set_clock_source_ShouldSetPmuPcsr) {
 	PMU->PCSR = 1;
