@@ -1,29 +1,5 @@
 @startuml
 interface Timer {
-	mode_t
-	cc_t
-	cc_mode_t
-	event_t
-	edge_t
-
-	start()
-	stop()
-	clear_event()
-	get_event()
-	set_prescaler()
-	get_prescaler()
-	set_reload()
-	get_reload()
-	set_cc()
-	get_cc()
-	enable_cc_pin()
-	disable_cc_pin()
-	set_cc_pin()
-	set_cc_pin_mode()
-	set_cc_polarity()
-}
-
-class LL {
 	reset()
 	set_mode()
 	set_prescaler()
@@ -65,10 +41,9 @@ class HAL {
 	deinit()
 }
 
-HAL ..|> Timer
-HAL --> LL
-HAL ..> LL_power
-HAL ..> LL_clock
-HAL ..> IRQ
-LL --> Timer
+LL ..|> Timer
+HAL --> Timer
+HAL --> LL_power
+HAL --> LL_clock
+HAL --> IRQ
 @enduml

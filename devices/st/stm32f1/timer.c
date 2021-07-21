@@ -1,4 +1,4 @@
-#include "halmcu/ll/timer.h"
+#include "halmcu/periph/timer.h"
 
 #include <stddef.h>
 
@@ -32,7 +32,7 @@ static TIM_Type *get_instance(periph_t peri)
 	}
 }
 
-void timer_ll_reset(periph_t peri)
+void timer_reset(periph_t peri)
 {
 	volatile uint32_t *rstr = &RCC->APB1RSTR;
 	uint32_t pos = 0;
@@ -66,7 +66,7 @@ void timer_ll_reset(periph_t peri)
 	bitop_clear(rstr, pos);
 }
 
-void timer_ll_set_mode(periph_t peri, timer_mode_t mode)
+void timer_set_mode(periph_t peri, timer_mode_t mode)
 {
 	TIM_Type *instance = get_instance(peri);
 
@@ -85,18 +85,18 @@ void timer_ll_set_mode(periph_t peri, timer_mode_t mode)
 	}
 }
 
-void timer_ll_set_prescaler(periph_t peri, uint32_t div_factor)
+void timer_set_prescaler(periph_t peri, uint32_t div_factor)
 {
 	assert(div_factor < 0x10000u); /* 16-bit counter */
 	get_instance(peri)->PSC = div_factor;
 }
 
-uint32_t timer_ll_get_prescaler(periph_t peri)
+uint32_t timer_get_prescaler(periph_t peri)
 {
 	return get_instance(peri)->PSC;
 }
 
-void timer_ll_enable_irq(periph_t peri, timer_event_t events)
+void timer_enable_irq(periph_t peri, timer_event_t events)
 {
 	TIM_Type *instance = get_instance(peri);
 	uint32_t bits = instance->DIER;
@@ -120,7 +120,7 @@ void timer_ll_enable_irq(periph_t peri, timer_event_t events)
 	instance->DIER = bits;
 }
 
-void timer_ll_disable_irq(periph_t peri, timer_event_t events)
+void timer_disable_irq(periph_t peri, timer_event_t events)
 {
 	TIM_Type *instance = get_instance(peri);
 	uint32_t bits = instance->DIER;
@@ -144,41 +144,41 @@ void timer_ll_disable_irq(periph_t peri, timer_event_t events)
 	instance->DIER = bits;
 }
 
-void timer_ll_set_counter(periph_t peri, uint32_t value)
+void timer_set_counter(periph_t peri, uint32_t value)
 {
 	assert(value < 0x10000u); /* 16-bit counter */
 	get_instance(peri)->CNT = value;
 }
 
-uint32_t timer_ll_get_counter(periph_t peri)
+uint32_t timer_get_counter(periph_t peri)
 {
 	return get_instance(peri)->CNT;
 }
 
-void timer_ll_set_reload(periph_t peri, uint32_t value)
+void timer_set_reload(periph_t peri, uint32_t value)
 {
 	assert(value < 0x10000u); /* 16-bit counter */
 	get_instance(peri)->ARR = value;
 }
 
-uint32_t timer_ll_get_reload(periph_t peri)
+uint32_t timer_get_reload(periph_t peri)
 {
 	return get_instance(peri)->ARR;
 }
 
-void timer_ll_start(periph_t peri)
+void timer_start(periph_t peri)
 {
 	TIM_Type *instance = get_instance(peri);
 	bitop_set(&instance->CR1, 0); /* CEN */
 }
 
-void timer_ll_stop(periph_t peri)
+void timer_stop(periph_t peri)
 {
 	TIM_Type *instance = get_instance(peri);
 	bitop_clear(&instance->CR1, 0); /* CEN */
 }
 
-void timer_ll_set_cc(periph_t peri, timer_cc_t cc, uint32_t value)
+void timer_set_cc(periph_t peri, timer_cc_t cc, uint32_t value)
 {
 	TIM_Type *instance = get_instance(peri);
 	if (cc == TIMER_CC_1) {
@@ -192,7 +192,7 @@ void timer_ll_set_cc(periph_t peri, timer_cc_t cc, uint32_t value)
 	}
 }
 
-uint32_t timer_ll_get_cc(periph_t peri, timer_cc_t cc)
+uint32_t timer_get_cc(periph_t peri, timer_cc_t cc)
 {
 	if (cc == TIMER_CC_1) {
 		return get_instance(peri)->CCR1;
@@ -207,7 +207,7 @@ uint32_t timer_ll_get_cc(periph_t peri, timer_cc_t cc)
 	return 0;
 }
 
-void timer_ll_clear_event(periph_t peri, timer_event_t events)
+void timer_clear_event(periph_t peri, timer_event_t events)
 {
 	uint32_t value = get_instance(peri)->SR;
 
@@ -230,7 +230,7 @@ void timer_ll_clear_event(periph_t peri, timer_event_t events)
 	get_instance(peri)->SR = value;
 }
 
-timer_event_t timer_ll_get_event(periph_t peri)
+timer_event_t timer_get_event(periph_t peri)
 {
 	uint32_t value = get_instance(peri)->SR;
 	timer_event_t events = TIMER_EVENT_NONE;
@@ -254,7 +254,7 @@ timer_event_t timer_ll_get_event(periph_t peri)
 	return events;
 }
 
-void timer_ll_set_clock_divider(periph_t peri, uint32_t div_factor)
+void timer_set_clock_divider(periph_t peri, uint32_t div_factor)
 {
 	uint32_t val = 0;
 
@@ -267,7 +267,7 @@ void timer_ll_set_clock_divider(periph_t peri, uint32_t div_factor)
 	bitop_clean_set_with_mask(&get_instance(peri)->CR1, 8, 3, val);
 }
 
-uint32_t timer_ll_get_frequency(periph_t peri, uint32_t tclk)
+uint32_t timer_get_frequency(periph_t peri, uint32_t tclk)
 {
 	TIM_Type *instance = get_instance(peri);
 	bool prescaled;
@@ -285,17 +285,17 @@ uint32_t timer_ll_get_frequency(periph_t peri, uint32_t tclk)
 	return tclk;
 }
 
-void timer_ll_set_counter_direction(periph_t peri, timer_direction_t dir)
+void timer_set_counter_direction(periph_t peri, timer_direction_t dir)
 {
 	bitop_clean_set_with_mask(&get_instance(peri)->CR1, 4, 1, dir);
 }
 
-void timer_ll_set_counter_alignment_mode(periph_t peri, uint32_t align)
+void timer_set_counter_alignment_mode(periph_t peri, uint32_t align)
 {
 	bitop_clean_set_with_mask(&get_instance(peri)->CR1, 5, 3, align);
 }
 
-void timer_ll_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode)
+void timer_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode)
 {
 	assert(cc >= TIMER_CC_1 && cc <= TIMER_CC_4);
 
@@ -309,7 +309,7 @@ void timer_ll_set_cc_pin_mode(periph_t peri, timer_cc_t cc, timer_cc_mode_t mode
 	}
 }
 
-void timer_ll_set_cc_pin(periph_t peri, timer_cc_t cc, uint32_t value)
+void timer_set_cc_pin(periph_t peri, timer_cc_t cc, uint32_t value)
 {
 	assert(cc >= TIMER_CC_1 && cc <= TIMER_CC_4);
 
@@ -323,7 +323,7 @@ void timer_ll_set_cc_pin(periph_t peri, timer_cc_t cc, uint32_t value)
 	}
 }
 
-void timer_ll_enable_cc_pin(periph_t peri, timer_cc_t cc)
+void timer_enable_cc_pin(periph_t peri, timer_cc_t cc)
 {
 	assert(cc > TIMER_CC_0);
 
@@ -338,7 +338,7 @@ void timer_ll_enable_cc_pin(periph_t peri, timer_cc_t cc)
 	bitop_set(&get_instance(peri)->CCER, pos);
 }
 
-void timer_ll_disable_cc_pin(periph_t peri, timer_cc_t cc)
+void timer_disable_cc_pin(periph_t peri, timer_cc_t cc)
 {
 	assert(cc > TIMER_CC_0);
 
@@ -353,7 +353,7 @@ void timer_ll_disable_cc_pin(periph_t peri, timer_cc_t cc)
 	bitop_clear(&get_instance(peri)->CCER, pos);
 }
 
-void timer_ll_set_cc_pin_polarity(periph_t peri, timer_cc_t cc, bool active_high)
+void timer_set_cc_pin_polarity(periph_t peri, timer_cc_t cc, bool active_high)
 {
 	assert(cc > TIMER_CC_0);
 
@@ -372,7 +372,7 @@ void timer_ll_set_cc_pin_polarity(periph_t peri, timer_cc_t cc, bool active_high
 	}
 }
 
-void timer_ll_enable_cc_preload(periph_t peri, timer_cc_t cc)
+void timer_enable_cc_preload(periph_t peri, timer_cc_t cc)
 {
 	assert(cc > 0 && cc <= 4);
 
@@ -384,7 +384,7 @@ void timer_ll_enable_cc_preload(periph_t peri, timer_cc_t cc)
 	}
 }
 
-void timer_ll_disable_cc_preload(periph_t peri, timer_cc_t cc)
+void timer_disable_cc_preload(periph_t peri, timer_cc_t cc)
 {
 	assert(cc > 0 && cc <= 4);
 
@@ -396,7 +396,7 @@ void timer_ll_disable_cc_preload(periph_t peri, timer_cc_t cc)
 	}
 }
 
-void timer_ll_enable_cc_fastmode(periph_t peri, timer_cc_t cc)
+void timer_enable_cc_fastmode(periph_t peri, timer_cc_t cc)
 {
 	assert(cc > 0 && cc <= 4);
 
@@ -408,7 +408,7 @@ void timer_ll_enable_cc_fastmode(periph_t peri, timer_cc_t cc)
 	}
 }
 
-void timer_ll_disable_cc_fastmode(periph_t peri, timer_cc_t cc)
+void timer_disable_cc_fastmode(periph_t peri, timer_cc_t cc)
 {
 	assert(cc > 0 && cc <= 4);
 
@@ -420,7 +420,7 @@ void timer_ll_disable_cc_fastmode(periph_t peri, timer_cc_t cc)
 	}
 }
 
-void timer_ll_set_cc_prescaler(periph_t peri, timer_cc_t cc, uint32_t value)
+void timer_set_cc_prescaler(periph_t peri, timer_cc_t cc, uint32_t value)
 {
 	assert(value <= 3);
 
@@ -434,7 +434,7 @@ void timer_ll_set_cc_prescaler(periph_t peri, timer_cc_t cc, uint32_t value)
 	}
 }
 
-void timer_ll_set_cc_filter(periph_t peri, timer_cc_t cc, uint32_t value)
+void timer_set_cc_filter(periph_t peri, timer_cc_t cc, uint32_t value)
 {
 	assert(value < 16);
 
@@ -448,7 +448,7 @@ void timer_ll_set_cc_filter(periph_t peri, timer_cc_t cc, uint32_t value)
 	}
 }
 
-void timer_ll_set_slave_mode(periph_t peri, uint32_t value)
+void timer_set_slave_mode(periph_t peri, uint32_t value)
 {
 	assert(value < 8);
 	bitop_clean_set_with_mask(&get_instance(peri)->SMCR, 0, 7, value);
