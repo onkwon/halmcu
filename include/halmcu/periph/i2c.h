@@ -1,5 +1,5 @@
-#ifndef HALMCU_I2C_LL_H
-#define HALMCU_I2C_LL_H
+#ifndef HALMCU_I2C_H
+#define HALMCU_I2C_H
 
 #if defined(__cplusplus)
 extern "C" {
@@ -39,4 +39,4 @@ void i2c_set_frequency(periph_t i2c, uint32_t hz, uint32_t pclk);
 }
 #endif
 
-#endif /* HALMCU_I2C_LL_H */
+#endif /* HALMCU_I2C_H */

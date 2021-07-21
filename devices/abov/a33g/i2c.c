@@ -1,4 +1,4 @@
-#include "halmcu/ll/i2c.h"
+#include "halmcu/periph/i2c.h"
 #include <stddef.h>
 #include "halmcu/bitop.h"
 #include "halmcu/asm/arm/cmsis.h"
