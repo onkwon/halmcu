@@ -1,19 +1,19 @@
-#include "abov/ll/pwr.h"
-#include "abov/compiler.h"
+#include "halmcu/ll/pwr.h"
+#include "halmcu/compiler.h"
 
-ABOV_WEAK
+HALMCU_WEAK
 void pwr_ll_enable_peripheral(periph_t peri)
 {
 	unused(peri);
 }
 
-ABOV_WEAK
+HALMCU_WEAK
 void pwr_ll_disable_peripheral(periph_t peri)
 {
 	unused(peri);
 }
 
-ABOV_WEAK
+HALMCU_WEAK
 void pwr_ll_reset(void)
 {
 	/* place holder */
