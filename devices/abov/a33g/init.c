@@ -1,5 +1,5 @@
 #include "halmcu/system.h"
-#include "halmcu/ll/clk.h"
+#include "halmcu/periph/clk.h"
 #include "halmcu/ll/wdt.h"
 #include "errata.h"
 

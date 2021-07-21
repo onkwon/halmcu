@@ -1,5 +1,5 @@
 #include "halmcu/delay.h"
-#include "halmcu/ll/clk.h"
+#include "halmcu/periph/clk.h"
 
 #define CYCLES_PER_LOOP			2
 #define F_10MHZ				10000000U

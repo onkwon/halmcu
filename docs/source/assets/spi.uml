@@ -1,22 +1,11 @@
 @startuml
 interface SPI {
-	spi_mode_t
-	spi_irq_t
-	spi_event_t
-
-	start()
-	stop()
-	get_event()
-	clear_event()
-}
-
-class LL {
 	reset()
 	get_rxd()
 	set_txd()
-	write()
-	read()
 	is_busy()
+	is_tx_completed()
+	has_rx()
 	clear_rx_buffer()
 	clear_tx_buffer()
 	enable_irq()
@@ -28,8 +17,8 @@ class LL {
 	set_chip_select_polarity()
 	set_loopback()
 	set_mode()
-	start()
-	stop()
+	enable_clock()
+	disable_clock()
 	get_event()
 	clear_event()
 	set_clock_phase()
@@ -47,6 +36,8 @@ class LL {
 class HAL {
 	enable()
 	disable()
+	start()
+	stop()
 	init()
 	deinit()
 	write()
@@ -54,10 +45,9 @@ class HAL {
 	write_read()
 }
 
-HAL ..|> SPI
-HAL --> LL
-HAL ..> LL_power
-HAL ..> LL_clock
-HAL ..> IRQ
-LL --> SPI
+LL ..|> SPI
+HAL --> SPI
+HAL --> LL_power
+HAL --> LL_clock
+HAL --> IRQ
 @enduml
