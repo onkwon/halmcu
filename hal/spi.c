@@ -1,10 +1,10 @@
-#include "abov/hal/spi.h"
+#include "halmcu/hal/spi.h"
 
 #include <stddef.h>
 
-#include "abov/ll/pwr.h"
-#include "abov/ll/clk.h"
-#include "abov/irq.h"
+#include "halmcu/ll/pwr.h"
+#include "halmcu/ll/clk.h"
+#include "halmcu/irq.h"
 
 void spi_enable(periph_t spi)
 {

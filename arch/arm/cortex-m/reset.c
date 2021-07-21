@@ -1,8 +1,8 @@
-#include "abov/irq.h"
+#include "halmcu/irq.h"
 #include <stdint.h>
-#include "abov/asm/arm/cmsis.h"
-#include "abov/compiler.h"
-#include "abov/system.h"
+#include "halmcu/asm/arm/cmsis.h"
+#include "halmcu/compiler.h"
+#include "halmcu/system.h"
 
 extern uintptr_t _edata, _ebss;
 extern uintptr_t _data[], _data_loadaddr[];
@@ -41,17 +41,17 @@ static inline void run_destructors(void)
 	/* destructors */
 }
 
-ABOV_WEAK void early_init(void)
+HALMCU_WEAK void early_init(void)
 {
 	/* place holder */
 }
 
-ABOV_WEAK void pre_main(void)
+HALMCU_WEAK void pre_main(void)
 {
 	/* place holder */
 }
 
-ABOV_WEAK void ISR_reset(void)
+HALMCU_WEAK void ISR_reset(void)
 {
 	initialize_core();
 	initialize_ram();

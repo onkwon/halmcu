@@ -1,36 +1,36 @@
-#include "abov/mutex.h"
-#include "abov/asm/arm/atomic.h"
-#include "abov/compiler.h"
+#include "halmcu/mutex.h"
+#include "halmcu/asm/arm/atomic.h"
+#include "halmcu/compiler.h"
 
-ABOV_WEAK
-void abov_mutex_lock(abov_mutex_t *l)
+HALMCU_WEAK
+void halmcu_mutex_lock(halmcu_mutex_t *l)
 {
 	uintptr_t val;
 
 	do {
 		val = atomic_ll(l);
-		if (val != ABOV_MUTEX_LOCKED &&
-				atomic_sc(ABOV_MUTEX_LOCKED, l) == 0) {
+		if (val != HALMCU_MUTEX_LOCKED &&
+				atomic_sc(HALMCU_MUTEX_LOCKED, l) == 0) {
 			break;
 		}
-	} while (val == ABOV_MUTEX_LOCKED);
+	} while (val == HALMCU_MUTEX_LOCKED);
 }
 
-ABOV_WEAK
-void abov_mutex_unlock(abov_mutex_t *l)
+HALMCU_WEAK
+void halmcu_mutex_unlock(halmcu_mutex_t *l)
 {
 	uintptr_t val;
 
 	do {
 		val = atomic_ll(l);
-		if (val == ABOV_MUTEX_UNLOCKED) {
+		if (val == HALMCU_MUTEX_UNLOCKED) {
 			break;
 		}
-	} while (atomic_sc(ABOV_MUTEX_UNLOCKED, l) != 0);
+	} while (atomic_sc(HALMCU_MUTEX_UNLOCKED, l) != 0);
 }
 
-ABOV_WEAK
-void abov_mutex_init(abov_mutex_t *l)
+HALMCU_WEAK
+void halmcu_mutex_init(halmcu_mutex_t *l)
 {
-	*l = ABOV_MUTEX_UNLOCKED;
+	*l = HALMCU_MUTEX_UNLOCKED;
 }

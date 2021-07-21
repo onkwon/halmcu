@@ -1,10 +1,10 @@
-#include "abov/hal/gpio.h"
+#include "halmcu/hal/gpio.h"
 
 #include <stddef.h>
 
-#include "abov/ll/pwr.h"
-#include "abov/ll/clk.h"
-#include "abov/irq.h"
+#include "halmcu/ll/pwr.h"
+#include "halmcu/ll/clk.h"
+#include "halmcu/irq.h"
 
 void gpio_open(periph_t port, uint32_t pin, const struct gpio_cfg *cfg)
 {

@@ -2,7 +2,7 @@
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTestExt/MockSupport.h"
 
-#include "abov/ll/wdt.h"
+#include "halmcu/ll/wdt.h"
 #include "a33g.h"
 
 extern "C" {
@@ -114,8 +114,8 @@ TEST(Watchdog, get_count_ShouldReturnCVR) {
 	LONGS_EQUAL(0xffff, wdt_ll_get_count());
 }
 
-#include "abov/hal/wdt.h"
-#include "abov/ll/clk.h"
+#include "halmcu/hal/wdt.h"
+#include "halmcu/ll/clk.h"
 
 TEST(Watchdog, set_clock_source_ShouldSetPmuPcsr) {
 	PMU->PCSR = 1;

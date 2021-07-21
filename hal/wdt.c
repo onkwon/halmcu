@@ -1,6 +1,6 @@
-#include "abov/hal/wdt.h"
-#include "abov/ll/pwr.h"
-#include "abov/ll/clk.h"
+#include "halmcu/hal/wdt.h"
+#include "halmcu/ll/pwr.h"
+#include "halmcu/ll/clk.h"
 
 static uint32_t get_clock_freqeuncy(void)
 {

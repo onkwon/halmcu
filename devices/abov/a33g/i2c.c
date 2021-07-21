@@ -1,7 +1,7 @@
-#include "abov/ll/i2c.h"
+#include "halmcu/ll/i2c.h"
 #include <stddef.h>
-#include "abov/bitop.h"
-#include "abov/asm/arm/cmsis.h"
+#include "halmcu/bitop.h"
+#include "halmcu/asm/arm/cmsis.h"
 #include "a33g.h"
 
 #define KHZ					1000U

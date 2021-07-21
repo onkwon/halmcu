@@ -9,7 +9,7 @@ OC := $(CROSS_COMPILE_PREFIX)objcopy
 OD := $(CROSS_COMPILE_PREFIX)objdump
 NM := $(CROSS_COMPILE_PREFIX)nm
 
-ABOV_CFLAGS ?= \
+HALMCU_CFLAGS ?= \
 	-std=c99 \
 	-static \
 	-ffreestanding \
@@ -24,7 +24,7 @@ ABOV_CFLAGS ?= \
 
 ## Compiler warnings
 STACK_LIMIT ?= 128
-ABOV_WARNING_FLAGS ?= \
+HALMCU_WARNING_FLAGS ?= \
 	-Werror \
 	-Wall \
 	-Wextra \
@@ -61,7 +61,7 @@ ABOV_WARNING_FLAGS ?= \
 	#-Wnested-externs
 	#-Wswitch-enum
 
-CFLAGS += $(ABOV_CFLAGS) $(ABOV_WARNING_FLAGS)
+CFLAGS += $(HALMCU_CFLAGS) $(HALMCU_WARNING_FLAGS)
 
 ifndef NDEBUG
 	CFLAGS += -g3

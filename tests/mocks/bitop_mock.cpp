@@ -1,7 +1,7 @@
 #include "CppUTestExt/MockSupport.h"
 
-#include "abov/bitop.h"
-#include "abov/compiler.h"
+#include "halmcu/bitop.h"
+#include "halmcu/compiler.h"
 
 void bitop_set(volatile uint32_t *reg, uint32_t pos) {
 	mock().actualCall(__func__)

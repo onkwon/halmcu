@@ -4,9 +4,9 @@
 
 #include <string.h>
 
-#include "abov/ll/uart.h"
+#include "halmcu/ll/uart.h"
 #include "stm32f1.h"
-#include "abov/assert.h"
+#include "halmcu/assert.h"
 
 extern "C" {
 static USART_Type reg1, reg2, reg3, reg4, reg5;
@@ -37,12 +37,12 @@ TEST_GROUP(UART) {
 };
 
 TEST(UART, reset_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	uart_ll_reset(PERIPH_GPIOA);
 }
 
 TEST(UART, has_rx_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	uart_ll_has_rx(PERIPH_GPIOA);
 }
 TEST(UART, has_rx_ShouldReturnFalse_WhenNothingReceived) {
@@ -54,7 +54,7 @@ TEST(UART, has_rx_ShouldReturnTrue_WhenDataReceived) {
 }
 
 TEST(UART, is_tx_ready_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	uart_ll_is_tx_ready(PERIPH_GPIOA);
 }
 TEST(UART, is_tx_ready_ShouldReturnTrue_WhenReadyToTransmit) {
@@ -66,7 +66,7 @@ TEST(UART, is_tx_ready_ShouldReturnTrue_WhenBusy) {
 }
 
 TEST(UART, get_rxd_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	uart_ll_get_rxd(PERIPH_GPIOA);
 }
 TEST(UART, get_rxd_ShouldReturnReceivedData) {
@@ -76,7 +76,7 @@ TEST(UART, get_rxd_ShouldReturnReceivedData) {
 }
 
 TEST(UART, set_txd_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	uart_ll_set_txd(PERIPH_GPIOA, 0);
 }
 TEST(UART, set_txd_ShouldSetDR) {
@@ -87,7 +87,7 @@ TEST(UART, set_txd_ShouldSetDR) {
 }
 
 TEST(UART, set_baudrate_ShouldCauseAssert_WhenInvalidPortGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	uart_ll_set_baudrate(PERIPH_GPIOA, 115200, 1000000);
 }
 TEST(UART, set_baudrate_ShouldSetBRR_WhenPlckIs72MHz) {

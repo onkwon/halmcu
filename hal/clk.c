@@ -1,4 +1,4 @@
-#include "abov/hal/clk.h"
+#include "halmcu/hal/clk.h"
 
 bool clk_init(clk_source_t clock_source, uint32_t target_hz)
 {

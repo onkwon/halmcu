@@ -1,6 +1,6 @@
 #include "CppUTestExt/MockSupport.h"
 
-#include "abov/irq.h"
+#include "halmcu/irq.h"
 
 void irq_enable(irq_t irq)
 {

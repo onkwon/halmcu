@@ -4,9 +4,9 @@
 
 #include <string.h>
 
-#include "abov/ll/wdt.h"
+#include "halmcu/ll/wdt.h"
 #include "stm32f1.h"
-#include "abov/assert.h"
+#include "halmcu/assert.h"
 
 extern "C" {
 static IWDT_Type iwdt_reg;
@@ -28,19 +28,19 @@ TEST_GROUP(IWDT) {
 };
 
 TEST(IWDT, set_prescaler_ShouldCauseAssert_WhenZeroValueGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	wdt_ll_set_prescaler(0);
 }
 TEST(IWDT, set_prescaler_ShouldCauseAssert_WhenTooBigValueGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	wdt_ll_set_prescaler(512);
 }
 TEST(IWDT, set_prescaler_ShouldCauseAssert_WhenTooSmallValueGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	wdt_ll_set_prescaler(2);
 }
 TEST(IWDT, set_prescaler_ShouldCauseAssert_WhenNotPowerOfTwoGiven) {
-	mock().expectOneCall("abov_assertion_failed");
+	mock().expectOneCall("halmcu_assertion_failed");
 	wdt_ll_set_prescaler(10);
 }
 TEST(IWDT, set_prescaler_ShouldSetPR) {

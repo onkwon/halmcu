@@ -2,8 +2,8 @@
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTestExt/MockSupport.h"
 
-#include "abov/hal/timer.h"
-#include "abov/irq.h"
+#include "halmcu/hal/timer.h"
+#include "halmcu/irq.h"
 
 static void set_clock_source(void) {
 	mock().actualCall(__func__);

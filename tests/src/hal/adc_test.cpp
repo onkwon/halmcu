@@ -2,7 +2,7 @@
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTestExt/MockSupport.h"
 
-#include "abov/hal/adc.h"
+#include "halmcu/hal/adc.h"
 
 TEST_GROUP(ADC) {
 	void setup(void) {

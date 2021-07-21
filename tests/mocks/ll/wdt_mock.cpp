@@ -1,6 +1,6 @@
 #include "CppUTestExt/MockSupport.h"
 
-#include "abov/ll/wdt.h"
+#include "halmcu/ll/wdt.h"
 
 uint32_t wdt_ll_get_prescaler(void)
 {

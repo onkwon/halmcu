@@ -1,9 +1,9 @@
-#include "abov/ll/adc.h"
+#include "halmcu/ll/adc.h"
 
-#include "abov/assert.h"
-#include "abov/compiler.h"
-#include "abov/bitop.h"
-#include "abov/asm/arm/cmsis.h"
+#include "halmcu/assert.h"
+#include "halmcu/compiler.h"
+#include "halmcu/bitop.h"
+#include "halmcu/asm/arm/cmsis.h"
 #include "a33g.h"
 
 #define ADIF				(1U << 5)
@@ -60,7 +60,7 @@ void adc_ll_stop(periph_t adc)
 	bitop_clear(&ADC->CR, 7); /* ADST */
 }
 
-ABOV_STATIC_ASSERT(__builtin_ffs(1) == 1, "");
+HALMCU_STATIC_ASSERT(__builtin_ffs(1) == 1, "");
 void adc_ll_select_channel(periph_t adc, adc_channel_t channel)
 {
 	unused(adc);

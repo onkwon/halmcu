@@ -1,12 +1,12 @@
 ARCH := armv7m3
 
-include $(LIBABOV_ROOT)/arch/arm/cortex-m/cortex-m.mk
+include $(HALMCU_ROOT)/arch/arm/cortex-m/cortex-m.mk
 
 CFLAGS += -mcpu=cortex-m3
 
-M3_SUBDIRS := $(LIBABOV_ROOT)/arch/arm/cortex-m/m3
+M3_SUBDIRS := $(HALMCU_ROOT)/arch/arm/cortex-m/m3
 M3_SRCS := $(foreach d, $(M3_SUBDIRS), $(shell find $(d) -type f -regex ".*\.c"))
-M3_INCS := $(LIBABOV_ROOT)/arch/arm/include/CMSIS_5/Device/ARM/ARMCM3/Include
+M3_INCS := $(HALMCU_ROOT)/arch/arm/include/CMSIS_5/Device/ARM/ARMCM3/Include
 
-LIBABOV_SRCS += $(M3_SRCS)
-LIBABOV_INCS += $(M3_INCS)
+HALMCU_SRCS += $(M3_SRCS)
+HALMCU_INCS += $(M3_INCS)

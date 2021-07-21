@@ -1,8 +1,8 @@
-#include "abov/ll/wdt.h"
+#include "halmcu/ll/wdt.h"
 
-#include "abov/bitop.h"
-#include "abov/compiler.h"
-#include "abov/assert.h"
+#include "halmcu/bitop.h"
+#include "halmcu/compiler.h"
+#include "halmcu/assert.h"
 #include "stm32f1.h"
 
 #define MAX_RELOAD				(0x1000 - 1)
@@ -17,7 +17,7 @@ static bool is_reload_busy(void)
 	return (IWDT->SR >> 1) & 1U; /* RVU */
 }
 
-ABOV_STATIC_ASSERT(__builtin_ffs(1) == 1, "");
+HALMCU_STATIC_ASSERT(__builtin_ffs(1) == 1, "");
 static uint32_t get_prescaler_value_from_divisor(uint32_t divisor)
 {
 	return (uint32_t)(__builtin_ffs((int)divisor) - 3);

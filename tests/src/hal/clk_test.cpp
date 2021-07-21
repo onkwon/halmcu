@@ -2,7 +2,7 @@
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTestExt/MockSupport.h"
 
-#include "abov/hal/clk.h"
+#include "halmcu/hal/clk.h"
 
 TEST_GROUP(CLK) {
 	void setup(void) {

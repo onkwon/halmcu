@@ -1,6 +1,6 @@
 DEVICE_SUBDIRS := \
-	$(LIBABOV_ROOT)/devices/common \
-	$(LIBABOV_ROOT)/devices/$(VENDOR)/$(DEVICE) \
+	$(HALMCU_ROOT)/devices/common \
+	$(HALMCU_ROOT)/devices/$(VENDOR)/$(DEVICE) \
 
 DEVICE_SRCS := \
 	$(foreach d, $(DEVICE_SUBDIRS), \
@@ -8,5 +8,5 @@ DEVICE_SRCS := \
 
 DEVICE_INCS := \
 
-LIBABOV_SRCS += $(DEVICE_SRCS)
-LIBABOV_INCS += $(DEVICE_INCS)
+HALMCU_SRCS += $(DEVICE_SRCS)
+HALMCU_INCS += $(DEVICE_INCS)

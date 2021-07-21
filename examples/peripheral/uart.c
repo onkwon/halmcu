@@ -1,8 +1,8 @@
-#include "abov/system.h"
-#include "abov/irq.h"
-#include "abov/hal/uart.h"
-#include "abov/hal/gpio.h"
-#include "abov/hal/clk.h"
+#include "halmcu/system.h"
+#include "halmcu/irq.h"
+#include "halmcu/hal/uart.h"
+#include "halmcu/hal/gpio.h"
+#include "halmcu/hal/clk.h"
 
 //#define POLLING
 
