@@ -5,7 +5,6 @@ class HAL
 abstract periph_t
 
 Periph --> periph_t
-LL --> Periph
-HAL ..|> Periph
-HAL ..> LL
+LL ..|> Periph
+HAL --> Periph
 @enduml

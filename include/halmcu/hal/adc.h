@@ -6,7 +6,6 @@ extern "C" {
 #endif
 
 #include "halmcu/periph/adc.h"
-#include "halmcu/ll/adc.h"
 
 void adc_enable(periph_t adc);
 void adc_disable(periph_t adc);
