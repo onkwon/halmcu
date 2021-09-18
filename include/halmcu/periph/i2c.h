@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "halmcu/periph/periph.h"
 
 typedef enum {
@@ -20,20 +21,32 @@ typedef enum {
 } i2c_event_t;
 
 void i2c_reset(periph_t i2c);
+void i2c_enable(periph_t i2c);
+void i2c_disable(periph_t i2c);
+void i2c_set_frequency(periph_t i2c, uint32_t hz, uint32_t pclk);
+void i2c_send_start(periph_t i2c);
+void i2c_send_stop(periph_t i2c);
+void i2c_enable_ack(periph_t i2c);
+void i2c_disable_ack(periph_t i2c);
+void i2c_write_byte(periph_t i2c, uint8_t value);
+uint8_t i2c_read_byte(periph_t i2c);
+bool i2c_is_busy(periph_t i2c);
+bool i2c_has_started(periph_t i2c);
+bool i2c_has_address_set(periph_t i2c);
+bool i2c_has_transfer_completed(periph_t i2c);
+bool i2c_has_received(periph_t i2c);
+
+void i2c_enable_interrupt(periph_t i2c, i2c_event_t events);
+void i2c_disable_interrupt(periph_t i2c, i2c_event_t events);
+
 void i2c_start(periph_t i2c);
 void i2c_stop(periph_t i2c);
 void i2c_set_slave_address(periph_t i2c, uint16_t slave_addr);
-void i2c_enable_ack(periph_t i2c);
-void i2c_disable_ack(periph_t i2c);
 void i2c_enable_irq(periph_t i2c);
 void i2c_disable_irq(periph_t i2c);
-void i2c_write_byte(periph_t i2c, uint8_t value);
-uint8_t i2c_read_byte(periph_t i2c);
 
 i2c_event_t i2c_get_event(periph_t i2c);
 void i2c_clear_event(periph_t i2c, i2c_event_t events);
-
-void i2c_set_frequency(periph_t i2c, uint32_t hz, uint32_t pclk);
 
 #if defined(__cplusplus)
 }

@@ -146,6 +146,48 @@ typedef struct {
 	volatile uint32_t I2SPR;
 } SPI_Type;
 
+typedef struct {
+	volatile uint32_t CR1;
+	volatile uint32_t CR2;
+	volatile uint32_t OAR1;
+	volatile uint32_t OAR2;
+	volatile uint32_t DR;
+	volatile uint32_t SR1;
+	volatile uint32_t SR2;
+	volatile uint32_t CCR;
+	volatile uint32_t TRISE;
+} I2C_Type;
+
+typedef struct {
+	volatile uint16_t EP0R;
+	volatile uint16_t ep0r_padding;
+	volatile uint16_t EP1R;
+	volatile uint16_t ep1r_padding;
+	volatile uint16_t EP2R;
+	volatile uint16_t ep2r_padding;
+	volatile uint16_t EP3R;
+	volatile uint16_t ep3r_padding;
+	volatile uint16_t EP4R;
+	volatile uint16_t ep4r_padding;
+	volatile uint16_t EP5R;
+	volatile uint16_t ep5r_padding;
+	volatile uint16_t EP6R;
+	volatile uint16_t ep6r_padding;
+	volatile uint16_t EP7R;
+	volatile uint16_t ep7r_padding;
+	volatile uint16_t reserved[16];
+	volatile uint16_t CNTR;
+	volatile uint16_t cntr_padding;
+	volatile uint16_t ISTR;
+	volatile uint16_t istr_padding;
+	volatile uint16_t FNR;
+	volatile uint16_t fnr_padding;
+	volatile uint16_t DADDR;
+	volatile uint16_t daddr_padding;
+	volatile uint16_t BTABLE;
+	volatile uint16_t btable_padding;
+} USB_Type;
+
 extern DBGMCU_Type * const DBGMCU;
 
 extern SYSCFG_Type * const SYSCFG;
@@ -191,6 +233,11 @@ extern TIM_Type * const TIM14;
 extern SPI_Type * const SPI1;
 extern SPI_Type * const SPI2;
 extern SPI_Type * const SPI3;
+
+extern I2C_Type * const I2C1;
+extern I2C_Type * const I2C2;
+
+extern USB_Type * const USB;
 
 #if defined(__cplusplus)
 }
