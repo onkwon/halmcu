@@ -71,3 +71,33 @@ TEST(I2C, read_byte_ShouldReturnDR) {
 	I2C1->DR = 0xA5;
 	LONGS_EQUAL(0xA5, i2c_read_byte(PERIPH_I2C1));
 }
+
+TEST(I2C, is_busy_ShouldReturnTrue_WhenBusy) {
+	LONGS_EQUAL(0, i2c_is_busy(PERIPH_I2C2));
+	I2C2->SR2 = 2;
+	LONGS_EQUAL(1, i2c_is_busy(PERIPH_I2C2));
+}
+
+TEST(I2C, has_started_ShouldReturnTrue_WhenSBset) {
+	LONGS_EQUAL(0, i2c_has_started(PERIPH_I2C1));
+	I2C1->SR1 = 1;
+	LONGS_EQUAL(1, i2c_has_started(PERIPH_I2C1));
+}
+
+TEST(I2C, has_received_ShouldReturnTrue_WhenRxNEset) {
+	LONGS_EQUAL(0, i2c_has_received(PERIPH_I2C1));
+	I2C1->SR1 = 0x40;
+	LONGS_EQUAL(1, i2c_has_received(PERIPH_I2C1));
+}
+
+TEST(I2C, has_address_set_ShouldReturnTrue_WhenADDRset) {
+	LONGS_EQUAL(0, i2c_has_address_set(PERIPH_I2C1));
+	I2C1->SR1 = 2;
+	LONGS_EQUAL(1, i2c_has_address_set(PERIPH_I2C1));
+}
+
+TEST(I2C, has_transfer_completed_ShouldReturnTrue_WhenBTFset) {
+	LONGS_EQUAL(0, i2c_has_transfer_completed(PERIPH_I2C1));
+	I2C1->SR1 = 4;
+	LONGS_EQUAL(1, i2c_has_transfer_completed(PERIPH_I2C1));
+}
