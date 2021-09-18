@@ -60,6 +60,13 @@ extern "C" {
 #define SPI2_BASE			(APB1_BASE + 0x3800U)
 #define SPI3_BASE			(APB1_BASE + 0x3C00U)
 
+#define I2C1_BASE			(APB1_BASE + 0x5400U)
+#define I2C2_BASE			(APB1_BASE + 0x5800U)
+
+#define USB_BASE			(APB1_BASE + 0x5C00U)
+#define USB_PMA_BASE			(APB1_BASE + 0x6000U)
+#define USB_PMA_SIZE			(512u)
+
 typedef struct {
 	volatile uint32_t IDCODE;
 	volatile uint32_t CR;
@@ -194,6 +201,48 @@ typedef struct {
 	volatile uint32_t I2SPR;
 } SPI_Type;
 
+typedef struct {
+	volatile uint32_t CR1;
+	volatile uint32_t CR2;
+	volatile uint32_t OAR1;
+	volatile uint32_t OAR2;
+	volatile uint32_t DR;
+	volatile uint32_t SR1;
+	volatile uint32_t SR2;
+	volatile uint32_t CCR;
+	volatile uint32_t TRISE;
+} I2C_Type;
+
+typedef struct {
+	volatile uint16_t EP0R;
+	volatile uint16_t ep0r_padding;
+	volatile uint16_t EP1R;
+	volatile uint16_t ep1r_padding;
+	volatile uint16_t EP2R;
+	volatile uint16_t ep2r_padding;
+	volatile uint16_t EP3R;
+	volatile uint16_t ep3r_padding;
+	volatile uint16_t EP4R;
+	volatile uint16_t ep4r_padding;
+	volatile uint16_t EP5R;
+	volatile uint16_t ep5r_padding;
+	volatile uint16_t EP6R;
+	volatile uint16_t ep6r_padding;
+	volatile uint16_t EP7R;
+	volatile uint16_t ep7r_padding;
+	volatile uint16_t reserved[16];
+	volatile uint16_t CNTR;
+	volatile uint16_t cntr_padding;
+	volatile uint16_t ISTR;
+	volatile uint16_t istr_padding;
+	volatile uint16_t FNR;
+	volatile uint16_t fnr_padding;
+	volatile uint16_t DADDR;
+	volatile uint16_t daddr_padding;
+	volatile uint16_t BTABLE;
+	volatile uint16_t btable_padding;
+} USB_Type;
+
 #define DBGMCU				((DBGMCU_Type *)DBGMCU_BASE)
 
 #define SYSCFG				((SYSCFG_Type *)SYSCFG_BASE)
@@ -239,6 +288,11 @@ typedef struct {
 #define SPI1				((SPI_Type *)SPI1_BASE)
 #define SPI2				((SPI_Type *)SPI2_BASE)
 #define SPI3				((SPI_Type *)SPI3_BASE)
+
+#define I2C1				((I2C_Type *)I2C1_BASE)
+#define I2C2				((I2C_Type *)I2C2_BASE)
+
+#define USB				((USB_Type *)USB_BASE)
 
 #if defined(__cplusplus)
 }
