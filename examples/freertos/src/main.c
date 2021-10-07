@@ -1,12 +1,11 @@
 #include "console.h"
 #include "printf.h"
 
-#include "halmcu/irq.h"
-#include "halmcu/asm/arm/systick.h"
-
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
+
+#include "halmcu/asm/arm/systick.h"
 
 static void sample_task(void *pvParameters)
 {
@@ -26,29 +25,6 @@ static void sample_task2(void *pvParameters)
 		printf("TASK #2 %d\n", i++);
 		vTaskDelay(1000);
 	}
-}
-
-void ISR_systick(void)
-{
-#if (INCLUDE_xTaskGetSchedulerState == 1)
-	if (xTaskGetSchedulerState() == taskSCHEDULER_NOT_STARTED) {
-		return;
-	}
-#endif
-	extern void xPortSysTickHandler(void);
-	xPortSysTickHandler();
-}
-
-void ISR_pendsv(void)
-{
-	extern void xPortPendSVHandler(void);
-	xPortPendSVHandler();
-}
-
-void ISR_svc(void)
-{
-	extern void vPortSVCHandler(void);
-	vPortSVCHandler();
 }
 
 int main(void)
